@@ -1,0 +1,37 @@
+.Login{
+	height: 100%;
+	width: 100%;
+	background-color: #E2F0D9;
+}
+.login-logo{
+	height: 50%;
+}
+.login-bg{
+	height: 80%;
+	width: 80%;
+}
+
+
+.login-inputs{
+	height: 50%;
+	width: 100%;
+	background-color: white;
+}
+
+.login-field{
+	height: 50%;
+	width: 100%;
+}
+.login-button
+{
+	width:80%;
+	height: 30px;
+	background-color: #385723;
+	color:  white;
+}
+.login-select
+{
+	width: 23%;
+	padding: 0px 0px 0px 5px;
+	border-radius: 20px;
+}
