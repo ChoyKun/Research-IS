@@ -1,12 +1,12 @@
 import FormCard from './components/cards/form-card';
-import Login from './views/Login';
+import AdminAccess from './views/AdminAccess.js';
 import './styles/app.css';
 
 
 function App() {
   return (
    <div className="app">
-    <Login/>
+    <AdminAccess/>
    </div>
   );
 }

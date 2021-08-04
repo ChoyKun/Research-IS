@@ -1,0 +1,24 @@
+.changePassBtn{
+	height: 50px;
+	width: 200px;
+	background-color:#4472c4;
+	color: white;
+}
+.crAccept{
+	height: 50px;
+	width: 200px;
+	background-color:#4472c4;
+	color: white;
+}
+.crDecline{
+	height: 50px;
+	width: 200px;
+	background-color:white;
+	color: black;
+}
+.AdminMenu{
+	height: 50px;
+	width: 200px;
+	background-color: #595959;
+	color: white;
+}

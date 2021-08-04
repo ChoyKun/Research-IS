@@ -4,6 +4,6 @@ import '../../styles/txt.css';
 
 export default function Field(props){
 	return(
-		<input className='txt' placeHolder={props.placeHolder} onChange={props.requestOnChange}/>
+		<input className='txt' placeHolder={props.placeHolder || null} onChange={props.requestOnChange}/>
 	);
 }
