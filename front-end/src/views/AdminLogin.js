@@ -32,12 +32,12 @@ export default function AdminLogin(props){
 			<div style={{width: '100%', height: '83%'}} className="d-flex flex-row">
 				
 				<div style={{backgroundColor:'#404040',width:'8%',height:"100%"}}className="side-panel d-flex flex-column">
-
+					<img src={scslogo}/>
 				</div>
 
 				<div style={{width:'92%', height:'100%', backgroundColor:'#e2f0d9'}}className="content-box d-flex flex-column">
 					<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-center align-items-center">
-						<SearcBar/>				
+									
 					</div>
 					<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
 						<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black'}} className='d-flex justify-content-center align-items-center'>

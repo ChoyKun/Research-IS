@@ -22,3 +22,51 @@
 	background-color: #595959;
 	color: white;
 }
+.sfilterCancel{
+	height: 35px;
+	width: 200px;
+	background-color: #a5a5a5;
+	color: white;
+}
+.sfilterShow{
+	height: 35px;
+	width: 130px;
+	background-color: #385723;
+	color: white;
+}
+.sfilterSave{
+	height: 35px;
+	width: 100px;
+	background-color: #a5a5a5;
+	color: white;
+}
+.aUploadBtn{
+	height: 35px;
+	width: 130px;
+	background-color: #385723;
+	color: white;
+}
+.aMore{
+	height: 35px;
+	width: 130px;
+	background-color: #385723;
+	color: white;
+}
+.aBatchBtn{
+	height: 35px;
+	width: 130px;
+	background-color: #385723;
+	color: white;
+}
+.aRegUploadBtn{
+	height: 35px;
+	width: 130px;
+	background-color: #385723;
+	color: white;
+}
+.aRegEdit{
+	height: 35px;
+	width: 130px;
+	background-color: #385723;
+	color: white;
+}
