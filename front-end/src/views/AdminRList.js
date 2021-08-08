@@ -42,7 +42,7 @@ export default function AdminRList(props){
 						<Button className='AdminMenu' title='Archived'/>				
 					</div>
 					<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-center align-items-center">
-						<SearcBar/>		
+						<SearcBar className='Search'/>		
 					</div>
 					<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
 						<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black'}}>

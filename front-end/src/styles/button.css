@@ -76,3 +76,15 @@
 	background-color: #385723;
 	color: white;
 }
+.crAcceptMobile{
+	height: 40px;
+	width: 150px;
+	background-color:#4472c4;
+	color: white;
+}
+.crDeclineMobile{
+	height: 40px;
+	width: 150px;
+	background-color:white;
+	color: black;
+}

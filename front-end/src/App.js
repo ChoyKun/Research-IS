@@ -1,12 +1,12 @@
 import FormCard from './components/cards/form-card';
-import RListFilter from './views/RListFilter.js';
+import MobileStudentChangePass from './views/MobileStudentChangePass.js';
 import './styles/app.css';
 
 
 function App() {
   return (
    <div className="app">
-    <RListFilter/>
+    <MobileStudentChangePass/>
    </div>
   );
 }
