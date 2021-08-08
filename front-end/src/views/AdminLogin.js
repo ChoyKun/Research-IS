@@ -32,7 +32,7 @@ export default function AdminLogin(props){
 			<div style={{width: '100%', height: '83%'}} className="d-flex flex-row">
 				
 				<div style={{backgroundColor:'#404040',width:'8%',height:"100%"}}className="side-panel d-flex flex-column">
-					<img src={scslogo}/>
+
 				</div>
 
 				<div style={{width:'92%', height:'100%', backgroundColor:'#e2f0d9'}}className="content-box d-flex flex-column">
@@ -47,11 +47,12 @@ export default function AdminLogin(props){
 										<img src={lock} style={{height:"150px"}}/>
 										<h1 style={{fontSize:'40px'}}>Research Coordinator Login</h1>
 									</div>
-									<div style={{height:'50%',width:'95%'}} className="d-flex flex-column justify-content-around">
-										<div className="login-field d-flex flex-column align-items-center justify-content-between">
-											<Field placeHolder="username"/>
-											<Field placeHolder="password"/>
+									<div style={{height:'100%',width:'100%'}} className="d-flex flex-column justify-content-around">
+										<div style={{height:'70%',width:'100%'}} className="login-field d-flex flex-column align-items-center justify-content-around flex-column">
+											<Field className='txt' placeHolder="username"/>
+											<Field className='txt' placeHolder="password"/>
 											<Button className="login-button" title="Sign me in" />
+											<Button className="GoBack" title="Go Back" />
 										</div>
 									</div>
 								</div>

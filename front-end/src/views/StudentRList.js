@@ -5,7 +5,7 @@ import Button from '../components/buttons/button';
 import Field from '../components/fields/txtfield';
 import SearcBar from '../components/contents/SearchBar';
 
-export default function StudentRList(props){
+export default function RListFilter(props){
 	return(
 		<div style={{width: '100%', height: '100%', color:'white'}} className="main-container">
 			<div style={{width: '100%', height: '10%', backgroundColor:'#385723',color:'white'}} className="main-banner text-center d-flex justify-content-center align-items-center">
@@ -25,7 +25,7 @@ export default function StudentRList(props){
 			<div style={{width: '100%', height: '83%'}} className="d-flex flex-row">
 				
 				<div style={{backgroundColor:'#404040',width:'8%',height:"100%"}}className="side-panel d-flex flex-column">
-					<img src={scslogo}/>
+
 				</div>
 
 				<div style={{width:'92%', height:'100%', backgroundColor:'#e2f0d9'}}className="content-box d-flex flex-column">

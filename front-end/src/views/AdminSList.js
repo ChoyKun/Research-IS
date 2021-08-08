@@ -1,12 +1,16 @@
 import React,{useState, useEffect} from 'react';
 
+//styles
+import '../styles/button.css';
+import '../styles/txt.css';
+
 // components
 import Button from '../components/buttons/button';
 import Field from '../components/fields/txtfield';
 import SearcBar from '../components/contents/SearchBar';
 
 
-export default function FacultyRList(props){
+export default function AdminRList(props){
 	return(
 		<div style={{width: '100%', height: '100%', color:'white'}} className="main-container">
 			<div style={{width: '100%', height: '10%', backgroundColor:'#385723',color:'white'}} className="main-banner text-center d-flex justify-content-center align-items-center">
@@ -26,12 +30,19 @@ export default function FacultyRList(props){
 			<div style={{width: '100%', height: '83%'}} className="d-flex flex-row">
 				
 				<div style={{backgroundColor:'#404040',width:'8%',height:"100%"}}className="side-panel d-flex flex-column">
-					<img src={scslogo}/>
+
 				</div>
 
 				<div style={{width:'92%', height:'100%', backgroundColor:'#e2f0d9'}}className="content-box d-flex flex-column">
 					<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-center align-items-center">
-						<SearcBar/>				
+						<Button className='AdminMenu' title='List of Students'/>
+						<Button className='AdminMenu' title='List of Research'/>
+						<Button className='AdminMenu' title='Upload new Research'/>
+						<Button className='AdminMenu' title='Register new Adviser'/>
+						<Button className='AdminMenu' title='Archived'/>				
+					</div>
+					<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-center align-items-center">
+						<SearcBar/>		
 					</div>
 					<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
 						<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black'}}>

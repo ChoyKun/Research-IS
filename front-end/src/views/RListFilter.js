@@ -30,7 +30,7 @@ export default function StudentFilter(props){
 			<div style={{width: '100%', height: '83%'}} className="d-flex flex-row">
 				
 				<div style={{backgroundColor:'#404040',width:'8%',height:"100%"}}className="side-panel d-flex flex-column">
-					<img src={scslogo}/>
+	
 				</div>
 
 				<div style={{width:'92%', height:'100%', backgroundColor:'#e2f0d9'}}className="content-box d-flex flex-column">
@@ -42,7 +42,7 @@ export default function StudentFilter(props){
 							<div style={{height:'90%',width:'95%'}}>
 								<div style={{height:'80%',width:'100%'}} className='d-flex justify-content-around flex-column'>
 									<h3 style={{color:'black'}}>Filters:</h3>
-									<div style={{width:'30%', color:'black'}}>
+									<div style={{width:'25%', color:'black'}}>
 										<Select className='sfilterCourse' label='Select Course:' options={['BSIT','BSCS']}/>
 									</div>
 									<div style={{width:'100%', color:'black'}}>

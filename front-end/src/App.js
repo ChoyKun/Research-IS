@@ -1,12 +1,12 @@
 import FormCard from './components/cards/form-card';
-import AdminAccess from './views/AdminAccess.js';
+import RListFilter from './views/RListFilter.js';
 import './styles/app.css';
 
 
 function App() {
   return (
    <div className="app">
-    <AdminAccess/>
+    <RListFilter/>
    </div>
   );
 }
