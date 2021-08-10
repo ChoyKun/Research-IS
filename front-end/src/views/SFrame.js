@@ -1,0 +1,85 @@
+import React, {useState, useEffect} from 'react';
+
+//icons
+import scslogo from "../images/scs-final.png";
+import favorites from "../images/heart.png";
+import profile from "../images/profile.png";
+import lock from "../images/lock.png"
+import drawer from "../images/drawer.png"
+
+import IconBtn from '../components/buttons/iconbtn';
+
+export default function SFrame(props){
+
+	const [isMenuOpen, setIsMenuOpen] = useState( false );
+
+	const reqOpenMenu = () => {
+		setIsMenuOpen( !isMenuOpen );
+	}
+
+	return(
+		<div style={{width: '100%', height: '100%', color:'white'}} className="main-container">
+
+			{/*main header*/}
+			<div style={{width: '100%', height: '10%', backgroundColor:'#385723',color:'white'}} className="main-banner text-center d-flex justify-content-center align-items-center">
+				<h1>SCS RESEARCH PORTAL</h1>
+			</div>
+
+			{/*sub header*/}
+			<div style={{width: '100%', height: '7%'}} className="menu-bar d-flex flex-row">
+				<div style={{backgroundColor: '#385723', height: '100%', width: '8%',color:'white'}} className='text-center'><h1>SCS</h1></div>
+				<div style={{backgroundColor:'#70AD47', height: '100%', width: '92%'}} className="d-flex flex-row justify-content-center align-items-center"> 
+					<div style={{height:'100%',width:'95%'}} className='d-flex flex-row justify-content-between align-items-center'>
+						<IconBtn style={{height:'25px',width:'40px'}} icon={drawer} onClick={reqOpenMenu} className="col-3 ml-3"/>
+						<div className="col-2 text-center"> JUDY MAUNAHAN </div>
+					</div>
+				</div>
+			</div>
+			
+			
+
+			<div style={{width: '100%', height: '83%'}} className="d-flex flex-row">
+				
+				{/*side panel*/}
+				{ isMenuOpen ? <OpenedMenu /> : <ClosedMenu />}
+
+				{/*rightside*/}
+				<div style={{width:'92%', height:'100%', backgroundColor:'#e2f0d9'}}className="content-box d-flex flex-column">
+					{ props.children }
+				</div>	
+			</div>
+		</div>
+	);
+}
+
+function OpenedMenu( props ){
+	return(
+		<div style={{backgroundColor:'#404040',width: '40%',height:"100%"}}className="side-panel d-flex flex-column align-items-center">
+			<div style={{backgroundColor:'#404040',width:'100%',height:"80%"}}className="side-panel d-flex flex-column justify-content-around align-items-center">
+				<img style={{height:'130px',width:'150px'}} src={scslogo}/>
+				<div style={{height:'3px',width:'250px',backgroundColor:'white'}} className='d-flex justify-content-center align-items-center'></div>
+				<div className='d-flex justify-content-around'>
+					<img style={{height:'50px',width:'50px'}} src={favorites}/>
+				</div>
+				<div className='d-flex justify-content-around align-items-center'>
+					<img style={{height:'50px',width:'50px'}} src={lock}/>
+					<h5>Change Password</h5>
+				</div>
+			</div>
+		</div>
+	);
+}
+
+
+function ClosedMenu( props ){
+	return(
+		<div style={{backgroundColor:'#404040',width: '8%',height:"100%"}}className="side-panel d-flex flex-column align-items-center">
+			<div style={{backgroundColor:'#404040',width:'100%',height:"50%"}}className="side-panel d-flex flex-column justify-content-around align-items-center">
+				<img style={{height:'60px',width:'70px'}} src={scslogo}/>
+				<div style={{height:'3px',width:'60px',backgroundColor:'white'}} className='d-flex justify-content-center align-items-center'></div>
+				<img style={{height:'60px',width:'70px'}} src={favorites}/>
+				<img style={{height:'60px',width:'70px'}} src={lock}/>
+			</div>
+		</div>
+	);
+}

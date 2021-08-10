@@ -1,4 +1,5 @@
 import React,{useState, useEffect} from 'react';
+import { Link } from 'react-router-dom';
 
 //style
 import '../styles/button.css'
@@ -30,7 +31,7 @@ export default function MobileRList(props){
 			<div style={{width: '100%', height: '83%'}} className="d-flex flex-row">
 				<div style={{width:'100%', height:'100%', backgroundColor:'#e2f0d9'}}className="content-box d-flex flex-column">
 					<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-center align-items-center">
-						<SearcBar className='MobileSearch'/>				
+						<SearcBar location='/m-rlistfilter' className='MobileSearch'/>				
 					</div>
 					<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
 						<div style={{height:'100%', width:'90%', backgroundColor:'white', border:'1px solid black'}} className='d-flex justify-content-center align-items-center'>
