@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {Link} from 'react-router-dom';
 
 //icons
 import scslogo from "../images/scs-final.png";
@@ -58,13 +59,23 @@ function OpenedMenu( props ){
 			<div style={{backgroundColor:'#404040',width:'100%',height:"80%"}}className="side-panel d-flex flex-column justify-content-around align-items-center">
 				<img style={{height:'130px',width:'150px'}} src={scslogo}/>
 				<div style={{height:'3px',width:'250px',backgroundColor:'white'}} className='d-flex justify-content-center align-items-center'></div>
-				<div className='d-flex justify-content-around'>
-					<img style={{height:'50px',width:'50px'}} src={profile}/>
-				</div>
-				<div className='d-flex justify-content-around align-items-center'>
-					<img style={{height:'50px',width:'50px'}} src={lock}/>
-					<h5>Change Password</h5>
-				</div>
+				<Link to="/admin-profile">
+					<div className='d-flex justify-content-around align-items-center'>
+						<img style={{height:'50px',width:'50px'}} src={profile}/>
+						<h6 style={{fontSize:'23px'}}>Profile</h6>
+					</div>
+				</Link>
+				<Link to="/student-changepass">
+					<div className='d-flex justify-content-around align-items-center'>
+						<img style={{height:'50px',width:'50px'}} src={lock}/>
+						<h6 style={{fontSize:'23px'}}>Change Password</h6>
+					</div>
+				</Link>
+				<Link to="/sign-in">
+					<div className='d-flex justify-content-around align-items-center'>
+						<h6 style={{fontSize:'23px'}}>Log out</h6>
+					</div>
+				</Link>
 			</div>
 		</div>
 	);
@@ -77,8 +88,8 @@ function ClosedMenu( props ){
 			<div style={{backgroundColor:'#404040',width:'100%',height:"50%"}}className="side-panel d-flex flex-column justify-content-around align-items-center">
 				<img style={{height:'60px',width:'70px'}} src={scslogo}/>
 				<div style={{height:'3px',width:'60px',backgroundColor:'white'}} className='d-flex justify-content-center align-items-center'></div>
-				<img style={{height:'60px',width:'70px'}} src={profile}/>
-				<img style={{height:'60px',width:'70px'}} src={lock}/>
+				<img style={{height:'50px',width:'50px'}} src={profile}/>
+				<img style={{height:'50px',width:'50px'}} src={lock}/>
 			</div>
 		</div>
 	);

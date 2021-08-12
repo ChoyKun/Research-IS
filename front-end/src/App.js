@@ -1,17 +1,21 @@
 import FormCard from './components/cards/form-card';
 import AdminAccess from './views/AdminAccess.js';
+import AdminChangepass from './views/AdminChangepass.js';
 import AdminArchive from './views/AdminArchive.js';
 import AdminLogin from './views/AdminLogin.js';
 import AdminReg from './views/AdminReg.js';
+import AdminProfile from './views/AdminProfile.js';
 import AdminRlist from './views/AdminRList';
 import AdminSList from './views/AdminSList.js';
 import AdminUpload from './views/AdminUpload.js';
 import FacultyReg from './views/FacultyReg.js';
+import FacultyProfile from './views/FacultyProfile.js';
+import FacultyChangepass from './views/FacultyChangepass.js';
 import FacultySList from './views/FacultySList.js';
 import FacultyUpload from './views/FacultyUpload.js';
 import Login from './views/Login.js';
 import MobileRList from './views/MobileRList.js';
-import MobileRListFilter from './views/MobileRList.js';
+import MobileRListFilter from './views/MobileRListFilter.js';
 import MobileStudentChangePass from './views/MobileStudentChangePass.js';
 import MobileStudentCopyright from './views/MobileStudentCopyright.js';
 import MobileStudentFavorites from './views/MobileStudentFavorites.js';
@@ -21,11 +25,14 @@ import StudentChangePass from './views/StudentChangePass.js';
 import StudentFavorites from './views/StudentFavorites.js';
 import StudentCopyRight from './views/StudentCopyRight.js';
 import StudentRList from './views/StudentRList.js';
+import StudentProfile from './views/StudentProfile.js';
 
 
-import Frame from './views/Frame';
+import AdminFrame from './views/AdminFrame';
+import FacultyFrame from './views/FacultyFrame';
 import SFrame from './views/SFrame';
 import EmptyFrame from './views/EmptyFrame';
+import MFrame from './views/MFrame'
 
 
 
@@ -41,12 +48,16 @@ const views = [
   '/sign-in',
   '/admin-access',
   '/admin-archive',
+  '/admin-changepass',
   '/admin-log-in',
+  '/admin-profile',
   '/admin-reg',
   '/admin-rlist',
   '/admin-slist',
   '/admin-upload',
   '/faculty-reg',
+  '/faculty-profile',
+  '/faculty-changepass',
   '/faculty-slist',
   '/faculty-upload',
   '/m-rlist',
@@ -60,7 +71,7 @@ const views = [
   '/student-copyright',
   '/student-favorites',
   '/student-rlist',
-
+  '/student-profile',
 ]
 
 const PageNotFound = () => {
@@ -88,88 +99,123 @@ function App() {
   return (
    <div className="app">
      <Switch>
+
+        <Route path="/admin-profile">
+          <AdminFrame>
+            <AdminProfile />
+          </AdminFrame>
+        </Route>
+
         <Route path="/admin-access">
-          <Frame>
+          <FacultyFrame>
             <AdminAccess />
-          </Frame>
+          </FacultyFrame>
         </Route>
 
         <Route path="/admin-archive">
-          <Frame>
+          <AdminFrame>
             <AdminArchive />
-          </Frame>
+          </AdminFrame>
+        </Route>
+
+        <Route path="/admin-changepass">
+          <AdminFrame>
+            <AdminChangepass />
+          </AdminFrame>
         </Route>
 
         <Route path="/admin-log-in">
-          <Frame>
+          <FacultyFrame>
             <AdminLogin />
-          </Frame>
+          </FacultyFrame>
         </Route>
 
         <Route path="/admin-reg">
-          <Frame>
+          <AdminFrame>
             <AdminReg />
-          </Frame>
+          </AdminFrame>
         </Route>
 
         <Route exact path="/admin-rlist">
-          <Frame>
+          <AdminFrame>
             <AdminRlist />
-          </Frame>
+          </AdminFrame>
         </Route>
 
         <Route exact path="/admin-slist">
-          <Frame>
+          <AdminFrame>
             <AdminSList />
-          </Frame>
+          </AdminFrame>
         </Route>
 
         <Route path="/admin-upload">
-          <Frame>
+          <AdminFrame>
             <AdminUpload />
-          </Frame>
+          </AdminFrame>
         </Route>
 
         <Route path="/faculty-reg">
-          <Frame>
+          <FacultyFrame>
             <FacultyReg />
-          </Frame>
+          </FacultyFrame>
+        </Route>
+
+        <Route path="/faculty-profile">
+          <FacultyFrame>
+            <FacultyProfile />
+          </FacultyFrame>
+        </Route>
+
+        <Route path="/faculty-changepass">
+          <FacultyFrame>
+            <FacultyChangepass />
+          </FacultyFrame>
         </Route>
 
         <Route path="/faculty-slist">
-          <Frame>
+          <FacultyFrame>
             <FacultySList />
-          </Frame>
+          </FacultyFrame>
         </Route>
 
         <Route path="/faculty-upload">
-          <Frame>
+          <FacultyFrame>
             <FacultyUpload />
-          </Frame>
+          </FacultyFrame>
         </Route>
 
         <Route path="/sign-in">
           <Login />
         </Route>
 
-        <Route path="/m-rlist">         
-          <MobileRList />
+        <Route path="/m-rlist">
+          <MFrame>
+            <MobileRList />
+          </MFrame>
         </Route>
 
         <Route path="/m-rlistfilter">
-          <MobileRListFilter />
+          <MFrame>
+            <MobileRListFilter />
+          </MFrame>
         </Route>
 
         <Route path="/m-changepass">
-          <MobileStudentChangePass />
+          <MFrame>
+            <MobileStudentChangePass />
+          </MFrame>
         </Route>
 
         <Route path="/m-copyright">
-          <MobileStudentCopyright />
+          <MFrame>
+            <MobileStudentCopyright />
+          </MFrame>
         </Route>
 
         <Route path="/m-favorites">
-          <MobileStudentFavorites />
+          <MFrame>
+            <MobileStudentFavorites />
+          </MFrame>
         </Route>
 
         <Route path="/rlist-filter">
@@ -208,6 +254,11 @@ function App() {
           </SFrame>
         </Route>
 
+        <Route path="/student-profile">
+          <SFrame>
+            <StudentProfile />
+          </SFrame>
+        </Route>
      </Switch>
    </div>
   );

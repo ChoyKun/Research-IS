@@ -31,7 +31,7 @@
 }
 .login-select
 {
-	width: 23%;
+	width: 200px;
 	padding: 0px 0px 0px 5px;
 	border-radius: 20px;
 }
@@ -40,4 +40,10 @@
 	height: 30px;
 	background-color: white;
 	color:  black;
+}
+.username{
+	width: 590px;
+}
+.password{
+	width: 590px;
 }

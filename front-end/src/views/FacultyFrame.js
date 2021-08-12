@@ -7,12 +7,10 @@ import favorites from "../images/heart.png";
 import profile from "../images/profile.png";
 import lock from "../images/lock.png"
 import drawer from "../images/drawer.png"
-import rlist from "../images/rlist.png"
 
 import IconBtn from '../components/buttons/iconbtn';
 
-export default function SFrame(props){
-
+export default function Frame(props){
 	const [isMenuOpen, setIsMenuOpen] = useState( false );
 
 	const reqOpenMenu = () => {
@@ -54,28 +52,17 @@ export default function SFrame(props){
 	);
 }
 
+
 function OpenedMenu( props ){
 	return(
 		<div style={{backgroundColor:'#404040',width: '40%',height:"100%"}}className="side-panel d-flex flex-column align-items-center">
 			<div style={{backgroundColor:'#404040',width:'100%',height:"80%"}}className="side-panel d-flex flex-column justify-content-around align-items-center">
 				<img style={{height:'130px',width:'150px'}} src={scslogo}/>
 				<div style={{height:'3px',width:'250px',backgroundColor:'white'}} className='d-flex justify-content-center align-items-center'></div>
-				<Link to='/student-profile'>
-					<div style={{width:'100%'}} className='d-flex justify-content-around flex-row'>
-						<img style={{height:'40px',width:'40px'}} src={profile}/>
+				<Link to="/faculty-profile">
+					<div className='d-flex justify-content-around align-items-center'>
+						<img style={{height:'50px',width:'50px'}} src={profile}/>
 						<h6 style={{fontSize:'23px'}}>Profile</h6>
-					</div>
-				</Link>
-				<Link to='/student-rlist'>
-					<div style={{width:'100%'}} className='d-flex justify-content-around flex-row'>
-						<img style={{height:'50px',width:'50px'}} src={rlist}/>
-						<h6 style={{fontSize:'23px'}}>Research Lists</h6>
-					</div>
-				</Link>
-				<Link to='/student-favorites'>
-					<div className='d-flex justify-content-around'>
-						<img style={{height:'50px',width:'50px'}} src={favorites}/>
-						<h6 style={{fontSize:'23px'}}>Favorites</h6>
 					</div>
 				</Link>
 				<Link to="/student-changepass">
@@ -102,8 +89,6 @@ function ClosedMenu( props ){
 				<img style={{height:'60px',width:'70px'}} src={scslogo}/>
 				<div style={{height:'3px',width:'60px',backgroundColor:'white'}} className='d-flex justify-content-center align-items-center'></div>
 				<img style={{height:'50px',width:'50px'}} src={profile}/>
-				<img style={{height:'50px',width:'50px'}} src={rlist}/>
-				<img style={{height:'50px',width:'50px'}} src={favorites}/>
 				<img style={{height:'50px',width:'50px'}} src={lock}/>
 			</div>
 		</div>

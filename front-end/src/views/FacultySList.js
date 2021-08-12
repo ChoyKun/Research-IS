@@ -20,7 +20,7 @@ import SearcBar from '../components/contents/SearchBar';
 export default function FacultyRList(props){
 	return(
 		<>
-			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-center align-items-center">
+			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center">
 				<Link to='/faculty-slist'><Button className='AdminMenu' title='List of Students'/></Link>
 				<Link to='/faculty-upload'><Button className='AdminMenu' title='Upload new Research'/></Link>
 				<Link to='/faculty-reg'><Button className='AdminMenu' title='Register new Student'/></Link>

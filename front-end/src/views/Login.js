@@ -31,8 +31,8 @@ export default function Login(props){
 						<h5>Sign in to start session</h5>
 					</div>
 					<div className="login-field d-flex flex-column align-items-center justify-content-between">
-						<Field placeHolder="username" requestOnChange={requestUsernameChange}/>
-						<Field placeHolder="password" requestOnChange={requestPasswordChange}/>
+						<Field className='username' placeHolder="username" requestOnChange={requestUsernameChange}/>
+						<Field className='password' placeHolder="password" requestOnChange={requestPasswordChange}/>
 						<div style={{width:"80%"}}>
 							<Select className="login-select" label='Select Position:'options={['Student','Adviser']}/>
 						</div>
