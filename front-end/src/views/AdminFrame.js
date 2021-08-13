@@ -65,7 +65,7 @@ function OpenedMenu( props ){
 						<h6 style={{fontSize:'23px'}}>Profile</h6>
 					</div>
 				</Link>
-				<Link to="/student-changepass">
+				<Link to="/admin-changepass">
 					<div className='d-flex justify-content-around align-items-center'>
 						<img style={{height:'50px',width:'50px'}} src={lock}/>
 						<h6 style={{fontSize:'23px'}}>Change Password</h6>

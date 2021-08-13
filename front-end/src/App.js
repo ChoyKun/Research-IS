@@ -5,11 +5,13 @@ import AdminArchive from './views/AdminArchive.js';
 import AdminLogin from './views/AdminLogin.js';
 import AdminReg from './views/AdminReg.js';
 import AdminProfile from './views/AdminProfile.js';
+import AdminEditProfile from './views/AdminEditProfile.js';
 import AdminRlist from './views/AdminRList';
 import AdminSList from './views/AdminSList.js';
 import AdminUpload from './views/AdminUpload.js';
 import FacultyReg from './views/FacultyReg.js';
 import FacultyProfile from './views/FacultyProfile.js';
+import FacultyEditProfile from './views/FacultyEditProfile.js';
 import FacultyChangepass from './views/FacultyChangepass.js';
 import FacultySList from './views/FacultySList.js';
 import FacultyUpload from './views/FacultyUpload.js';
@@ -51,12 +53,14 @@ const views = [
   '/admin-changepass',
   '/admin-log-in',
   '/admin-profile',
+  '/admin-edit-profile',
   '/admin-reg',
   '/admin-rlist',
   '/admin-slist',
   '/admin-upload',
   '/faculty-reg',
   '/faculty-profile',
+  '/faculty-edit-profile',
   '/faculty-changepass',
   '/faculty-slist',
   '/faculty-upload',
@@ -118,6 +122,12 @@ function App() {
           </AdminFrame>
         </Route>
 
+        <Route path="/admin-edit-profile">
+          <AdminFrame>
+            <AdminEditProfile />
+          </AdminFrame>
+        </Route>
+
         <Route path="/admin-changepass">
           <AdminFrame>
             <AdminChangepass />
@@ -163,6 +173,12 @@ function App() {
         <Route path="/faculty-profile">
           <FacultyFrame>
             <FacultyProfile />
+          </FacultyFrame>
+        </Route>
+
+        <Route path="/faculty-edit-profile">
+          <FacultyFrame>
+            <FacultyEditProfile />
           </FacultyFrame>
         </Route>
 
