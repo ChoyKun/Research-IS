@@ -1,5 +1,6 @@
-import React,{useState, useEffect} from 'react';
+import React,{useState, useEffect, Suspense} from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 //icons
 import scslogo from "../images/scs-final.png";
@@ -18,6 +19,20 @@ import SearcBar from '../components/contents/SearchBar';
 
 
 export default function FacultyRList(props){
+
+	const [studentData, setStudentData] = useState( null );
+
+	
+	useEffect(() => {
+		axios.get('http://localhost:7000/student/slist')
+		.then( res => {
+			setStudentData( res.data );
+		})
+		.catch( err => {
+			console.log( err );
+		})
+	}, [])
+
 	return(
 		<>
 			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center">
@@ -30,12 +45,85 @@ export default function FacultyRList(props){
 				<SearcBar location='/slist-filter'/>		
 			</div>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
-				<div style={{height:'80%', width:'90%', backgroundColor:'white', border:'1px solid black'}}>
-					
+				<div style={{height:'80%', width:'90%', backgroundColor:'white', border:'1px solid black',color:'black'}}>
+					<Suspense fallback={<Loading/>}>
+						<SlistHeader/>
+						{ studentData?.map?.( object => (
+								<div onClick={() => console.log('clicked')} key={studentData.indexOf(object)} className="d-flex bg-secondary flex-row justify-content-around">
+									<div className="col-1 text-center">{object.studentNo}</div>
+									<div className="col-1 text-center">{object.password}</div>
+									<div className="col-1 text-center">{object.firstName}</div>
+									<div className="col-1 text-center">{object.middleInitial}</div>
+									<div className="col-1 text-center">{object.lastName}</div>
+									<div className="col-1 text-center">{object.extentionName ?? "N/A"}</div>
+									<div className="col-1 text-center">{(() => {
+																	const date = new Date(object.birthdate);
+																	return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
+															})()}
+									</div>
+									<div className="col-1 text-center ">{object.course}</div>
+									<div className="col-1 text-center">{object.yearLevel}</div>
+									<div className="col-1 text-center">{object.section}</div>
+									<div className="col-2 text-center">{(() => {
+																	const date = new Date(object.dateRegistered);
+																	return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
+															})()}
+									</div>
+								</div>			
+							)) }
+					</Suspense>
+
 				</div>
 			</div>
 		</>
 	);
 }
 
+function Loading(props){
+	return(
+		<div>
+			loading
+		</div>
+	);
+}
 
+
+function SlistHeader(props){
+	return(
+		<div style={{height:'30px',width:'100%',border:'1px solid black', backgroundColor:'#4472c4'}} className='d-flex flex-row justify-content-around'> 
+			<div className='col-1 text-center'>
+				StudentNo
+			</div>
+			<div className='col-1 text-center'>
+				Password
+			</div>
+			<div className='col-1 text-center'>
+				First Name
+			</div>
+			<div className='col-1 text-center'>
+				Middile Initial
+			</div>
+			<div className='col-1 text-center'>
+				Last Name
+			</div>
+			<div className='col-1 text-center'>
+				Extension Name
+			</div>
+			<div className='col-1 text-center'>
+				Birth Date
+			</div>
+			<div className='col-1 text-center'>
+				Course
+			</div>
+			<div className='col-1 text-center'>
+				Year level
+			</div>
+			<div className='col-1 text-center'>
+				Section
+			</div>
+			<div className='col-2 text-center'>
+				Date Registered
+			</div>
+		</div>
+	);
+}
