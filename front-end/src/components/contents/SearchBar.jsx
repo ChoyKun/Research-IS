@@ -7,7 +7,6 @@ import { Link } from 'react-router-dom';
 import '../../styles/txt.css';
 
 export default function SearchBar( props ){
-	console.log( props.location );
 	const [fieldContent, setFieldContent] = useState(null);
 
 
@@ -17,7 +16,6 @@ export default function SearchBar( props ){
 
 	const linkToButton = (e) => {
 		setFieldContent( e.target.value );
-		console.log(fieldContent)
 	}
 
 	return(

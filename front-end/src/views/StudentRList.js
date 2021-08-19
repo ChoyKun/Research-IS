@@ -29,20 +29,21 @@ export default function RListFilter(props){
 
 	useEffect(() => {
 		setFilteredData(researchData?.map?.( object => {
-											if( search ){
-												for( let key of Object.keys( object ) ){
-													console.log(object[key], search)
-													if(object[key]?.toLowerCase?.() === search?.toLowerCase?.()){
-														return <Item key={Object.keys( object ).indexOf(key)} {...object}/>
-													}
+
+										if( search ){
+											for( let key of Object.keys( object ) ){
+												console.log(object)									
+												if(object[key]?.toLowerCase?.()?.startsWith( search?.charAt?.(0)?.toLowerCase?.() )){
+													return <Item key={object.id} {...object}/>
 												}
 											}
-											else{
-												return <Item key={researchData.indexOf( object )} {...object}/>
-											}
 										}
-									))
-		console.log( filteredData );
+										else{
+											return <Item key={object.id} {...object}/>
+										}
+									}
+								))
+		console.log( filteredData )
 	}, [search, researchData])
 
 	return(
@@ -51,11 +52,9 @@ export default function RListFilter(props){
 				<SearcBar location='/rlist-filter' setSearch={setSearch}/>				
 			</div>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
-				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black', color:'black'}}>
+				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black', color:'black',overflowY:'auto',overflowX:'auto'}}>
 					<Suspense fallback={<Loading/>}>
 						{ filteredData }
-						{ console.log(filteredData) }
-
 					</Suspense>
 				</div>
 			</div>
@@ -75,7 +74,7 @@ function Loading(props){
 
 function Item(props){
 	return (
-		<div style={{fontSize:'20px'}} onClick={() => console.log('clicked')} className="d-flex flex-row justify-content-around">
+		<div style={{fontSize:'20px'}} onClick={() => console.log('clicked')} className="d-flex flex-row justify-content-around mb-3">
 			<div className="col-1 text-center">{props.title}</div>
 			<div className="col-1 text-center">{props.course??'N/A'}</div>
 			<div className="col-5 text-center">{props.researchCategories === '[]' ? 'N/A' : JSON.parse(props.researchCategories).join(', ')}</div>

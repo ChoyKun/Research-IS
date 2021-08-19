@@ -23,7 +23,7 @@ import Checkbox from '../components/fields/checkbox';
 export default function FacultyUpload(props){
 	const state = {
 		title: null,
-		course: null,
+		course: 'BSIT',
 		researchCategories: [],
 		yearSubmitted: null,
 		PDFFile:null
@@ -101,7 +101,6 @@ export default function FacultyUpload(props){
 											<Checkbox cLabel='Hardware' value='Hardware' reqOnChange={(e)=>(dispatch({type:'researchCategories',name:'Hardware', data: e.target.checked }))}/>
 											<Checkbox cLabel='Software' value='Software' reqOnChange={(e)=>(dispatch({type:'researchCategories',name:'Software', data: e.target.checked }))}/>
 											<Checkbox cLabel='Web System' value='Web System' reqOnChange={(e)=>(dispatch({type:'researchCategories',name:'Web System', data: e.target.checked }))}/>
-											<Checkbox cLabel='Tae' value='Tae' reqOnChange={(e)=>(console.log(e.target.checked))}/>
 
 										</div>
 										<div style={{height:'20%',width:'100%'}} className='d-flex justify-content-around flex-row'>

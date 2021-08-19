@@ -39,16 +39,16 @@ export default function AdminRList(props){
 		setFilteredData(researchData?.map?.(object =>{
 			if(search){
 					for( let key of Object.keys(object)){
-							if(object[key]?.toLowerCase?.()=== search?.toLowerCase?.()){
-								return <Item key={Object.keys(object).indexOf(key)} {...object}/>
+							if(object[key]?.toLowerCase?.()?.startsWith(search?.charAt?.(0)?.toLowerCase?.())){
+								return <Item key={object.id} {...object}/>
 							}
 					}
 			}
 			else{
-					return<Item key={researchData.indexOf(object)}{...object}/>
+					return<Item key={object.id}{...object}/>
 			}
 		}))
-	}, [search,researchData])
+	}, [search, researchData])
 
 	return(
 		<>
@@ -63,7 +63,7 @@ export default function AdminRList(props){
 				<SearcBar location='rlist-filter' setSearch={setSearch} className='Search'/>		
 			</div>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
-				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black'}}>
+				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black',overflowY:'auto',overflowX:'auto'}}>
 					<Suspense fallback={<Loading/>}>
 						<RListHeader/>
 						{ filteredData }
@@ -80,11 +80,11 @@ export default function AdminRList(props){
 
 function Item(props){
 	return(
-		<div onClick={() => console.log('clicked')} className="d-flex bg-secondary flex-row justify-content-around">
-			<div className="col-3 text-center">{props.title}</div>
+		<div onClick={() => console.log('clicked')} className="d-flex bg-secondary flex-row justify-content-around" style={{border:'1px solid black'}}>
+			<div className="col-2 text-center">{props.title}</div>
 			<div className="col-1 text-center">{props.course??'N/A'}</div>
 			<div className="col-5 text-center">{props.researchCategories === '[]' ? 'N/A' : JSON.parse(props.researchCategories).join(', ')}</div>
-			<div className="col-1 text-center">{props.yearSubmitted}</div>
+			<div className="col-2 text-center">{props.yearSubmitted}</div>
 			<Button className='col-1 text-center' style={{backgroundColor:'#385723', color:'white'}} title='View'/>
 			<Button className='col-1 text-center' style={{backgroundColor:'#385723', color:'white'}} title='Edit'/>
 		</div>
@@ -101,7 +101,7 @@ function Loading(props){
 function RListHeader(props){
 	return(
 		<div style={{height:'30px',width:'100%',border:'1px solid black', backgroundColor:'#4472c4'}} className='d-flex flex-row justify-content-around'>
-			<div className='col-3 text-center'>
+			<div className='col-2 text-center'>
 				Title
 			</div>
 			<div className='col-1 text-center'>
@@ -110,7 +110,7 @@ function RListHeader(props){
 			<div className='col-5 text-center'>
 				ResearchCategories
 			</div>
-			<div className='col-1 text-center'>
+			<div className='col-2 text-center'>
 				Year Submitted
 			</div>
 			<div className='col-1 text-center'>
