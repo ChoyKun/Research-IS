@@ -8,10 +8,22 @@ import '../../styles/txt.css';
 
 export default function SearchBar( props ){
 	console.log( props.location );
+	const [fieldContent, setFieldContent] = useState(null);
+
+
+	const sendRequest = (e) => {
+		props.setSearch(fieldContent);
+	}
+
+	const linkToButton = (e) => {
+		setFieldContent( e.target.value );
+		console.log(fieldContent)
+	}
+
 	return(
 		<div style={{height:'10%', width:'100%'}} className="search-bar d-flex flex-row justify-content-around align-items-center">
-			<Button style={{height: '30px',width:'100px',backgroundColor:'#385723',color: 'white'}} onClick={props.onClick} title="Search"/>
-			<Field style={{width:'700px'}} className={props.className} requestOnChange={props.onChange}/>
+			<Button style={{height: '30px',width:'100px',backgroundColor:'#385723',color: 'white'}} click={sendRequest} title="Search"/>
+			<Field style={{width:'700px'}} className={props.className} reqOnChange={linkToButton}/>
 			<Link to={props.location}>
 				Add filter
 			</Link>

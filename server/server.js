@@ -14,6 +14,8 @@ const dbUri = 'mongodb://localhost/Research-ISdb'
 
 // Models
 const Student = require('./model/student');
+const Research = require('./model/research');
+const Faculty = require('./model/faculty');
 
 app.use(cors());
 app.use(express.json())
@@ -30,7 +32,7 @@ mongoose.connect(dbUri,{useNewUrlParser: true, useUnifiedTopology:true})
 	throw err
 })
 
-// get, post, put, delete
+// Student List
 app.get('/student/slist', async (req, res, next) =>{
 	const circularData = await Student.find({});
 	const data = CircularJSON.stringify( circularData );
@@ -47,6 +49,55 @@ app.post('/student/slist/register', async (req, res , next) =>{
 
 	const newStudent = new Student(studentData);
 	newStudent.save((err) => {
+		if ( err ){
+			console.log(err);
+		}
+	})
+
+	res.end();
+})
+
+
+//Research List
+app.get('/research/rlist', async (req, res, next) =>{
+	const circularData = await Research.find({});
+	const data = CircularJSON.stringify( circularData );
+
+	console.log(data);
+
+	return res.status( 200 ).json( JSON.parse(data) );
+})
+
+app.post('/research/rlist/upload', async (req, res , next) =>{
+	console.log(req.body);
+	const researchData = req.body;
+
+	const newResearch = new Research(researchData);
+	newResearch.save((err) => {
+		if ( err ){
+			console.log(err);
+		}
+	})
+
+	res.end();
+})
+
+//Faculty
+app.get('/faculty/flist', async (req, res, next) =>{
+	const circularData = await Faculty.find({});
+	const data = CircularJSON.stringify( circularData );
+
+	console.log(data);
+
+	return res.status( 200 ).json( JSON.parse(data) );
+})
+
+app.post('/faculty/flist/register', async (req, res , next) =>{
+	console.log(req.body);
+	const facultyData = req.body;
+
+	const newFaculty = new Faculty(facultyData);
+	newFaculty.save((err) => {
 		if ( err ){
 			console.log(err);
 		}

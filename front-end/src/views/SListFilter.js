@@ -40,12 +40,11 @@ export default function SListFilter(props){
 					<div style={{height:'20%',width: '100%'}}>
 						<div style={{height:'100%', width:'100%'}} className='d-flex flex-row'>
 							<div style={{height:'100%',width:'20%'}} className='d-flex justify-content-around align-items-center'>
-								<Button className='sfilterCancel' title='Cancel'/>
+								<Button className='sfilterCancel' title='Cancel' click={()=> window.history.back()}/>
 							</div>
 							<div style={{height:'100%',width:'80%'}} className='d-flex flex-row-reverse'>
 								<div style={{height:'100%', width:'50%'}} className='d-flex justify-content-around align-items-center flex-row-reverse'>
 									<Button className='sfilterShow' title='Show Result'/>
-									<Button className='sfilterSave' title='Save'/>
 								</div>
 							</div>
 						</div>
