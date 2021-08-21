@@ -40,6 +40,7 @@ export default function AdminRList(props){
 			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center">
 				<Link to="/admin-slist"><Button className='AdminMenu' title='List of Students'/></Link>
 				<Link to='/admin-rlist'><Button className='AdminMenu' title='List of Research'/></Link>
+				<Link to='/admin-flist'><Button className='AdminMenu' title='List of Faculties'/></Link>
 				<Link to="/admin-upload"><Button className='AdminMenu' title='Upload new Research'/></Link>
 				<Link to="/admin-reg"><Button className='AdminMenu' title='Register new Adviser'/></Link>
 				<Link to="/admin-archive"><Button className='AdminMenu' title='Archived'/></Link>				
@@ -109,7 +110,7 @@ function SlistHeader(props){
 				Last Name
 			</div>
 			<div className='col-1 text-center'>
-				Extension Name
+				E. Name
 			</div>
 			<div className='col-1 text-center'>
 				Birth Date

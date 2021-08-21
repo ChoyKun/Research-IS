@@ -22,14 +22,14 @@ import Checkbox from '../components/fields/checkbox';
 
 export default function AdminRList(props){
 
-	const [researchData, setResearchData] = useState(null);
+	const [facultyData, setFacultyData] = useState(null);
 	const [filteredData, setFilteredData] = useState(null);
 	const [search, setSearch] = useState(null);
 
 	useEffect(()=>{
-		axios.get('http://localhost:7000/research/rlist')
+		axios.get('http://localhost:7000/faculty/flist')
 		.then((res)=>{
-			setResearchData(res.data);
+			setFacultyData(res.data);
 		})
 		.catch((err)=>{
 			console.log(err)
@@ -37,7 +37,7 @@ export default function AdminRList(props){
 	},[])
 
 	useEffect(()=>{
-		setFilteredData(researchData?.map?.(object =>{
+		setFilteredData(facultyData?.map?.(object =>{
 			if(search){
 					for( let key of Object.keys(object)){
 							if(object[key]?.toLowerCase?.()?.startsWith(search?.charAt?.(0)?.toLowerCase?.())){
@@ -49,7 +49,7 @@ export default function AdminRList(props){
 					return<Item key={object.id}{...object}/>
 			}
 		}))
-	}, [search, researchData])
+	}, [search, facultyData])
 
 	return(
 		<>
@@ -62,15 +62,12 @@ export default function AdminRList(props){
 				<Link to="/admin-archive"><Button className='AdminMenu' title='Archived'/></Link>				
 			</div>
 			<div style={{height:'20%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center flex-column">
-				<SearcBar location='rlist-filter' setSearch={setSearch} className='Search'/>
-				<div style={{height:'20%', width:'90%'}}className="d-flex flex-row justify-content-start flex-row-reverse">
-					<Button style={{height: '30px',width:'100px',backgroundColor:'#385723',color: 'white'}} title='Archive'/>		
-				</div>	
+				<SearcBar location='rlist-filter' setSearch={setSearch} className='Search'/>	
 			</div>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
 				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black',overflowY:'auto',overflowX:'auto'}}>
 					<Suspense fallback={<Loading/>}>
-						<RListHeader/>
+						<FListHeader/>
 						{ filteredData }
 					</Suspense>
 				</div>
@@ -85,13 +82,22 @@ export default function AdminRList(props){
 function Item(props){
 	return(
 		<div onClick={() => console.log('clicked')} className="d-flex bg-secondary flex-row justify-content-around" style={{border:'1px solid black'}}>
-			<div className="col-1 text-center"><Checkbox/></div>
-			<div className="col-2 text-center">{props.title}</div>
-			<div className="col-1 text-center">{props.course??'N/A'}</div>
-			<div className="col-4 text-center">{props.researchCategories === '[]' ? 'N/A' : JSON.parse(props.researchCategories).join(', ')}</div>
-			<div className="col-2 text-center">{props.yearSubmitted}</div>
-			<Button className='col-1 text-center' style={{backgroundColor:'#385723', color:'white'}} title='View'/>
-			<Button className='col-1 text-center' style={{backgroundColor:'#385723', color:'white'}} title='Edit'/>
+			<div className="col-1 text-center">{props.username}</div>
+			<div className="col-1 text-center">{props.password}</div>
+			<div className="col-1 text-center">{props.firstName}</div>
+			<div className="col-1 text-center">{props.middleInitial}</div>
+			<div className="col-1 text-center">{props.lastName}</div>
+			<div className="col-1 text-center">{props.extentionName ?? "N/A"}</div>
+			<div className="col-1 text-center">{(() => {
+											const date = new Date(props.birthdate);
+											return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
+									})()}
+			</div>
+			<div className="col-1 text-center">{(() => {
+											const date = new Date(props.dateRegistered);
+											return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
+									})()}
+			</div>
 		</div>
 	);
 }
@@ -103,29 +109,32 @@ function Loading(props){
 	);
 }
 
-function RListHeader(props){
+function FListHeader(props){
 	return(
 		<div style={{height:'30px',width:'100%',border:'1px solid black', backgroundColor:'#4472c4'}} className='d-flex flex-row justify-content-around'>
 			<div className='col-1 text-center'>
-				<Checkbox/>
-			</div>
-			<div className='col-2 text-center'>
-				Title
+				Username
 			</div>
 			<div className='col-1 text-center'>
-				Course
-			</div>
-			<div className='col-4 text-center'>
-				ResearchCategories
-			</div>
-			<div className='col-2 text-center'>
-				Year Submitted
+				Password
 			</div>
 			<div className='col-1 text-center'>
-				
+				First Name
 			</div>
 			<div className='col-1 text-center'>
-				
+				Middile Initial
+			</div>
+			<div className='col-1 text-center'>
+				Last Name
+			</div>
+			<div className='col-1 text-center'>
+				Name Extention
+			</div>
+			<div className='col-1 text-center'>
+				Birthday
+			</div>
+			<div className='col-1 text-center'>
+				Day Registered
 			</div>
 		</div>
 	);

@@ -17,9 +17,10 @@ export default function AdminAccess( props ){
 			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center">
 				<Button className='AdminMenu' title='List of Students'/>
 				<Button className='AdminMenu' title='List of Research'/>
+				<Button className='AdminMenu' title='List of Faculties'/>
 				<Button className='AdminMenu' title='Upload new Research'/>
 				<Button className='AdminMenu' title='Register new Adviser'/>
-				<Button className='AdminMenu' title='Archived'/>			
+				<Button className='AdminMenu' title='Archived'/>
 			</div>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
 				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black'}} className='d-flex justify-content-center align-items-center'>

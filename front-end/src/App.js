@@ -8,6 +8,7 @@ import AdminProfile from './views/AdminProfile.js';
 import AdminEditProfile from './views/AdminEditProfile.js';
 import AdminRlist from './views/AdminRList';
 import AdminSList from './views/AdminSList.js';
+import AdminFList from './views/AdminFList.js';
 import AdminUpload from './views/AdminUpload.js';
 import FacultyReg from './views/FacultyReg.js';
 import FacultyProfile from './views/FacultyProfile.js';
@@ -57,6 +58,7 @@ const views = [
   '/admin-reg',
   '/admin-rlist',
   '/admin-slist',
+  '/admin-flist',
   '/admin-upload',
   '/faculty-reg',
   '/faculty-profile',
@@ -155,6 +157,11 @@ function App() {
         <Route exact path="/admin-slist">
           <AdminFrame>
             <AdminSList />
+          </AdminFrame>
+        </Route>
+        <Route exact path="/admin-flist">
+          <AdminFrame>
+            <AdminFList />
           </AdminFrame>
         </Route>
 

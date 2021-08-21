@@ -107,7 +107,7 @@ function SlistHeader(props){
 				Last Name
 			</div>
 			<div className='col-1 text-center'>
-				Extension Name
+				E. Name
 			</div>
 			<div className='col-1 text-center'>
 				Birth Date
