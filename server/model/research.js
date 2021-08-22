@@ -7,7 +7,8 @@ const researchSchema = new Schema({
 	course: String,
 	researchCategories: String,
 	yearSubmitted: String,
-	PDFFile:{type:Buffer, contentType:String}
+	PDFFile:{type:Buffer, contentType:String},
+	status:String
 })
 
 const Research = mongoose.model('Research', researchSchema);

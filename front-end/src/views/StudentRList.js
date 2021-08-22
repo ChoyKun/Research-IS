@@ -77,7 +77,7 @@ function Item(props){
 		<div style={{fontSize:'20px'}} onClick={() => console.log('clicked')} className="d-flex flex-row justify-content-around mb-3">
 			<div className="col-1 text-center">{props.title}</div>
 			<div className="col-1 text-center">{props.course??'N/A'}</div>
-			<div className="col-5 text-center">{props.researchCategories === '[]' ? 'N/A' : JSON.parse(props.researchCategories).join(', ')}</div>
+			<div className="col-5 text-center">{props.researchCategories === '[]' ? 'N/A' : ()=> JSON.parse(props.researchCategories).join(', ')}</div>
 			<div className="col-1 text-center">{props.yearSubmitted}</div>
 			<Button className="col-1 text-center" style={{backgroundColor:'#385723', color:'white'}} title='View'/>
 		</div>
