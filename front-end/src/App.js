@@ -13,6 +13,7 @@ import AdminUpload from './views/AdminUpload.js';
 import FacultyReg from './views/FacultyReg.js';
 import FacultyProfile from './views/FacultyProfile.js';
 import FacultyEditProfile from './views/FacultyEditProfile.js';
+import FacultyEditStudent from './views/FacultyEditStudent.js';
 import FacultyChangepass from './views/FacultyChangepass.js';
 import FacultySList from './views/FacultySList.js';
 import FacultyUpload from './views/FacultyUpload.js';
@@ -63,6 +64,7 @@ const views = [
   '/faculty-reg',
   '/faculty-profile',
   '/faculty-edit-profile',
+  '/faculty-edit-student',
   '/faculty-changepass',
   '/faculty-slist',
   '/faculty-upload',
@@ -186,6 +188,12 @@ function App() {
         <Route path="/faculty-edit-profile">
           <FacultyFrame>
             <FacultyEditProfile />
+          </FacultyFrame>
+        </Route>
+
+        <Route path="/faculty-edit-student">
+          <FacultyFrame>
+            <FacultyEditStudent />
           </FacultyFrame>
         </Route>
 
