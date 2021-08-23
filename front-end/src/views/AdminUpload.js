@@ -26,7 +26,8 @@ export default function FacultyUpload(props){
 		course: 'BSIT',
 		researchCategories: [],
 		yearSubmitted: null,
-		PDFFile:null
+		PDFFile:null,
+		status:'public'
 	}
 
 	function reducer(state, action){

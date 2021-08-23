@@ -22,34 +22,51 @@ import Checkbox from '../components/fields/checkbox';
 
 export default function AdminRList(props){
 
-	const [researchData, setResearchData] = useState(null);
-	const [filteredData, setFilteredData] = useState(null);
-	const [search, setSearch] = useState(null);
+	const [researchData, setResearchData] = useState([]);
+	const [filteredData, setFilteredData] = useState([]);
+	const [search, setSearch] = useState('');
 
 	useEffect(()=>{
 		axios.get('http://localhost:7000/research/rlist')
 		.then((res)=>{
-			setResearchData(res.data);
+			res.data.forEach( elem => {
+				console.log( elem.status );
+				if( elem.status === 'public' ){
+					const newData = researchData;
+					console.log(newData);
+					newData.push( elem );
+					setResearchData(newData);
+				}
+			})
 		})
 		.catch((err)=>{
 			console.log(err)
 		})
 	},[])
 
-	useEffect(()=>{
-		setFilteredData(researchData?.map?.(object =>{
-			if(search){
-					for( let key of Object.keys(object)){
-							if(object[key]?.toLowerCase?.()?.startsWith(search?.charAt?.(0)?.toLowerCase?.())){
-								return <Item key={object.id} {...object}/>
+	useEffect(() => {
+		if( researchData ){
+			console.log(researchData)
+
+			const data = researchData.map( object => {
+							console.log('else')		
+							console.log(object)
+							if(search){
+								for( let key of Object.keys(object)){
+										if(object[key]?.toLowerCase?.()?.startsWith(search?.charAt?.(0)?.toLowerCase?.())){
+											return <Item key={object.id} {...object}/>
+										}
+								}
 							}
-					}
-			}
-			else{
-					return<Item key={object.id}{...object}/>
-			}
-		}))
-	}, [search, researchData])
+							else{
+								console.log('else')	
+								return <Item key={object.id}{...object}/>
+							}
+						});
+			console.log(data)
+			setFilteredData( data );
+		}
+	}, [researchData])
 
 	return(
 		<>
@@ -71,7 +88,7 @@ export default function AdminRList(props){
 				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black',overflowY:'auto',overflowX:'auto'}}>
 					<Suspense fallback={<Loading/>}>
 						<RListHeader/>
-						{ filteredData }
+						{ researchData }
 					</Suspense>
 				</div>
 			</div>
