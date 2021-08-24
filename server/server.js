@@ -105,3 +105,35 @@ app.post('/faculty/flist/register', async (req, res , next) =>{
 
 	res.end();
 })
+
+
+// Admin
+app.post('/auth-admin', async (req, res, next) => {
+	const admin_path = path.join(__dirname, 'data/auth-admin.json');
+
+	fs.readFile(admin_path, (err, data) => {
+		if( err ){
+			return res.status(401).json({message: 'file not found'});
+		}
+
+		const { username , password } = JSON.parse(data);
+		const { _username, _password } = req.body;
+
+		if(match(username, _username)){
+			if(match(password, _password)){
+				return res.status(200).json({ message: 'Logged in successfully' });
+			}
+			else{
+				return res.status(400).json({ message: 'password is incorrect' })
+			}
+		}
+		else{
+			return res.status(400).json({ message: 'username is incorrect' })
+		}
+
+		// return res.status(200).json( JSON.parse(data) );
+	});
+});
+
+
+const match = (leftOp, rightOp) => leftOp === rightOp;

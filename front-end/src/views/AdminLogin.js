@@ -1,5 +1,6 @@
-import React,{useState, useEffect} from 'react';
-import { Link } from 'react-router-dom';
+import React,{useState, useEffect, useReducer} from 'react';
+import { Link, Redirect } from 'react-router-dom';
+import axios from 'axios';
 
 //icons
 import scslogo from "../images/scs-final.png";
@@ -19,6 +20,39 @@ import SearcBar from '../components/contents/SearchBar';
 
 
 export default function AdminLogin(props){
+	const [adminData, setAdminData] = useState(null)
+	const [isAuth, setIsAuth] = useState(false);
+
+	const state={
+		_username:null,
+		_password:null
+	}
+
+	function reducer(state,action){
+		switch(action.type){
+			case 'username':
+				state._username = action.data;
+				return state;
+			case 'password':
+				state._password = action.data;
+				return state;
+		}
+	}
+
+	
+	const [data, dispatch] = useReducer(reducer, {});
+
+	const handler= ()=>{
+		axios.post('http://localhost:7000/auth-admin',data)
+		.then((res)=>{
+			console.log(res.data.message);
+			setIsAuth(true);
+		})
+		.catch((err)=>{
+			console.log(JSON.parse(err.request.response).message);
+		})
+	}
+
 	return(
 		<>
 			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-center align-items-center">
@@ -34,9 +68,9 @@ export default function AdminLogin(props){
 							</div>
 							<div style={{height:'100%',width:'100%'}} className="d-flex flex-column justify-content-around">
 								<div style={{height:'70%',width:'100%'}} className="login-field d-flex flex-column align-items-center justify-content-around flex-column">
-									<Field className='txt' placeHolder="username"/>
-									<Field className='txt' placeHolder="password"/>
-									<Button className="login-button" title="Sign me in" />
+									<Field className='txt' placeHolder="username" reqOnChange={(e)=>{dispatch({type:'username',data:e.target.value})}}/>
+									<Field className='txt' placeHolder="password" reqOnChange={(e)=>{dispatch({type:'password',data:e.target.value})}}/>
+									<Button className="login-button" title="Sign me in" click={handler}/>
 									<Link to='/admin-access' style={{width:'80%'}}><Button className="GoBack" title="Go Back" /></Link>
 								</div>
 							</div>
@@ -44,6 +78,8 @@ export default function AdminLogin(props){
 					</div>
 				</div>
 			</div>
+			{ console.log(isAuth) }
+			{ isAuth ? <Redirect to='/admin-archive'/> : null }
 		</>
 	);
 }

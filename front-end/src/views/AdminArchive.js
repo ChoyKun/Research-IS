@@ -19,16 +19,19 @@ import Checkbox from '../components/fields/checkbox';
 
 
 export default function AdminArchive(props){
-	const [archiveData, setArchiveData] = useState(null);
-	const [filteredData, setFilteredData] = useState(null);
+	const [archiveData, setArchiveData] = useState([]);
+	const [filteredData, setFilteredData] = useState([]);
 	const [search, setSearch] = useState(null);
 
 
 	useEffect(()=>{
-		axios.get('http//localhost:7000/research/rlist')
+		axios.get('http://localhost:7000/research/rlist')
 		.then((res)=>{
-
-				setArchiveData(res.data);
+			res.data.forEach(elem => {
+				if(elem.status === 'archive'){
+					setArchiveData((archiveData)=>[...archiveData,elem]);
+				}
+			})
 
 		})
 		.catch((err)=>{
@@ -41,12 +44,12 @@ export default function AdminArchive(props){
 			if(search){
 					for( let key of Object.keys(object)){
 							if(object[key]?.toLowerCase?.()?.startsWith(search?.charAt?.(0)?.toLowerCase?.())){
-								return <Item key={object.id} {...object}/>
+								return <Item key={object._id} {...object}/>
 							}
 					}
 			}
 			else{
-					return<Item key={object.id}{...object}/>
+					return<Item key={object._id} {...object}/>
 			}
 		}))
 	}, [search, archiveData])
@@ -62,7 +65,7 @@ export default function AdminArchive(props){
 				<Link to="/admin-archive"><Button className='AdminMenu' title='Archived'/></Link>					
 			</div>
 			<div style={{height:'20%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center flex-column">
-				<SearcBar location='rlist-filter' className='Search'/>
+				<SearcBar location='rlist-filter' setSearch={setSearch}className='Search'/>
 				<div style={{height:'20%', width:'90%'}}className="d-flex flex-row justify-content-start flex-row-reverse">
 					<Button style={{height: '30px',width:'100px',backgroundColor:'#385723',color: 'white'}} title='Archive'/>		
 				</div>	
