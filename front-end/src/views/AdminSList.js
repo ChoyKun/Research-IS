@@ -23,6 +23,8 @@ export default function AdminRList(props){
 
 
 	const [studentData, setStudentData] = useState( null );
+	const [filteredData, setFilteredData] = useState(null);
+	const [search, setSearch]= useState(null);
 
 	
 	useEffect(() => {
@@ -35,6 +37,23 @@ export default function AdminRList(props){
 		})
 	}, [])
 
+
+	useEffect(()=>{
+		setFilteredData(studentData?.map?.(object=>{
+			if(search){
+				for( let key of Object.keys(object)){
+					if(object[key]?.toLowerCase?.()?.startsWith(search?.charAt?.(0)?.toLowerCase?.())){
+						return <Item key={object._id}{...object}/>
+					}
+				}
+			}
+			else{
+				console.log(Item)
+				return <Item key={object._id}{...object}/>
+			}
+		}))
+	},[search, studentData])
+
 	return(
 		<>
 			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center">
@@ -46,35 +65,14 @@ export default function AdminRList(props){
 				<Link to="/admin-archive"><Button className='AdminMenu' title='Archived'/></Link>				
 			</div>
 			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-center align-items-center">
-				<SearcBar location="/slist-filter" className='Search'/>		
+				<SearcBar location="/slist-filter" setSearch={setSearch}className='Search'/>		
 			</div>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
 				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black', color:'black'}}>
 					<Suspense fallback={<Loading/>}>
 						<SlistHeader/>
-						{ studentData?.map?.( object => (
-								<div onClick={() => console.log('clicked')} key={studentData.indexOf(object)} className="d-flex bg-secondary flex-row justify-content-around">
-									<div className="col-1 text-center">{object.studentNo}</div>
-									<div className="col-1 text-center">{object.password}</div>
-									<div className="col-1 text-center">{object.firstName}</div>
-									<div className="col-1 text-center">{object.middleInitial}</div>
-									<div className="col-1 text-center">{object.lastName}</div>
-									<div className="col-1 text-center">{object.extentionName ?? "N/A"}</div>
-									<div className="col-1 text-center">{(() => {
-																	const date = new Date(object.birthdate);
-																	return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
-															})()}
-									</div>
-									<div className="col-1 text-center ">{object.course}</div>
-									<div className="col-1 text-center">{object.yearLevel}</div>
-									<div className="col-1 text-center">{object.section}</div>
-									<div className="col-2 text-center">{(() => {
-																	const date = new Date(object.dateRegistered);
-																	return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
-															})()}
-									</div>
-								</div>			
-							)) }
+						{console.log(filteredData)}
+						{filteredData}
 					</Suspense>
 				</div>
 			</div>
@@ -82,6 +80,32 @@ export default function AdminRList(props){
 	);
 }
 
+
+function Item(props){
+	return(
+		<div onClick={() => console.log('clicked')}style={{border:'1px solid black'}} className="d-flex bg-secondary flex-row justify-content-around">
+			<div className="col-1 text-center">{props.studentNo}</div>
+			<div className="col-1 text-center">{props.password}</div>
+			<div className="col-1 text-center">{props.firstName}</div>
+			<div className="col-1 text-center">{props.middleInitial}</div>
+			<div className="col-1 text-center">{props.lastName}</div>
+			<div className="col-1 text-center">{props.extentionName ?? "N/A"}</div>
+			<div className="col-1 text-center">{(() => {
+											const date = new Date(props.birthdate);
+											return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
+									})()}
+			</div>
+			<div className="col-1 text-center ">{props.course}</div>
+			<div className="col-1 text-center">{props.yearLevel}</div>
+			<div className="col-1 text-center">{props.section}</div>
+			<div className="col-2 text-center">{(() => {
+											const date = new Date(props.dateRegistered);
+											return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
+									})()}
+			</div>
+		</div>		
+	);
+}
 
 function Loading(props){
 	return(

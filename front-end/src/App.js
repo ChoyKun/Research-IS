@@ -261,31 +261,31 @@ function App() {
           </EmptyFrame>
         </Route>
 
-        <Route path="/student-changepass">
+        <Route path="/student-changepass/:username">
           <SFrame>          
             <StudentChangePass />
           </SFrame>
         </Route>
 
-        <Route path="/student-favorites">
+        <Route path="/student-favorites/:username">
           <SFrame>
             <StudentFavorites />
           </SFrame>
         </Route>
 
-        <Route path="/student-copyright">
+        <Route path="/student-copyright/:username">
           <SFrame>
             <StudentCopyRight />
           </SFrame>
         </Route>
 
-        <Route path="/student-rlist">
+        <Route path="/student-rlist/:username">
           <SFrame>
             <StudentRList />
           </SFrame>
         </Route>
 
-        <Route path="/student-profile">
+        <Route path="/student-profile/:username">
           <SFrame>
             <StudentProfile />
           </SFrame>

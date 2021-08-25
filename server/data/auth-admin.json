@@ -1,4 +1,7 @@
 {
 	"username" : "Admin",
-	"password" : "PasswordTest" 
+	"password" : "PasswordTest",
+	"name":"Test Name",
+	"position":"Test Position",
+	"birthday":"Test Birthday" 
 }

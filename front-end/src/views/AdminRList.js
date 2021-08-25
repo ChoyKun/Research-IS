@@ -25,6 +25,8 @@ export default function AdminRList(props){
 	const [researchData, setResearchData] = useState([]);
 	const [filteredData, setFilteredData] = useState([]);
 	const [search, setSearch] = useState('');
+	const [sendArchived, setSendArchived] = useState(false);
+	const [archAccum, setArchAccum]= useState([])
 
 	useEffect(()=>{
 		axios.get('http://localhost:7000/research/rlist')
@@ -46,35 +48,46 @@ export default function AdminRList(props){
 			if(search){
 					for( let key of Object.keys(object)){
 							if(object[key]?.toLowerCase?.()?.startsWith(search?.charAt?.(0)?.toLowerCase?.())){
-								return <Item key={object._id} {...object}/>
+								return <Item key={object._id} object={object}/>
 							}
 					}
 			}
 			else{
-				return <Item key={object._id} {...object}/>
+				return <Item key={object._id} object={object}/>
 			}
 		}))
 	}, [search, researchData])
 	
-	//useEffect(() => {
-	//	if( researchData ){
-	//		const data = researchData?.map?.( object => {
-	//						if(search){
-	//							for( let key of Object.keys(object)){
-	//									if(object[key]?.toLowerCase?.()?.startsWith(search?.charAt?.(0)?.toLowerCase?.())){
-	//										return <Item key={object.id} {...object}/>
-	//									}
-	//							}
-	//						}
-	//						else{
-	//							console.log('else')	
-	//							return <Item key={object.id}{...object}/>
-	//						}
-	//					});
-	//		console.log(data)
-	//		setFilteredData( data );
-	//	}
-	//}, [researchData])
+	useEffect(()=>{
+		if( sendArchived ){
+			const newPublicElems = []
+			researchData.forEach((elem) => {
+				if(elem.status === 'archive') {
+					console.log('here')
+					setArchAccum((archAccum) => [...archAccum, elem])
+				}
+				else{
+					newPublicElems.push( elem );
+				}
+				
+			});
+			setResearchData(() => [...newPublicElems])		
+			console.log( archAccum );	
+		}
+
+	}, [sendArchived])
+
+
+	useEffect(() => {
+		if( archAccum.length ){
+			axios.put('http://localhost:7000/research/rlist/update', archAccum)
+			.then( res => {
+				console.log( res.data.message );
+				setSendArchived( false );
+			})
+			.catch((err)=>{console.log(err)});
+		}
+	}, [archAccum])
 
 	return(
 		<>
@@ -89,7 +102,7 @@ export default function AdminRList(props){
 			<div style={{height:'20%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center flex-column">
 				<SearcBar location='rlist-filter' setSearch={setSearch} className='Search'/>
 				<div style={{height:'20%', width:'90%'}}className="d-flex flex-row justify-content-start flex-row-reverse">
-					<Button style={{height: '30px',width:'100px',backgroundColor:'#385723',color: 'white'}} title='Archive'/>		
+					<Button style={{height: '30px',width:'100px',backgroundColor:'#385723',color: 'white'}} click={() => setSendArchived(true)} title='Archive'/>		
 				</div>	
 			</div>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
@@ -109,13 +122,18 @@ export default function AdminRList(props){
 
 
 function Item(props){
+
+	const handleOnChange = (e) => {
+		props.object.status = e.target.checked ? 'archive' : 'public';
+	}
+
 	return(
 		<div onClick={() => console.log('clicked')} className="d-flex bg-secondary flex-row justify-content-around" style={{border:'1px solid black'}}>
-			<div className="col-1 text-center"><Checkbox/></div>
-			<div className="col-2 text-center">{props.title}</div>
-			<div className="col-1 text-center">{props.course??'N/A'}</div>
-			<div className="col-4 text-center">{props.researchCategories === '[]' ? 'N/A' : ()=> JSON.parse(props.researchCategories).join(', ')}</div>
-			<div className="col-2 text-center">{props.yearSubmitted}</div>
+			<div className="col-1 text-center"><Checkbox reqOnChange={handleOnChange}/></div>
+			<div className="col-2 text-center">{props.object.title}</div>
+			<div className="col-1 text-center">{props.object.course??'N/A'}</div>
+			<div className="col-4 text-center">{props.object.researchCategories === '[]' ? 'N/A' : ()=> JSON.parse(props.object.researchCategories).join(', ')}</div>
+			<div className="col-2 text-center">{props.object.yearSubmitted}</div>
 			<Button className='col-1 text-center' style={{backgroundColor:'#385723', color:'white'}} title='View'/>
 			<Button className='col-1 text-center' style={{backgroundColor:'#385723', color:'white'}} title='Edit'/>
 		</div>

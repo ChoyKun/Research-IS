@@ -32,14 +32,86 @@ mongoose.connect(dbUri,{useNewUrlParser: true, useUnifiedTopology:true})
 	throw err
 })
 
+
+
+//Login
+
+app.post('/sign-in', async(req,res,next)=>{
+	const { _username, _password, _label } = req.body;
+
+	console.log( _username, _password, _label );
+
+	switch( _label ){
+		case 'Student':
+			Student.findOne({studentNo: _username, password:_password }, (err, doc) => {
+				if( err ){
+					console.log( err );
+					return res.status( 401 ).json({ message: 'Unauthorized' });
+				}
+
+				console.log( doc );
+
+				if( doc ){
+					return res.status( 200 ).json({message: 'logged-in successfuly'});
+				}
+				return res.status( 401 ).json({message: 'Unauthorized'});					
+			});
+			break;
+		case 'Adviser':
+			Faculty.findOne({username:_username, password:_password},  (err, doc) => {
+				if( err ){
+					console.log( err );
+					return res.status( 401 ).json({ message: 'Unauthorized' });
+				}
+
+				if( doc ){
+					return res.status( 200 ).json({message: 'logged-in successfuly'});
+				}
+				return res.status( 401 ).json({message: 'Unauthorized'});				
+			});
+			break;
+
+		default:
+			return res.status( 401 ).json({message: 'Unauthorized'});
+
+	}
+})
+
+app.get('/student/slist/:studentNo', async(req, res, next)=>{
+	Student.findOne({studentNo: req.params.studentNo}, (err, doc)=>{
+		if(err){
+			return res.status(400).json({message:'unknown user'})
+		}
+		if(doc){
+			return res.status(200).json({data:`${doc.firstName} ${doc.middleInitial} ${doc.lastName}`, message:'user logged-in'})
+		}
+	})
+})
+
 // Student List
 app.get('/student/slist', async (req, res, next) =>{
 	const circularData = await Student.find({});
 	const data = CircularJSON.stringify( circularData );
 
-	console.log(data);
-
 	return res.status( 200 ).json( JSON.parse(data) );
+})
+
+
+app.post('/student/slist/login', async (req, res, next)=>{
+
+	Student.findOne({studentNo: _studentNo, password: _password}, ( err, doc ) => {
+		if( err ){
+			console.log( err );
+			return res.status( 401 ).json({message: 'Unauthorized'});
+		}
+
+		console.log( doc );
+
+
+
+		return res.status( 200 ).json({message: 'logged-in successfuly'});
+
+	})
 })
 
 
@@ -63,8 +135,6 @@ app.get('/research/rlist', async (req, res, next) =>{
 	const circularData = await Research.find({});
 	const data = CircularJSON.stringify( circularData );
 
-	console.log(data);
-
 	return res.status( 200 ).json( JSON.parse(data) );
 })
 
@@ -82,12 +152,30 @@ app.post('/research/rlist/upload', async (req, res , next) =>{
 	res.end();
 })
 
+
+app.put('/research/rlist/update',async(req,res,next)=>{
+	const editData = req.body;
+
+	// console.log(  );
+	console.log( editData );
+
+	editData.forEach(async (elem) => {
+		Research.findOneAndUpdate({_id: elem._id}, {status: elem.status}, null, ( err ) => {
+			if( err ) {
+				console.log( err );
+				return res.status( 503 ).json({ message: 'Server Error' });
+			}
+		})
+	})
+
+	return res.status( 200 ).json({message: 'Updated successfully'});
+})
+
 //Faculty
 app.get('/faculty/flist', async (req, res, next) =>{
 	const circularData = await Faculty.find({});
 	const data = CircularJSON.stringify( circularData );
 
-	console.log(data);
 
 	return res.status( 200 ).json( JSON.parse(data) );
 })
@@ -108,6 +196,19 @@ app.post('/faculty/flist/register', async (req, res , next) =>{
 
 
 // Admin
+app.get('/auth-admin/profile', async (req,res,next)=>{
+	const admin_path = path.join(__dirname,'data/auth-admin.json');
+
+	fs.readFile(admin_path,(err,data)=>{
+		if(err){
+			console.log(err);
+			return res.status(404).json({ message: 'file not found'});
+		}
+
+		return res.status(200).json({data: JSON.parse(data) ,message:'kahit ano'})
+	})
+})
+
 app.post('/auth-admin', async (req, res, next) => {
 	const admin_path = path.join(__dirname, 'data/auth-admin.json');
 

@@ -31,7 +31,7 @@ export default function Frame(props){
 				<div style={{backgroundColor:'#70AD47', height: '100%', width: '92%'}} className="d-flex flex-row justify-content-center align-items-center"> 
 					<div style={{height:'100%',width:'95%'}} className='d-flex flex-row justify-content-between align-items-center'>
 						<IconBtn style={{height:'25px',width:'40px'}} icon={drawer} onClick={reqOpenMenu} className="col-3 ml-3"/>
-						<div className="col-2 text-center"> JUDY MAUNAHAN </div>
+						<div className="col-2 text-center"></div>
 					</div>
 				</div>
 			</div>
