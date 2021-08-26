@@ -114,7 +114,7 @@ function App() {
           </AdminFrame>
         </Route>
 
-        <Route path="/admin-access">
+        <Route path="/admin-access/:username">
           <FacultyFrame>
             <AdminAccess />
           </FacultyFrame>
@@ -173,43 +173,43 @@ function App() {
           </AdminFrame>
         </Route>
 
-        <Route path="/faculty-reg">
+        <Route path="/faculty-reg/:username">
           <FacultyFrame>
             <FacultyReg />
           </FacultyFrame>
         </Route>
 
-        <Route path="/faculty-profile">
+        <Route path="/faculty-profile/:username">
           <FacultyFrame>
             <FacultyProfile />
           </FacultyFrame>
         </Route>
 
-        <Route path="/faculty-edit-profile">
+        <Route path="/faculty-edit-profile/:username">
           <FacultyFrame>
             <FacultyEditProfile />
           </FacultyFrame>
         </Route>
 
-        <Route path="/faculty-edit-student">
+        <Route path="/faculty-edit-student/:username">
           <FacultyFrame>
             <FacultyEditStudent />
           </FacultyFrame>
         </Route>
 
-        <Route path="/faculty-changepass">
+        <Route path="/faculty-changepass/:username">
           <FacultyFrame>
             <FacultyChangepass />
           </FacultyFrame>
         </Route>
 
-        <Route path="/faculty-slist">
+        <Route path="/faculty-slist/:username">
           <FacultyFrame>
             <FacultySList />
           </FacultyFrame>
         </Route>
 
-        <Route path="/faculty-upload">
+        <Route path="/faculty-upload/:username">
           <FacultyFrame>
             <FacultyUpload />
           </FacultyFrame>

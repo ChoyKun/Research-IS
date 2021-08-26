@@ -88,6 +88,17 @@ app.get('/student/slist/:studentNo', async(req, res, next)=>{
 	})
 })
 
+app.get('/faculty/flist/:username', async(req, res, next)=>{
+	Faculty.findOne({username: req.params.username}, (err, doc)=>{
+		if(err){
+			return res.status(400).json({message:'unknown user'})
+		}
+		if(doc){
+			return res.status(200).json({data:`${doc.firstName} ${doc.middleInitial} ${doc.lastName}`, message:'user logged-in'})
+		}
+	})
+})
+
 // Student List
 app.get('/student/slist', async (req, res, next) =>{
 	const circularData = await Student.find({});

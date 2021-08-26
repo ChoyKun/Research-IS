@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import {Link} from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
+import axios from 'axios'
 
 //icons
 import scslogo from "../images/scs-final.png";
@@ -12,6 +13,18 @@ import IconBtn from '../components/buttons/iconbtn';
 
 export default function Frame(props){
 	const [isMenuOpen, setIsMenuOpen] = useState( false );
+	const {username}=useParams();
+	const [name, setName]=useState(null);
+
+	useEffect(() => {
+		axios.get(`http://localhost:7000/faculty/flist/${username}`)
+		.then(res=>{
+			setName(res.data.data);
+		})
+		.catch(err=>{
+			console.log(err);
+		})	
+	}, [])
 
 	const reqOpenMenu = () => {
 		setIsMenuOpen( !isMenuOpen );
@@ -31,7 +44,7 @@ export default function Frame(props){
 				<div style={{backgroundColor:'#70AD47', height: '100%', width: '92%'}} className="d-flex flex-row justify-content-center align-items-center"> 
 					<div style={{height:'100%',width:'95%'}} className='d-flex flex-row justify-content-between align-items-center'>
 						<IconBtn style={{height:'25px',width:'40px'}} icon={drawer} onClick={reqOpenMenu} className="col-3 ml-3"/>
-						<div className="col-2 text-center"> JUDY MAUNAHAN </div>
+						<div className="col-2 text-center"> {name ?? 'Loading'} </div>
 					</div>
 				</div>
 			</div>
@@ -54,18 +67,19 @@ export default function Frame(props){
 
 
 function OpenedMenu( props ){
+	const {username} = useParams();
 	return(
 		<div style={{backgroundColor:'#404040',width: '40%',height:"100%"}}className="side-panel d-flex flex-column align-items-center">
 			<div style={{backgroundColor:'#404040',width:'100%',height:"80%"}}className="side-panel d-flex flex-column justify-content-around align-items-center">
 				<img style={{height:'130px',width:'150px'}} src={scslogo}/>
 				<div style={{height:'3px',width:'250px',backgroundColor:'white'}} className='d-flex justify-content-center align-items-center'></div>
-				<Link to="/faculty-profile">
+				<Link to={`/faculty-profile/${username}`}>
 					<div className='d-flex justify-content-around align-items-center'>
 						<img style={{height:'50px',width:'50px'}} src={profile}/>
 						<h6 style={{fontSize:'23px'}}>Profile</h6>
 					</div>
 				</Link>
-				<Link to="/faculty-changepass">
+				<Link to={`/faculty-changepass/${username}`}>
 					<div className='d-flex justify-content-around align-items-center'>
 						<img style={{height:'50px',width:'50px'}} src={lock}/>
 						<h6 style={{fontSize:'23px'}}>Change Password</h6>

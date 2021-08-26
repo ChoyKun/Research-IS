@@ -1,5 +1,5 @@
 import React,{useState, useEffect, Suspense} from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams} from 'react-router-dom';
 import axios from 'axios';
 
 //icons
@@ -19,6 +19,7 @@ import SearcBar from '../components/contents/SearchBar';
 
 
 export default function FacultyRList(props){
+	const {username} = useParams();
 
 	const [studentData, setStudentData] = useState( null );
 	const [filteredData, setFilteredData] = useState(null);
@@ -53,15 +54,15 @@ export default function FacultyRList(props){
 	return(
 		<>
 			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center">
-				<Link to='/faculty-slist'><Button className='AdminMenu' title='List of Students'/></Link>
-				<Link to='/faculty-upload'><Button className='AdminMenu' title='Upload new Research'/></Link>
-				<Link to='/faculty-reg'><Button className='AdminMenu' title='Register new Student'/></Link>
-				<Link to='/admin-access'><Button className='AdminMenu' title='Archived'/></Link>					
+				<Link to={`/faculty-slist/${username}`}><Button className='AdminMenu' title='List of Students'/></Link>
+				<Link to={`/faculty-upload/${username}`}><Button className='AdminMenu' title='Upload new Research'/></Link>
+				<Link to={`/faculty-reg/${username}`}><Button className='AdminMenu' title='Register new Adviser'/></Link>
+				<Link to={`/admin-access/${username}`}><Button className='AdminMenu' title='Archived'/></Link>					
 			</div>
 			<div style={{height:'15%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center flex-column">
 				<SearcBar location='/slist-filter'/>
 				<div style={{height:'20%', width:'90%'}}className="d-flex flex-row justify-content-start flex-row-reverse">
-					<Link to ='/faculty-edit-student'><Button style={{height: '30px',width:'100px',backgroundColor:'#385723',color: 'white'}} title='Edit'/></Link>		
+					<Link to ={`/faculty-edit-student/${username}`}><Button style={{height: '30px',width:'100px',backgroundColor:'#385723',color: 'white'}} title='Edit'/></Link>		
 				</div>		
 			</div>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>

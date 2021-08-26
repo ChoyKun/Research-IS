@@ -13,37 +13,41 @@ import Field from '../components/fields/txtfield';
 import SearcBar from '../components/contents/SearchBar';
 
 export default function RListFilter(props){
-	const [researchData, setResearchData] = useState(null);
-	const [filteredData, setFilteredData] = useState( null );
+	const [researchData, setResearchData] = useState([]);
+	const [filteredData, setFilteredData] = useState( [] );
 	const [search, setSearch] = useState( null );
 
 
 	useEffect(()=>{
 		axios.get('http://localhost:7000/research/rlist')
 		.then((res)=>{
-			setResearchData(res.data);
+			res.data.forEach( elem => {
+				console.log( elem.status );
+				if( elem.status === 'public' ){
+					setResearchData((researchData) => [...researchData, elem]);
+				}
+			})
 		})
 		.catch((err)=>{
 			console.log(err)
 		})
-	},[]);
+	},[])
 
 	useEffect(() => {
 		setFilteredData(researchData?.map?.( object => {
-
-										if( search ){
-											for( let key of Object.keys( object ) ){
-												console.log(object)									
-												if(object[key]?.toLowerCase?.()?.startsWith( search?.charAt?.(0)?.toLowerCase?.() )){
-													return <Item key={object.id} {...object}/>
-												}
-											}
-										}
-										else{
-											return <Item key={object.id} {...object}/>
-										}
-									}
-								))
+			if( search ){
+				for( let key of Object.keys( object ) ){
+					console.log(object)									
+					if(object[key]?.toLowerCase?.()?.startsWith( search?.charAt?.(0)?.toLowerCase?.() )){
+						return <Item key={object.id} {...object}/>
+					}
+				}
+			}
+			else{
+				return <Item key={object.id} {...object}/>
+			}
+		}
+	))
 		console.log( filteredData )
 	}, [search, researchData])
 

@@ -1,5 +1,5 @@
 import React,{useState, useEffect, useReducer} from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams} from 'react-router-dom';
 import axios from 'axios';
 
 //icons
@@ -20,6 +20,7 @@ import Select from '../components/fields/select';
 
 
 export default function FacultyReg(props){
+	const {username} = useParams();
 
 	const state = {
 		studentNo : null,
@@ -106,10 +107,10 @@ export default function FacultyReg(props){
 	return(
 		<>
 			<div style={{height:'10%', width:'100%'}}className="d-flex flex-row justify-content-around align-items-center">
-				<Link to='/faculty-slist'><Button className='AdminMenu' title='List of Students'/></Link>
-				<Link to='/faculty-upload'><Button className='AdminMenu' title='Upload new Research'/></Link>
-				<Link to='/faculty-reg'><Button className='AdminMenu' title='Register new Student'/></Link>
-				<Link to='/admin-access'><Button className='AdminMenu' title='Archived'/></Link>					
+				<Link to={`/faculty-slist/${username}`}><Button className='AdminMenu' title='List of Students'/></Link>
+				<Link to={`/faculty-upload/${username}`}><Button className='AdminMenu' title='Upload new Research'/></Link>
+				<Link to={`/faculty-reg/${username}`}><Button className='AdminMenu' title='Register new Adviser'/></Link>
+				<Link to={`/admin-access/${username}`}><Button className='AdminMenu' title='Archived'/></Link>					
 			</div>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
 				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black'}} className='d-flex justify-content-center align-items-center'>

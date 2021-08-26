@@ -1,5 +1,5 @@
 import React,{useState, useEffect} from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 //icons
 import scslogo from "../images/scs-final.png";
@@ -14,13 +14,14 @@ import Field from '../components/fields/txtfield';
 import SearcBar from '../components/contents/SearchBar';
 
 export default function FacultyChangepass(props){
+	const {username} = useParams();
 	return(
 		<>
 			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center">
-				<Link to="/faculty-slist"><Button className='AdminMenu' title='List of Students'/></Link>
-				<Link to="/faculty-upload"><Button className='AdminMenu' title='Upload new Research'/></Link>
-				<Link to="/faculty-reg"><Button className='AdminMenu' title='Register new Adviser'/></Link>
-				<Link to="/admin-access"><Button className='AdminMenu' title='Archived'/></Link>				
+				<Link to={`/faculty-slist/${username}`}><Button className='AdminMenu' title='List of Students'/></Link>
+				<Link to={`/faculty-upload/${username}`}><Button className='AdminMenu' title='Upload new Research'/></Link>
+				<Link to={`/faculty-reg/${username}`}><Button className='AdminMenu' title='Register new Adviser'/></Link>
+				<Link to={`/admin-access/${username}`}><Button className='AdminMenu' title='Archived'/></Link>				
 			</div>
 			<div style={{height:'100%',width:'100%'}} className='d-flex flex-column justify-content-center align-items-center'>
 				<div style={{height:'10%', width:'100%', backgroundColor:'#385723', color:'white'}} className='d-flex justify-content-center align-items-center'>
