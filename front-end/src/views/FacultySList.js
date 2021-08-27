@@ -56,8 +56,8 @@ export default function FacultyRList(props){
 			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center">
 				<Link to={`/faculty-slist/${username}`}><Button className='AdminMenu' title='List of Students'/></Link>
 				<Link to={`/faculty-upload/${username}`}><Button className='AdminMenu' title='Upload new Research'/></Link>
-				<Link to={`/faculty-reg/${username}`}><Button className='AdminMenu' title='Register new Adviser'/></Link>
-				<Link to={`/admin-access/${username}`}><Button className='AdminMenu' title='Archived'/></Link>					
+				<Link to={`/faculty-reg/${username}`}><Button className='AdminMenu' title='Register new Student'/></Link>
+				<Link to="/admin-access"><Button className='AdminMenu' title='Archived'/></Link>					
 			</div>
 			<div style={{height:'15%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center flex-column">
 				<SearcBar location='/slist-filter'/>

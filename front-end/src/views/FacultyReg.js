@@ -109,7 +109,7 @@ export default function FacultyReg(props){
 			<div style={{height:'10%', width:'100%'}}className="d-flex flex-row justify-content-around align-items-center">
 				<Link to={`/faculty-slist/${username}`}><Button className='AdminMenu' title='List of Students'/></Link>
 				<Link to={`/faculty-upload/${username}`}><Button className='AdminMenu' title='Upload new Research'/></Link>
-				<Link to={`/faculty-reg/${username}`}><Button className='AdminMenu' title='Register new Adviser'/></Link>
+				<Link to={`/faculty-reg/${username}`}><Button className='AdminMenu' title='Register new Student'/></Link>
 				<Link to={`/admin-access/${username}`}><Button className='AdminMenu' title='Archived'/></Link>					
 			</div>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>

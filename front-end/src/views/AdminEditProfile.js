@@ -58,7 +58,7 @@ export default function AdminEditProfile(props){
 						</div>
 						<div style={{height:'10%',width:'100%'}} className='d-flex justify-content-end align-items-center'>
 							<div style={{height:'100%',width:'30%'}} className='d-flex justify-content-around '>
-								<Button style={{height:'50px',width:'100px'}} title='Canel'/>
+								<Button style={{height:'50px',width:'100px'}} title='Cancel'/>
 								<Button style={{height:'50px',width:'150px',backgroundColor:'#595959',color:'white'}} title='Save Changes'/>
 							</div>
 						</div>

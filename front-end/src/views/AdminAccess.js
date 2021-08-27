@@ -32,7 +32,7 @@ export default function AdminAccess( props ){
 							</div>
 							<div style={{height:'30%',width:'95%'}} className="d-flex flex-row-reverse justify-content-around">
 								<Link to='/admin-log-in'><Button className='crAccept' title='Login As Admin'/></Link>
-								<Button className='crDecline' title='Go Back' click={window.history.back()}/>
+								<Button className='crDecline' title='Go Back' click={()=> window.history.back()}/>
 							</div>
 						</div>
 					</div>
