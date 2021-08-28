@@ -89,7 +89,7 @@ export default function FacultyProfile(props){
 							))}
 						</div>
 						<div style={{height:'10%',width:'100%'}} className='d-flex justify-content-end align-items-center'>
-							<Button style={{height:'50px',width:'100px'}} title='Edit Profile'/>
+							<Link to={`/faculty-edit-profile/${username}`}><Button style={{height:'50px',width:'100px'}} title='Edit Profile'/></Link>
 						</div>
 					</div>
 				</div>
