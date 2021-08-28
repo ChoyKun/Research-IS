@@ -110,7 +110,7 @@ app.get('/student/slist', async (req, res, next) =>{
 
 app.post('/student/slist/login', async (req, res, next)=>{
 
-	Student.findOne({studentNo: _studentNo, password: _password}, ( err, doc ) => {
+	Student.findOne({studentNo: _username, password: _password}, ( err, doc ) => {
 		if( err ){
 			console.log( err );
 			return res.status( 401 ).json({message: 'Unauthorized'});
@@ -124,6 +124,42 @@ app.post('/student/slist/login', async (req, res, next)=>{
 
 	})
 })
+
+app.put('/student/slist/changepassword/:studentNo',async(req,res,next)=>{
+	const studentNo = req.params.studentNo;
+
+	const data = await Student.findOne({studentNo: studentNo});
+	console.log( data );
+
+	const { password } = data;
+
+
+
+	const { _currPassword, _newPassword, _verNewPassword} = req.body;
+
+	if(match(password, _currPassword)){
+		if(match(_newPassword, _verNewPassword)){
+			Student.findOneAndUpdate({studentNo: data.studentNo}, {password: _newPassword}, {useFindAndModify : false}, ( err ) => {
+				if( err ) {
+					console.log( err );
+					return res.status( 503 ).json({ message: 'Server Error' });
+				}
+
+				return res.status( 200 ).json({ message: 'Changed successfully' });
+
+			})
+		}
+		else{
+			return res.status(400).json({ message: 'Password is incorrect' })
+		}
+	}
+	else{
+		return res.status(400).json({ message: 'Password is incorrect' })
+	}
+
+		
+})
+
 
 
 app.post('/student/slist/register', async (req, res , next) =>{
