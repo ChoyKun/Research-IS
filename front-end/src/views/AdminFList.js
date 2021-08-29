@@ -51,6 +51,7 @@ export default function AdminRList(props){
 		}))
 	}, [search, facultyData])
 
+
 	return(
 		<>
 			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center">
@@ -80,6 +81,23 @@ export default function AdminRList(props){
 
 
 function Item(props){
+
+	const getDateFrom = ( dateString ) => {
+    	const date = new Date( dateString );
+
+		const year = date.getFullYear();
+
+		// console.log( date.getMonth() );
+		const m = date.getMonth() + 1;
+
+		const month = m.toString().length < 2 ? `0${m.toString()}` : m;
+		const day = date.getDate().toString().length < 2 ? `0${date.getDate().toString()}` : date.getDate();
+
+		const formated = `${year}-${month}-${day}`;
+
+		return formated;
+    }
+
 	return(
 		<div onClick={() => console.log('clicked')} className="d-flex bg-secondary flex-row justify-content-around" style={{border:'1px solid black'}}>
 			<div className="col-1 text-center">{props.username}</div>
@@ -88,16 +106,8 @@ function Item(props){
 			<div className="col-1 text-center">{props.middleInitial}</div>
 			<div className="col-1 text-center">{props.lastName}</div>
 			<div className="col-1 text-center">{props.extentionName ?? "N/A"}</div>
-			<div className="col-1 text-center">{(() => {
-											const date = new Date(props.birthdate);
-											return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
-									})()}
-			</div>
-			<div className="col-1 text-center">{(() => {
-											const date = new Date(props.dateRegistered);
-											return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
-									})()}
-			</div>
+			<div className="col-1 text-center">{getDateFrom(props.birthdate)}</div>
+			<div className="col-1 text-center">{getDateFrom(props.dateRegistered)}</div>
 		</div>
 	);
 }

@@ -241,6 +241,79 @@ app.post('/faculty/flist/register', async (req, res , next) =>{
 	res.end();
 })
 
+app.put('/faculty/flist/changepassword/:username',async(req,res,next)=>{
+	const username = req.params.username;
+
+	const data = await Faculty.findOne({username: username});
+	console.log( data );
+
+	const { password } = data;
+
+
+
+	const { _currPassword, _newPassword, _verNewPassword} = req.body;
+
+	if(match(password, _currPassword)){
+		if(match(_newPassword, _verNewPassword)){
+			Faculty.findOneAndUpdate({username: data.username}, {password: _newPassword}, {useFindAndModify : false}, ( err ) => {
+				if( err ) {
+					console.log( err );
+					return res.status( 503 ).json({ message: 'Server Error' });
+				}
+
+				return res.status( 200 ).json({ message: 'Changed successfully' });
+
+			})
+		}
+		else{
+			return res.status(400).json({ message: 'Password is incorrect' })
+		}
+	}
+	else{
+		return res.status(400).json({ message: 'Password is incorrect' })
+	}
+
+		
+})
+
+
+app.put('/faculty/flist/editprofile/:username',async (req,res,next)=>{
+	const username = req.params.username;
+
+	console.log( req.body );	
+	const {_password, _newFirstName, _newMiddleInitial, _newLastName, _newUsername, _newBirthdate} =req.body;
+
+
+
+	Faculty.findOne({username: username}, (err, doc) => {
+		if(err)	return res.status(503).json({ message: 'Server Error' })
+
+			
+		if( doc ){
+			console.log( doc );
+			if( match(doc.password, _password) ){
+		
+				doc.firstName = _newFirstName ?? doc.firstName;
+				doc.middleInitial = _newMiddleInitial ?? doc.middleInitial;
+				doc.lastName =  _newLastName ?? doc.lastName;
+				doc.username = _newUsername ?? doc.username;
+				doc.birthdate= _newBirthdate ?? doc.birthdate;
+
+
+				// may nakalimutan pala ako WAHAHAH
+				doc.save( err => {
+					if(err)	return res.status(503).json({ message: 'Server Error' })
+					
+					return res.status(200).json({message:'Saved successfully'})
+				});
+			}
+			else{
+				return res.status(400).json({ message: 'Password is incorrect' })
+			}
+		}	
+	});
+});
+
 
 // Admin
 app.get('/auth-admin/profile', async (req,res,next)=>{
@@ -282,6 +355,36 @@ app.post('/auth-admin', async (req, res, next) => {
 		// return res.status(200).json( JSON.parse(data) );
 	});
 });
+
+app.put('/auth-admin/editprofile', async(req,res,next)=>{
+	const admin_path = path.join(__dirname, 'data/auth-admin.json');
+
+	fs.readFile(admin_path, (err, data) => {
+		if( err ){
+			return res.status(401).json({message: 'file not found'});
+		}
+
+		const { username , password, name, position, birthday } = JSON.parse(data);
+		const { _username, _password, _name, _position, _birthday} = req.body;
+		console.log(req.body);
+		console.log(data);
+
+		if(match(password, _password)){
+			return res.status(200).json({ message: 'Logged in successfully' });
+
+			data.name = _name ?? data.name;
+			data.position = _position ?? data.position;
+			data.username= _username ?? data.username;
+			data.birthday=_birthday ?? data.birthday;
+		}
+		else{
+			return res.status(400).json({ message: 'password is incorrect' })
+		}
+
+
+		
+	});
+})
 
 
 const match = (leftOp, rightOp) => leftOp === rightOp;

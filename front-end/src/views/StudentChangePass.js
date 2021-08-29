@@ -39,11 +39,6 @@ export default function StudentChangePass(props){
 		}
 	}
 
-	// sama mo yung id nung student paps sa req. Modify mo muna yung data na isesend mo
-	// wait try ko
-	// match mo na lang kaya yung username? naka useParams naman username dito
-	// pwede din. Ano ba laman nung username? student no din d ba?
-	// Ahh WAHAHHA ginawa na nating messenger to eh WAHAHAHHA
 
 
 	const [data, dispatch] = useReducer(reducer,state);
