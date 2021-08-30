@@ -42,10 +42,10 @@ export default function AdminEditProfile(props){
 				state._name=action.data;
 				return state;
 			case '_position':
-				state._newLastName=action.data;
+				state._position=action.data;
 				return state;
 			case '_birthday':
-				state._newBirthdate=action.data;
+				state._birthday=action.data;
 				return state;
 		}
 	}
@@ -104,26 +104,26 @@ export default function AdminEditProfile(props){
 							<div style={{height:'100%',width:'225px', border:'1px solid black'}}> </div>
 						</div>
 						<div style={{height:'35%',width:'100%',color:'black'}} className='d-flex justify-content-around flex-column'>
-							<div style={{width:'300px'}} className='d-flex justify-content-around'>
+							<div style={{width:'300px'}} className='d-flex justify-content-between'>
 								<label style={{fontSize:'20px'}}>Name:</label>
 								<Field style={{width:'200px'}} placeHolder={adminData?.name} reqOnChange={(e)=>{dispatch({type:'_name',data: e.target.value})}}/>
 							</div>
-							<div style={{width:'300px'}} className='d-flex justify-content-around'>
+							<div style={{width:'300px'}} className='d-flex justify-content-between'>
 								<label style={{fontSize:'20px'}}>Position:</label>
 								<Field style={{width:'200px'}} placeHolder={adminData?.position} reqOnChange={(e)=>{dispatch({type:'_position',data: e.target.value})}}/>
 							</div>
-							<div style={{width:'300px'}} className='d-flex justify-content-around'>
+							<div style={{width:'300px'}} className='d-flex justify-content-between'>
 								<label style={{fontSize:'20px'}}>Username:</label>
 								<Field style={{width:'200px'}}placeHolder={adminData?.username} reqOnChange={(e)=>{dispatch({type:'_username',data: e.target.value})}}/>
 							</div>
-							<div style={{width:'300px'}} className='d-flex justify-content-around'>
+							<div style={{width:'300px'}} className='d-flex justify-content-between'>
 								<label style={{fontSize:'20px'}}>Birthday:</label>
-								<Field type='date' style={{width:'200px'}} value={adminData?.birthday} reqOnChange={(e)=>{dispatch({type:'_birthday',data: e.target.value})}}/>
+								<Field type='date' style={{width:'200px'}} value={getDateFrom(adminData?.birthday)} reqOnChange={(e)=>{dispatch({type:'_birthday',data: e.target.value})}}/>
 							</div>	
 						</div>
 						<div style={{height:'20%',width:'100%'}} className='d-flex justify-content-end flex-column align-items-center'>
 							<div style={{height:'100%',width:'30%'}} className='d-flex justify-content-around'>
-								<Field style={{width:'200px',height:'30px'}} placeHolder='password'/>
+								<Field style={{width:'200px',height:'30px'}} placeHolder='password' reqOnChange={(e)=>{dispatch({type:'_password',data: e.target.value})}}/>
 							</div>
 							<div style={{height:'100%',width:'30%'}} className='d-flex justify-content-around '>
 								<Button style={{height:'30px',width:'100px'}} title='Cancel' click={()=>window.history.back()}/>

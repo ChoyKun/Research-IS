@@ -191,7 +191,7 @@ function App() {
           </FacultyFrame>
         </Route>
 
-        <Route path="/faculty-edit-student/:username">
+        <Route path="/faculty-edit-student/:username/:studentNo">
           <FacultyFrame>
             <FacultyEditStudent />
           </FacultyFrame>

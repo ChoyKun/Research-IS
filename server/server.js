@@ -162,6 +162,8 @@ app.put('/student/slist/changepassword/:studentNo',async(req,res,next)=>{
 
 
 
+
+
 app.post('/student/slist/register', async (req, res , next) =>{
 	console.log(req.body);
 	const studentData = req.body;
@@ -232,10 +234,21 @@ app.post('/faculty/flist/register', async (req, res , next) =>{
 	const facultyData = req.body;
 
 	const newFaculty = new Faculty(facultyData);
-	newFaculty.save((err) => {
-		if ( err ){
-			console.log(err);
+
+	Faculty.find({ username: facultyData.username}, (err, doc) => {
+		return res.status( 503 ).json({ message: 'Server Error' });
+
+		if( doc.length > 1 ){
+			return res.status(400).json({message:'username already used'})
 		}
+		else{
+			newFaculty.save((err) => {
+				if ( err ){
+					console.log(err);
+				}
+			})
+		}
+		
 	})
 
 	res.end();
@@ -246,8 +259,6 @@ app.put('/faculty/flist/changepassword/:username',async(req,res,next)=>{
 
 	const data = await Faculty.findOne({username: username});
 	console.log( data );
-
-	const { password } = data;
 
 
 
@@ -284,7 +295,6 @@ app.put('/faculty/flist/editprofile/:username',async (req,res,next)=>{
 	const {_password, _newFirstName, _newMiddleInitial, _newLastName, _newUsername, _newBirthdate} =req.body;
 
 
-
 	Faculty.findOne({username: username}, (err, doc) => {
 		if(err)	return res.status(503).json({ message: 'Server Error' })
 
@@ -301,6 +311,48 @@ app.put('/faculty/flist/editprofile/:username',async (req,res,next)=>{
 
 
 				// may nakalimutan pala ako WAHAHAH
+				doc.save( err => {
+					if(err)	return res.status(503).json({ message: 'Server Error' })
+					
+					return res.status(200).json({message:'Saved successfully'})
+				});
+			}
+			else{
+				return res.status(400).json({ message: 'Password is incorrect' })
+			}
+		}	
+	});
+});
+
+app.put('/faculty/flist/editstudent/:username/:studentNo',async (req,res,next)=>{
+	const studentNo = req.params.studentNo;
+	const username = req.params.username;
+
+	const facultyData = Faculty.findOne({username: username})
+
+	console.log( req.body );	
+	const {_password,_firstName, _middleInitial,_lastName, _extentionName, _birthdate,_course,_yearLevel,_section,_img } =req.body;
+	const { password } = await Faculty.findOne({username: username}).exec();
+
+
+	Student.findOne({studentNo: studentNo}, (err, doc) => {
+		if(err)	return res.status(503).json({ message: 'Server Error' })
+
+			
+		if( doc ){
+			console.log( doc );
+			console.log(password, _password)
+			if( match(password, _password) ){
+		
+				doc.firstName = _firstName ?? doc.firstName;
+				doc.middleInitial = _middleInitial ?? doc.middleInitial;
+				doc.lastName = _lastName ?? doc.lastName;
+				doc.extentionName = _extentionName ?? doc.extentionName;
+				doc.birthdate = _birthdate ?? doc.birthdate;
+				doc.course = _course ?? doc.course;
+				doc.yearLevel = _yearLevel ?? doc.yearLevel;
+				doc.section = _section ?? doc.section;
+
 				doc.save( err => {
 					if(err)	return res.status(503).json({ message: 'Server Error' })
 					
@@ -367,15 +419,24 @@ app.put('/auth-admin/editprofile', async(req,res,next)=>{
 		const { username , password, name, position, birthday } = JSON.parse(data);
 		const { _username, _password, _name, _position, _birthday} = req.body;
 		console.log(req.body);
-		console.log(data);
 
 		if(match(password, _password)){
-			return res.status(200).json({ message: 'Logged in successfully' });
+			const pData = JSON.parse(data);
 
-			data.name = _name ?? data.name;
-			data.position = _position ?? data.position;
-			data.username= _username ?? data.username;
-			data.birthday=_birthday ?? data.birthday;
+			console.log( _name ?? pData.name );
+
+			pData.name = _name ?? pData.name;
+			pData.position = _position ?? pData.position;
+			pData.username= _username ?? pData.username;
+			pData.birthday=_birthday ?? pData.birthday;
+
+			fs.writeFile(admin_path, JSON.stringify(pData, null, 4) ,(err)=>{
+				if(err){
+					return res.status(503).json({message: 'Server Error'});
+				}
+				return res.status(200).json({ message: 'Logged in successfully' });
+			})
+
 		}
 		else{
 			return res.status(400).json({ message: 'password is incorrect' })
@@ -386,5 +447,40 @@ app.put('/auth-admin/editprofile', async(req,res,next)=>{
 	});
 })
 
+app.put('/auth-admin/changepassword', async(req,res,next)=>{
+	const admin_path = path.join(__dirname, 'data/auth-admin.json');
+
+	fs.readFile(admin_path, (err, data) => {
+		if( err ){
+			return res.status(401).json({message: 'file not found'});
+		}
+
+		const { password } = JSON.parse(data);
+		const { _currPassword, _newPassword, _verPassword } = req.body;
+		console.log(req.body);
+
+		if(match(password, _currPassword)){
+			if(match(_newPassword,_verPassword)){
+				const pData = JSON.parse(data);
+
+				pData.password = _newPassword
+
+				fs.writeFile(admin_path, JSON.stringify(pData, null, 4) ,(err)=>{
+					if(err){
+						return res.status(503).json({message: 'Server Error'});
+					}
+					return res.status(200).json({ message: 'Logged in successfully' });
+				})
+			}
+
+		}
+		else{
+			return res.status(400).json({ message: 'password is incorrect' })
+		}
+
+
+		
+	});
+})
 
 const match = (leftOp, rightOp) => leftOp === rightOp;

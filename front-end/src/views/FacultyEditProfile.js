@@ -78,7 +78,7 @@ export default function FacultyEditProfile(props){
 		})
 	},[])
 
-	useEffect(() => { // d pala yan nasa handler pala
+	useEffect(() => {
 		axios.get(`http://localhost:7000/faculty/flist/${username}`)
 		.then(res=>{
 			setName(res.data.data);
@@ -108,6 +108,8 @@ export default function FacultyEditProfile(props){
     		console.log(err.response);
     	})
     }
+
+    
 
 	return(
 		<>
