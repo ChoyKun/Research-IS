@@ -132,7 +132,7 @@ function Item(props){
 			<div className="col-1 text-center"><Checkbox reqOnChange={handleOnChange}/></div>
 			<div className="col-2 text-center">{props.object.title}</div>
 			<div className="col-1 text-center">{props.object.course??'N/A'}</div>
-			<div className="col-4 text-center">{props.object.researchCategories === '[]' ? 'N/A' : ()=> JSON.parse(props.object.researchCategories).join(', ')}</div>
+			<div className="col-4 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
 			<div className="col-2 text-center">{props.object.yearSubmitted}</div>
 			<Button className='col-1 text-center' style={{backgroundColor:'#385723', color:'white'}} title='View'/>
 			<Button className='col-1 text-center' style={{backgroundColor:'#385723', color:'white'}} title='Edit'/>

@@ -71,6 +71,9 @@ export default function AdminReg(props){
 	const handler = ()=>{
 		axios.post('http://localhost:7000/faculty/flist/register',data)
 		.catch((err)=>{
+			if( err?.response?.data?.message ){
+				alert( err.response.data.message );
+			}
 			console.log(err);
 		})
 	}

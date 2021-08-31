@@ -160,22 +160,83 @@ app.put('/student/slist/changepassword/:studentNo',async(req,res,next)=>{
 		
 })
 
+app.put('/student/slist/favorites/:username',async(req,res,next)=>{ //san mo to tinatwag? StudentRlist
+	const studentNo = req.params.username;
 
+	const favorite = req.body;
+
+	Student.findOne({studentNo:studentNo}, (err,data)=>{
+		if(err) return res.status( 503 ).json({ message: 'Server Error' });
+
+		if(data){
+			data.favorites.push(...favorite);
+
+			data.save( err => {
+				if(err) return res.status( 503 ).json({ message: 'Server Error' });
+			})
+
+			return res.status(200).json({message: 'successfuly added to favorites'})
+		}
+	})
+})
+
+app.get('/student/slist/favlist/:username', async(req,res,next)=>{
+	const studentNo= req.params.username;
+
+	Student.findOne({studentNo: studentNo}, (err, data)=>{
+		if(err) return res.status( 503 ).json({ message: 'Server Error' });
+
+		if(data){
+			const favList = [];
+
+			data.favorites.forEach(async (_id, index) => {
+				await Research.findOne({_id: _id}, (err,doc)=>{
+					if(err) return res.status(503).json({message: 'Server Error' })
+
+					if(doc){
+						favList.push(doc);
+
+						console.log( favList );
+					}
+
+					if( index === data.favorites.length - 1){
+						return res.status(200).json({data: favList})
+					}
+				})
+			})
+
+
+		}
+	})
+})
 
 
 
 app.post('/student/slist/register', async (req, res , next) =>{
-	console.log(req.body);
+	// console.log(req.body);
 	const studentData = req.body;
 
 	const newStudent = new Student(studentData);
-	newStudent.save((err) => {
-		if ( err ){
-			console.log(err);
-		}
-	})
 
-	res.end();
+	Student.find({ studentNo: studentData.studentNo}, (err, doc) => {
+		if(err) return res.status( 503 ).json({ message: 'Server Error' });
+
+		console.log( doc );
+
+		if( doc.length > 1 ){ 
+			return res.status(400).json({message:'username already used'})
+		}
+		else{
+			newStudent.save((err) => {
+				if ( err ){
+					console.log(err);
+				}
+			})
+
+			return res.status(200).json({message:'successfuly registered'});
+		}
+		
+	})
 })
 
 
@@ -188,7 +249,7 @@ app.get('/research/rlist', async (req, res, next) =>{
 })
 
 app.post('/research/rlist/upload', async (req, res , next) =>{
-	console.log(req.body);
+	// console.log(req.body);
 	const researchData = req.body;
 
 	const newResearch = new Research(researchData);
@@ -236,9 +297,11 @@ app.post('/faculty/flist/register', async (req, res , next) =>{
 	const newFaculty = new Faculty(facultyData);
 
 	Faculty.find({ username: facultyData.username}, (err, doc) => {
-		return res.status( 503 ).json({ message: 'Server Error' });
+		if(err) return res.status( 503 ).json({ message: 'Server Error' });
 
-		if( doc.length > 1 ){
+		console.log( doc );
+
+		if( doc.length > 1 ){ // san yung part na nagaadd ka?
 			return res.status(400).json({message:'username already used'})
 		}
 		else{
@@ -247,11 +310,11 @@ app.post('/faculty/flist/register', async (req, res , next) =>{
 					console.log(err);
 				}
 			})
+
+			return res.status(200).json({message:'successfuly registered'});
 		}
 		
 	})
-
-	res.end();
 })
 
 app.put('/faculty/flist/changepassword/:username',async(req,res,next)=>{

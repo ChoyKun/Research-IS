@@ -29,7 +29,8 @@ export default function FacultyUpload(props){
 		researchCategories: [],
 		yearSubmitted: null,
 		PDFFile:null,
-		status:'archive'
+		status:'public',
+		favorites:'false'
 	}
 
 	function reducer(state, action){

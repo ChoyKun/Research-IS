@@ -34,7 +34,8 @@ export default function FacultyReg(props){
 		yearLevel: '1',
 		section: null,
 		dateRegistered: null,
-		img: null
+		img: null,
+		favorites: [],
 	}
 
 
@@ -99,7 +100,9 @@ export default function FacultyReg(props){
 	const handler = ()=>{
 		axios.post('http://localhost:7000/student/slist/register', data)
 		.catch((err)=>{
-			console.log(err);
+			if( err?.response?.data?.message ){
+				alert( err.response.data.message );
+			}
 		})
 	}
 
