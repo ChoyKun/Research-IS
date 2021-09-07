@@ -150,7 +150,7 @@ app.put('/student/slist/changepassword/:studentNo',async(req,res,next)=>{
 			})
 		}
 		else{
-			return res.status(400).json({ message: 'Password is incorrect' })
+			return res.status(400).json({ message: 'Password does not match' })
 		}
 	}
 	else{

@@ -8,8 +8,10 @@ import AdminProfile from './views/AdminProfile.js';
 import AdminEditProfile from './views/AdminEditProfile.js';
 import AdminRlist from './views/AdminRList';
 import AdminSList from './views/AdminSList.js';
+import AdminInactiveSList from './views/AdminInactiveSList.js';
 import AdminFList from './views/AdminFList.js';
 import AdminUpload from './views/AdminUpload.js';
+import AdminCO from './views/AdminCO.js';
 import FacultyReg from './views/FacultyReg.js';
 import FacultyProfile from './views/FacultyProfile.js';
 import FacultyEditProfile from './views/FacultyEditProfile.js';
@@ -57,8 +59,10 @@ const views = [
   '/admin-profile',
   '/admin-edit-profile',
   '/admin-reg',
+  '/admin-current-officer',
   '/admin-rlist',
   '/admin-slist',
+  '/admin-inactive-slist',
   '/admin-flist',
   '/admin-upload',
   '/faculty-reg',
@@ -150,6 +154,12 @@ function App() {
           </AdminFrame>
         </Route>
 
+        <Route path="/admin-current-officer">
+          <AdminFrame>
+            <AdminCO />
+          </AdminFrame>
+        </Route>
+
         <Route exact path="/admin-rlist">
           <AdminFrame>
             <AdminRlist />
@@ -161,6 +171,13 @@ function App() {
             <AdminSList />
           </AdminFrame>
         </Route>
+
+        <Route exact path="/admin-inactive-slist">
+          <AdminFrame>
+            <AdminInactiveSList />
+          </AdminFrame>
+        </Route>
+
         <Route exact path="/admin-flist">
           <AdminFrame>
             <AdminFList />

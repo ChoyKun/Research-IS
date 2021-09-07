@@ -36,6 +36,7 @@ export default function FacultyReg(props){
 		dateRegistered: null,
 		img: null,
 		favorites: [],
+		status:'active'
 	}
 
 

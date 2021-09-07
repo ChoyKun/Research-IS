@@ -7,6 +7,7 @@ import favorites from "../images/heart.png";
 import profile from "../images/profile.png";
 import lock from "../images/lock.png"
 import drawer from "../images/drawer.png"
+import rlist from "../images/rlist.png"
 
 import IconBtn from '../components/buttons/iconbtn';
 
@@ -61,14 +62,38 @@ function OpenedMenu( props ){
 				<div style={{height:'3px',width:'250px',backgroundColor:'white'}} className='d-flex justify-content-center align-items-center'></div>
 				<Link to="/admin-profile">
 					<div className='d-flex justify-content-around align-items-center'>
-						<img style={{height:'50px',width:'50px'}} src={profile}/>
-						<h6 style={{fontSize:'23px'}}>Profile</h6>
+						<img style={{height:'40px',width:'40px'}} src={profile}/>
+						<h6 style={{fontSize:'20px'}}>Profile</h6>
 					</div>
 				</Link>
 				<Link to="/admin-changepass">
 					<div className='d-flex justify-content-around align-items-center'>
-						<img style={{height:'50px',width:'50px'}} src={lock}/>
-						<h6 style={{fontSize:'23px'}}>Change Password</h6>
+						<img style={{height:'40px',width:'40px'}} src={lock}/>
+						<h6 style={{fontSize:'20px'}}>Change Password</h6>
+					</div>
+				</Link>
+				<Link to="/admin-rlist">
+					<div className='d-flex justify-content-around align-items-center'>
+						<img style={{height:'40px',width:'40px'}} src={rlist}/>
+						<h6 style={{fontSize:'20px'}}>Research Lists</h6>
+					</div>
+				</Link>
+				<Link to="/admin-current-officer">
+					<div className='d-flex justify-content-around align-items-center'>
+						<img style={{height:'40px',width:'40px'}} src={lock}/>
+						<h6 style={{fontSize:'20px'}}>Officer Management</h6>
+					</div>
+				</Link>
+				<Link to="/admin-slist">
+					<div className='d-flex justify-content-around align-items-center'>
+						<img style={{height:'40px',width:'40px'}} src={lock}/>
+						<h6 style={{fontSize:'20px'}}>Student's List</h6>
+					</div>
+				</Link>
+				<Link to="/admin-slist">
+					<div className='d-flex justify-content-around align-items-center'>
+						<img style={{height:'40px',width:'40px'}} src={lock}/>
+						<h6 style={{fontSize:'20px'}}>Change Research Coor</h6>
 					</div>
 				</Link>
 				<Link to="/sign-in">

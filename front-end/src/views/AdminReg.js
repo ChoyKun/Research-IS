@@ -31,7 +31,8 @@ export default function AdminReg(props){
 		extentionName:null,
 		birthdate:null,
 		dateRegistered:null,
-		img:null
+		img:null,
+		status:'active'
 	}
 
 	function reducer(state, action){
@@ -74,19 +75,13 @@ export default function AdminReg(props){
 			if( err?.response?.data?.message ){
 				alert( err.response.data.message );
 			}
-			console.log(err);
+			alert( err.response.data.message );
 		})
 	}
 
 	return(
 		<>
-			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center">
-				<Link to="/admin-slist"><Button className='AdminMenu' title='List of Students'/></Link>
-				<Link to='/admin-rlist'><Button className='AdminMenu' title='List of Research'/></Link>
-				<Link to='/admin-flist'><Button className='AdminMenu' title='List of Faculties'/></Link>
-				<Link to="/admin-upload"><Button className='AdminMenu' title='Upload new Research'/></Link>
-				<Link to="/admin-reg"><Button className='AdminMenu' title='Register new Adviser'/></Link>
-				<Link to="/admin-archive"><Button className='AdminMenu' title='Archived'/></Link>				
+			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center">		
 			</div>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
 				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black'}} className='d-flex justify-content-center align-items-center'>
@@ -148,7 +143,7 @@ export default function AdminReg(props){
 									</div>
 								</div>
 								<div style={{height:'100%',width:'50%'}} className='d-flex justify-content-around align-items-center flex-row-revers'>
-									<Button title='Edit' className='aRegEdit'/>
+									<Button title='Cancel' click={()=>window.history.back()} className='aRegEdit'/>
 									<Button click={handler} title='Register' className='aRegUploadBtn'/>
 								</div>
 							</div>

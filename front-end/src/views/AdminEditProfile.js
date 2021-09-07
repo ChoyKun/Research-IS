@@ -55,7 +55,7 @@ export default function AdminEditProfile(props){
 	const handler =()=>{
 		axios.put('http://localhost:7000/auth-admin/editprofile', data)
 		.catch((err)=>{
-			console.log(err);
+			alert( err.response.data.message );
 		})
 	}
 

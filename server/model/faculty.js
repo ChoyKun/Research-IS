@@ -10,7 +10,8 @@ const facultySchema= new Schema({
 	extentionName:String,
 	birthdate:{type:Date},
 	dateRegistered:{type:Date, default:Date.now},
-	img:{type:Buffer,contentType:String}
+	img:{type:Buffer,contentType:String},
+	status: String
 })
 
 const Faculty = mongoose.model('Faculty', facultySchema);

@@ -68,7 +68,7 @@ export default function FacultyUpload(props){
 			data.researchCategories = JSON.parse( data.researchCategories )
 		})
 		.catch((err)=>{
-			console.log(err);
+			alert( err.response.data.message );
 		})
 
 
@@ -77,12 +77,9 @@ export default function FacultyUpload(props){
 	return(
 		<>
 			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center">
-				<Link to="/admin-slist"><Button className='AdminMenu' title='List of Students'/></Link>
 				<Link to='/admin-rlist'><Button className='AdminMenu' title='List of Research'/></Link>
-				<Link to='/admin-flist'><Button className='AdminMenu' title='List of Faculties'/></Link>
-				<Link to="/admin-upload"><Button className='AdminMenu' title='Upload new Research'/></Link>
-				<Link to="/admin-reg"><Button className='AdminMenu' title='Register new Adviser'/></Link>
-				<Link to="/admin-archive"><Button className='AdminMenu' title='Archived'/></Link>					
+				<Link to="/admin-archive"><Button className='AdminMenu' title='Archived'/></Link>
+				<Link to="/admin-upload"><Button className='AdminMenu' title='Upload new Research'/></Link>					
 			</div>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
 				<div style={{height:'95%', width:'95%', backgroundColor:'white', border:'1px solid black', color: 'black'}} className='d-flex justify-content-center align-items-center flex-column'>
@@ -119,20 +116,14 @@ export default function FacultyUpload(props){
 								<Field placeHolder='ex. 2001' reqOnChange={(e)=>(dispatch({type:'yearSubmitted', data: e.target.value }))}/>
 							</div>
 						</div>
-						<div style={{height:'15%',width:'100%'}} className='d-flex justify-content-around align-items-center flex-row'>
+						<div style={{height:'25%',width:'100%'}} className='d-flex justify-content-around align-items-center flex-row'>
 							<div style={{width:'80%'}} className='d-flex justify-content-around flex-row'>
 								<Field type='file' title='Attach File'/>
 							</div>
 						</div>
-						<div style={{height:'15%',width:'100%'}} className='d-flex justify-content-around align-items-center flex-row'>
-							<div style={{width:'75%'}} className='d-flex flex-row'>
-								<Button className='aMore' title='Add More Files'/>
-							</div>
-						</div>
-						<div style={{height:'10%',width:'100%'}} className='d-flex justify-content-around align-items-center flex-row-reverse'>
-							<div style={{width:'30%'}} className='d-flex  justify-content-around flex-row-reverse'>
+						<div style={{height:'15%',width:'100%'}} className='d-flex justify-content-around align-items-center flex-row-reverse'>
+							<div style={{width:'80%'}} className='d-flex  justify-content-start flex-row-reverse'>
 								<Button click={handler} className='aBatchBtn' title='Upload'/>
-								<Button className='aBatchBtn' title='Batch Upload'/>
 							</div>
 						</div>
 					</div>

@@ -70,7 +70,7 @@ export default function FacultyUpload(props){
 			data.researchCategories = JSON.parse( data.researchCategories )
 		})
 		.catch((err)=>{
-			console.log(err);
+			alert( err.response.data.message );
 		})
 
 
