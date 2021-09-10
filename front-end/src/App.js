@@ -12,6 +12,7 @@ import AdminInactiveSList from './views/AdminInactiveSList.js';
 import AdminFList from './views/AdminFList.js';
 import AdminUpload from './views/AdminUpload.js';
 import AdminCO from './views/AdminCO.js';
+import AdminNewCoor from './views/AdminNewCoor.js';
 import FacultyReg from './views/FacultyReg.js';
 import FacultyProfile from './views/FacultyProfile.js';
 import FacultyEditProfile from './views/FacultyEditProfile.js';
@@ -65,6 +66,7 @@ const views = [
   '/admin-inactive-slist',
   '/admin-flist',
   '/admin-upload',
+  '/admin-new-coor',
   '/faculty-reg',
   '/faculty-profile',
   '/faculty-edit-profile',
@@ -112,7 +114,7 @@ function App() {
    <div className="app">
      <Switch>
 
-        <Route path="/admin-profile">
+        <Route path="/admin-profile/:username">
           <AdminFrame>
             <AdminProfile />
           </AdminFrame>
@@ -124,19 +126,19 @@ function App() {
           </FacultyFrame>
         </Route>
 
-        <Route path="/admin-archive">
+        <Route path="/admin-archive/:username">
           <AdminFrame>
             <AdminArchive />
           </AdminFrame>
         </Route>
 
-        <Route path="/admin-edit-profile">
+        <Route path="/admin-edit-profile/:username">
           <AdminFrame>
             <AdminEditProfile />
           </AdminFrame>
         </Route>
 
-        <Route path="/admin-changepass">
+        <Route path="/admin-changepass/:username">
           <AdminFrame>
             <AdminChangepass />
           </AdminFrame>
@@ -148,43 +150,49 @@ function App() {
           </FacultyFrame>
         </Route>
 
-        <Route path="/admin-reg">
+        <Route path="/admin-reg/:username">
           <AdminFrame>
             <AdminReg />
           </AdminFrame>
         </Route>
 
-        <Route path="/admin-current-officer">
+        <Route path="/admin-new-coor/:username">
+          <AdminFrame>
+            <AdminNewCoor />
+          </AdminFrame>
+        </Route>
+
+        <Route path="/admin-current-officer/:username">
           <AdminFrame>
             <AdminCO />
           </AdminFrame>
         </Route>
 
-        <Route exact path="/admin-rlist">
+        <Route exact path="/admin-rlist/:username">
           <AdminFrame>
             <AdminRlist />
           </AdminFrame>
         </Route>
 
-        <Route exact path="/admin-slist">
+        <Route exact path="/admin-slist/:username">
           <AdminFrame>
             <AdminSList />
           </AdminFrame>
         </Route>
 
-        <Route exact path="/admin-inactive-slist">
+        <Route exact path="/admin-inactive-slist/:username">
           <AdminFrame>
             <AdminInactiveSList />
           </AdminFrame>
         </Route>
 
-        <Route exact path="/admin-flist">
+        <Route exact path="/admin-flist/:username">
           <AdminFrame>
             <AdminFList />
           </AdminFrame>
         </Route>
 
-        <Route path="/admin-upload">
+        <Route path="/admin-upload/:username">
           <AdminFrame>
             <AdminUpload />
           </AdminFrame>

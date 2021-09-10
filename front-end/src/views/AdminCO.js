@@ -29,7 +29,7 @@ export default function AdminCO(props){
 		.then((res)=>{
 			res.data.forEach( elem => {
 				console.log( elem.status );
-				if( elem.username === `${username}` ){
+				if( elem.status === 'active' ){
 					setFacultyData((FacultyData) => [...FacultyData, elem]);
 				}
 			})

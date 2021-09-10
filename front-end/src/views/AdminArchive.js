@@ -1,5 +1,5 @@
 import React,{useState, useEffect, Suspense} from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import axios from 'axios'
 
 //icons
@@ -21,6 +21,7 @@ import Checkbox from '../components/fields/checkbox';
 
 
 export default function AdminRList(props){
+	const {username} = useParams();
 
 	const [archiveData, setArchiveData] = useState([]);
 	const [filteredData, setFilteredData] = useState([]);
@@ -94,9 +95,9 @@ export default function AdminRList(props){
 	return(
 		<>
 			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center">
-				<Link to='/admin-rlist'><Button className='AdminMenu' title='List of Research'/></Link>
-				<Link to="/admin-archive"><Button className='AdminMenu' title='Archived'/></Link>
-				<Link to="/admin-upload"><Button className='AdminMenu' title='Upload new Research'/></Link>				
+				<Link to={`/admin-rlist/${username}`}><Button className='AdminMenu' title='List of Research'/></Link>
+				<Link to={`/admin-archive/${username}`}><Button className='AdminMenu' title='Archived'/></Link>
+				<Link to={`/admin-upload/${username}`}><Button className='AdminMenu' title='Upload new Research'/></Link>				
 			</div>
 			<div style={{height:'20%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center flex-column">
 				<SearcBar location='rlist-filter' setSearch={setSearch} className='Search'/>

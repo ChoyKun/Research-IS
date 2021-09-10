@@ -15,7 +15,6 @@ export default function Frame(props){
 	const [isMenuOpen, setIsMenuOpen] = useState( false );
 	const {username}=useParams();
 	const [name, setName]=useState(null);
-
 	useEffect(() => {
 		axios.get(`http://localhost:7000/faculty/flist/${username}`)
 		.then(res=>{
@@ -25,7 +24,7 @@ export default function Frame(props){
 			console.log(err);
 		})	
 	}, [])
-
+	
 	const reqOpenMenu = () => {
 		setIsMenuOpen( !isMenuOpen );
 	}

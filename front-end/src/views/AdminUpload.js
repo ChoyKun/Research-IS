@@ -1,5 +1,5 @@
 import React,{useState, useEffect, useReducer} from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 //icons
@@ -21,6 +21,8 @@ import Checkbox from '../components/fields/checkbox';
 
 
 export default function FacultyUpload(props){
+	const {username} = useParams();
+	
 	const state = {
 		title: null,
 		course: 'BSIT',
@@ -77,9 +79,9 @@ export default function FacultyUpload(props){
 	return(
 		<>
 			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center">
-				<Link to='/admin-rlist'><Button className='AdminMenu' title='List of Research'/></Link>
-				<Link to="/admin-archive"><Button className='AdminMenu' title='Archived'/></Link>
-				<Link to="/admin-upload"><Button className='AdminMenu' title='Upload new Research'/></Link>					
+				<Link to={`/admin-rlist/${username}`}><Button className='AdminMenu' title='List of Research'/></Link>
+				<Link to={`/admin-archive/${username}`}><Button className='AdminMenu' title='Archived'/></Link>
+				<Link to={`/admin-upload/${username}`}><Button className='AdminMenu' title='Upload new Research'/></Link>					
 			</div>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
 				<div style={{height:'95%', width:'95%', backgroundColor:'white', border:'1px solid black', color: 'black'}} className='d-flex justify-content-center align-items-center flex-column'>

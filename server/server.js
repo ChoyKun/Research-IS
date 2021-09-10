@@ -16,6 +16,7 @@ const dbUri = 'mongodb://localhost/Research-ISdb'
 const Student = require('./model/student');
 const Research = require('./model/research');
 const Faculty = require('./model/faculty');
+const Coordinator = require('./model/coordinator');
 
 app.use(cors());
 app.use(express.json())
@@ -444,31 +445,53 @@ app.get('/auth-admin/profile', async (req,res,next)=>{
 	})
 })
 
-app.post('/auth-admin', async (req, res, next) => {
-	const admin_path = path.join(__dirname, 'data/auth-admin.json');
 
-	fs.readFile(admin_path, (err, data) => {
-		if( err ){
-			return res.status(401).json({message: 'file not found'});
-		}
 
-		const { username , password } = JSON.parse(data);
-		const { _username, _password } = req.body;
 
-		if(match(username, _username)){
-			if(match(password, _password)){
-				return res.status(200).json({ message: 'Logged in successfully' });
-			}
-			else{
-				return res.status(400).json({ message: 'password is incorrect' })
-			}
+app.post('/coordinator/clist/register', async (req, res , next) =>{
+	// console.log(req.body);
+	const coorData = req.body;
+
+	console.log(coorData)
+	const newCoor = new Coordinator(coorData);
+
+	Coordinator.find({ username: coorData.username}, (err, doc) => {
+		if(err) return res.status( 503 ).json({ message: 'Server Error' });
+
+		console.log( doc );
+
+		if( doc.length > 1 ){ 
+			return res.status(400).json({message:'username already used'})
 		}
 		else{
-			return res.status(400).json({ message: 'username is incorrect' })
-		}
+			newCoor.save((err) => {
+				if ( err ){
+					console.log(err);
+				}
+			})
 
-		// return res.status(200).json( JSON.parse(data) );
-	});
+			return res.status(200).json({message:'successfuly registered'});
+		}
+		
+	})
+})
+
+app.post('/auth-admin', async (req, res, next) => {
+	const {_username, _password}=req.body;
+
+	Coordinator.findOne({username: _username, password:_password }, (err, doc) => {
+				if( err ){
+					console.log( err );
+					return res.status( 401 ).json({ message: 'Unauthorized' });
+				}
+
+				console.log( doc );
+
+				if( doc ){
+					return res.status( 200 ).json({message: 'logged-in successfuly'});
+				}
+				return res.status( 401 ).json({message: 'Unauthorized'});					
+			});
 });
 
 app.put('/auth-admin/editprofile', async(req,res,next)=>{

@@ -21,7 +21,7 @@ import SearcBar from '../components/contents/SearchBar';
 
 export default function AdminLogin(props){
 	const [adminData, setAdminData] = useState(null)
-	const [isAuth, setIsAuth] = useState(false);
+	const [redirect, setRedirect] = useState( null );
 
 	const state={
 		_username:null,
@@ -45,8 +45,12 @@ export default function AdminLogin(props){
 	const handler= ()=>{
 		axios.post('http://localhost:7000/auth-admin',data)
 		.then((res)=>{
-			console.log(res.data.message);
-			setIsAuth(true);
+			alert(res.data.message);
+			if(res.status == 200 ){
+	
+				setRedirect( <Redirect to={`/admin-archive/${data._username}`}/> );
+			}
+			
 		})
 		.catch((err)=>{
 			console.log(JSON.parse(err.request.response).message);
@@ -77,9 +81,8 @@ export default function AdminLogin(props){
 						</div>
 					</div>
 				</div>
+				{redirect}
 			</div>
-			{ console.log(isAuth) }
-			{ isAuth ? <Redirect to='/admin-archive'/> : null }
 		</>
 	);
 }

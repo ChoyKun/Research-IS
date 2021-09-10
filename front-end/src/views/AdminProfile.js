@@ -64,6 +64,7 @@ export default function AdminProfile(props){
 						</div>
 						<div style={{height:'10%',width:'100%'}} className='d-flex justify-content-end align-items-center'>
 							<Link to='/admin-edit-profile'><Button style={{height:'50px',width:'100px'}} title='Edit Profile'/></Link>
+							<Link to='/admin-edit-profile'><Button style={{height:'50px',width:'100px'}} title='Add New Coordinator'/></Link>
 						</div>
 					</div>
 				</div>
