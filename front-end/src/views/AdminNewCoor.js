@@ -1,5 +1,5 @@
 import React,{useState, useEffect, useReducer} from 'react';
-import { Link } from 'react-router-dom';
+import { Link,useParams, Redirect } from 'react-router-dom';
 import axios from 'axios'
 
 
@@ -21,6 +21,10 @@ import Select from '../components/fields/select';
 
 
 export default function AdminNewCoor(props){
+
+	const {username} = useParams();
+
+	const [redirect, setRedirect] = useState( null );
 
 	const state ={
 		username:null ,
@@ -70,7 +74,20 @@ export default function AdminNewCoor(props){
 	const [data, dispatch] = useReducer(reducer,state)
 
 	const handler = ()=>{
-		axios.post('http://localhost:7000/coordinator/clist/register',data)
+		axios.put(`http://localhost:7000/coordinator/clist/new-admin/${username}`)
+		.then((res)=>{
+			alert(res.data.message);
+			setRedirect( <Redirect to='/admin-login'/> );
+			// mukhang okay na paps ung edit profile madali na lang yon
+		})
+		.catch((err)=>{
+			if( err?.response?.data?.message ){
+				alert( err.response.data.message );
+			}
+			alert( err.response.data.message );
+		})
+
+		axios.post('http://localhost:7000/coordinator/clist/register',data)// eto ung sa taas ung nag dedeactivate
 		.catch((err)=>{
 			if( err?.response?.data?.message ){
 				alert( err.response.data.message );
@@ -151,6 +168,7 @@ export default function AdminNewCoor(props){
 					</div>
 				</div>
 			</div>
+			{ redirect }
 		</>
 	);
 }

@@ -433,19 +433,23 @@ app.put('/faculty/flist/editstudent/:username/:studentNo',async (req,res,next)=>
 
 // Admin
 app.get('/auth-admin/profile', async (req,res,next)=>{
-	const admin_path = path.join(__dirname,'data/auth-admin.json');
+	const circularData = await Coordinator.find({});
+	const data = CircularJSON.stringify( circularData );
 
-	fs.readFile(admin_path,(err,data)=>{
-		if(err){
-			console.log(err);
-			return res.status(404).json({ message: 'file not found'});
-		}
 
-		return res.status(200).json({data: JSON.parse(data) ,message:'kahit ano'})
-	})
+	return res.status( 200 ).json( JSON.parse(data) );
 })
 
-
+app.get('/auth-admin/profile/:username', async(req, res, next)=>{
+	Coordinator.findOne({username: req.params.username}, (err, doc)=>{
+		if(err){
+			return res.status(400).json({message:'unknown user'})
+		}
+		if(doc){
+			return res.status(200).json({data:`${doc.firstName} ${doc.middleInitial} ${doc.lastName}`, message:'user logged-in'})
+		}
+	})
+})
 
 
 app.post('/coordinator/clist/register', async (req, res , next) =>{
@@ -476,22 +480,67 @@ app.post('/coordinator/clist/register', async (req, res , next) =>{
 	})
 })
 
+// mali method mo pano ba? dapat post to kasi post din yung nasa front-end ay shet wait
+app.put('/coordinator/clist/new-admin/:username', async (req,res,next)=>{
+	const current = req.params.username
+
+	// Coordinator.findOneAndUpdate({username: current}, {status: 'Inactive'}, null, ( err ) => {
+	// 	if( err ) {
+	// 		console.log( err );
+	// 		return res.status( 503 ).json({ message: 'Server Error' });
+	// 	}
+	// })
+
+	// so 1 account lang dapat ang activated? yep 1 lang coor eh tapos pwede siya palitan anytime
+	//  pero may setter ka naman ng pag dedeactivate ng account? sa front end? wala kase naka default as active ung new registered account eh, bale idedeact na lang ung current user
+	Coordinator.find({}, (err, docs) => {
+		if( err ) return res.status(503).json({message:'server error'})
+
+		if( docs ){
+			docs.forEach( doc => {
+				if( doc.username == req.params.username ){
+					doc.status = 'Inactive';
+
+					doc.save( err => { // may message ako paps
+						if(err) return res.status(400).json({message:'server error'})
+					}); //try mo daw pa
+				}
+			});
+			return res.status(200).json({message:'welcome new coordinator please re log in'});
+
+		}
+	})
+})
+
 app.post('/auth-admin', async (req, res, next) => {
 	const {_username, _password}=req.body;
 
-	Coordinator.findOne({username: _username, password:_password }, (err, doc) => {
-				if( err ){
-					console.log( err );
-					return res.status( 401 ).json({ message: 'Unauthorized' });
-				}
+	// tama ba?
+	Coordinator.findOne({status: 'active' }, (err, doc) => {
+		if( err ){
+			console.log( err );
+			return res.status( 401 ).json({ message: 'Unauthorized' });
+		}
 
-				console.log( doc );
+		console.log( doc );
 
-				if( doc ){
+		if( doc ){
+
+			if(doc.username == _username){
+				if(doc.password == _password){
 					return res.status( 200 ).json({message: 'logged-in successfuly'});
 				}
-				return res.status( 401 ).json({message: 'Unauthorized'});					
-			});
+				else{
+					return res.status( 401 ).json({message: 'Incorrect Password'});	
+				}
+			}
+			else{
+				return res.status( 401 ).json({message: 'Unauthorized'});	
+			}
+			
+		}
+		return res.status( 401 ).json({message: 'Unauthorized'});					
+	});
 });
 
 app.put('/auth-admin/editprofile', async(req,res,next)=>{

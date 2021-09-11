@@ -39,6 +39,7 @@ export default function FacultyProfile(props){
 		})
 	},[])
 	console.log(username);
+	
 	useEffect(() => {
 		axios.get(`http://localhost:7000/faculty/flist/${username}`)
 		.then(res=>{
