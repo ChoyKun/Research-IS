@@ -1,5 +1,5 @@
 import React,{useState, useEffect, useReducer} from 'react';
-import { Link, use } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 //icons
@@ -20,32 +20,51 @@ import SearcBar from '../components/contents/SearchBar';
 
 
 export default function AdminEditProfile(props){
+
+	const {username} = useParams();
+
 	const state={
-		_username : null, 
-		_password : null,
-		_name:null,
-		_position: null,
-		_birthday: null
+		_username:null ,
+		_password:null,
+		_firstName:null,
+		_middleInitial:null,
+		_lastName:null,
+		_extentionName:null,
+		_birthdate:null,
+		_dateRegistered:null,
+		_img:null,
 	}
-	const [adminData, setAdminData] = useState(null);
+
+	const [adminData, setAdminData] = useState([]);
 
 	function reducer(state,action){
 		switch(action.type){
 			case '_username':
-				state._username=action.data;
+				state._username = action.data;
 				return state;
 			case '_password':
-				state._password=action.data;
+				state._password = action.data;
 				return state;
-				console.log(state)
-			case '_name':
-				state._name=action.data;
+			case '_firstName':
+				state._firstName = action.data;
 				return state;
-			case '_position':
-				state._position=action.data;
+			case '_middleInitial':
+				state._middleInitial = action.data;
 				return state;
-			case '_birthday':
-				state._birthday=action.data;
+			case '_lastName':
+				state._lastName = action.data;
+				return state;
+			case '_extentionName':
+				state._extentionName = action.data;
+				return state;
+			case '_birthdate':
+				state._birthdate = action.data;
+				return state;
+			case '_dateRegistered':
+				state._dateRegistered = action.data;
+				return state;
+			case '_img':
+				state._img = action.data;
 				return state;
 		}
 	}
@@ -53,17 +72,24 @@ export default function AdminEditProfile(props){
 	const [data,dispatch] = useReducer(reducer, state);
 
 	const handler =()=>{
-		axios.put('http://localhost:7000/auth-admin/editprofile', data)
+		axios.put(`http://localhost:7000/auth-admin/editprofile/${username}`, data)
+		.then((res)=>{
+			alert(res.data.message);
+		})
 		.catch((err)=>{
-			alert( err.response.data.message );
+			alert( err.data.message );
 		})
 	}
 
 	useEffect(()=>{
-		axios.get('http://localhost:7000/auth-admin/profile')
+		axios.get('http://localhost:7000/auth-admin/profile/')
 		.then(res=>{
-			console.log( res.data.data );
-			setAdminData(res.data.data)
+			res.data.forEach( elem => {
+				console.log( elem.status );
+				if( elem.status === 'active' ){
+					setAdminData((AdminData) => [...AdminData, elem]);
+				}
+			})
 		})
 		.catch(err=>{
 			console.log(err)
@@ -86,14 +112,6 @@ export default function AdminEditProfile(props){
 
 	return(
 		<>
-			<div style={{height:'8%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center">
-				<Link to="/admin-slist"><Button className='AdminMenu' title='List of Students'/></Link>
-				<Link to='/admin-rlist'><Button className='AdminMenu' title='List of Research'/></Link>
-				<Link to='/admin-rlist'><Button className='AdminMenu' title='List of Faculties'/></Link>
-				<Link to="/admin-upload"><Button className='AdminMenu' title='Upload new Research'/></Link>
-				<Link to="/admin-reg"><Button className='AdminMenu' title='Register new Adviser'/></Link>
-				<Link to="/admin-archive"><Button className='AdminMenu' title='Archived'/></Link>					
-			</div>
 			<div style={{height:'8%', width:'100%', backgroundColor:'#595959', color:'white'}} className='d-flex justify-content-center align-items-center'>
 				<h2>Edit Profile</h2>				
 			</div>
@@ -104,22 +122,46 @@ export default function AdminEditProfile(props){
 							<div style={{height:'100%',width:'225px', border:'1px solid black'}}> </div>
 						</div>
 						<div style={{height:'35%',width:'100%',color:'black'}} className='d-flex justify-content-around flex-column'>
-							<div style={{width:'300px'}} className='d-flex justify-content-between'>
-								<label style={{fontSize:'20px'}}>Name:</label>
-								<Field style={{width:'200px'}} placeHolder={adminData?.name} reqOnChange={(e)=>{dispatch({type:'_name',data: e.target.value})}}/>
-							</div>
-							<div style={{width:'300px'}} className='d-flex justify-content-between'>
-								<label style={{fontSize:'20px'}}>Position:</label>
-								<Field style={{width:'200px'}} placeHolder={adminData?.position} reqOnChange={(e)=>{dispatch({type:'_position',data: e.target.value})}}/>
-							</div>
-							<div style={{width:'300px'}} className='d-flex justify-content-between'>
-								<label style={{fontSize:'20px'}}>Username:</label>
-								<Field style={{width:'200px'}}placeHolder={adminData?.username} reqOnChange={(e)=>{dispatch({type:'_username',data: e.target.value})}}/>
-							</div>
-							<div style={{width:'300px'}} className='d-flex justify-content-between'>
-								<label style={{fontSize:'20px'}}>Birthday:</label>
-								<Field type='date' style={{width:'200px'}} value={getDateFrom(adminData?.birthday)} reqOnChange={(e)=>{dispatch({type:'_birthday',data: e.target.value})}}/>
-							</div>	
+							{adminData?.map?.(object=>(
+								<>
+									<div style={{width:'100%'}} className='d-flex justify-content-between flex-row'>
+										<div style={{width:'50%'}} className='d-flex justify-content-between flex-column'>
+											<div style={{width:'300px'}} className='d-flex justify-content-between'>
+												<label style={{fontSize:'20px'}}>First Name:</label>
+												<Field style={{width:'200px'}} placeHolder={object.firstName} reqOnChange={(e)=>{dispatch({type:'_firstName',data: e.target.value})}}/>
+											</div>
+											<div style={{width:'300px'}} className='d-flex justify-content-between'>
+												<label style={{fontSize:'20px'}}>Middle Initial:</label>
+												<Field style={{width:'180px'}} placeHolder={object.middleInitial} reqOnChange={(e)=>{dispatch({type:'_middleInitial',data: e.target.value})}}/>
+											</div>
+											<div style={{width:'300px'}} className='d-flex justify-content-between'>
+												<label style={{fontSize:'20px'}}>Last Name:</label>
+												<Field style={{width:'180px'}} placeHolder={object.lastName} reqOnChange={(e)=>{dispatch({type:'_lastName',data: e.target.value})}}/>
+											</div>
+											<div style={{width:'300px'}} className='d-flex justify-content-between'>
+												<label style={{fontSize:'20px'}}>Extention Name:</label>
+												<Field style={{width:'150px'}} placeHolder={object.extentionName} reqOnChange={(e)=>{dispatch({type:'_extentionName',data: e.target.value})}}/>
+											</div>
+										</div>
+										<div style={{width:'50%'}} className='d-flex justify-content-between flex-column'>
+											<div style={{width:'300px'}} className='d-flex justify-content-between'>
+												<label style={{fontSize:'20px'}}>Username:</label>
+												<Field style={{width:'200px'}} placeHolder={object.username} reqOnChange={(e)=>{dispatch({type:'_username',data: e.target.value})}}/>
+											</div>
+											
+											<div style={{width:'300px'}} className='d-flex justify-content-between'>
+												<label style={{fontSize:'20px'}}>Birthday:</label>
+												<Field type='date' style={{width:'180px'}} value={getDateFrom(object.birthdate)} reqOnChange={(e)=>{dispatch({type:'_birthdate',data: e.target.value})}}/>
+											</div>
+											<div style={{width:'300px'}} className='d-flex justify-content-between'>
+												<label style={{fontSize:'20px'}}>Reg. Date:</label>
+												<Field type='date' style={{width:'180px'}} value={getDateFrom(object.dateRegistered)} reqOnChange={(e)=>{dispatch({type:'_dateRegistered',data: e.target.value})}}/>
+											</div>
+										</div>
+									</div>
+									
+								</>
+							))}
 						</div>
 						<div style={{height:'20%',width:'100%'}} className='d-flex justify-content-end flex-column align-items-center'>
 							<div style={{height:'100%',width:'30%'}} className='d-flex justify-content-around'>

@@ -84,7 +84,7 @@ export default function FacultyProfile(props){
 							))}
 						</div>
 						<div style={{height:'10%',width:'100%'}} className='d-flex justify-content-end align-items-center'>
-							<Link to={`/faculty-edit-profile/${username}`}><Button style={{height:'50px',width:'100px'}} title='Edit Profile'/></Link>
+							<Link to={`/admin-edit-profile/${username}`}><Button style={{height:'50px',width:'100px'}} title='Edit Profile'/></Link>
 							<Link to={`/admin-new-coor/${username}`}><Button style={{height:'50px',width:'100px'}} title='Regiser New Coordinator'/></Link>
 						</div>
 					</div>
@@ -93,7 +93,5 @@ export default function FacultyProfile(props){
 		</>
 	);
 }
-
-// doble run d ba tnga na server AHAHAHHA wait lang
 
 

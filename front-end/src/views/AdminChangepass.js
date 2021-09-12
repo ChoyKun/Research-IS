@@ -16,6 +16,8 @@ import SearcBar from '../components/contents/SearchBar';
 
 export default function StudentChangePass(props){
 
+	const {username} = useParams();
+
 	const state = {
 		_currPassword:null,
 		_newPassword:null,
@@ -40,7 +42,10 @@ export default function StudentChangePass(props){
 	const [data, dispatch] = useReducer(reducer, state);
 
 	const handler=()=>{
-		axios.put('http://localhost:7000/auth-admin/changepassword',data)
+		axios.put(`http://localhost:7000/auth-admin/changepassword/${username}`,data)
+		.then((res)=>{
+			alert(res.data.message);
+		})
 		.catch((err)=>{
 			alert( err.response.data.message );
 		})

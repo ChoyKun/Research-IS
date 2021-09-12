@@ -327,6 +327,7 @@ app.put('/faculty/flist/changepassword/:username',async(req,res,next)=>{
 
 
 	const { _currPassword, _newPassword, _verNewPassword} = req.body;
+	const { password } = data;
 
 	if(match(password, _currPassword)){
 		if(match(_newPassword, _verNewPassword)){
@@ -480,19 +481,9 @@ app.post('/coordinator/clist/register', async (req, res , next) =>{
 	})
 })
 
-// mali method mo pano ba? dapat post to kasi post din yung nasa front-end ay shet wait
 app.put('/coordinator/clist/new-admin/:username', async (req,res,next)=>{
 	const current = req.params.username
 
-	// Coordinator.findOneAndUpdate({username: current}, {status: 'Inactive'}, null, ( err ) => {
-	// 	if( err ) {
-	// 		console.log( err );
-	// 		return res.status( 503 ).json({ message: 'Server Error' });
-	// 	}
-	// })
-
-	// so 1 account lang dapat ang activated? yep 1 lang coor eh tapos pwede siya palitan anytime
-	//  pero may setter ka naman ng pag dedeactivate ng account? sa front end? wala kase naka default as active ung new registered account eh, bale idedeact na lang ung current user
 	Coordinator.find({}, (err, docs) => {
 		if( err ) return res.status(503).json({message:'server error'})
 
@@ -543,79 +534,93 @@ app.post('/auth-admin', async (req, res, next) => {
 	});
 });
 
-app.put('/auth-admin/editprofile', async(req,res,next)=>{
-	const admin_path = path.join(__dirname, 'data/auth-admin.json');
+app.put('/auth-admin/editprofile/:username', async(req,res,next)=>{
+	const username = req.params.username;
+ 
+	console.log( username );
 
-	fs.readFile(admin_path, (err, data) => {
-		if( err ){
-			return res.status(401).json({message: 'file not found'});
-		}
+	const {
+		_username ,
+		_password,
+		_firstName,
+		_middleInitial,
+		_lastName,
+		_extentionName,
+		_birthdate,
+		_dateRegistered,
+		_img,
+	} =req.body;
 
-		const { username , password, name, position, birthday } = JSON.parse(data);
-		const { _username, _password, _name, _position, _birthday} = req.body;
-		console.log(req.body);
+	console.log(req.body)
+	Coordinator.findOne({username: username}, (err, doc) => {
+		if(err)	return res.status(503).json({ message: 'Server Error' })
 
-		if(match(password, _password)){
-			const pData = JSON.parse(data);
-
-			console.log( _name ?? pData.name );
-
-			pData.name = _name ?? pData.name;
-			pData.position = _position ?? pData.position;
-			pData.username= _username ?? pData.username;
-			pData.birthday=_birthday ?? pData.birthday;
-
-			fs.writeFile(admin_path, JSON.stringify(pData, null, 4) ,(err)=>{
-				if(err){
-					return res.status(503).json({message: 'Server Error'});
-				}
-				return res.status(200).json({ message: 'Logged in successfully' });
-			})
-
-		}
-		else{
-			return res.status(400).json({ message: 'password is incorrect' })
-		}
-
-
+		console.log(doc);
+		if( doc ){
+			console.log( doc );
+			if( match(doc.password, _password) ){
 		
+				
+				doc.username  = _username ?? doc.username;
+				doc.firstName = _firstName ?? doc.firstName;
+				doc.middleInitial = _middleInitial ?? doc.middleInitial;
+				doc.lastName = _lastName ?? doc.lastName;
+				doc.extentionName = _extentionName ?? doc.extentionName;
+				doc.birthdate = _birthdate ?? doc.birthdate;
+				doc.dateRegistered = _dateRegistered ?? doc.dateRegistered;
+				doc.img = _img ?? doc.img;
+
+
+				doc.save( err => {
+					if(err)	return res.status(503).json({ message: 'Server Error' })
+					
+					return res.status(200).json({message:'Saved successfully'})
+				});
+			}
+			else{
+				return res.status(400).json({ message: 'Password is incorrect' })
+			}
+		}	
 	});
 })
 
-app.put('/auth-admin/changepassword', async(req,res,next)=>{
-	const admin_path = path.join(__dirname, 'data/auth-admin.json');
+app.put('/auth-admin/changepassword/:username', async(req,res,next)=>{
+	const username = req.params.username;
 
-	fs.readFile(admin_path, (err, data) => {
-		if( err ){
-			return res.status(401).json({message: 'file not found'});
-		}
+	const data = await Coordinator.findOne({username: username});
+	console.log( data );
 
-		const { password } = JSON.parse(data);
-		const { _currPassword, _newPassword, _verPassword } = req.body;
-		console.log(req.body);
 
-		if(match(password, _currPassword)){
-			if(match(_newPassword,_verPassword)){
-				const pData = JSON.parse(data);
 
-				pData.password = _newPassword
+	const { _currPassword, _newPassword, _verPassword} = req.body;
+	const {password} = data;
 
-				fs.writeFile(admin_path, JSON.stringify(pData, null, 4) ,(err)=>{
-					if(err){
-						return res.status(503).json({message: 'Server Error'});
-					}
-					return res.status(200).json({ message: 'Logged in successfully' });
-				})
-			}
+	console.log(req.body)
 
+	if(match(password, _currPassword)){
+		console.log(password)
+		console.log(_currPassword)
+		console.log(_newPassword)
+		console.log(_verPassword)
+		if(match(_newPassword, _verPassword)){
+			
+			Coordinator.findOneAndUpdate({username: username}, {password: _newPassword}, {useFindAndModify : false}, ( err ) => {
+				if( err ) {
+					console.log( err );
+					return res.status( 503 ).json({ message: 'Server Error' });
+				}
+
+				return res.status( 200 ).json({ message: 'Changed successfully' });
+
+			})
 		}
 		else{
-			return res.status(400).json({ message: 'password is incorrect' })
+			return res.status(400).json({ message: 'Password is incorrect' })
 		}
-
-
-		
-	});
+	}
+	else{
+		return res.status(400).json({ message: 'Password is incorrect' })
+	}
 })
 
 const match = (leftOp, rightOp) => leftOp === rightOp;
