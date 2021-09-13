@@ -39,6 +39,7 @@ export default function AdminLogin(props){
 		}
 	}
 
+	// wait parang nagegets ko na WAHHAAHHA ung saving lang problem paps, d kase nagsesave as 'active' ung selected coor kaya walang active coor
 	
 	const [data, dispatch] = useReducer(reducer, {});
 

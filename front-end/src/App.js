@@ -12,6 +12,7 @@ import AdminInactiveSList from './views/AdminInactiveSList.js';
 import AdminFList from './views/AdminFList.js';
 import AdminUpload from './views/AdminUpload.js';
 import AdminCO from './views/AdminCO.js';
+import AdminCList from './views/AdminCList.js';
 import AdminNewCoor from './views/AdminNewCoor.js';
 import FacultyReg from './views/FacultyReg.js';
 import FacultyProfile from './views/FacultyProfile.js';
@@ -67,6 +68,7 @@ const views = [
   '/admin-flist',
   '/admin-upload',
   '/admin-new-coor',
+  '/admin-coor-list',
   '/faculty-reg',
   '/faculty-profile',
   '/faculty-edit-profile',
@@ -159,6 +161,12 @@ function App() {
         <Route path="/admin-new-coor/:username">
           <AdminFrame>
             <AdminNewCoor />
+          </AdminFrame>
+        </Route>
+
+        <Route path="/admin-coor-list/:username">
+          <AdminFrame>
+            <AdminCList />
           </AdminFrame>
         </Route>
 

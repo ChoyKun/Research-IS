@@ -77,7 +77,7 @@ export default function AdminNewCoor(props){
 		axios.put(`http://localhost:7000/coordinator/clist/new-admin/${username}`)
 		.then((res)=>{
 			alert(res.data.message);
-			setRedirect( <Redirect to='/admin-login'/> );
+			setRedirect( <Redirect to='/admin-log-in'/> );
 			// mukhang okay na paps ung edit profile madali na lang yon
 		})
 		.catch((err)=>{

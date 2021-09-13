@@ -86,6 +86,7 @@ export default function FacultyProfile(props){
 						<div style={{height:'10%',width:'100%'}} className='d-flex justify-content-end align-items-center'>
 							<Link to={`/admin-edit-profile/${username}`}><Button style={{height:'50px',width:'100px'}} title='Edit Profile'/></Link>
 							<Link to={`/admin-new-coor/${username}`}><Button style={{height:'50px',width:'100px'}} title='Regiser New Coordinator'/></Link>
+							<Link to={`/admin-coor-list/${username}`}><Button style={{height:'50px',width:'100px'}} title='Change Coordinator'/></Link>
 						</div>
 					</div>
 				</div>

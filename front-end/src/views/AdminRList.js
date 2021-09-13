@@ -35,7 +35,7 @@ export default function AdminRList(props){
 		.then((res)=>{
 			res.data.forEach( elem => {
 				console.log( elem.status );
-				if( elem.status === 'public' ){
+				if( elem.status === 'inactive' ){
 					setResearchData((researchData) => [...researchData, elem]);
 				}
 			})

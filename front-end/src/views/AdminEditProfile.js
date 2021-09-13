@@ -128,15 +128,15 @@ export default function AdminEditProfile(props){
 										<div style={{width:'50%'}} className='d-flex justify-content-between flex-column'>
 											<div style={{width:'300px'}} className='d-flex justify-content-between'>
 												<label style={{fontSize:'20px'}}>First Name:</label>
-												<Field style={{width:'200px'}} placeHolder={object.firstName} reqOnChange={(e)=>{dispatch({type:'_firstName',data: e.target.value})}}/>
+												<Field style={{width:'150px'}} placeHolder={object.firstName} reqOnChange={(e)=>{dispatch({type:'_firstName',data: e.target.value})}}/>
 											</div>
 											<div style={{width:'300px'}} className='d-flex justify-content-between'>
 												<label style={{fontSize:'20px'}}>Middle Initial:</label>
-												<Field style={{width:'180px'}} placeHolder={object.middleInitial} reqOnChange={(e)=>{dispatch({type:'_middleInitial',data: e.target.value})}}/>
+												<Field style={{width:'150px'}} placeHolder={object.middleInitial} reqOnChange={(e)=>{dispatch({type:'_middleInitial',data: e.target.value})}}/>
 											</div>
 											<div style={{width:'300px'}} className='d-flex justify-content-between'>
 												<label style={{fontSize:'20px'}}>Last Name:</label>
-												<Field style={{width:'180px'}} placeHolder={object.lastName} reqOnChange={(e)=>{dispatch({type:'_lastName',data: e.target.value})}}/>
+												<Field style={{width:'150px'}} placeHolder={object.lastName} reqOnChange={(e)=>{dispatch({type:'_lastName',data: e.target.value})}}/>
 											</div>
 											<div style={{width:'300px'}} className='d-flex justify-content-between'>
 												<label style={{fontSize:'20px'}}>Extention Name:</label>
@@ -146,7 +146,7 @@ export default function AdminEditProfile(props){
 										<div style={{width:'50%'}} className='d-flex justify-content-between flex-column'>
 											<div style={{width:'300px'}} className='d-flex justify-content-between'>
 												<label style={{fontSize:'20px'}}>Username:</label>
-												<Field style={{width:'200px'}} placeHolder={object.username} reqOnChange={(e)=>{dispatch({type:'_username',data: e.target.value})}}/>
+												<Field style={{width:'180px'}} placeHolder={object.username} reqOnChange={(e)=>{dispatch({type:'_username',data: e.target.value})}}/>
 											</div>
 											
 											<div style={{width:'300px'}} className='d-flex justify-content-between'>

@@ -490,7 +490,7 @@ app.put('/coordinator/clist/new-admin/:username', async (req,res,next)=>{
 		if( docs ){
 			docs.forEach( doc => {
 				if( doc.username == req.params.username ){
-					doc.status = 'Inactive';
+					doc.status = 'inactive';
 
 					doc.save( err => { // may message ako paps
 						if(err) return res.status(400).json({message:'server error'})
@@ -498,15 +498,16 @@ app.put('/coordinator/clist/new-admin/:username', async (req,res,next)=>{
 				}
 			});
 			return res.status(200).json({message:'welcome new coordinator please re log in'});
-
 		}
-	})
+	});
+
+	// Dahil siguro sa pagiging async nitong mga to wait
 })
 
 app.post('/auth-admin', async (req, res, next) => {
 	const {_username, _password}=req.body;
 
-	// tama ba?
+
 	Coordinator.findOne({status: 'active' }, (err, doc) => {
 		if( err ){
 			console.log( err );
@@ -531,6 +532,43 @@ app.post('/auth-admin', async (req, res, next) => {
 			
 		}
 		return res.status( 401 ).json({message: 'Unauthorized'});					
+	});
+});
+
+app.put('/coordinator/clist/changecoor/:username',async (req,res,next)=>{
+	console.log(req.params.username);
+
+	// yung username ano yon? ung username ng current kahit ba hindi na need yon? Wait so yung current dapat yung magiging active? inactive meron na siya request sa taas
+
+	const prevCoor = req.params.username;
+
+	const checkMatch = ( doc , username ) => {
+		
+		if( doc.username == username ){
+			doc.status = 'active';
+
+			doc.save( err => { // may message ako paps
+				if(err) return res.status(400).json({message:'server error'})
+			});
+		}
+	}
+
+	const success = () => res.status(200).json({message:'welcome new coordinator please re log in'});
+	// try mo
+	Coordinator.find({}, (err, doc) => {
+		if(err)	return res.status(503).json({ message: 'Server Error' })
+
+		console.log( doc ); // try ulit paps
+		if( doc.length ){
+			doc.forEach(doc=>{
+				checkMatch( doc, prevCoor );
+			}); // try paps
+			success();
+		}
+		else{
+			checkMatch( doc, prevCoor );
+			success();
+		}
 	});
 });
 
