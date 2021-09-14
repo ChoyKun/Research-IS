@@ -54,7 +54,7 @@ export default function AdminLogin(props){
 			
 		})
 		.catch((err)=>{
-			console.log(JSON.parse(err.request.response).message);
+			alert(JSON.parse(err.request.response).message);
 		})
 	}
 

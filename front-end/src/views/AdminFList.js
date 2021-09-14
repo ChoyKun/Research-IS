@@ -1,4 +1,4 @@
-import React,{useState, useEffect, Suspense} from 'react';
+import React,{useState, useEffect, Suspense, useRef, useReducer} from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios'
 
@@ -22,14 +22,33 @@ import Checkbox from '../components/fields/checkbox';
 
 export default function AdminRList(props){
 
-	const [facultyData, setFacultyData] = useState(null);
+	const [facultyData, setFacultyData] = useState([]);
 	const [filteredData, setFilteredData] = useState(null);
 	const [search, setSearch] = useState(null);
+	
+
+	const reducer = (state, action)=>{
+		if(!state.item){
+			setColorToSelected( action.item );
+		} 
+		else{
+			setColorToSelected( state.item, true );
+			setColorToSelected( action.item );
+		}
+		console.log(action.data);
+		return {item: action.item, data: action.data};		
+	}
+	const [selected, selectedDispatch] = useReducer(reducer, {item: null, data: null});
 
 	useEffect(()=>{
 		axios.get('http://localhost:7000/faculty/flist')
 		.then((res)=>{
-			setFacultyData(res.data);
+			res.data.forEach( elem => {
+				console.log( elem.status );
+				if( elem.status === 'inactive' ){
+					setFacultyData((facultyData) => [...facultyData, elem]);
+				}
+			})
 		})
 		.catch((err)=>{
 			console.log(err)
@@ -41,12 +60,12 @@ export default function AdminRList(props){
 			if(search){
 					for( let key of Object.keys(object)){
 							if(object[key]?.toLowerCase?.()?.startsWith(search?.charAt?.(0)?.toLowerCase?.())){
-								return <Item key={object.id} {...object}/>
+								return <Item key={object.id} {...object} dispatch={selectedDispatch}/>
 							}
 					}
 			}
 			else{
-					return<Item key={object.id}{...object}/>
+					return<Item key={object.id}{...object} dispatch={selectedDispatch}/>
 			}
 		}))
 	}, [search, facultyData])
@@ -77,6 +96,15 @@ export default function AdminRList(props){
 
 
 function Item(props){
+	const item = useRef();
+	
+	const handleClick = () => {
+		if( !item.current ) return;
+
+		props.dispatch({ item: item.current, data: props });
+
+
+	}
 
 	const getDateFrom = ( dateString ) => {
     	const date = new Date( dateString );
@@ -95,7 +123,7 @@ function Item(props){
     }
 
 	return(
-		<div onClick={() => console.log('clicked')} className="d-flex bg-secondary flex-row justify-content-around" style={{border:'1px solid black'}}>
+		<div onClick={handleClick} className="d-flex bg-secondary flex-row justify-content-around" style={{border:'1px solid black'}}>
 			<div className="col-1 text-center">{props.username}</div>
 			<div className="col-1 text-center">{props.password}</div>
 			<div className="col-1 text-center">{props.firstName}</div>
@@ -144,4 +172,21 @@ function FListHeader(props){
 			</div>
 		</div>
 	);
+}
+
+const setColorToSelected = (item, reverse = false) => {
+	console.log( item );
+	if( !item ) return ;
+
+	const list = item.classList;
+
+	if( !reverse ){
+		console.log( item.classList );
+		list.replace('bg-secondary', 'bg-success');
+	}
+	else{
+		list.replace('bg-success', 'bg-secondary');
+	}
+	
+
 }

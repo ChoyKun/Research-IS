@@ -28,7 +28,6 @@ export default function AdminCO(props){
 		axios.get('http://localhost:7000/faculty/flist')
 		.then((res)=>{
 			res.data.forEach( elem => {
-				console.log( elem.status );
 				if( elem.status === 'active' ){
 					setFacultyData((FacultyData) => [...FacultyData, elem]);
 				}
@@ -85,8 +84,8 @@ export default function AdminCO(props){
 							))}
 						</div>
 						<div style={{height:'10%',width:'50%'}} className='d-flex justify-content-between align-items-center'>
-							<Link to={`/admin-reg`}><Button style={{height:'50px',width:'150px'}} title='Add new Officer'/></Link>
-							<Link to={`/admin-flist`}><Button style={{height:'50px',width:'150px'}} title='Change Officer'/></Link>
+							<Link to={`/admin-reg/${username}`}><Button style={{height:'50px',width:'150px'}} title='Add new Officer'/></Link>
+							<Link to={`/admin-flist/${username}`}><Button style={{height:'50px',width:'150px'}} title='Change Officer'/></Link>
 						</div>
 					</div>
 				</div>

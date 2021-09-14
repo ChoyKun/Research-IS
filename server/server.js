@@ -90,11 +90,12 @@ app.get('/student/slist/:studentNo', async(req, res, next)=>{
 })
 
 app.get('/faculty/flist/:username', async(req, res, next)=>{
-	Faculty.findOne({username: req.params.username}, (err, doc)=>{
+	Faculty.findOne({status: 'active'}, (err, doc)=>{
 		if(err){
 			return res.status(400).json({message:'unknown user'})
 		}
 		if(doc){
+			console.log(doc);
 			return res.status(200).json({data:`${doc.firstName} ${doc.middleInitial} ${doc.lastName}`, message:'user logged-in'})
 		}
 	})
@@ -316,6 +317,25 @@ app.post('/faculty/flist/register', async (req, res , next) =>{
 		}
 		
 	})
+})
+
+app.put('/faculty/flist/new-officer', async(req,res,next)=>{
+
+	Faculty.findOne({status:'active'}, (err, docs) => {
+		if( err ) return res.status(503).json({message:'server error'})
+		console.log(docs)
+		if( docs ){
+				
+
+			docs.status = 'inactive';
+
+			docs.save( err => { // may message ako paps
+				if(err) return res.status(400).json({message:'server error'})
+			}); //try mo daw pa
+
+			return res.status(200).json({message:'welcome new coordinator please re log in'});
+		}
+	});
 })
 
 app.put('/faculty/flist/changepassword/:username',async(req,res,next)=>{

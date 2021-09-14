@@ -70,13 +70,22 @@ export default function AdminReg(props){
 	const [data, dispatch] = useReducer(reducer,state)
 
 	const handler = ()=>{
-		axios.post('http://localhost:7000/faculty/flist/register',data)
-		.catch((err)=>{
-			if( err?.response?.data?.message ){
-				alert( err.response.data.message );
-			}
-			alert( err.response.data.message );
+		axios.put('http://localhost:7000/faculty/flist/new-officer')
+		.then((res)=>{
+			alert(res.data.message);
+			axios.post('http://localhost:7000/faculty/flist/register',data)
+			.catch((err)=>{
+				if( err?.response?.data?.message ){
+					alert( err.response.data.message );
+				}
+			})
 		})
+		.catch((err)=>{
+			alert(err.data.message);
+		})
+
+
+		
 	}
 
 	return(
