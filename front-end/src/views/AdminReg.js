@@ -83,8 +83,6 @@ export default function AdminReg(props){
 		.catch((err)=>{
 			alert(err.data.message);
 		})
-
-
 		
 	}
 

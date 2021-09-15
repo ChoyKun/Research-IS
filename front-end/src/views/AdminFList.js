@@ -1,5 +1,5 @@
 import React,{useState, useEffect, Suspense, useRef, useReducer} from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import axios from 'axios'
 
 //icons
@@ -38,6 +38,7 @@ export default function AdminRList(props){
 		console.log(action.data);
 		return {item: action.item, data: action.data};		
 	}
+
 	const [selected, selectedDispatch] = useReducer(reducer, {item: null, data: null});
 
 	useEffect(()=>{
@@ -70,13 +71,30 @@ export default function AdminRList(props){
 		}))
 	}, [search, facultyData])
 
+	const handler = ()=>{
+		axios.put('http://localhost:7000/faculty/flist/new-officer')
+		.then((res)=>{
+			alert(res.data.message);
+			axios.put(`http://localhost:7000/faculty/flist/changeofficer/${selected?.data?.username}`)
+			.catch((err)=>{
+				if( err?.response?.data?.message ){
+					alert( err.response.data.message );
+				}
+			})
+		})
+		.catch((err)=>{
+			alert(err.data.message);
+		})
+		
+	}
+
 
 	return(
 		<>
 			<div style={{height:'20%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center flex-column">
 				<SearcBar location='rlist-filter' setSearch={setSearch} className='Search'/>
 				<div style={{height:'20%', width:'30%'}}className="d-flex flex-row justify-content-between flex-row-reverse">
-					<Button style={{height: '30px',width:'100px',backgroundColor:'#385723',color: 'white'}} title='Activate'/>
+					<Button style={{height: '30px',width:'100px',backgroundColor:'#385723',color: 'white'}} title='Activate' click={handler}/>
 					<Button style={{height: '30px',width:'100px',backgroundColor:'white',color: 'black'}} click={()=>window.history.back()}title='Cancel'/>		
 				</div>	
 			</div>
@@ -123,7 +141,7 @@ function Item(props){
     }
 
 	return(
-		<div onClick={handleClick} className="d-flex bg-secondary flex-row justify-content-around" style={{border:'1px solid black'}}>
+		<div onClick={handleClick} ref={item} className="d-flex bg-secondary flex-row justify-content-around" style={{border:'1px solid black'}}>
 			<div className="col-1 text-center">{props.username}</div>
 			<div className="col-1 text-center">{props.password}</div>
 			<div className="col-1 text-center">{props.firstName}</div>

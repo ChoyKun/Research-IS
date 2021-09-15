@@ -59,7 +59,7 @@ app.post('/sign-in', async(req,res,next)=>{
 			});
 			break;
 		case 'Adviser':
-			Faculty.findOne({username:_username, password:_password},  (err, doc) => {
+			Faculty.findOne({username:_username, password:_password, status: 'active'},  (err, doc) => {
 				if( err ){
 					console.log( err );
 					return res.status( 401 ).json({ message: 'Unauthorized' });
@@ -337,6 +337,43 @@ app.put('/faculty/flist/new-officer', async(req,res,next)=>{
 		}
 	});
 })
+
+app.put('/faculty/flist/changeofficer/:username',async (req,res,next)=>{
+	console.log(req.params.username);
+
+	// yung username ano yon? ung username ng current kahit ba hindi na need yon? Wait so yung current dapat yung magiging active? inactive meron na siya request sa taas
+
+	const prevCoor = req.params.username;
+
+	const checkMatch = ( doc , username ) => {
+		
+		if( doc.username == username ){
+			doc.status = 'active';
+
+			doc.save( err => { // may message ako paps
+				if(err) return res.status(400).json({message:'server error'})
+			});
+		}
+	}
+
+	const success = () => res.status(200).json({message:'welcome new coordinator please re log in'});
+	// try mo
+	Faculty.find({}, (err, doc) => {
+		if(err)	return res.status(503).json({ message: 'Server Error' })
+
+		console.log( doc ); // try ulit paps
+		if( doc.length ){
+			doc.forEach(doc=>{
+				checkMatch( doc, prevCoor );
+			}); // try paps
+			success();
+		}
+		else{
+			checkMatch( doc, prevCoor );
+			success();
+		}
+	});
+});
 
 app.put('/faculty/flist/changepassword/:username',async(req,res,next)=>{
 	const username = req.params.username;

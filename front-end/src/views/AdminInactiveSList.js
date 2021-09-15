@@ -1,5 +1,5 @@
 import React,{useState, useEffect, Suspense} from 'react';
-import { Link } from 'react-router-dom';
+import { Link,useParams } from 'react-router-dom';
 import axios from 'axios';
 
 //icons
@@ -20,6 +20,8 @@ import SearcBar from '../components/contents/SearchBar';
 
 
 export default function AdminInactiveSList(props){
+
+	const {username} = useParams();
 
 
 	const [studentData, setStudentData] = useState( null );
@@ -57,8 +59,8 @@ export default function AdminInactiveSList(props){
 	return(
 		<>
 			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center">
-				<Link to="/admin-slist"><Button className='AdminMenu' title='Active Students'/></Link>
-				<Link to="/admin-inactive-slist"><Button className='AdminMenu' title='Inactive Students'/></Link>				
+				<Link to={`/admin-slist/${username}`}><Button className='AdminMenu' title='Active Students'/></Link>
+				<Link to={`/admin-inactive-slist/${username}`}><Button className='AdminMenu' title='Inactive Students'/></Link>				
 			</div>
 			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center flex-column">
 				<SearcBar location="/slist-filter" setSearch={setSearch}className='Search'/>
