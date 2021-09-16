@@ -74,8 +74,10 @@ export default function AdminRList(props){
 	const handler = ()=>{
 		axios.put('http://localhost:7000/faculty/flist/new-officer')
 		.then((res)=>{
-			alert(res.data.message);
 			axios.put(`http://localhost:7000/faculty/flist/changeofficer/${selected?.data?.username}`)
+			.then((res)=>{
+				alert(res.data.message);
+			})
 			.catch((err)=>{
 				if( err?.response?.data?.message ){
 					alert( err.response.data.message );

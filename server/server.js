@@ -127,6 +127,24 @@ app.post('/student/slist/login', async (req, res, next)=>{
 	})
 })
 
+app.put('/student/slist/update',async(req,res,next)=>{
+	const editData = req.body;
+
+	// console.log(  );
+	console.log( editData );
+
+	editData.forEach(async (elem) => {
+		Student.findOneAndUpdate({_id: elem._id}, {status: elem.status}, null, ( err ) => {
+			if( err ) {
+				console.log( err );
+				return res.status( 503 ).json({ message: 'Server Error' });
+			}
+		})
+	})
+
+	return res.status( 200 ).json({message: 'Updated successfully'});
+})
+
 app.put('/student/slist/changepassword/:studentNo',async(req,res,next)=>{
 	const studentNo = req.params.studentNo;
 
@@ -257,11 +275,11 @@ app.post('/research/rlist/upload', async (req, res , next) =>{
 	const newResearch = new Research(researchData);
 	newResearch.save((err) => {
 		if ( err ){
-			console.log(err);
+			return res.status( 503 ).json({ message: 'Server Error' });
 		}
 	})
 
-	res.end();
+	return res.status( 200 ).json({message: 'Uploaded successfully'});
 })
 
 
@@ -303,7 +321,7 @@ app.post('/faculty/flist/register', async (req, res , next) =>{
 
 		console.log( doc );
 
-		if( doc.length > 1 ){ // san yung part na nagaadd ka?
+		if( doc.length > 0 ){ // san yung part na nagaadd ka?
 			return res.status(400).json({message:'username already used'})
 		}
 		else{
@@ -333,7 +351,7 @@ app.put('/faculty/flist/new-officer', async(req,res,next)=>{
 				if(err) return res.status(400).json({message:'server error'})
 			}); //try mo daw pa
 
-			return res.status(200).json({message:'welcome new coordinator please re log in'});
+			return res.status(200).json({message:'New active officer created, the previous officer is now deactivated'});
 		}
 	});
 })
@@ -356,7 +374,7 @@ app.put('/faculty/flist/changeofficer/:username',async (req,res,next)=>{
 		}
 	}
 
-	const success = () => res.status(200).json({message:'welcome new coordinator please re log in'});
+	const success = () => res.status(200).json({message:'Current officer changed'});
 	// try mo
 	Faculty.find({}, (err, doc) => {
 		if(err)	return res.status(503).json({ message: 'Server Error' })

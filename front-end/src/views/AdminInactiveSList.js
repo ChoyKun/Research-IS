@@ -1,5 +1,5 @@
 import React,{useState, useEffect, Suspense} from 'react';
-import { Link,useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 //icons
@@ -17,22 +17,29 @@ import '../styles/txt.css';
 import Button from '../components/buttons/button';
 import Field from '../components/fields/txtfield';
 import SearcBar from '../components/contents/SearchBar';
+import Checkbox from '../components/fields/checkbox';
 
 
-export default function AdminInactiveSList(props){
-
+export default function AdminRList(props){
 	const {username} = useParams();
 
 
-	const [studentData, setStudentData] = useState( null );
+	const [studentData, setStudentData] = useState( [] );
 	const [filteredData, setFilteredData] = useState(null);
 	const [search, setSearch]= useState(null);
+	const [sendActive, setSendActive] = useState(false);
+	const [activeAccum, setActiveAccum]= useState([])
 
 	
 	useEffect(() => {
 		axios.get('http://localhost:7000/student/slist')
 		.then( res => {
-			setStudentData( res.data );
+			res.data.forEach( elem => {
+				console.log( elem.status );
+				if( elem.status === 'inactive' ){
+					setStudentData((studentData) => [...studentData, elem]);
+				}
+			})
 		})
 		.catch( err => {
 			console.log( err );
@@ -45,16 +52,47 @@ export default function AdminInactiveSList(props){
 			if(search){
 				for( let key of Object.keys(object)){
 					if(object[key]?.toLowerCase?.()?.startsWith(search?.charAt?.(0)?.toLowerCase?.())){
-						return <Item key={object._id}{...object}/>
+						return <Item key={object._id}object={object}/>
 					}
 				}
 			}
 			else{
 				console.log(Item)
-				return <Item key={object._id}{...object}/>
+				return <Item key={object._id}object={object}/>
 			}
 		}))
 	},[search, studentData])
+
+	useEffect(()=>{
+		if( sendActive ){
+			const newInactiveElems = []
+			studentData.forEach((elem) => {
+				if(elem.status === 'active') {
+					console.log('here')
+					setActiveAccum((activeAccum) => [...activeAccum, elem])
+				}
+				else{
+					newInactiveElems.push( elem );
+				}
+				
+			});
+			setStudentData(() => [...newInactiveElems])		
+		}
+
+	}, [sendActive])
+
+	useEffect(() => {
+		if( activeAccum.length ){
+			axios.put('http://localhost:7000/student/slist/update', activeAccum)
+			.then( res => {
+				alert( res.data.message );
+				setSendActive( false );
+			})
+			.catch((err)=>{
+				console.log(err)
+			});
+		}
+	}, [activeAccum])
 
 	return(
 		<>
@@ -65,7 +103,7 @@ export default function AdminInactiveSList(props){
 			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center flex-column">
 				<SearcBar location="/slist-filter" setSearch={setSearch}className='Search'/>
 				<div style={{height:'20%', width:'90%'}}className="d-flex flex-row justify-content-start flex-row-reverse">
-					<Button style={{height: '30px',width:'100px',backgroundColor:'#385723',color: 'white'}} title='Activate'/>		
+					<Button style={{height: '30px',width:'100px',backgroundColor:'#385723',color: 'white'}} title='Activate' click={() => setSendActive(true)}/>		
 				</div>		
 			</div>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
@@ -83,24 +121,30 @@ export default function AdminInactiveSList(props){
 
 
 function Item(props){
+
+	const handleOnChange = (e) => {
+		props.object.status = e.target.checked ? 'active' : 'inactive';
+	}
+
 	return(
 		<div onClick={() => console.log('clicked')}style={{border:'1px solid black'}} className="d-flex bg-secondary flex-row justify-content-around">
-			<div className="col-1 text-center">{props.studentNo}</div>
-			<div className="col-1 text-center">{props.password}</div>
-			<div className="col-1 text-center">{props.firstName}</div>
-			<div className="col-1 text-center">{props.middleInitial}</div>
-			<div className="col-1 text-center">{props.lastName}</div>
-			<div className="col-1 text-center">{props.extentionName ?? "N/A"}</div>
+			<div className="col-1 text-center"><Checkbox reqOnChange={handleOnChange}/></div>
+			<div className="col-1 text-center">{props.object.studentNo}</div>
+			<div className="col-1 text-center">{props.object.password}</div>
+			<div className="col-1 text-center">{props.object.firstName}</div>
+			<div className="col-1 text-center">{props.object.middleInitial}</div>
+			<div className="col-1 text-center">{props.object.lastName}</div>
+			<div className="col-1 text-center">{props.object.extentionName ?? "N/A"}</div>
 			<div className="col-1 text-center">{(() => {
-											const date = new Date(props.birthdate);
+											const date = new Date(props.object.birthdate);
 											return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
 									})()}
 			</div>
-			<div className="col-1 text-center ">{props.course}</div>
-			<div className="col-1 text-center">{props.yearLevel}</div>
-			<div className="col-1 text-center">{props.section}</div>
-			<div className="col-2 text-center">{(() => {
-											const date = new Date(props.dateRegistered);
+			<div className="col-1 text-center ">{props.object.course}</div>
+			<div className="col-1 text-center">{props.object.yearLevel}</div>
+			<div className="col-1 text-center">{props.object.section}</div>
+			<div className="col-1 text-center">{(() => {
+											const date = new Date(props.object.dateRegistered);
 											return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
 									})()}
 			</div>
@@ -119,6 +163,7 @@ function Loading(props){
 function SlistHeader(props){
 	return(
 		<div style={{height:'30px',width:'100%',border:'1px solid black', backgroundColor:'#4472c4'}} className='d-flex flex-row justify-content-around'> 
+			<div className="col-1 text-center"><Checkbox/></div>
 			<div className='col-1 text-center'>
 				StudentNo
 			</div>
@@ -149,8 +194,8 @@ function SlistHeader(props){
 			<div className='col-1 text-center'>
 				Section
 			</div>
-			<div className='col-2 text-center'>
-				Date Registered
+			<div className='col-1 text-center'>
+				Reg. Date
 			</div>
 		</div>
 	);

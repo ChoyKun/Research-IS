@@ -83,7 +83,7 @@ export default function AdminRList(props){
 		if( pubAccum.length ){
 			axios.put('http://localhost:7000/research/rlist/update', pubAccum)
 			.then( res => {
-				console.log( res.data.message );
+				alert( res.data.message );
 				setSendPublic( false );
 			})
 			.catch((err)=>{

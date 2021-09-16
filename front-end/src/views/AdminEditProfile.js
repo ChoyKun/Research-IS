@@ -77,7 +77,7 @@ export default function AdminEditProfile(props){
 			alert(res.data.message);
 		})
 		.catch((err)=>{
-			alert( err.data.message );
+			alert( err.response.data.message );
 		})
 	}
 

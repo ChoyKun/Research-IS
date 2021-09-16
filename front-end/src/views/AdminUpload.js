@@ -66,7 +66,8 @@ export default function FacultyUpload(props){
 		data.researchCategories = JSON.stringify( data.researchCategories );
 
 		axios.post('http://localhost:7000/research/rlist/upload',data)
-		.then(() => {
+		.then((res) => {
+			alert( res.data.message );
 			data.researchCategories = JSON.parse( data.researchCategories )
 		})
 		.catch((err)=>{

@@ -84,7 +84,7 @@ export default function AdminRList(props){
 		if( archAccum.length ){
 			axios.put('http://localhost:7000/research/rlist/update', archAccum)
 			.then( res => {
-				console.log( res.data.message );
+				alert( res.data.message );
 				setSendArchived( false );
 			})
 			.catch((err)=>{
