@@ -52,13 +52,13 @@ export default function AdminRList(props){
 			if(search){
 				for( let key of Object.keys(object)){
 					if(object[key]?.toLowerCase?.()?.startsWith(search?.charAt?.(0)?.toLowerCase?.())){
-						return <Item key={object._id}object={object}/>
+						return <Item key={object._id} object={object}/>
 					}
 				}
 			}
 			else{
 				console.log(Item)
-				return <Item key={object._id}object={object}/>
+				return <Item key={object._id} object={object}/>
 			}
 		}))
 	},[search, studentData])

@@ -111,7 +111,6 @@ export default function AdminRList(props){
 				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black', color:'black'}}>
 					<Suspense fallback={<Loading/>}>
 						<SlistHeader/>
-						{console.log(filteredData)}
 						{filteredData}
 					</Suspense>
 				</div>

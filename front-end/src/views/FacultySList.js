@@ -47,7 +47,6 @@ export default function FacultyRList(props){
 		axios.get('http://localhost:7000/student/slist')
 		.then( res => {
 			res.data.forEach( elem => {
-				console.log( elem.status );
 				if( elem.status === 'active' ){
 					setStudentData((studentData) => [...studentData, elem]);
 				}
@@ -59,18 +58,22 @@ export default function FacultyRList(props){
 	}, [])
 
 	useEffect(()=>{
-		setFilteredData(studentData?.map?.(object =>{
-			if(search){
-				for(let key of Object.keys(object)){
-					if(object[key]?.toLowerCase?.()?.startsWith?.(search?.charAt?.(0).toLowerCase?.())){
-						return<Item key={object._id}{...object}dispatch={selectedDispatch}/>
+		if( studentData.length	){
+			console.log( studentData );
+			setFilteredData(studentData.map(object =>{
+				if(search){
+					for(let key of Object.keys(object)){
+						if(object[key]?.toLowerCase?.()?.startsWith?.(search?.charAt?.(0).toLowerCase?.())){
+							console.log(object);
+							return<Item key={object._id} object={object} dispatch={selectedDispatch}/>
+						}
 					}
 				}
-			}
-			else{
-				return <Item key={object._id}{...object} dispatch={selectedDispatch}/>
-			}
-		}))
+				else{
+					return <Item key={object._id} object={object} dispatch={selectedDispatch}/>
+				}
+			}))
+		}
 	},[search, studentData])
 
 	useEffect(()=>{
@@ -134,38 +137,40 @@ export default function FacultyRList(props){
 function Item(props){ //getData
 	// 
 	const item = useRef();
-	
+
 	const handleClick = () => {
 		if( !item.current ) return;
 
-		props.dispatch({ item: item.current, data: props });
+		props.dispatch({ item: item.current, data: props.object });
 
 
 	}
+	
 
 	const handleOnChange = (e) => {
 		props.object.status = e.target.checked ? 'inactive' : 'active';
+
 	}
 
 	return(
 		<div onClick={handleClick} ref={item} style={{border:'1px solid black'}} className={'d-flex bg-secondary flex-row justify-content-around'}>
 			<div className="col-1 text-center"><Checkbox reqOnChange={handleOnChange}/></div>
-			<div className="col-1 text-center">{props.studentNo}</div>
-			<div className="col-1 text-center">{props.password}</div>
-			<div className="col-1 text-center">{props.firstName}</div>
-			<div className="col-1 text-center">{props.middleInitial}</div>
-			<div className="col-1 text-center">{props.lastName}</div>
-			<div className="col-1 text-center">{props.extentionName ?? "N/A"}</div>
+			<div className="col-1 text-center">{props.object.studentNo}</div>
+			<div className="col-1 text-center">{props.object.password}</div>
+			<div className="col-1 text-center">{props.object.firstName}</div>
+			<div className="col-1 text-center">{props.object.middleInitial}</div>
+			<div className="col-1 text-center">{props.object.lastName}</div>
+			<div className="col-1 text-center">{props.object.extentionName ?? "N/A"}</div>
 			<div className="col-1 text-center">{(() => {
-											const date = new Date(props.birthdate);
+											const date = new Date(props.object.birthdate);
 											return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
 									})()}
 			</div>
-			<div className="col-1 text-center ">{props.course}</div>
-			<div className="col-1 text-center">{props.yearLevel}</div>
-			<div className="col-1 text-center">{props.section}</div>
+			<div className="col-1 text-center ">{props.object.course}</div>
+			<div className="col-1 text-center">{props.object.yearLevel}</div>
+			<div className="col-1 text-center">{props.object.section}</div>
 			<div className="col-1 text-center">{(() => {
-											const date = new Date(props.dateRegistered);
+											const date = new Date(props.object.dateRegistered);
 											return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
 									})()}
 			</div>
