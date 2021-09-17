@@ -20,6 +20,7 @@ import FacultyEditProfile from './views/FacultyEditProfile.js';
 import FacultyEditStudent from './views/FacultyEditStudent.js';
 import FacultyChangepass from './views/FacultyChangepass.js';
 import FacultySList from './views/FacultySList.js';
+import FacultyInactiveSList from './views/FacultyInactiveSList.js';
 import FacultyUpload from './views/FacultyUpload.js';
 import Login from './views/Login.js';
 import MobileRList from './views/MobileRList.js';
@@ -75,6 +76,7 @@ const views = [
   '/faculty-edit-student',
   '/faculty-changepass',
   '/faculty-slist',
+  '/faculty-inactive-slist',
   '/faculty-upload',
   '/m-rlist',
   '/m-rlistfilter',
@@ -239,6 +241,12 @@ function App() {
         <Route path="/faculty-slist/:username">
           <FacultyFrame>
             <FacultySList />
+          </FacultyFrame>
+        </Route>
+
+         <Route path="/faculty-inactive-slist/:username">
+          <FacultyFrame>
+            <FacultyInactiveSList />
           </FacultyFrame>
         </Route>
 
