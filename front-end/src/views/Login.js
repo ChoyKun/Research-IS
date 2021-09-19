@@ -46,7 +46,7 @@ export default function Login(props){
 					setRedirect( <Redirect to={`/student-rlist/${data._username}`}/> );
 				}
 				else if(data._label == 'Adviser'){
-					setRedirect( <Redirect to={`/faculty-slist/${data._username}`}/> );
+					setRedirect( <Redirect to={`/MIS-slist/${data._username}`}/> );
 				}
 			}
 		})	

@@ -72,13 +72,13 @@ function OpenedMenu( props ){
 			<div style={{backgroundColor:'#404040',width:'100%',height:"80%"}}className="side-panel d-flex flex-column justify-content-around align-items-center">
 				<img style={{height:'130px',width:'150px'}} src={scslogo}/>
 				<div style={{height:'3px',width:'250px',backgroundColor:'white'}} className='d-flex justify-content-center align-items-center'></div>
-				<Link to={`/faculty-profile/${username}`}>
+				<Link to={`/MIS-profile/${username}`}>
 					<div className='d-flex justify-content-around align-items-center'>
 						<img style={{height:'50px',width:'50px'}} src={profile}/>
 						<h6 style={{fontSize:'23px'}}>Profile</h6>
 					</div>
 				</Link>
-				<Link to={`/faculty-changepass/${username}`}>
+				<Link to={`/MIS-changepass/${username}`}>
 					<div className='d-flex justify-content-around align-items-center'>
 						<img style={{height:'50px',width:'50px'}} src={lock}/>
 						<h6 style={{fontSize:'23px'}}>Change Password</h6>

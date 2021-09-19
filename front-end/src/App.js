@@ -70,14 +70,14 @@ const views = [
   '/admin-upload',
   '/admin-new-coor',
   '/admin-coor-list',
-  '/faculty-reg',
-  '/faculty-profile',
-  '/faculty-edit-profile',
-  '/faculty-edit-student',
-  '/faculty-changepass',
-  '/faculty-slist',
-  '/faculty-inactive-slist',
-  '/faculty-upload',
+  '/MIS-reg',
+  '/MIS-profile',
+  '/MIS-edit-profile',
+  '/MIS-edit-student',
+  '/MIS-changepass',
+  '/MIS-slist',
+  '/MIS-inactive-slist',
+  '/MIS-upload',
   '/m-rlist',
   '/m-rlistfilter',
   '/m-changepass',
@@ -208,49 +208,49 @@ function App() {
           </AdminFrame>
         </Route>
 
-        <Route path="/faculty-reg/:username">
+        <Route path="/MIS-reg/:username">
           <FacultyFrame>
             <FacultyReg />
           </FacultyFrame>
         </Route>
 
-        <Route path="/faculty-profile/:username">
+        <Route path="/MIS-profile/:username">
           <FacultyFrame>
             <FacultyProfile />
           </FacultyFrame>
         </Route>
 
-        <Route path="/faculty-edit-profile/:username">
+        <Route path="/MIS-edit-profile/:username">
           <FacultyFrame>
             <FacultyEditProfile />
           </FacultyFrame>
         </Route>
 
-        <Route path="/faculty-edit-student/:username/:studentNo">
+        <Route path="/MIS-edit-student/:username/:studentNo">
           <FacultyFrame>
             <FacultyEditStudent />
           </FacultyFrame>
         </Route>
 
-        <Route path="/faculty-changepass/:username">
+        <Route path="/MIS-changepass/:username">
           <FacultyFrame>
             <FacultyChangepass />
           </FacultyFrame>
         </Route>
 
-        <Route path="/faculty-slist/:username">
+        <Route path="/MIS-slist/:username">
           <FacultyFrame>
             <FacultySList />
           </FacultyFrame>
         </Route>
 
-         <Route path="/faculty-inactive-slist/:username">
+         <Route path="/MIS-inactive-slist/:username">
           <FacultyFrame>
             <FacultyInactiveSList />
           </FacultyFrame>
         </Route>
 
-        <Route path="/faculty-upload/:username">
+        <Route path="/MIS-upload/:username">
           <FacultyFrame>
             <FacultyUpload />
           </FacultyFrame>

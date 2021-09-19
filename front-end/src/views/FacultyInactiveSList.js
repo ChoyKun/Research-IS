@@ -97,9 +97,9 @@ export default function AdminRList(props){
 	return(
 		<>
 			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center">
-				<Link to={`/faculty-slist/${username}`}><Button className='AdminMenu' title='Active Students'/></Link>
-				<Link to={`/faculty-inactive-slist/${username}`}><Button className='AdminMenu' title='Inactive Students'/></Link>
-				<Link to={`/faculty-reg/${username}`}><Button className='AdminMenu' title='Register New Student'/></Link>			
+				<Link to={`/MIS-slist/${username}`}><Button className='AdminMenu' title='Active Students'/></Link>
+				<Link to={`/MIS-inactive-slist/${username}`}><Button className='AdminMenu' title='Inactive Students'/></Link>
+				<Link to={`/MIS-reg/${username}`}><Button className='AdminMenu' title='Register New Student'/></Link>			
 			</div>
 			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center flex-column">
 				<SearcBar location="/slist-filter" setSearch={setSearch}className='Search'/>
