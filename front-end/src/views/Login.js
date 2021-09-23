@@ -39,8 +39,7 @@ export default function Login(props){
 	const handler=()=>{
 		axios.post('http://localhost:7000/sign-in', data)
 		.then(res=>{
-			console.log(res.data.message);
-			console.log(data._label);
+			alert(res.data.message);
 			if(res.status == 200 ){
 				if(data._label == 'Student'){
 					setRedirect( <Redirect to={`/student-rlist/${data._username}`}/> );
@@ -51,7 +50,7 @@ export default function Login(props){
 			}
 		})	
 		.catch(err=>{
-			alert( err.response.data.message );
+			alert(JSON.parse(err.request.response).message);
 		})
 	}
 

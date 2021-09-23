@@ -46,6 +46,9 @@ export default function StudentChangePass(props){
 
 	const handler = ()=>{
 		axios.put(`http://localhost:7000/student/slist/changepassword/${username}`,data)
+		.then((res)=>{
+			alert( res.data.message );
+		})
 		.catch((err)=>{
 			alert( err.response.data.message );
 		})

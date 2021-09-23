@@ -432,7 +432,17 @@ app.put('/faculty/flist/editprofile/:username',async (req,res,next)=>{
 	const username = req.params.username;
 
 	console.log( req.body );	
-	const {_password, _newFirstName, _newMiddleInitial, _newLastName, _newUsername, _newBirthdate} =req.body;
+	const {
+		_username ,
+		_password,
+		_firstName,
+		_middleInitial,
+		_lastName,
+		_extentionName,
+		_birthdate,
+		_dateRegistered,
+		_img,
+	} =req.body;
 
 
 	Faculty.findOne({username: username}, (err, doc) => {
@@ -443,11 +453,14 @@ app.put('/faculty/flist/editprofile/:username',async (req,res,next)=>{
 			console.log( doc );
 			if( match(doc.password, _password) ){
 		
-				doc.firstName = _newFirstName ?? doc.firstName;
-				doc.middleInitial = _newMiddleInitial ?? doc.middleInitial;
-				doc.lastName =  _newLastName ?? doc.lastName;
-				doc.username = _newUsername ?? doc.username;
-				doc.birthdate= _newBirthdate ?? doc.birthdate;
+				doc.username  = _username ?? doc.username;
+				doc.firstName = _firstName ?? doc.firstName;
+				doc.middleInitial = _middleInitial ?? doc.middleInitial;
+				doc.lastName = _lastName ?? doc.lastName;
+				doc.extentionName = _extentionName ?? doc.extentionName;
+				doc.birthdate = _birthdate ?? doc.birthdate;
+				doc.dateRegistered = _dateRegistered ?? doc.dateRegistered;
+				doc.img = _img ?? doc.img;
 
 
 				// may nakalimutan pala ako WAHAHAH
