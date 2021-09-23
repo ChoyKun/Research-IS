@@ -126,7 +126,10 @@ export default function FacultyEditProfile(props){
 						<div style={{height:'40%',width:'100%'}} className='d-flex justify-content-start'>
 							<div style={{height:'100%',width:'225px', border:'1px solid black'}}> </div>
 						</div>
-						<div style={{height:'35%',width:'100%',color:'black'}} className='d-flex justify-content-around flex-column'>
+						<div style={{height:'8%',width:'20%'}} className='d-flex justify-content-start'>
+							<Field title='Upload Photo' type="file" accepts="image/*" className='aRegUploadPhoto'/>
+						</div>
+						<div style={{height:'32%',width:'100%',color:'black'}} className='d-flex justify-content-around flex-column'>
 							{facultyData?.map?.(object=>(
 								<>
 									<div style={{width:'100%'}} className='d-flex justify-content-between flex-row'>
@@ -156,11 +159,17 @@ export default function FacultyEditProfile(props){
 											
 											<div style={{width:'300px'}} className='d-flex justify-content-between'>
 												<label style={{fontSize:'20px'}}>Birthday:</label>
-												<Field type='date' style={{width:'180px'}} value={getDateFrom(object.birthdate)} reqOnChange={(e)=>{dispatch({type:'_birthdate',data: e.target.value})}}/>
+												<label style={{fontSize:'20px'}}>{(() => {
+													const date = new Date(object.birthdate);
+													return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
+												})()}</label>
 											</div>
 											<div style={{width:'300px'}} className='d-flex justify-content-between'>
 												<label style={{fontSize:'20px'}}>Reg. Date:</label>
-												<label style={{fontSize:'20px'}}>{getDateFrom(object.dateRegistered)}</label>
+												<label style={{fontSize:'20px'}}>{(() => {
+													const date = new Date(object.dateRegistered);
+													return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
+												})()}</label>
 											</div>
 										</div>
 									</div>

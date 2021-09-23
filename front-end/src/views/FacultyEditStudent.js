@@ -117,40 +117,45 @@ export default function FacultyEditProfile(props){
 			<div style={{height:'8%', width:'100%', backgroundColor:'#385723', color:'white'}} className='d-flex justify-content-center align-items-center'>
 				<h2>Edit Student Profile</h2>				
 			</div>
+			<div style={{height:'10%', width:'100%'}}className="d-flex flex-row justify-content-around align-items-center">
+				<Link to={`/MIS-slist/${username}`}><Button className='AdminMenu' title='Active Students'/></Link>
+				<Link to={`/MIS-inactive-slist/${username}`}><Button className='AdminMenu' title='Inactive Students'/></Link>
+				<Link to={`/MIS-reg/${username}`}><Button className='AdminMenu' title='Register New Student'/></Link>					
+			</div>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
 				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black'}} className='d-flex justify-content-center'>
 					<div style={{height:'95%', width:'95%', color:'black'}}>
 						{studentData?.map?.(object =>(
 							<div style={{height:'100%',width:'100%'}} key={studentData.indexOf(object)} className="d-flex flex-column justify-content-center">
-								<div style={{height:'100%',width:'100%'}} className="d-flex flex-row justify-content-center">
+								<div style={{height:'90%',width:'90%'}} className="d-flex flex-row justify-content-center">
 									<div style={{height:'95%',width:'50%'}}>
 										<div style={{height:'150px',width:'170px',backgroundColor:'white', border:'1px solid black' }}>
 											
 										</div>
 										<Field title='Upload Photo' type="file" accepts="image/*" className='aRegUploadPhoto'/>
-										<div style={{height:'10%',width:'150px'}} className='d-flex justify-content-between align-items-center flex-row'>
+										<div style={{height:'10%',width:'200px'}} className='d-flex justify-content-between align-items-center flex-row'>
 											<label style={{fontSize:'18px'}}>Student ID:</label>
 											<label>{object.studentNo}</label>
 										</div>
-										<div style={{height:'10%',width:'150px'}} className='d-flex justify-content-between align-items-center flex-row'>
+										<div style={{height:'10%',width:'200px'}} className='d-flex justify-content-between align-items-center flex-row'>
 											<label style={{fontSize:'18px'}}>Password:</label>
 											<label>{object.password}</label>
 										</div>
-										<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
+										<div style={{height:'10%',width:'200px'}} className='d-flex justify-content-between align-items-center flex-row'>
 											<label style={{fontSize:'18px'}}>First Name:</label>
-											<Field className='fName' placeHolder={object.firstName} reqOnChange={(e)=>{dispatch({type:'_firstName',data: e.target.value})}}/>
+											<label>{object.firstName}</label>
 										</div>
-										<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
+										<div style={{height:'10%',width:'200px'}} className='d-flex justify-content-between align-items-center flex-row'>
 											<label style={{fontSize:'18px'}}>Middle Initial:</label>
-											<Field className='fName' placeHolder={object.middleInitial} reqOnChange={(e)=>{dispatch({type:'_middleInitial',data: e.target.value})}}/>
+											<label>{object.middleInitial}</label>
 										</div>
-										<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
+										<div style={{height:'10%',width:'200px'}} className='d-flex justify-content-between align-items-center flex-row'>
 											<label style={{fontSize:'18px'}}>Last Name:</label>
-											<Field className='lName'  placeHolder={object.lastName} reqOnChange={(e)=>{dispatch({type:'_lastName',data: e.target.value})}}/>
+											<label>{object.lastName}</label>
 										</div>
-										<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
+										<div style={{height:'10%',width:'200px'}} className='d-flex justify-content-between align-items-center flex-row'>
 											<label style={{fontSize:'18px'}}>Name Extention:</label>
-											<Field className='fName' placeHolder={object.nameExtention} reqOnChange={(e)=>{dispatch({type:'_nameExtention',data: e.target.value})}}/>
+											<label>{object.extentionName ?? 'null' }</label>
 										</div>
 									</div>
 									<div style={{height:'100%',width:'50%'}}>
@@ -159,7 +164,10 @@ export default function FacultyEditProfile(props){
 										</div>
 										<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
 											<label style={{fontSize:'18px'}}>Birth Date</label>
-											<Field type='date' value={getDateFrom(object.birthdate)} reqOnChange={(e)=>{dispatch({type:'_birthdate',data: e.target.value})}}/>
+											<label>{(() => {
+													const date = new Date(object.birthdate);
+													return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
+												})()}</label>
 										</div>
 										<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
 											<Select className='aRegCourse' label='Select Course:' options={['BSIT','BSCS']} selected={object.course} reqOnChange={(e)=>{dispatch({type:'_course',data: e.target.value})}}/>
@@ -173,7 +181,10 @@ export default function FacultyEditProfile(props){
 										</div>
 										<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
 											<label>Date Registered:</label>
-											<label>{getDateFrom(object.dateRegistered)}</label>
+											<label>{(() => {
+													const date = new Date(object.dateRegistered);
+													return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
+												})()}</label>
 										</div>
 										<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
 											<Field style={{width:'200px'}} placeHolder='Enter password to confirm' reqOnChange={(e)=>{dispatch({type:'_password',data: e.target.value})}}/>
