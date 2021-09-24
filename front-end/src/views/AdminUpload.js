@@ -28,6 +28,11 @@ export default function FacultyUpload(props){
 		course: 'BSIT',
 		researchCategories: [],
 		yearSubmitted: null,
+		lead: null,
+		mem1: null,
+		mem2: null,
+		mem3: null,
+		mem4: null,
 		PDFFile:null,
 		status:'public',
 		favorites:'false'
@@ -53,6 +58,21 @@ export default function FacultyUpload(props){
 				return state;
 			case 'yearSubmitted':
 				state.yearSubmitted = action.data;
+				return state;
+			case 'lead':
+				state.lead = action.data;
+				return state;
+			case 'mem1':
+				state.mem1 = action.data;
+				return state;
+			case 'mem2':
+				state.mem2 = action.data;
+				return state;
+			case 'mem3':
+				state.mem3 = action.data;
+				return state;
+			case 'mem4':
+				state.mem4 = action.data;
 				return state;
 			case 'PDFFile':
 				state.PDFFile = action.data;
@@ -86,49 +106,59 @@ export default function FacultyUpload(props){
 			</div>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
 				<div style={{height:'95%', width:'95%', backgroundColor:'white', border:'1px solid black', color: 'black'}} className='d-flex justify-content-center align-items-center flex-column'>
-					<div style={{height:'95%',width:'95%'}} className='d-flex align-items-center flex-column'>
-						<div style={{height:'60%',width:'100%'}} className='d-flex justify-content-around flex-column'>
-							<label style={{fontSize:'20px'}}>Add new research</label>
-							<div style={{width:'60%'}} className='d-flex flex-row justify-content-around'>
-								<label style={{fontSize:'20px'}}>Title: </label>
-								<Field reqOnChange={(e)=>(dispatch({type:'title', data: e.target.value }))}/>
+					<div style={{height:'95%',width:'95%'}} className='d-flex align-items-center flex-row'>
+						<div style={{height:'95%',width:'50%'}}>
+								<label style={{fontSize:'20px'}}>Add new research</label>
+								<div style={{height:'10%',width:'400px'}} className='d-flex justify-content-between align-items-center flex-row'>
+									<label style={{fontSize:'20px'}}>Title: </label>
+									<Field style={{width:'300px'}} reqOnChange={(e)=>(dispatch({type:'title', data: e.target.value }))}/>
+								</div>
+								<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
+									<Select style={{width:'300px'}} label='Select Course:' options={['BSIT','BSCS']} reqOnChange={(e)=>(dispatch({type:'course', data: e.target.value }))} />
+								</div>
+								<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
+									<label style={{width:'300px'}}>Year Submitted:</label>
+									<Field style={{width:'300px'}} placeHolder='ex. 2001' reqOnChange={(e)=>(dispatch({type:'yearSubmitted', data: e.target.value }))}/>
+								</div>
+								<label style={{fontSize:'20px'}}>Group Members</label>
+								<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
+									<label style={{fontSize:'18px'}}>Leader:</label>
+									<Field className='fName' reqOnChange={(e) => {dispatch({type: 'lead', data: e.target.value});}}/>
+								</div>
+								<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
+									<label style={{fontSize:'18px'}}>Member 1:</label>
+									<Field className='fName' reqOnChange={(e) => {dispatch({type: 'mem1', data: e.target.value});}}/>
+								</div>
+								<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
+									<label style={{fontSize:'18px'}}>Member 2:</label>
+									<Field className='fName' reqOnChange={(e) => {dispatch({type: 'mem2', data: e.target.value});}}/>
+								</div>
+								<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
+									<label style={{fontSize:'18px'}}>Member 3:</label>
+									<Field className='fName' reqOnChange={(e) => {dispatch({type: 'mem3', data: e.target.value});}}/>
+								</div>
+								<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
+									<label style={{fontSize:'18px'}}>Member 4:</label>
+									<Field className='fName' reqOnChange={(e) => {dispatch({type: 'mem4', data: e.target.value});}}/>
+								</div>
 							</div>
-							<div style={{width:'30%'}}>
-								<Select className='aUpload' label='Select Course:' options={['BSIT','BSCS']} reqOnChange={(e)=>(dispatch({type:'course', data: e.target.value }))} />
-							</div>
-							<div style={{height:'20%',width:'100%'}} className='d-flex flex-row'>
-									<div style={{height:'50%', width:'30%'}} className='d-flex align-items-center'>
-										<label>Research Categories</label>
-									</div>
-									<div style={{height:'100%', width:'70%'}} className='d-flex justify-content-around align-items-center flex-column'>
-										<div style={{height:'20%',width:'100%'}} className='d-flex justify-content-around flex-row'>
-											<Checkbox cLabel='Hardware' value='Hardware' reqOnChange={(e)=>(dispatch({type:'researchCategories',name:'Hardware', data: e.target.checked }))}/>
-											<Checkbox cLabel='Software' value='Software' reqOnChange={(e)=>(dispatch({type:'researchCategories',name:'Software', data: e.target.checked }))}/>
-											<Checkbox cLabel='Web System' value='Web System' reqOnChange={(e)=>(dispatch({type:'researchCategories',name:'Web System', data: e.target.checked }))}/>
-
-										</div>
-										<div style={{height:'20%',width:'100%'}} className='d-flex justify-content-around flex-row'>
-											<Checkbox cLabel='Game Dev' value='Game Dev' reqOnChange={(e)=>(dispatch({type:'researchCategories',name:'Game Dev', data: e.target.checked }))}/>
-											<Checkbox cLabel='Augmented Reality' value='Augmented Reality' reqOnChange={(e)=>(dispatch({type:'researchCategories',name:'Augmented Reality', data: e.target.checked }))}/>
-											<Checkbox cLabel='Mobile App'value='Mobile App' reqOnChange={(e)=>(dispatch({type:'researchCategories',name:'Mobile App', data: e.target.checked }))} />
-										</div>
-									</div>
-							</div>
-							<div style={{width:'40%', color:'black'}} className='d-flex flex-row'>
-								<label style={{width:'300px'}}>Year Submitted:</label>
-								<Field placeHolder='ex. 2001' reqOnChange={(e)=>(dispatch({type:'yearSubmitted', data: e.target.value }))}/>
-							</div>
-						</div>
-						<div style={{height:'25%',width:'100%'}} className='d-flex justify-content-around align-items-center flex-row'>
-							<div style={{width:'80%'}} className='d-flex justify-content-around flex-row'>
-								<Field type='file' title='Attach File'/>
-							</div>
-						</div>
-						<div style={{height:'15%',width:'100%'}} className='d-flex justify-content-around align-items-center flex-row-reverse'>
-							<div style={{width:'80%'}} className='d-flex  justify-content-start flex-row-reverse'>
-								<Button click={handler} className='aBatchBtn' title='Upload'/>
-							</div>
-						</div>
+							<div style={{height:'95%',width:'50%'}}>
+								<label style={{fontSize:'20px'}}>Research Categories</label>
+								<div style={{height:'250px',width:'200px',backgroundColor:'white',border:'1px solid black'}} className='d-flex flex-column'>
+									<Checkbox cLabel='Hardware' value='Hardware' reqOnChange={(e)=>(dispatch({type:'researchCategories',name:'Hardware', data: e.target.checked }))}/>
+									<Checkbox cLabel='Software' value='Software' reqOnChange={(e)=>(dispatch({type:'researchCategories',name:'Software', data: e.target.checked }))}/>
+									<Checkbox cLabel='Web System' value='Web System' reqOnChange={(e)=>(dispatch({type:'researchCategories',name:'Web System', data: e.target.checked }))}/>
+									<Checkbox cLabel='Game Dev' value='Game Dev' reqOnChange={(e)=>(dispatch({type:'researchCategories',name:'Game Dev', data: e.target.checked }))}/>
+									<Checkbox cLabel='Augmented Reality' value='Augmented Reality' reqOnChange={(e)=>(dispatch({type:'researchCategories',name:'Augmented Reality', data: e.target.checked }))}/>
+									<Checkbox cLabel='Mobile App'value='Mobile App' reqOnChange={(e)=>(dispatch({type:'researchCategories',name:'Mobile App', data: e.target.checked }))} />
+								</div>
+								<div style={{height:'10%',width:'200px'}} className='d-flex flex-column'>
+									<Field type='file' title='Attach File'/>
+								</div>
+								<div style={{height:'10%',width:'200px'}} className='d-flex flex-column'>
+									<Button click={handler} className='aBatchBtn' title='Upload'/>
+								</div>
+							</div>	
 					</div>
 				</div>
 			</div>
@@ -138,3 +168,21 @@ export default function FacultyUpload(props){
 
 
 
+{/*
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*/}

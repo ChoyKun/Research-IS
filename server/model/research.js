@@ -5,8 +5,13 @@ const {Schema} = mongoose;
 const researchSchema = new Schema({
 	title: String,
 	course: String,
-	researchCategories: String,// dito gumana lol sa student hindi
+	researchCategories: String,
 	yearSubmitted: String,
+	lead: String,
+	mem1: String,
+	mem2: String,
+	mem3: String,
+	mem4: String,
 	PDFFile:{type:Buffer, contentType:String},
 	status:String,
 	favorites:String

@@ -75,6 +75,9 @@ export default function FacultyEditProfile(props){
 
 	const handler=()=>{
 		axios.put(`http://localhost:7000/faculty/flist/editstudent/${username}/${studentNo}`,data)
+		.then((res)=>{
+			alert(res.data.message);
+		})
 		.catch((err)=>{
 			alert( err.response.data.message );
 		})
