@@ -52,6 +52,9 @@ export default function FacultyProfile(props){
 
 	return(
 		<>
+			<div style={{height:'8%', width:'100%', backgroundColor:'#595959', color:'white'}} className='d-flex justify-content-center align-items-center'>
+				<h2>Coordinator Profile</h2>				
+			</div>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
 				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black'}} className='d-flex justify-content-around'>
 					<div style={{height:'95%', width:'95%'}} className='d-flex justify-content-around align-items-center flex-column'>

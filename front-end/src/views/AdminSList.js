@@ -63,48 +63,20 @@ export default function AdminRList(props){
 		}))
 	},[search, studentData])
 
-	useEffect(()=>{
-		if( sendInactive ){
-			const newActiveElems = []
-			studentData.forEach((elem) => {
-				if(elem.status === 'inactive') {
-					console.log('here')
-					setInacAccum((inacAccum) => [...inacAccum, elem])
-				}
-				else{
-					newActiveElems.push( elem );
-				}
-				
-			});
-			setStudentData(() => [...newActiveElems])		
-		}
 
-	}, [sendInactive])
-
-	useEffect(() => {
-		if( inacAccum.length ){
-			axios.put('http://localhost:7000/student/slist/update', inacAccum)
-			.then( res => {
-				alert( res.data.message );
-				setSendInactive( false );
-			})
-			.catch((err)=>{
-				console.log(err)
-			});
-		}
-	}, [inacAccum])
+	
 
 	return(
 		<>
+			<div style={{height:'8%', width:'100%', backgroundColor:'#595959', color:'white'}} className='d-flex justify-content-center align-items-center'>
+				<h2>Active Students</h2>				
+			</div>
 			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center">
 				<Link to={`/admin-slist/${username}`}><Button className='AdminMenu' title='Active Students'/></Link>
 				<Link to={`/admin-inactive-slist/${username}`}><Button className='AdminMenu' title='Inactive Students'/></Link>				
 			</div>
 			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center flex-column">
-				<SearcBar location="/slist-filter" setSearch={setSearch} className='Search'/>
-				<div style={{height:'20%', width:'90%'}}className="d-flex flex-row justify-content-start flex-row-reverse">
-					<Button style={{height: '30px',width:'100px',backgroundColor:'#385723',color: 'white'}} title='Deactivate' click={() => setSendInactive(true)}/>		
-				</div>		
+				<SearcBar location="/slist-filter" setSearch={setSearch} className='Search'/>		
 			</div>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
 				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black', color:'black'}}>
@@ -122,13 +94,8 @@ export default function AdminRList(props){
 
 function Item(props){
 
-	const handleOnChange = (e) => {
-		props.object.status = e.target.checked ? 'inactive' : 'active';
-	}
-
 	return(
 		<div onClick={() => console.log('clicked')}style={{border:'1px solid black'}} className="d-flex bg-secondary flex-row justify-content-around">
-			<div className="col-1 text-center"><Checkbox reqOnChange={handleOnChange}/></div>
 			<div className="col-1 text-center">{props.object.studentNo}</div>
 			<div className="col-1 text-center">{props.object.password}</div>
 			<div className="col-1 text-center">{props.object.firstName}</div>
@@ -163,7 +130,6 @@ function Loading(props){
 function SlistHeader(props){
 	return(
 		<div style={{height:'30px',width:'100%',border:'1px solid black', backgroundColor:'#4472c4'}} className='d-flex flex-row justify-content-around'> 
-			<div className="col-1 text-center"><Checkbox/></div>
 			<div className='col-1 text-center'>
 				StudentNo
 			</div>

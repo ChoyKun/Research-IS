@@ -91,8 +91,8 @@ export default function AdminCList(props){
 
 	return(
 		<>
-			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center">
-									
+			<div style={{height:'8%', width:'100%', backgroundColor:'#595959', color:'white'}} className='d-flex justify-content-center align-items-center'>
+				<h2>Inactive Coordinator List</h2>				
 			</div>
 			<div style={{height:'15%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center flex-column">
 				<SearcBar location='/slist-filter'/>

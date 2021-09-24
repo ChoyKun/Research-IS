@@ -93,6 +93,9 @@ export default function AdminRList(props){
 
 	return(
 		<>
+			<div style={{height:'8%', width:'100%', backgroundColor:'#595959', color:'white'}} className='d-flex justify-content-center align-items-center'>
+				<h2>Inactive MIS Officer List</h2>				
+			</div>
 			<div style={{height:'20%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center flex-column">
 				<SearcBar location='rlist-filter' setSearch={setSearch} className='Search'/>
 				<div style={{height:'20%', width:'30%'}}className="d-flex flex-row justify-content-between flex-row-reverse">

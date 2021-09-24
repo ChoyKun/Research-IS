@@ -50,7 +50,8 @@ export default function AdminCO(props){
 
 	return(
 		<>
-			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center">				
+			<div style={{height:'8%', width:'100%', backgroundColor:'#595959', color:'white'}} className='d-flex justify-content-center align-items-center'>
+				<h2>Current Active Officer</h2>				
 			</div>
 			<div style={{width: '100%', height: '100%', color:'black'}} className='d-flex justify-content-center align-items-center'>
 				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black'}} className='d-flex justify-content-around'>

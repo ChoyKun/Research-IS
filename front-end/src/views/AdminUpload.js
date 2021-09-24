@@ -99,6 +99,9 @@ export default function FacultyUpload(props){
 
 	return(
 		<>
+			<div style={{height:'8%', width:'100%', backgroundColor:'#595959', color:'white'}} className='d-flex justify-content-center align-items-center'>
+				<h2>Upload new Research</h2>				
+			</div>
 			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center">
 				<Link to={`/admin-rlist/${username}`}><Button className='AdminMenu' title='List of Research'/></Link>
 				<Link to={`/admin-archive/${username}`}><Button className='AdminMenu' title='Archived'/></Link>
