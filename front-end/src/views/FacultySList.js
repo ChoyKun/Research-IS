@@ -107,6 +107,16 @@ export default function FacultyRList(props){
 		}
 	}, [inacAccum])
 
+	const sender = () =>{
+		const send = window.confirm("Do you want to update the list?");
+		if(send == true){
+			setSendInactive(true);
+		}
+		else{
+			alert("Operation canceled")
+		}
+	}
+
 	return(
 		<>
 			<div style={{height:'8%', width:'100%', backgroundColor:'#385723', color:'white'}} className='d-flex justify-content-center align-items-center'>
@@ -120,7 +130,7 @@ export default function FacultyRList(props){
 			<div style={{height:'15%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center flex-column">
 				<SearcBar location='/slist-filter'/>
 				<div style={{height:'20%', width:'30%'}}className="d-flex flex-row justify-content-between flex-row-reverse">
-					<Button style={{height: '30px',width:'100px',backgroundColor:'#385723',color: 'white'}} title='Deactivate' click={() => setSendInactive(true)}/>
+					<Button style={{height: '30px',width:'100px',backgroundColor:'#385723',color: 'white'}} title='Deactivate' click={sender}/>
 					<Link to ={`/MIS-edit-student/${username}/${selected?.data?.studentNo}`}><Button style={{height: '30px',width:'100px',backgroundColor:'#385723',color: 'white'}} title='Edit'/></Link>		
 				</div>		
 			</div>

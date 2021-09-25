@@ -45,10 +45,20 @@ export default function FacultyChangepass(props){
 
 
 	const handler = ()=>{
-		axios.put(`http://localhost:7000/faculty/flist/changepassword/${username}`,data)
-		.catch((err)=>{
-			console.log(err);
-		})
+		const send = window.confirm("Do you want to change your password?");
+		if(send == true){
+			axios.put(`http://localhost:7000/faculty/flist/changepassword/${username}`,data)
+			.then((res)=>{
+				alert(res.data.message);
+			})
+			.catch((err)=>{
+				console.log(err);
+			})
+		}
+		else{
+			alert("Operation canceled")
+		}
+		
 	}
 
 

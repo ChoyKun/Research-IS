@@ -72,13 +72,20 @@ export default function FacultyEditProfile(props){
 	const [data,dispatch] = useReducer(reducer, state);
 
 	const handler =()=>{
-		axios.put(`http://localhost:7000/faculty/flist/editprofile/${username}`, data)
-		.then((res)=>{
-			alert(res.data.message);
-		})
-		.catch((err)=>{
-			alert(JSON.parse(err.request.response).message);
-		})
+		const send = window.confirm("Do you want to update your profile?");
+		if(send == true){
+			axios.put(`http://localhost:7000/faculty/flist/editprofile/${username}`, data)
+			.then((res)=>{
+				alert(res.data.message);
+			})
+			.catch((err)=>{
+				alert(JSON.parse(err.request.response).message);
+			})
+		}
+		else{
+			alert("Operation canceled")
+		}
+		
 	}
 
 	useEffect(()=>{
