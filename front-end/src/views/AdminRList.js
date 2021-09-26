@@ -93,6 +93,16 @@ export default function AdminRList(props){
 		}
 	}, [archAccum])
 
+	const sender = () =>{
+		const send = window.confirm("Do you want to update the list?");
+		if(send == true){
+			setSendArchived(true);
+		}
+		else{
+			alert("Operation canceled")
+		}
+	}
+
 	return(
 		<>
 			<div style={{height:'8%', width:'100%', backgroundColor:'#595959', color:'white'}} className='d-flex justify-content-center align-items-center'>

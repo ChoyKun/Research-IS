@@ -92,6 +92,16 @@ export default function AdminRList(props){
 		}
 	}, [pubAccum])
 
+	const sender = () =>{
+		const send = window.confirm("Do you want to update the list?");
+		if(send == true){
+			setSendPublic(true);
+		}
+		else{
+			alert("Operation canceled")
+		}
+	}
+
 	return(
 		<>
 			<div style={{height:'8%', width:'100%', backgroundColor:'#595959', color:'white'}} className='d-flex justify-content-center align-items-center'>
@@ -105,7 +115,7 @@ export default function AdminRList(props){
 			<div style={{height:'20%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center flex-column">
 				<SearcBar location='rlist-filter' setSearch={setSearch} className='Search'/>
 				<div style={{height:'20%', width:'90%'}}className="d-flex flex-row justify-content-start flex-row-reverse">
-					<Button style={{height: '30px',width:'100px',backgroundColor:'#385723',color: 'white'}} click={() => setSendPublic(true)} title='Publish'/>		
+					<Button style={{height: '30px',width:'100px',backgroundColor:'#385723',color: 'white'}} click={sender} title='Publish'/>		
 				</div>	
 			</div>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>

@@ -72,13 +72,20 @@ export default function AdminEditProfile(props){
 	const [data,dispatch] = useReducer(reducer, state);
 
 	const handler =()=>{
-		axios.put(`http://localhost:7000/auth-admin/editprofile/${username}`, data)
-		.then((res)=>{
-			alert(res.data.message);
-		})
-		.catch((err)=>{
-			alert( err.response.data.message );
-		})
+		const send = window.confirm("Do you want to update your profile?");
+		if(send == true){
+			axios.put(`http://localhost:7000/auth-admin/editprofile/${username}`, data)
+			.then((res)=>{
+				alert(res.data.message);
+			})
+			.catch((err)=>{
+				alert( err.response.data.message );
+			})
+			}
+			else{
+			alert("Operation canceled")
+		}
+		
 	}
 
 	useEffect(()=>{

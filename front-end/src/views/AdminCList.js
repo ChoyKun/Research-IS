@@ -72,21 +72,28 @@ export default function AdminCList(props){
 	},[search, adminData])
 
 	const handler = async (state, action)=>{
-
-		axios.put(`http://localhost:7000/coordinator/clist/new-admin/${username}`) // set current admin to inactive to no?
-		.then( async () => {
-			axios.put(`http://localhost:7000/coordinator/clist/changecoor/${selected?.data?.username}`) // set selected admin to active?
-			.then((res)=>{
-				alert(res.data.message);
-				setRedirect( <Redirect to='/admin-log-in'/> );
+		const send = window.confirm("Changing the coordinator will deactivate your account, do you want to continue?");
+		if(send == true){
+			axios.put(`http://localhost:7000/coordinator/clist/new-admin/${username}`) // set current admin to inactive to no?
+			.then( async () => {
+				axios.put(`http://localhost:7000/coordinator/clist/changecoor/${selected?.data?.username}`) // set selected admin to active?
+				.then((res)=>{
+					alert(res.data.message);
+					setRedirect( <Redirect to='/admin-log-in'/> );
+				})
+				.catch((err)=>{
+					console.log(err);
+				});
 			})
 			.catch((err)=>{
 				console.log(err);
 			});
-		})
-		.catch((err)=>{
-			console.log(err);
-		}); // wait pwede kaya toh? try paps
+		}
+		else{
+			alert("Operation canceled")
+		}
+
+		
 	}
 
 	return(
@@ -96,8 +103,9 @@ export default function AdminCList(props){
 			</div>
 			<div style={{height:'15%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center flex-column">
 				<SearcBar location='/slist-filter'/>
-				<div style={{height:'20%', width:'90%'}}className="d-flex flex-row justify-content-start flex-row-reverse">
+				<div style={{height:'20%', width:'40%'}}className="d-flex flex-row justify-content-between flex-row-reverse">
 					<Button style={{height: '30px',width:'200px',backgroundColor:'#385723',color: 'white'}} title='Change Coordinator' click={handler}/>
+					<Button style={{height: '30px',width:'200px',backgroundColor:'#385723',color: 'white'}} title='Cancel' click={()=>window.history.back()}/>
 				</div>		
 			</div>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>

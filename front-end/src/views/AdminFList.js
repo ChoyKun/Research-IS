@@ -72,22 +72,27 @@ export default function AdminRList(props){
 	}, [search, facultyData])
 
 	const handler = ()=>{
-		axios.put('http://localhost:7000/faculty/flist/new-officer')
-		.then((res)=>{
-			axios.put(`http://localhost:7000/faculty/flist/changeofficer/${selected?.data?.username}`)
+		const send = window.confirm("Do you want to change current officer?");
+		if(send == true){
+			axios.put('http://localhost:7000/faculty/flist/new-officer')
 			.then((res)=>{
-				alert(res.data.message);
+				axios.put(`http://localhost:7000/faculty/flist/changeofficer/${selected?.data?.username}`)
+				.then((res)=>{
+					alert(res.data.message);
+				})
+				.catch((err)=>{
+					if( err?.response?.data?.message ){
+						alert( err.response.data.message );
+					}
+				})
 			})
 			.catch((err)=>{
-				if( err?.response?.data?.message ){
-					alert( err.response.data.message );
-				}
+				alert(err.data.message);
 			})
-		})
-		.catch((err)=>{
-			alert(err.data.message);
-		})
-		
+		}
+		else{
+			alert("Operation canceled")
+		}
 	}
 
 

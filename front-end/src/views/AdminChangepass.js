@@ -42,13 +42,20 @@ export default function StudentChangePass(props){
 	const [data, dispatch] = useReducer(reducer, state);
 
 	const handler=()=>{
-		axios.put(`http://localhost:7000/auth-admin/changepassword/${username}`,data)
-		.then((res)=>{
-			alert(res.data.message);
-		})
-		.catch((err)=>{
-			alert( err.response.data.message );
-		})
+		const send = window.confirm("Do you want to change password?");
+		if(send == true){
+			axios.put(`http://localhost:7000/auth-admin/changepassword/${username}`,data)
+			.then((res)=>{
+				alert(res.data.message);
+			})
+			.catch((err)=>{
+				alert( err.response.data.message );
+			})
+		}
+		else{
+			alert("Operation canceled")
+		}
+		
 	}
 
 	return(
