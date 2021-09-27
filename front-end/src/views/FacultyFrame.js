@@ -84,6 +84,11 @@ function OpenedMenu( props ){
 						<h6 style={{fontSize:'23px'}}>Change Password</h6>
 					</div>
 				</Link>
+				<Link to={`/admin-access/${username}`}>
+					<div className='d-flex justify-content-around align-items-center'>
+						<h6 style={{fontSize:'23px'}}>Archives</h6>
+					</div>
+				</Link>
 				<Link to="/sign-in">
 					<div className='d-flex justify-content-around align-items-center'>
 						<h6 style={{fontSize:'23px'}}>Log out</h6>

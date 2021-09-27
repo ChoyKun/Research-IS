@@ -62,16 +62,10 @@ function OpenedMenu( props ){
 			<div style={{backgroundColor:'#404040',width:'100%',height:"80%"}}className="side-panel d-flex flex-column justify-content-around align-items-center">
 				<img style={{height:'130px',width:'150px'}} src={scslogo}/>
 				<div style={{height:'3px',width:'250px',backgroundColor:'white'}} className='d-flex justify-content-center align-items-center'></div>
-				<Link to={`/admin-changepass/${username}`}>
-					<div className='d-flex justify-content-around align-items-center'>
-						<img style={{height:'40px',width:'40px'}} src={lock}/>
-						<h6 style={{fontSize:'20px'}}>Change Password</h6>
-					</div>
-				</Link>
 				<Link to={`/admin-rlist/${username}`}>
 					<div className='d-flex justify-content-around align-items-center'>
 						<img style={{height:'40px',width:'40px'}} src={rlist}/>
-						<h6 style={{fontSize:'20px'}}>Research Lists</h6>
+						<h6 style={{fontSize:'20px'}}>Research Management</h6>
 					</div>
 				</Link>
 				<Link to={`/admin-current-officer/${username}`}>
@@ -89,7 +83,13 @@ function OpenedMenu( props ){
 				<Link to={`/admin-profile/${username}`}>
 					<div className='d-flex justify-content-around align-items-center'>
 						<img style={{height:'40px',width:'40px'}} src={lock}/>
-						<h6 style={{fontSize:'20px'}}>Change Research Coor</h6>
+						<h6 style={{fontSize:'20px'}}>Change Research Coordinator</h6>
+					</div>
+				</Link>
+				<Link to={`/admin-changepass/${username}`}>
+					<div className='d-flex justify-content-around align-items-center'>
+						<img style={{height:'40px',width:'40px'}} src={lock}/>
+						<h6 style={{fontSize:'20px'}}>Change Password</h6>
 					</div>
 				</Link>
 				<Link to="/sign-in">

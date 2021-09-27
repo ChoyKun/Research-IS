@@ -4,6 +4,7 @@ import AdminChangepass from './views/AdminChangepass.js';
 import AdminArchive from './views/AdminArchive.js';
 import AdminLogin from './views/AdminLogin.js';
 import AdminReg from './views/AdminReg.js';
+import AdminRequest from './views/AdminRequest.js';
 import AdminProfile from './views/AdminProfile.js';
 import AdminEditProfile from './views/AdminEditProfile.js';
 import AdminRlist from './views/AdminRList';
@@ -35,6 +36,9 @@ import StudentFavorites from './views/StudentFavorites.js';
 import StudentCopyRight from './views/StudentCopyRight.js';
 import StudentRList from './views/StudentRList.js';
 import StudentProfile from './views/StudentProfile.js';
+import StudentPending from './views/StudentPending.js';
+import StudentApproved from './views/StudentApproved.js';
+
 
 
 import AdminFrame from './views/AdminFrame';
@@ -59,6 +63,7 @@ const views = [
   '/admin-archive',
   '/admin-changepass',
   '/admin-log-in',
+  '/admin-request',
   '/admin-profile',
   '/admin-edit-profile',
   '/admin-reg',
@@ -89,6 +94,8 @@ const views = [
   '/student-copyright',
   '/student-favorites',
   '/student-rlist',
+  '/student-approved',
+  '/student-pending',
   '/student-profile',
 ]
 
@@ -148,7 +155,7 @@ function App() {
           </AdminFrame>
         </Route>
 
-        <Route path="/admin-log-in">
+        <Route path="/admin-log-in/:username">
           <FacultyFrame>
             <AdminLogin />
           </FacultyFrame>
@@ -157,6 +164,12 @@ function App() {
         <Route path="/admin-reg/:username">
           <AdminFrame>
             <AdminReg />
+          </AdminFrame>
+        </Route>
+
+        <Route path="/admin-request/:username">
+          <AdminFrame>
+            <AdminRequest />
           </AdminFrame>
         </Route>
 
@@ -323,6 +336,18 @@ function App() {
         <Route path="/student-rlist/:username">
           <SFrame>
             <StudentRList />
+          </SFrame>
+        </Route>
+
+        <Route path="/student-approved/:username">
+          <SFrame>
+            <StudentApproved />
+          </SFrame>
+        </Route>
+
+        <Route path="/student-pending/:username">
+          <SFrame>
+            <StudentPending />
           </SFrame>
         </Route>
 
