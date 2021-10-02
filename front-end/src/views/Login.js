@@ -44,7 +44,7 @@ export default function Login(props){
 				if(data._label == 'Student'){
 					setRedirect( <Redirect to={`/student-rlist/${data._username}`}/> );
 				}
-				else if(data._label == 'Adviser'){
+				else if(data._label == 'MIS Officer'){
 					setRedirect( <Redirect to={`/MIS-slist/${data._username}`}/> );
 				}
 			}
@@ -67,10 +67,10 @@ export default function Login(props){
 						<h5>Sign in to start session</h5>
 					</div>
 					<div className="login-field d-flex flex-column align-items-center justify-content-between">
-						<Field className='username' placeHolder="student no." reqOnChange={(e)=>{dispatch({type:'username',data: e.target.value})}}/>
-						<Field className='password' placeHolder="password" reqOnChange={(e)=>{dispatch({type:'password',data: e.target.value})}}/>
+						<Field className='username' placeHolder="Student no." reqOnChange={(e)=>{dispatch({type:'username',data: e.target.value})}}/>
+						<Field className='password' placeHolder="Password" reqOnChange={(e)=>{dispatch({type:'password',data: e.target.value})}}/>
 						<div style={{width:"80%"}}>
-							<Select className="login-select" label='Select Position:'options={['Student','Adviser']} reqOnChange={(e)=>{dispatch({type:'label',data: e.target.value})}}/>
+							<Select className="login-select" label='Select Position:'options={['Student','MIS Officer']} reqOnChange={(e)=>{dispatch({type:'label',data: e.target.value})}}/>
 						</div>
 						<Button className="login-button" title="Sign me in" click={handler}/>
 					</div>

@@ -76,20 +76,20 @@ export default function AdminNewCoor(props){
 	const handler = ()=>{
 		const send = window.confirm("Registering new coordinator will disable the current coordinator, do you want to continue?");
 		if(send == true){
-			axios.put(`http://localhost:7000/coordinator/clist/new-admin/${username}`)
+			axios.post('http://localhost:7000/coordinator/clist/register',data)
 			.then((res)=>{
-				alert(res.data.message);
-				setRedirect( <Redirect to='/admin-log-in'/> );
-				// mukhang okay na paps ung edit profile madali na lang yon
-			})
-			.catch((err)=>{
-				if( err?.response?.data?.message ){
+				axios.put(`http://localhost:7000/coordinator/clist/new-admin/${username}`)
+				.then((res)=>{
+					alert(res.data.message);
+					setRedirect( <Redirect to='/sign-in'/> );
+				})
+				.catch((err)=>{
+					if( err?.response?.data?.message ){
+						alert( err.response.data.message );
+					}
 					alert( err.response.data.message );
-				}
-				alert( err.response.data.message );
-			})
-
-			axios.post('http://localhost:7000/coordinator/clist/register',data)// eto ung sa taas ung nag dedeactivate
+				})
+			})// eto ung sa taas ung nag dedeactivate
 			.catch((err)=>{
 				if( err?.response?.data?.message ){
 					alert( err.response.data.message );

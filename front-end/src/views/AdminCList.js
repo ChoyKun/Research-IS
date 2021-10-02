@@ -79,7 +79,7 @@ export default function AdminCList(props){
 				axios.put(`http://localhost:7000/coordinator/clist/changecoor/${selected?.data?.username}`) // set selected admin to active?
 				.then((res)=>{
 					alert(res.data.message);
-					setRedirect( <Redirect to='/admin-log-in'/> );
+					setRedirect( <Redirect to='/sign-in'/> );
 				})
 				.catch((err)=>{
 					console.log(err);

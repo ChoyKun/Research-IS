@@ -1,4 +1,5 @@
 const express = require('express');
+const fileUpload = require('express-fileupload');
 const app = express();
 
 const fs = require('fs');
@@ -19,8 +20,9 @@ const Faculty = require('./model/faculty');
 const Coordinator = require('./model/coordinator');
 
 app.use(cors());
-app.use(express.json())
+app.use(express.json());
 app.use(express.urlencoded({extended: false}));
+app.use(fileUpload());
 
 mongoose.connect(dbUri,{useNewUrlParser: true, useUnifiedTopology:true})
 .then((result)=>{
@@ -58,11 +60,22 @@ app.post('/sign-in', async(req,res,next)=>{
 				return res.status( 401 ).json({message: 'Unauthorized'});					
 			});
 			break;
-		case 'Adviser':
-			Faculty.findOne({username:_username, password:_password, status: 'active'},  (err, doc) => {
+		case 'MIS Officer':
+			Faculty.find({username:_username, password:_password, status: 'active'},  (err, doc) => {
 				if( err ){
-					console.log( err );
-					return res.status( 401 ).json({ message: 'Unauthorized' });
+					console.log(err);
+					Coordinator.find({username:_username, password:_password, status: 'active'},  (errs, docs) => {
+						if( errs ){
+							console.log( errs );
+							return res.status( 401 ).json({ message: 'Unauthorized' });
+						}
+
+						if( docs ){
+							console.log(docs)
+							return res.status( 200 ).json({message: 'logged-in successfuly'});
+						}
+						return res.status( 401 ).json({message: 'Unauthorized'});				
+					});
 				}
 
 				if( doc ){
@@ -256,6 +269,22 @@ app.post('/student/slist/register', async (req, res , next) =>{
 			return res.status(200).json({message:'successfuly registered'});
 		}
 		
+	})
+})
+
+app.post('/upload/image', async (req,res,next)=>{
+	if(req.file === null){
+		return res.status(400).json({message:'no image chosen'})
+	}
+
+	const file = req.file.img;
+
+	file.mv(`${__dirname}/client/public/uploads/${file.name}`,err =>{
+		if(err){
+			console.log(err)
+			return res.status(500).send(err);
+		}
+		res.json({fileName: file.name, filePath: `/uploads/${file.name}`})
 	})
 })
 

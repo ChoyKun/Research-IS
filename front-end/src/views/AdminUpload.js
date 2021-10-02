@@ -83,18 +83,22 @@ export default function FacultyUpload(props){
 	const [data,dispatch] = useReducer(reducer,state);
 
 	const handler = ()=>{
-		data.researchCategories = JSON.stringify( data.researchCategories );
+		const send = window.confirm("Uploaded researches will not be editable do you want to continue");
+		if(send == true){
+			data.researchCategories = JSON.stringify( data.researchCategories );
 
-		axios.post('http://localhost:7000/research/rlist/upload',data)
-		.then((res) => {
-			alert( res.data.message );
-			data.researchCategories = JSON.parse( data.researchCategories )
-		})
-		.catch((err)=>{
-			alert( err.response.data.message );
-		})
-
-
+			axios.post('http://localhost:7000/research/rlist/upload',data)
+			.then((res) => {
+				alert( res.data.message );
+				data.researchCategories = JSON.parse( data.researchCategories )
+			})
+			.catch((err)=>{
+				alert( err.response.data.message );
+			})
+		}
+		else{
+			alert("Operation canceled")
+		}
 	}
 
 	return(

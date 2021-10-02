@@ -34,7 +34,7 @@ export default function FacultyReg(props){
 		yearLevel: '1',
 		section: null,
 		dateRegistered: null,
-		img: null,
+		img: {},
 		favorites: [],
 		status:'active'
 	}
@@ -99,12 +99,19 @@ export default function FacultyReg(props){
 	const [data, dispatch] = useReducer(reducer, state)
 
 	const handler = ()=>{
-		axios.post('http://localhost:7000/student/slist/register', data)
-		.catch((err)=>{
-			if( err?.response?.data?.message ){
-				alert( err.response.data.message );
+		const send = window.confirm("If you register this record you can not edit it again, do you want to proceed?");
+		if(send == true){
+			axios.post('http://localhost:7000/student/slist/register', data)
+			.catch((err)=>{
+					if( err?.response?.data?.message ){
+						alert( err.response.data.message );
+					}
+				})
 			}
-		})
+		else{
+			alert("Operation canceled")
+		}
+		
 	}
 
 
@@ -126,7 +133,7 @@ export default function FacultyReg(props){
 								<div style={{height:'150px',width:'170px',backgroundColor:'white', border:'1px solid black' }}>
 									
 								</div>
-								<Field title='Upload Photo' type="file" accepts="image/*" className='aRegUploadPhoto'/>
+								<Field title='Upload Photo' type="file" name="img" accepts="image/*" className='aRegUploadPhoto' reqOnChange={(e) => {dispatch({type: 'img', data: e.target.value});}}/>
 								<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
 									<label style={{fontSize:'18px'}}>Student ID:</label>
 									<Field className='uNametxt' reqOnChange={(e) => {dispatch({type: 'studentNo', data: e.target.value});}}/>

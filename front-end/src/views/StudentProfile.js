@@ -55,36 +55,38 @@ export default function StudentProfile(props){
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
 				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black'}} className='d-flex justify-content-around'>
 					<div style={{height:'95%', width:'95%'}} className='d-flex justify-content-around align-items-center flex-column'>
-						<div style={{height:'40%',width:'100%'}} className='d-flex justify-content-start'>
-							<div style={{height:'100%',width:'225px', border:'1px solid black'}}> </div>
-						</div>
-						<div style={{height:'40%',width:'100%',color:'black'}} className='d-flex justify-content-center flex-column'>
+						<div style={{height:'90%',width:'100%',color:'black'}} className='d-flex justify-content-center flex-column'>
 							{studentData?.map?.( object=>(
-								<div onClick={() => console.log('clicked')} key={studentData.indexOf(object)} className="d-flex flex-column justify-content-start">
-									<div style={{height:'40%',width:'50%'}} className='d-flex flex-row justify-content-start'>
+								<div style={{height:'100%',width:'100%',color:'black'}} onClick={() => console.log('clicked')} key={studentData.indexOf(object)} className="d-flex flex-column justify-content-start">
+									<div style={{height:'40%',width:'100%'}} className='d-flex justify-content-start'>
+										<div style={{height:'100%',width:'225px', border:'1px solid black'}}> 
+											<img src={object.img}/>
+										</div>
+									</div>
+									<div style={{height:'10%',width:'50%'}} className='d-flex flex-row justify-content-start'>
 										<label style={{fontSize:'20px'}}>Name:</label>
 										<label style={{fontSize:'20px'}}>{name ?? 'Loading'}</label> 
 									</div>
-									<div style={{height:'40%',width:'50%'}} className='d-flex flex-row justify-content-start'>
+									<div style={{height:'10%',width:'50%'}} className='d-flex flex-row justify-content-start'>
 										<label style={{fontSize:'20px'}}>Birthday:</label>
 										<label style={{fontSize:'20px'}}>{(() => {
 													const date = new Date(object.birthdate);
 													return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
 												})()}</label> 
 									</div>
-									<div style={{height:'40%',width:'50%'}} className='d-flex flex-row justify-content-start'>
+									<div style={{height:'10%',width:'50%'}} className='d-flex flex-row justify-content-start'>
 										<label style={{fontSize:'20px'}}>Course:</label>
 										<label style={{fontSize:'20px'}}>{object.course}</label> 
 									</div>
-									<div style={{height:'40%',width:'50%'}} className='d-flex flex-row justify-content-start'>
+									<div style={{height:'10%',width:'50%'}} className='d-flex flex-row justify-content-start'>
 										<label style={{fontSize:'20px'}}>Year Level:</label>
 										<label style={{fontSize:'20px'}}>{object.yearLevel}</label> 
 									</div>
-									<div style={{height:'40%',width:'50%'}} className='d-flex flex-row justify-content-start'>
+									<div style={{height:'10%',width:'50%'}} className='d-flex flex-row justify-content-start'>
 										<label style={{fontSize:'20px'}}>Section:</label>
 										<label style={{fontSize:'20px'}}>{object.section}</label> 
 									</div>
-									<div style={{height:'40%',width:'50%'}} className='d-flex flex-row justify-content-start'>
+									<div style={{height:'10%',width:'50%'}} className='d-flex flex-row justify-content-start'>
 										<label style={{fontSize:'20px'}}>Date Registered:</label>
 										<label style={{fontSize:'20px'}}> {(() => {
 													const date = new Date(object.dateRegistered);
