@@ -14,7 +14,7 @@ const studentSchema = new Schema({
 	yearLevel:String,
 	section:String,
 	dateRegistered:{type:Date,default:Date.now},
-	img:{type: Buffer, contentType: String },
+	img: String,
 	favorites: Array,
 	status: String
 

@@ -36,9 +36,10 @@ mongoose.connect(dbUri,{useNewUrlParser: true, useUnifiedTopology:true})
 })
 
 
+// paths
+const images_path = path.join(__dirname, '../front-end/public/images');
 
 //Login
-
 app.post('/sign-in', async(req,res,next)=>{
 	const { _username, _password, _label } = req.body;
 
@@ -132,8 +133,6 @@ app.post('/student/slist/login', async (req, res, next)=>{
 		}
 
 		console.log( doc );
-
-
 
 		return res.status( 200 ).json({message: 'logged-in successfuly'});
 
@@ -272,21 +271,169 @@ app.post('/student/slist/register', async (req, res , next) =>{
 	})
 })
 
-app.post('/upload/image', async (req,res,next)=>{
-	if(req.file === null){
-		return res.status(400).json({message:'no image chosen'})
+
+// =====================================================================
+// ============= GET PICTURE ================
+app.get('/picture/:username', async (req, res, next) => {
+	const reqUsername = req.params.username;
+
+	Coordinator.findOne({username: reqUsername}, (err, doc) => {
+		if( err ) return res.sendStatus( 503 );
+
+		if( doc ){
+			doc.save( err => {
+			    if( err ) return res.sendStatus( 503 );
+
+				return res.status( 200 ).json({ path: doc.img });    
+			});
+		}
+	});
+
+	Student.findOne({username: reqUsername}, (err, doc) => {
+		if( err ) return res.sendStatus( 503 );
+
+		if( doc ){
+			doc.save( err => {
+			    if( err ) return res.sendStatus( 503 );
+
+				return res.status( 200 ).json({ path: doc.img });    
+			});
+		}
+	});
+
+	Faculty.findOne({username: reqUsername}, (err, doc) => {
+		if( err ) return res.sendStatus( 503 );
+
+		if( doc ){
+			doc.save( err => {
+			    if( err ) return res.sendStatus( 503 );
+
+				return res.status( 200 ).json({ path: doc.img });    
+			});
+		}
+	});
+});
+// =====================================================================
+
+
+// =====================================================================
+// ====== FACULTY IMAGE UPLOAD NEW CODE =======
+app.put('/upload-picture/:username', async (req, res, next) => {
+	if( !req.files ) return res.status( 400 ).json({ message: 'No file found'});
+
+	const reqUsername = req.params.username;
+	const image = req.files.adminImg;
+
+	const image_name = `client-pic-${new Date().getMilliseconds()}.png`
+	const destination_path = path.join( images_path, image_name );
+
+	const updateImage = ( docu ) => {
+		docu.img = `/images/${image_name}`;
+
+		docu.save( err => {
+		    if( err ) return res.sendStatus( 503 );
+
+			image.mv( destination_path, async (err) => {
+			    if( err ) return res.status( 503 );
+
+				return res.status( 200 ).json({ path: `/images/${image_name}` });    
+			});
+		});
 	}
 
-	const file = req.file.img;
+	Faculty.findOne({username: reqUsername}, (err, doc) => {
+		if( err ) return res.sendStatus( 503 );
 
-	file.mv(`${__dirname}/client/public/uploads/${file.name}`,err =>{
-		if(err){
-			console.log(err)
-			return res.status(500).send(err);
+		if( doc ){
+			if( doc.img ){
+				fs.readdir( images_path, (err, files) => {
+					if( err ) return res.status( 503 );
+
+					files.forEach( async (file) => {
+						if( doc.img === `/images/${file}` ){
+							fs.unlink( path.join( images_path, '/',file), (err) => {
+								if( err ) return res.status( 503 );
+
+								updateImage( doc );
+							});
+						}
+					});
+				});
+			}
+			else{
+				updateImage( doc );
+			}
 		}
-		res.json({fileName: file.name, filePath: `/uploads/${file.name}`})
-	})
-})
+	});
+
+	Coordinator.findOne({username: reqUsername}, (err, doc) => {
+		if( err ) return res.sendStatus( 503 );
+
+		if( doc ){
+			if( doc.img ){
+				fs.readdir( images_path, (err, files) => {
+					if( err ) return res.status( 503 );
+
+					files.forEach( async (file) => {
+						if( doc.img === `/images/${file}` ){
+							fs.unlink( path.join( images_path, '/',file), (err) => {
+								if( err ) return res.status( 503 );
+
+								updateImage( doc );
+							});
+						}
+					});
+				});
+			}
+			else{
+				updateImage( doc );
+			}
+		}
+	});
+
+	Student.findOne({username: reqUsername}, (err, doc) => {
+		if( err ) return res.sendStatus( 503 );
+
+		if( doc ){
+			if( doc.img ){
+				fs.readdir( images_path, (err, files) => {
+					if( err ) return res.status( 503 );
+
+					files.forEach( async (file) => {
+						if( doc.img === `/images/${file}` ){
+							fs.unlink( path.join( images_path, '/',file), (err) => {
+								if( err ) return res.status( 503 );
+
+								updateImage( doc );
+							});
+						}
+					});
+				});
+			}
+			else{
+				updateImage( doc );
+			}
+		}
+	});
+});
+// =====================================================================
+
+// ===== FACULTY IMAGE UPLOAD OLD CODE ======
+// app.post('/upload/image', async (req,res,next)=>{
+// 	if(req.file === null){
+// 		return res.status(400).json({message:'no image chosen'})
+// 	}
+
+// 	const file = req.file.img;
+
+// 	file.mv(`${__dirname}/client/public/images/${file.name}`,err =>{
+// 		if(err){
+// 			console.log(err)
+// 			return res.status(500).send(err);
+// 		}
+// 		res.json({fileName: file.name, filePath: `/uploads/${file.name}`})
+// 	})
+// });
 
 
 //Research List

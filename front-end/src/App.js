@@ -1,3 +1,5 @@
+import { Redirect } from 'react-router-dom';
+
 import FormCard from './components/cards/form-card';
 import AdminAccess from './views/AdminAccess.js';
 import AdminChangepass from './views/AdminChangepass.js';
@@ -46,8 +48,6 @@ import FacultyFrame from './views/FacultyFrame';
 import SFrame from './views/SFrame';
 import EmptyFrame from './views/EmptyFrame';
 import MFrame from './views/MFrame'
-
-
 
 
 
@@ -109,9 +109,6 @@ const PageNotFound = () => {
 }
 
 
-
-
-
 function App() {
   const pathname = window.location.pathname;
 
@@ -124,7 +121,6 @@ function App() {
   return (
    <div className="app">
      <Switch>
-
         <Route path="/admin-profile/:username">
           <AdminFrame>
             <AdminProfile />
@@ -356,6 +352,9 @@ function App() {
             <StudentProfile />
           </SFrame>
         </Route>
+
+        { pathname === views[ 0 ] ? <Redirect to="/sign-in"/> : null }
+        
      </Switch>
    </div>
   );

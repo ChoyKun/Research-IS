@@ -16,6 +16,7 @@ import '../styles/txt.css';
 // components
 import Button from '../components/buttons/button';
 import Field from '../components/fields/txtfield';
+import Image from '../components/fields/image';
 import SearcBar from '../components/contents/SearchBar';
 
 
@@ -64,7 +65,9 @@ export default function FacultyProfile(props){
 				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black'}} className='d-flex justify-content-around'>
 					<div style={{height:'95%', width:'95%'}} className='d-flex justify-content-around align-items-center flex-column'>
 						<div style={{height:'40%',width:'100%'}} className='d-flex justify-content-start'>
-							<div style={{height:'100%',width:'225px', border:'1px solid black'}}> </div>
+							<div style={{height:'100%',width:'225px', border:'1px solid black'}}> 
+								<Image username={username}/>
+							</div>
 						</div>
 						<div style={{height:'40%',width:'100%',color:'black'}} className='d-flex justify-content-center flex-column'>
 							{facultyData?.map?.( object=>(
