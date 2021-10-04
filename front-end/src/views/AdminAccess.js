@@ -14,8 +14,6 @@ import SearcBar from '../components/contents/SearchBar';
 export default function AdminAccess( props ){
 	const {username} = useParams();
 
-
-
 	return(
 		<>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>

@@ -66,7 +66,8 @@ export default function Frame(props){
 
 
 function OpenedMenu( props ){
-	const {username} = useParams();
+	const { username } = useParams();
+	
 	return(
 		<div style={{backgroundColor:'#404040',width: '40%',height:"100%"}}className="side-panel d-flex flex-column align-items-center">
 			<div style={{backgroundColor:'#404040',width:'100%',height:"80%"}}className="side-panel d-flex flex-column justify-content-around align-items-center">

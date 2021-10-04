@@ -127,7 +127,7 @@ function App() {
           </AdminFrame>
         </Route>
 
-        <Route path="/admin-access">
+        <Route path="/admin-access/:username">
           <FacultyFrame>
             <AdminAccess />
           </FacultyFrame>

@@ -38,6 +38,7 @@ mongoose.connect(dbUri,{useNewUrlParser: true, useUnifiedTopology:true})
 
 // paths
 const images_path = path.join(__dirname, '../front-end/public/images');
+const pdfs_path = path.join(__dirname, '../front-end/public/pdfs');
 
 //Login
 app.post('/sign-in', async(req,res,next)=>{
@@ -418,22 +419,25 @@ app.put('/upload-picture/:username', async (req, res, next) => {
 });
 // =====================================================================
 
-// ===== FACULTY IMAGE UPLOAD OLD CODE ======
-// app.post('/upload/image', async (req,res,next)=>{
-// 	if(req.file === null){
-// 		return res.status(400).json({message:'no image chosen'})
-// 	}
 
-// 	const file = req.file.img;
+// =====================================================================
+// ====== FILE UPLOAD ========
+app.post('/upload-file/', async (req, res, next) => {
+	if( !req.files ) return res.status( 400 ).json({ message: 'No file found'});
 
-// 	file.mv(`${__dirname}/client/public/images/${file.name}`,err =>{
-// 		if(err){
-// 			console.log(err)
-// 			return res.status(500).send(err);
-// 		}
-// 		res.json({fileName: file.name, filePath: `/uploads/${file.name}`})
-// 	})
-// });
+	const file = req.files.fileUpload;
+	
+	const file_name = `${file.name}_${new Date().getMilliseconds()}.pdf`
+	const destination_path = path.join( pdfs_path, file_name );
+
+	file.mv( destination_path, async (err) => {
+	    if( err ) return res.status( 503 );
+
+		return res.status( 200 ).json({ path: `/pdfs/${file_name}` });    
+	});
+});
+
+// =====================================================================
 
 
 //Research List
@@ -703,7 +707,7 @@ app.get('/auth-admin/profile', async (req,res,next)=>{
 
 
 	return res.status( 200 ).json( JSON.parse(data) );
-})
+});
 
 app.get('/auth-admin/profile/:username', async(req, res, next)=>{
 	Coordinator.findOne({username: req.params.username}, (err, doc)=>{
@@ -713,8 +717,8 @@ app.get('/auth-admin/profile/:username', async(req, res, next)=>{
 		if(doc){
 			return res.status(200).json({data:`${doc.firstName} ${doc.middleInitial} ${doc.lastName}`, message:'user logged-in'})
 		}
-	})
-})
+	});
+});
 
 
 app.post('/coordinator/clist/register', async (req, res , next) =>{
@@ -769,33 +773,29 @@ app.put('/coordinator/clist/new-admin/:username', async (req,res,next)=>{
 })
 
 app.post('/auth-admin', async (req, res, next) => {
-	const {_username, _password}=req.body;
+	const { _username, _password } = req.body;
 
-
-	Coordinator.findOne({status: 'active' }, (err, doc) => {
+	Coordinator.findOne({status: 'active'}, (err, doc) => {
 		if( err ){
 			console.log( err );
 			return res.status( 401 ).json({ message: 'Unauthorized' });
 		}
 
-		console.log( doc );
-
 		if( doc ){
-
 			if(doc.username == _username){
 				if(doc.password == _password){
 					return res.status( 200 ).json({message: 'logged-in successfuly'});
 				}
 				else{
-					return res.status( 401 ).json({message: 'Incorrect Password'});	
+					return res.status( 401 ).json({message: 'Incorrect password'});	
 				}
 			}
 			else{
-				return res.status( 401 ).json({message: 'Unauthorized'});	
-			}
-			
+				return res.status( 401 ).json({message: 'Incorrect username'});	
+			}		
+
+			return res.status( 401 ).json({message: 'Unauthorized'});			
 		}
-		return res.status( 401 ).json({message: 'Unauthorized'});					
 	});
 });
 

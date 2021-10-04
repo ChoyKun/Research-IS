@@ -12,10 +12,10 @@ const researchSchema = new Schema({
 	mem2: String,
 	mem3: String,
 	mem4: String,
-	PDFFile:{type:Buffer, contentType:String},
-	status:String,
-	favorites:String
-})
+	PDFFile: String,
+	status: String,
+	favorites: String
+});
 
 const Research = mongoose.model('Research', researchSchema);
 

@@ -15,6 +15,7 @@ import '../styles/txt.css';
 // components
 import Button from '../components/buttons/button';
 import Field from '../components/fields/txtfield';
+import FileUpload from '../components/fields/file-render';
 import SearcBar from '../components/contents/SearchBar';
 import Select from '../components/fields/select';
 import Checkbox from '../components/fields/checkbox';
@@ -101,6 +102,10 @@ export default function FacultyUpload(props){
 		}
 	}
 
+	const handlePdfUpload = ( path ) => {
+		dispatch({ type: 'PDFFile', data: path });
+	}
+
 	return(
 		<>
 			<div style={{height:'8%', width:'100%', backgroundColor:'#595959', color:'white'}} className='d-flex justify-content-center align-items-center'>
@@ -150,18 +155,22 @@ export default function FacultyUpload(props){
 									<Field className='fName' reqOnChange={(e) => {dispatch({type: 'mem4', data: e.target.value});}}/>
 								</div>
 							</div>
-							<div style={{height:'95%',width:'50%'}}>
-								<label style={{fontSize:'20px'}}>Research Categories</label>
-								<div style={{height:'250px',width:'200px',backgroundColor:'white',border:'1px solid black'}} className='d-flex flex-column'>
-									<Checkbox cLabel='Hardware' value='Hardware' reqOnChange={(e)=>(dispatch({type:'researchCategories',name:'Hardware', data: e.target.checked }))}/>
-									<Checkbox cLabel='Software' value='Software' reqOnChange={(e)=>(dispatch({type:'researchCategories',name:'Software', data: e.target.checked }))}/>
-									<Checkbox cLabel='Web System' value='Web System' reqOnChange={(e)=>(dispatch({type:'researchCategories',name:'Web System', data: e.target.checked }))}/>
-									<Checkbox cLabel='Game Dev' value='Game Dev' reqOnChange={(e)=>(dispatch({type:'researchCategories',name:'Game Dev', data: e.target.checked }))}/>
-									<Checkbox cLabel='Augmented Reality' value='Augmented Reality' reqOnChange={(e)=>(dispatch({type:'researchCategories',name:'Augmented Reality', data: e.target.checked }))}/>
-									<Checkbox cLabel='Mobile App'value='Mobile App' reqOnChange={(e)=>(dispatch({type:'researchCategories',name:'Mobile App', data: e.target.checked }))} />
-								</div>
-								<div style={{height:'10%',width:'200px'}} className='d-flex flex-column'>
-									<Field type='file' title='Attach File'/>
+							<div style={{height:'95%',width:'50%'}} className="d-flex flex-column justify-content-around align-items-center">
+								<div style={{height: '90%', width: '100%'}} className="py-4 d-flex flex-row justify-content-around align-items-center">
+									<div style={{height:'100%',width:'200px'}} className="d-flex flex-column justify-content-center align-items-center">
+										<label style={{fontSize:'18px'}}>Research Categories</label>
+										<div style={{height:'90%',width:'100%',backgroundColor:'white',border:'1px solid black'}} className='px-3 d-flex flex-column justify-content-around'>
+											<Checkbox cLabel='Hardware' value='Hardware' reqOnChange={(e)=>(dispatch({type:'researchCategories',name:'Hardware', data: e.target.checked }))}/>
+											<Checkbox cLabel='Software' value='Software' reqOnChange={(e)=>(dispatch({type:'researchCategories',name:'Software', data: e.target.checked }))}/>
+											<Checkbox cLabel='Web System' value='Web System' reqOnChange={(e)=>(dispatch({type:'researchCategories',name:'Web System', data: e.target.checked }))}/>
+											<Checkbox cLabel='Game Dev' value='Game Dev' reqOnChange={(e)=>(dispatch({type:'researchCategories',name:'Game Dev', data: e.target.checked }))}/>
+											<Checkbox cLabel='Augmented Reality' value='Augmented Reality' reqOnChange={(e)=>(dispatch({type:'researchCategories',name:'Augmented Reality', data: e.target.checked }))}/>
+											<Checkbox cLabel='Mobile App'value='Mobile App' reqOnChange={(e)=>(dispatch({type:'researchCategories',name:'Mobile App', data: e.target.checked }))} />
+										</div>
+									</div>
+									<div style={{height:'100%',width:'200px'}} className='d-flex flex-column'>
+										<FileUpload active={true} title={data.title} fileCatcher={handlePdfUpload}/>
+									</div>
 								</div>
 								<div style={{height:'10%',width:'200px'}} className='d-flex flex-column'>
 									<Button click={handler} className='aBatchBtn' title='Upload'/>
