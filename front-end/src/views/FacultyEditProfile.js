@@ -23,6 +23,7 @@ import SearcBar from '../components/contents/SearchBar';
 export default function FacultyEditProfile(props){
 
 	const {username} = useParams();
+	
 
 	const state={
 		_username:null ,
@@ -104,6 +105,7 @@ export default function FacultyEditProfile(props){
 		})
 	},[]);
 
+
 	const getDateFrom = ( dateString ) => {
     	const date = new Date( dateString );
 
@@ -140,6 +142,7 @@ export default function FacultyEditProfile(props){
 							{/*<Image username={username}/>*/}
 						</div>
 						<div style={{height:'32%',width:'100%',color:'black'}} className='d-flex justify-content-around flex-column'>
+							{console.log(facultyData)}
 							{facultyData?.map?.(object=>(
 								<>
 									<div style={{width:'100%'}} className='d-flex justify-content-between flex-row'>

@@ -169,7 +169,7 @@ function App() {
           </AdminFrame>
         </Route>
 
-        <Route path="/admin-new-coor/:username">
+        <Route path="/admin-new-coor">
           <AdminFrame>
             <AdminNewCoor />
           </AdminFrame>
