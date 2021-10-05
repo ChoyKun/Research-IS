@@ -1,6 +1,6 @@
 import React,{useState, useEffect} from 'react';
 import { Link, useParams} from 'react-router-dom';
-
+import axios from 'axios';
 
 
 //style
@@ -13,10 +13,30 @@ import SearcBar from '../components/contents/SearchBar';
 
 export default function AdminRequest( props ){
 	const {username} = useParams();
-	const [request, setRequests] = useState([]);
+	const [requests, setRequests] = useState([]);
 
 	useEffect(() => {
-		props?.Event?.on?.('requestResearch', ( data ) => console.log( data ));
+		const getRequests = setInterval(() => {
+			axios.get('http://localhost:7000/request-views')
+			.then( res => {
+				if( !requests.length ){
+					setRequests([...res.data.reqViews]);
+				}
+				else{
+					res.data.reqViews.forEach( req => {						
+						if( !requests.map( r => r.id ).includes( req.id ) ){
+							setRequests( requests => [...requests, res]);
+						}
+					});
+				}
+			})
+			.catch( err => {
+				console.log(err);
+				clearInterval( getRequests );
+			})
+		}, 10000);
+
+		return () => clearInterval( getRequests );
 	}, []);
 
 	return(
@@ -33,7 +53,9 @@ export default function AdminRequest( props ){
 			<div style={{width: '100%', height: '100%'}} className='d-flex flex-column justify-content-center align-items-center'>
 				<Header/>
 				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black', overflowY: 'auto'}} className='d-flex flex-column justify-content-start align-items-center'>
-					
+					{
+						requests?.map?.( req => <Request setRequests={setRequests} key={req.id} {...req}/>)
+					}
 				</div>
 			</div>
 		</>
@@ -54,16 +76,22 @@ const Header = ( props ) => {
 
 			className="d-flex flex-row justify-content-around align-items-center"
 		>
-			<div className="col-2 text-center"><p className="p-0 m-0"> STUDENT NO. </p></div>
-			<div className="col-4 text-center"><p className="p-0 m-0"> NAME </p></div>
+			<div className="col-4 text-center"><p className="p-0 m-0"> STUDENT NO. </p></div>
 			<div className="col-4 text-center"><p className="p-0 m-0"> TITLE </p></div>
-			<div className="col-2 text-center"><label for="approveAll">APPROVE ALL </label><input type="checkbox" name="approveAll"/></div>
+			<div className="col-4 text-center"><label htmlFor="approveAll">APPROVE ALL </label><input type="checkbox" name="approveAll"/></div>
 		</div>
 	);
 }
  
 // stud num, name, title, by unique id
 const Request = ( props ) => {
+	const handleChange = async () => {
+		axios.put(`http://localhost:7000/change-file-state/${ props.id }`)
+		.catch( err => {
+			console.log( err );
+		});
+	}
+
 	return(
 		<div 
 			style={{
@@ -74,10 +102,9 @@ const Request = ( props ) => {
 			}} 
 			className="d-flex mb-1 flex-row justify-content-around align-items-center"
 		>
-			<div className="col-2 text-center"><p className="p-0 m-0"> { props.studentNo } </p></div>
-			<div className="col-4 text-center"><p className="p-0 m-0"> { props.name } </p></div>
+			<div className="col-4 text-center"><p className="p-0 m-0"> { props.studentNo } </p></div>
 			<div className="col-4 text-center"><p className="p-0 m-0"> { props.title } </p></div>
-			<div className="col-2 text-center"><input type="checkbox" name="approve"/></div>
+			<div className="col-4 text-center"><input onChange={handleChange} type="checkbox" name="approve"/></div>
 		</div>
 	);
 }

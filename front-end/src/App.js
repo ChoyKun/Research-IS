@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useReducer } from 'react';
 import { Redirect } from 'react-router-dom';
 
 import FormCard from './components/cards/form-card';
@@ -98,7 +98,8 @@ const views = [
   '/student-approved',
   '/student-pending',
   '/student-profile',
-]
+];
+
 
 const PageNotFound = () => {
   return(
@@ -112,16 +113,6 @@ const PageNotFound = () => {
 
 function App() {
   const pathname = window.location.pathname;
-
-  const Event = new EventEmitter();
-
-  React.useEffect(() => {
-    Event.on('requestResearch', () => console.log('Requesting'));
-  }, []);
-
-  if( views.indexOf(pathname) < 0 ){
-    return <PageNotFound />
-  }
 
 
   return (
@@ -171,7 +162,7 @@ function App() {
 
         <Route path="/admin-request/:username">
           <AdminFrame>
-            <AdminRequest Event={Event}/>
+            <AdminRequest />
           </AdminFrame>
         </Route>
 
@@ -337,7 +328,7 @@ function App() {
 
         <Route path="/student-rlist/:username">
           <SFrame>
-            <StudentRList Event={Event}/>
+            <StudentRList />
           </SFrame>
         </Route>
 

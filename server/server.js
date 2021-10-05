@@ -40,6 +40,8 @@ mongoose.connect(dbUri,{useNewUrlParser: true, useUnifiedTopology:true})
 const images_path = path.join(__dirname, '../front-end/public/images');
 const pdfs_path = path.join(__dirname, '../front-end/public/pdfs');
 
+const req_view_path = path.join(__dirname, 'data/view-requests.json');
+
 //Login
 app.post('/sign-in', async(req,res,next)=>{
 	const { _username, _password, _label } = req.body;
@@ -923,6 +925,101 @@ app.put('/auth-admin/changepassword/:username', async(req,res,next)=>{
 	else{
 		return res.status(400).json({ message: 'Password is incorrect' })
 	}
-})
+});
+
+
+app.delete('/delete-file-req/:id', async ( req, res, next ) => {
+	const id = req.params.id;
+
+	fs.readFile( req_view_path, ( err, reqList ) => {
+		if( err ) return res.sendStatus( 503 );
+
+		let list = JSON.parse( reqList );
+
+		list = list.filter( item => item.id != id );
+
+		fs.writeFile( req_view_path, JSON.stringify(list, null, 4), err => {
+			if( err ) return res.sendStatus( 503 );
+
+			return res.sendStatus( 200 );
+		});		
+	});
+});
+
+
+app.get('/check-file/:id', async ( req, res, next ) => {
+	const id = req.params.id;
+
+	fs.readFile( req_view_path, ( err, reqList ) => {
+		if( err ) return res.sendStatus( 503 );
+
+		const list = JSON.parse( reqList );
+
+		list.forEach( async (item, index) => {
+			if( item.id === id ){
+				console.log('here')
+				return res.status( 200 ).json({itemState: list[index].state});
+			}
+		});
+
+		return res.end();
+	});
+});
+
+app.put('/change-file-state/:id', async ( req, res, next ) => {
+	const id = req.params.id;
+
+	fs.readFile( req_view_path, ( err, reqList ) => {
+		if( err ) return res.sendStatus( 503 );
+
+		const list = JSON.parse( reqList );
+
+		list.forEach( (item, index) => {
+			if( item.id === id ){
+				list[index].state = 'approved';
+			}
+		});
+
+		fs.writeFile( req_view_path, JSON.stringify(list, null, 4), err => {
+			if( err ) return res.sendStatus( 503 );
+
+			return res.sendStatus( 200 );
+		});
+	});
+});
+
+app.get('/request-views', async ( req, res, next ) => {
+	const data = req.body.data;
+
+	fs.readFile( req_view_path, ( err, reqList ) => {
+		if( err ) return res.sendStatus( 503 );
+
+		return res.json({ reqViews: JSON.parse( reqList ) });
+	});
+});
+
+
+app.post('/request-view', async ( req, res, next ) => {
+	const data = req.body.data;
+
+	fs.readFile( req_view_path, ( err, reqList ) => {
+		if( err ) return res.sendStatus( 503 );
+		console.log('here');
+
+		const list = JSON.parse( reqList );
+
+		if( list.length && list.map( item => item.id ).includes( data.id ) ) return res.sendStatus( 200 );
+		else if( !data ) return res.sendStatus( 200 );
+		list.push( data );
+
+		fs.writeFile( req_view_path, JSON.stringify( list, null, 4 ), ( err ) => {
+			if( err ) return res.sendStatus( 503 );
+			console.log('here');
+
+
+			return res.sendStatus( 200 );
+		});
+	});
+});
 
 const match = (leftOp, rightOp) => leftOp === rightOp;
