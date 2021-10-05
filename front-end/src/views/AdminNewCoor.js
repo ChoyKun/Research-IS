@@ -75,14 +75,16 @@ export default function AdminNewCoor(props){
 		}
 	}
 
+
+
 	const [data, dispatch] = useReducer(reducer,state)
 
 	const handler = ()=>{
 		const send = window.confirm("Registering new coordinator will disable the current coordinator, do you want to continue?");
 		if(send == true){
-			axios.post('http://localhost:7000/coordinator/clist/register',data)
+			axios.put(`http://localhost:7000/coordinator/clist/new-admin/${username}`)
 			.then((res)=>{
-				axios.put(`http://localhost:7000/coordinator/clist/new-admin/${username}`)
+				axios.post('http://localhost:7000/coordinator/clist/register', data)
 				.then((res)=>{
 					alert(res.data.message);
 					setRedirect( <Redirect to='/sign-in'/> );
