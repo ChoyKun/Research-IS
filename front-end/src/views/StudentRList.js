@@ -21,7 +21,7 @@ export default function RListFilter(props){
 	const [search, setSearch] = useState( null );
 	const [favorites, setFavorites] = useState([])
 	const [sendFavs, setSendFavs] = useState(false);
-
+	
 
 	useEffect(()=>{
 		axios.get('http://localhost:7000/research/rlist')
@@ -36,7 +36,13 @@ export default function RListFilter(props){
 		.catch((err)=>{
 			console.log(err)
 		})
-	},[])
+	},[]);
+
+	useEffect(() => {
+		props?.Event?.on?.('approve');
+	}, []);
+
+	const emitRequest()
 
 	useEffect(() => {
 		setFilteredData(researchData?.map?.( object => {
@@ -44,13 +50,19 @@ export default function RListFilter(props){
 				for( let key of Object.keys( object ) ){
 					// console.log(object)									
 					if(object[key]?.toLowerCase?.()?.startsWith( search?.charAt?.(0)?.toLowerCase?.() )){
-						return <Item key={object.id} object={object}/>
+						return <Item key={object.id} object={object} onClick={() => Event.emit('requestResearch', {
+							studentNo: username,
+							research: object
+						})}/>
 
 					}
 				}
 			}
 			else{
-				return <Item key={object.id} object={object}/>
+				return <Item key={object.id} object={object}  onClick={() => Event.emit('requestResearch', {
+					studentNo: username,
+					research: object
+				})}/>
 			}
 		}
 	))
@@ -114,7 +126,6 @@ function Loading(props){
 
 
 function Item(props){
-
 	const handleOnChange = (e) => {
 		props.object.favorites = e.target.checked ? 'true' : 'false';
 		console.log(props.object.favorites)
@@ -128,7 +139,7 @@ function Item(props){
 			<div className="col-1 text-center">{props.object.course??'N/A'}</div>
 			<div className="col-4 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
 			<div className="col-2 text-center">{props.object.yearSubmitted}</div>
-			<Button className='col-1 text-center' style={{backgroundColor:'#385723', color:'white'}} title='View'/>
+			<Button click={props?.onClick} className='col-1 text-center' style={{backgroundColor:'#385723', color:'white'}} title='View'/>
 		</div>
 	);
 }

@@ -1,3 +1,4 @@
+import React from 'react';
 import { Redirect } from 'react-router-dom';
 
 import FormCard from './components/cards/form-card';
@@ -49,7 +50,7 @@ import SFrame from './views/SFrame';
 import EmptyFrame from './views/EmptyFrame';
 import MFrame from './views/MFrame'
 
-
+import EventEmitter from './modules/custom-event-emitter';
 
 import {Route, Switch} from 'react-router-dom';
 
@@ -112,6 +113,11 @@ const PageNotFound = () => {
 function App() {
   const pathname = window.location.pathname;
 
+  const Event = new EventEmitter();
+
+  React.useEffect(() => {
+    Event.on('requestResearch', () => console.log('Requesting'));
+  }, []);
 
   if( views.indexOf(pathname) < 0 ){
     return <PageNotFound />
@@ -165,7 +171,7 @@ function App() {
 
         <Route path="/admin-request/:username">
           <AdminFrame>
-            <AdminRequest />
+            <AdminRequest Event={Event}/>
           </AdminFrame>
         </Route>
 
@@ -331,7 +337,7 @@ function App() {
 
         <Route path="/student-rlist/:username">
           <SFrame>
-            <StudentRList />
+            <StudentRList Event={Event}/>
           </SFrame>
         </Route>
 
