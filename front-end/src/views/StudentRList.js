@@ -21,8 +21,9 @@ export default function RListFilter(props){
 	const [search, setSearch] = useState( null );
 	const [favorites, setFavorites] = useState([])
 	const [sendFavs, setSendFavs] = useState(false);
-	
-	let emitRequest;
+
+
+
 
 	useEffect(()=>{
 		axios.get('http://localhost:7000/research/rlist')
@@ -39,10 +40,7 @@ export default function RListFilter(props){
 		})
 	},[]);
 
-	// useEffect(() => {
-	// 	// props?.Event?.on?.('approve');
 
-	// }, []);
 
 
 	useEffect(() => {
@@ -51,12 +49,16 @@ export default function RListFilter(props){
 				for( let key of Object.keys( object ) ){
 					// console.log(object)									
 					if(object[key]?.toLowerCase?.()?.startsWith( search?.charAt?.(0)?.toLowerCase?.() )){
-						return <Item key={object.id} object={object} onClick={() => props.setRequests( () => object )}/>
+
+						return <Item key={object._id} object={object}/>
+
 					}
 				}
 			}
 			else{
-				return <Item key={object.id} object={object}  onClick={() => props.setRequests( () => object )}/>
+
+				return <Item key={object._id} object={object} />
+
 			}
 		}
 	))
@@ -74,7 +76,6 @@ export default function RListFilter(props){
 			});		
 			console.log( favorites );	
 		}
-
 	}, [sendFavs]);
 
 	useEffect(() => {
@@ -119,11 +120,56 @@ function Loading(props){
 
 
 function Item(props){
+	const { username } = useParams();
+
 	const handleOnChange = (e) => {
 		props.object.favorites = e.target.checked ? 'true' : 'false';
 		console.log(props.object.favorites)
 	}
 	
+	const [itemState, setItemState] = useState('idle');
+
+	const requestForView = async () => {
+		setItemState(() => 'pending');
+
+		const data = {
+			id: props.object._id,
+			name: username,
+			title: props.object.title,
+			state: 'pending'
+		};
+
+		alert(`Pending to accept viewing of "${data.title}" research by admin.\nIf approved then view button will turn into green`);
+
+		axios.post('http://localhost:7000/request-view', {data})
+		.catch( err => {
+			console.log( err );
+		});
+	}
+
+	useEffect(() => {
+		const checkFile = async () => {
+			axios.get(`http://localhost:7000/check-file/${props.object._id}`)
+			.then( res => {
+				if( res.data.itemState === 'approved' ){
+					setItemState(() => res.data.itemState);
+					
+					axios.delete(`http://localhost:7000/delete-file-req/${props.object._id}`)
+					.catch( err => {
+						console.log( err );
+					});
+				}
+				else{
+					setTimeout(() => checkFile(), 10000);
+				}
+			})
+			.catch( err => {
+				console.log( err );
+			});
+		}
+
+		if( itemState === 'idle' ) checkFile();
+	}, [itemState]);
 
 	return(
 		<div className="d-flex bg-secondary flex-row justify-content-around" style={{border:'1px solid black'}}>
@@ -132,7 +178,7 @@ function Item(props){
 			<div className="col-1 text-center">{props.object.course??'N/A'}</div>
 			<div className="col-4 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
 			<div className="col-2 text-center">{props.object.yearSubmitted}</div>
-			<Button click={props?.onClick} className='col-1 text-center' style={{backgroundColor:'#385723', color:'white'}} title='View'/>
+			<Button click={requestForView} className={`col-1 ${itemState === 'approved' ? 'bg-success' : 'bg-danger'} text-center`} style={{backgroundColor:'#385723', color:'white'}} title='View'/>
 		</div>
 	);
 }
