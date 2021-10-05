@@ -17,6 +17,8 @@ import Button from '../components/buttons/button';
 import Field from '../components/fields/txtfield';
 import SearcBar from '../components/contents/SearchBar';
 import Select from '../components/fields/select';
+import Image from '../components/fields/image';
+
 
 
 export default function FacultyReg(props){
@@ -131,9 +133,8 @@ export default function FacultyReg(props){
 						<div style={{height:'90%',width:'90%'}} className="d-flex flex-row justify-content-center">
 							<div style={{height:'95%',width:'50%'}}>
 								<div style={{height:'150px',width:'170px',backgroundColor:'white', border:'1px solid black' }}>
-									
+									<Image active={true} username={data.studentNo}/>
 								</div>
-								<Field title='Upload Photo' type="file" name="img" accepts="image/*" className='aRegUploadPhoto'/>
 								<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
 									<label style={{fontSize:'18px'}}>Student ID:</label>
 									<Field className='uNametxt' reqOnChange={(e) => {dispatch({type: 'studentNo', data: e.target.value});}}/>

@@ -29,6 +29,7 @@ export default function AdminNewCoor(props){
 	const state ={
 		username:null ,
 		password:null,
+		_password:null,
 		firstName:null,
 		middleInitial:null,
 		lastName:null,
@@ -46,6 +47,9 @@ export default function AdminNewCoor(props){
 				return state;
 			case 'password':
 				state.password = action.data;
+				return state;
+			case '_password':
+				state._password = action.data;
 				return state;
 			case 'firstName':
 				state.firstName = action.data;
@@ -94,7 +98,6 @@ export default function AdminNewCoor(props){
 				if( err?.response?.data?.message ){
 					alert( err.response.data.message );
 				}
-				alert( err.response.data.message );
 			})
 		}
 		else{
@@ -153,6 +156,9 @@ export default function AdminNewCoor(props){
 								<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
 									<label>Date Registered:</label>
 									<Field type='date' placeHolder='Enter Date Here' reqOnChange={(e) => {dispatch({type: 'dateRegistered', data: e.target.value});}}/>
+								</div>
+								<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-center align-items-center flex-row'>
+									<Field className='fName' placeHolder='Enter you password to confirm' reqOnChange={(e) => {dispatch({type: '_password', data: e.target.value});}}/>
 								</div>
 								<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
 									<Button title='Cancel' className='crDecline' click={()=>window.history.back()}/>

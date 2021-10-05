@@ -22,6 +22,7 @@ export default function RListFilter(props){
 	const [favorites, setFavorites] = useState([])
 	const [sendFavs, setSendFavs] = useState(false);
 	
+	let emitRequest;
 
 	useEffect(()=>{
 		axios.get('http://localhost:7000/research/rlist')
@@ -38,11 +39,11 @@ export default function RListFilter(props){
 		})
 	},[]);
 
-	useEffect(() => {
-		props?.Event?.on?.('approve');
-	}, []);
+	// useEffect(() => {
+	// 	// props?.Event?.on?.('approve');
 
-	const emitRequest()
+	// }, []);
+
 
 	useEffect(() => {
 		setFilteredData(researchData?.map?.( object => {
@@ -50,19 +51,12 @@ export default function RListFilter(props){
 				for( let key of Object.keys( object ) ){
 					// console.log(object)									
 					if(object[key]?.toLowerCase?.()?.startsWith( search?.charAt?.(0)?.toLowerCase?.() )){
-						return <Item key={object.id} object={object} onClick={() => Event.emit('requestResearch', {
-							studentNo: username,
-							research: object
-						})}/>
-
+						return <Item key={object.id} object={object} onClick={() => props.setRequests( () => object )}/>
 					}
 				}
 			}
 			else{
-				return <Item key={object.id} object={object}  onClick={() => Event.emit('requestResearch', {
-					studentNo: username,
-					research: object
-				})}/>
+				return <Item key={object.id} object={object}  onClick={() => props.setRequests( () => object )}/>
 			}
 		}
 	))
@@ -93,7 +87,6 @@ export default function RListFilter(props){
 			.catch((err)=>{console.log(err)});
 		}
 	}, [favorites])
-	console.log(favorites);
 
 	return(
 		<>
@@ -133,7 +126,7 @@ function Item(props){
 	
 
 	return(
-		<div onClick={() => console.log('clicked')} className="d-flex bg-secondary flex-row justify-content-around" style={{border:'1px solid black'}}>
+		<div className="d-flex bg-secondary flex-row justify-content-around" style={{border:'1px solid black'}}>
 			<div className="col-1 text-center"><Checkbox reqOnChange={handleOnChange}/></div>
 			<div className="col-2 text-center">{props.object.title}</div>
 			<div className="col-1 text-center">{props.object.course??'N/A'}</div>

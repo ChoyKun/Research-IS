@@ -35,9 +35,9 @@ const FileUpload = ( props ) => {
 		>
 			<object className="image-img loading" width="100%" height="100%" data={ file }/>
 			{ 
-				props?.active && !file 
+				props?.active
 					? (() => (
-						<div className="admin-img-l1 d-flex justify-content-center align-items-center">
+						<div style={{width: '80%'}} className="admin-img-l1 d-flex justify-content-center align-items-center">
 							<div className="admin-img-l2 d-flex justify-content-center align-items-center">
 								<input onChange={handleChangePhoto} className="admin-img-inp" name="fileUpload" type="file" accept="application/pdf"/>
 								<h5 style={{opacity: isVisible ? '1' : '0'}} className="p-2 m-0 bg-dark rounded">Edit file</h5>

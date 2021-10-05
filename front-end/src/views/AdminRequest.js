@@ -13,11 +13,11 @@ import SearcBar from '../components/contents/SearchBar';
 
 export default function AdminRequest( props ){
 	const {username} = useParams();
-	const [request, setRequests] = useState([]);
+	// const [requests, setRequests] = useState([ ... ]);
 
 	useEffect(() => {
-		props?.Event?.on?.('requestResearch', ( data ) => console.log( data ));
-	}, []);
+		console.log( props.requests );
+	}, [props.requests]);
 
 	return(
 		<>
@@ -33,7 +33,7 @@ export default function AdminRequest( props ){
 			<div style={{width: '100%', height: '100%'}} className='d-flex flex-column justify-content-center align-items-center'>
 				<Header/>
 				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black', overflowY: 'auto'}} className='d-flex flex-column justify-content-start align-items-center'>
-					
+					{/*{ requests?.map?.( req => <Request studentNo={req.studentNo} name={req.name} title={req.title}/>) }*/}
 				</div>
 			</div>
 		</>

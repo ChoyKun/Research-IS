@@ -4,11 +4,12 @@ import '../styles/login.css';
 import Field from '../components/fields/txtfield';
 import Button from '../components/buttons/button'
 import Select from '../components/fields/select';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 
 export default function Login(props){
+	const {username} = useParams();
 	const [redirect, setRedirect] = useState( null );
 
 	const state={
@@ -41,6 +42,7 @@ export default function Login(props){
 		.then(res=>{
 			alert(res.data.message);
 			if(res.status == 200 ){
+
 				if(data._label == 'Student'){
 					setRedirect( <Redirect to={`/student-rlist/${data._username}`}/> );
 				}
@@ -62,7 +64,10 @@ export default function Login(props){
 					<img src={scslogo}/>
 					<h1>SCS Research Portal</h1>
 				</div>
-				<div className='login-inputs d-flex flex-column align-items-center justify-content-center'>
+				<div style={{height:"50%",width:"100%"}}className='login-inputs d-flex flex-column justify-content-center'>
+					<div style={{height:"10%",width:"90%"}} className="login-header d-flex flex-row-reverse">
+						<Link to={`/admin-new-coor/${username}`}><Button style={{height:"25px",width:"30px"}} title="ER"/></Link>
+					</div>
 					<div className="login-header d-flex justify-content-center align-items-center">
 						<h5>Sign in to start session</h5>
 					</div>

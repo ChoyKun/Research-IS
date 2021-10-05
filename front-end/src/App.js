@@ -112,17 +112,20 @@ const PageNotFound = () => {
 
 function App() {
   const pathname = window.location.pathname;
+  const [requests, setRequests] = React.useState( null );
+  const [secRequests, setSecRequests] = React.useState([]);
+
 
   const Event = new EventEmitter();
 
   React.useEffect(() => {
-    Event.on('requestResearch', () => console.log('Requesting'));
-  }, []);
+    setSecRequests( requests );
+  }, [requests]);
 
-  if( views.indexOf(pathname) < 0 ){
-    return <PageNotFound />
-  }
 
+  // if( views.indexOf(pathname) < 0 ){
+  //   return <PageNotFound />
+  // }
 
   return (
    <div className="app">
@@ -171,7 +174,7 @@ function App() {
 
         <Route path="/admin-request/:username">
           <AdminFrame>
-            <AdminRequest Event={Event}/>
+            <AdminRequest requests={secRequests}/>
           </AdminFrame>
         </Route>
 
@@ -337,7 +340,7 @@ function App() {
 
         <Route path="/student-rlist/:username">
           <SFrame>
-            <StudentRList Event={Event}/>
+            <StudentRList setRequests={setRequests}/>
           </SFrame>
         </Route>
 

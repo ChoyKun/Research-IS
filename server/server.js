@@ -18,7 +18,6 @@ const Student = require('./model/student');
 const Research = require('./model/research');
 const Faculty = require('./model/faculty');
 const Coordinator = require('./model/coordinator');
-
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
@@ -44,11 +43,10 @@ const pdfs_path = path.join(__dirname, '../front-end/public/pdfs');
 app.post('/sign-in', async(req,res,next)=>{
 	const { _username, _password, _label } = req.body;
 
-	console.log( _username, _password, _label );
-
 	switch( _label ){
 		case 'Student':
-			Student.findOne({studentNo: _username, password:_password }, (err, doc) => {
+			console.log(_label)
+			Student.findOne({studentNo: _username, password:_password, status: 'active'}, (err, doc) => {
 				if( err ){
 					console.log( err );
 					return res.status( 401 ).json({ message: 'Unauthorized' });
@@ -63,7 +61,7 @@ app.post('/sign-in', async(req,res,next)=>{
 			});
 			break;
 		case 'MIS Officer':
-			Faculty.find({username:_username, password:_password, status: 'active'},  (err, doc) => {
+			Faculty.findOne({username:_username, password:_password, status: 'active'},  (err, doc) => {
 				if( err ){
 					console.log(err);
 					Coordinator.find({username:_username, password:_password, status: 'active'},  (errs, docs) => {
@@ -426,6 +424,8 @@ app.post('/upload-file/', async (req, res, next) => {
 	if( !req.files ) return res.status( 400 ).json({ message: 'No file found'});
 
 	const file = req.files.fileUpload;
+
+	console.log( file );
 	
 	const file_name = `${file.name}_${new Date().getMilliseconds()}.pdf`
 	const destination_path = path.join( pdfs_path, file_name );
@@ -434,6 +434,30 @@ app.post('/upload-file/', async (req, res, next) => {
 	    if( err ) return res.status( 503 );
 
 		return res.status( 200 ).json({ path: `/pdfs/${file_name}` });    
+	});
+});
+
+
+app.delete('/delete-file/:filename', async (req, res, next) => {
+	const filename = req.params.filename;
+
+
+	fs.readdir(pdfs_path, (err, files) => {
+		if( err ) return res.status( 400 );
+
+		if( files ){
+			files.forEach( file => {
+				if( `/pdfs/${file}` === filename){
+					fs.unlink(path.join( pdfs_path, '/',file), (err) => {
+						if( err ) return res.status( 400 );
+
+						return res.status( 200 );    
+					});
+				}
+			});
+		}
+
+		return res.end();
 	});
 });
 
@@ -751,9 +775,27 @@ app.post('/coordinator/clist/register', async (req, res , next) =>{
 
 app.put('/coordinator/clist/new-admin/:username', async (req,res,next)=>{
 	const current = req.params.username
+	const {_password} = req.body;
 
-	Coordinator.find({}, (err, docs) => {
-		if( err ) return res.status(503).json({message:'server error'})
+	Coordinator.find({password:_password,status:'active'}, (err, docs) => {
+		if( err ){
+			Faculty.find({password:_password,status:'active'}, (err, docs) => {
+				if(err) return res.status(503).json({message:'server error'})
+
+				if( docs ){
+					docs.forEach( doc => {
+						if( doc.username == req.params.username ){
+							doc.status = 'inactive';
+
+							doc.save( err => { // may message ako paps
+								if(err) return res.status(400).json({message:'server error'})
+							}); //try mo daw pa
+						}
+					});
+					return res.status(200).json({message:'welcome new coordinator please re log in'});
+				}
+			})
+		} 
 
 		if( docs ){
 			docs.forEach( doc => {
