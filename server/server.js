@@ -63,7 +63,7 @@ app.post('/sign-in', async(req,res,next)=>{
 			});
 			break;
 		case 'MIS Officer':
-			Faculty.findOne({username:_username, password:_password, status: 'active'},  (err, doc) => {
+			Faculty.find({username:_username, password:_password, status: 'active'},  (err, doc) => {
 				if( err ){
 					console.log(err);
 					Coordinator.find({username:_username, password:_password, status: 'active'},  (errs, docs) => {
@@ -759,7 +759,7 @@ app.post('/coordinator/clist/register', async (req, res , next) =>{
 
 		console.log( doc );
 
-		if( doc.length > 1 ){ 
+		if( doc.length > 0 ){ 
 			return res.status(400).json({message:'username already used'})
 		}
 		else{
@@ -777,36 +777,20 @@ app.post('/coordinator/clist/register', async (req, res , next) =>{
 
 app.put('/coordinator/clist/new-admin/:username', async (req,res,next)=>{
 	const current = req.params.username
-	const {_password} = req.body;
 
-	Coordinator.find({password:_password,status:'active'}, (err, docs) => {
-		if( err ){
-			Faculty.find({password:_password,status:'active'}, (err, docs) => {
-				if(err) return res.status(503).json({message:'server error'})
-
-				if( docs ){
-					docs.forEach( doc => {
-						if( doc.username == req.params.username ){
-							doc.status = 'inactive';
-
-							doc.save( err => { // may message ako paps
-								if(err) return res.status(400).json({message:'server error'})
-							}); //try mo daw pa
-						}
-					});
-					return res.status(200).json({message:'welcome new coordinator please re log in'});
-				}
-			})
-		} 
+	Coordinator.find({}, (err, docs) => {
+		if( err ) return res.status(503).json({message:'server error'})
 
 		if( docs ){
+			console.log(docs)
 			docs.forEach( doc => {
 				if( doc.username == req.params.username ){
+					console.log(doc.username)
 					doc.status = 'inactive';
 
-					doc.save( err => { // may message ako paps
+					doc.save( err => {
 						if(err) return res.status(400).json({message:'server error'})
-					}); //try mo daw pa
+					});
 				}
 			});
 			return res.status(200).json({message:'welcome new coordinator please re log in'});
@@ -999,7 +983,7 @@ app.get('/check-file/:id', async ( req, res, next ) => {
 
 		list.forEach( async (item, index) => {
 			if( item.id === id ){
-				console.log('here')
+
 				return res.status( 200 ).json({itemState: list[index].state});
 			}
 		});
@@ -1046,7 +1030,7 @@ app.post('/request-view', async ( req, res, next ) => {
 
 	fs.readFile( req_view_path, ( err, reqList ) => {
 		if( err ) return res.sendStatus( 503 );
-		console.log('here');
+
 
 		const list = JSON.parse( reqList );
 
@@ -1056,7 +1040,6 @@ app.post('/request-view', async ( req, res, next ) => {
 
 		fs.writeFile( req_view_path, JSON.stringify( list, null, 4 ), ( err ) => {
 			if( err ) return res.sendStatus( 503 );
-			console.log('here');
 
 
 			return res.sendStatus( 200 );

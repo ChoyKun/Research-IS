@@ -65,9 +65,6 @@ export default function Login(props){
 					<h1>SCS Research Portal</h1>
 				</div>
 				<div style={{height:"50%",width:"100%"}}className='login-inputs d-flex flex-column justify-content-center'>
-					<div style={{height:"10%",width:"90%"}} className="login-header d-flex flex-row-reverse">
-						<Link to={`/admin-new-coor/${username}`}><Button style={{height:"25px",width:"30px"}} title="ER"/></Link>
-					</div>
 					<div className="login-header d-flex justify-content-center align-items-center">
 						<h5>Sign in to start session</h5>
 					</div>

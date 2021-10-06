@@ -27,6 +27,7 @@ import FacultySList from './views/FacultySList.js';
 import FacultyInactiveSList from './views/FacultyInactiveSList.js';
 import FacultyUpload from './views/FacultyUpload.js';
 import Login from './views/Login.js';
+import EmergencyAdmin from './views/EmergencyAdmin.js';
 import MobileRList from './views/MobileRList.js';
 import MobileRListFilter from './views/MobileRListFilter.js';
 import MobileStudentChangePass from './views/MobileStudentChangePass.js';
@@ -68,6 +69,7 @@ const views = [
   '/admin-profile',
   '/admin-edit-profile',
   '/admin-reg',
+  '/emergency-admin',
   '/admin-current-officer',
   '/admin-rlist',
   '/admin-slist',
@@ -222,6 +224,12 @@ function App() {
         <Route path="/MIS-reg/:username">
           <FacultyFrame>
             <FacultyReg />
+          </FacultyFrame>
+        </Route>
+
+        <Route path="/emergency-admin">
+          <FacultyFrame>
+            <EmergencyAdmin />
           </FacultyFrame>
         </Route>
 
