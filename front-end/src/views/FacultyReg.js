@@ -104,6 +104,9 @@ export default function FacultyReg(props){
 		const send = window.confirm("If you register this record you can not edit it again, do you want to proceed?");
 		if(send == true){
 			axios.post('http://localhost:7000/student/slist/register', data)
+			.then((res)=>{
+				alert(res.data.message);
+			})
 			.catch((err)=>{
 					if( err?.response?.data?.message ){
 						alert( err.response.data.message );

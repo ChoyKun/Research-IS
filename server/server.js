@@ -51,30 +51,19 @@ app.post('/sign-in', async(req,res,next)=>{
 			Student.findOne({studentNo: _username, password:_password, status: 'active'}, (err, doc) => {
 				if( err ){
 					console.log( err );
-					return res.status( 401 ).json({ message: 'Unauthorized' });
+					return res.status( 401 ).json({ message: 'Server Error' });
 				}
 
-				console.log( doc );
-
-				if( doc ){
-					return res.status( 200 ).json({message: 'logged-in successfuly'});
-				}
-				return res.status( 401 ).json({message: 'Unauthorized'});					
-			});
-			break;
-		case 'MIS Officer':
-			Faculty.find({username:_username, password:_password, status: 'active'},  (err, doc) => {
-				if( err ){
-					console.log(err);
-					Coordinator.find({username:_username, password:_password, status: 'active'},  (errs, docs) => {
+				if( !doc ){
+					Coordinator.findOne({username:_username, password:_password, status: 'active'},  (errs, docs) => {
 						if( errs ){
 							console.log( errs );
-							return res.status( 401 ).json({ message: 'Unauthorized' });
+							return res.status( 401 ).json({ message: 'Server Error' });
 						}
 
 						if( docs ){
 							console.log(docs)
-							return res.status( 200 ).json({message: 'logged-in successfuly'});
+							return res.status( 200 ).json({message: 'Welcome mr. coordinator'});
 						}
 						return res.status( 401 ).json({message: 'Unauthorized'});				
 					});
@@ -83,12 +72,39 @@ app.post('/sign-in', async(req,res,next)=>{
 				if( doc ){
 					return res.status( 200 ).json({message: 'logged-in successfuly'});
 				}
-				return res.status( 401 ).json({message: 'Unauthorized'});				
+					
+			});
+			break;
+		case 'MIS Officer':
+			Faculty.findOne({username:_username, password:_password, status: 'active'},  (err, doc) => {
+				if( err ){
+					console.log(err);
+					return res.status( 401 ).json({ message: 'Server Error' });
+				}
+
+				if( !doc ){
+					Coordinator.findOne({username:_username, password:_password, status: 'active'},  (errs, docs) => {
+						if( errs ){
+							console.log( errs );
+							return res.status( 401 ).json({ message: 'Server Error' });
+						}
+
+						if( docs ){
+							console.log(docs)
+							return res.status( 200 ).json({message: 'Welcome mr. coordinator'});
+						}
+						return res.status( 401 ).json({message: 'Unauthorized'});				
+					});
+				}
+
+				if( doc ){
+					return res.status( 200 ).json({message: 'logged-in successfuly'});
+				}
 			});
 			break;
 
 		default:
-			return res.status( 401 ).json({message: 'Unauthorized'});
+			return res.status( 401 ).json({message: 'Unauthorized 4'});
 
 	}
 })
