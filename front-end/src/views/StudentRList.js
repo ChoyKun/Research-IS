@@ -147,6 +147,18 @@ function Item(props){
 		});
 	}
 
+	const viewer = () =>{
+		console.log(itemState)
+		if(itemState == 'approved'){
+			console.log('full')
+			window.open("/research-full"," ")
+		}
+		else if(itemState == 'pending' || itemState == 'idle'){
+			console.log('abstract')
+			window.open("/research-abstract"," ")
+		}
+	}
+
 	useEffect(() => {
 		const checkFile = async () => {
 			axios.get(`http://localhost:7000/check-file/${props.object._id}`)
@@ -178,7 +190,7 @@ function Item(props){
 			<div className="col-1 text-center">{props.object.course??'N/A'}</div>
 			<div className="col-4 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
 			<div className="col-2 text-center">{props.object.yearSubmitted}</div>
-			<Button  style={{backgroundColor:'#385723', color:'white'}} title='View'/>
+			<Button click={viewer} style={{backgroundColor:'#385723', color:'white'}} title='View' />
 			<Button click={requestForView} className={`col-1 ${itemState === 'approved' ? 'bg-success' : 'bg-danger'} text-center`} style={{backgroundColor:'#385723', color:'white'}} title='Request'/>
 		</div>
 	);

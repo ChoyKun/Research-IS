@@ -42,6 +42,8 @@ import StudentRList from './views/StudentRList.js';
 import StudentProfile from './views/StudentProfile.js';
 import StudentPending from './views/StudentPending.js';
 import StudentApproved from './views/StudentApproved.js';
+import AbstractView from './views/AbstractView.js';
+import FullContent from './views/FullContent.js';
 
 
 
@@ -100,6 +102,8 @@ const views = [
   '/student-approved',
   '/student-pending',
   '/student-profile',
+  '/research-abstract',
+  '/research-full'
 ];
 
 
@@ -363,6 +367,14 @@ function App() {
           <SFrame>
             <StudentProfile />
           </SFrame>
+        </Route>
+
+        <Route path="/research-abstract">
+            <AbstractView />        
+        </Route>
+
+        <Route path="/research-full">
+            <FullContent />        
         </Route>
 
         { pathname === views[ 0 ] ? <Redirect to="/sign-in"/> : null }

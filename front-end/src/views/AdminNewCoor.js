@@ -78,6 +78,7 @@ export default function AdminNewCoor(props){
 	const handler = ()=>{
 		const send = window.confirm("Registering new coordinator will disable the current coordinator, do you want to continue?");
 		if(send == true){
+			console.log({username})
 			axios.put(`http://localhost:7000/coordinator/clist/new-admin/${username}`)			
 			.then( async ()=>{
 				axios.post('http://localhost:7000/coordinator/clist/register', data)

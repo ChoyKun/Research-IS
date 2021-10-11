@@ -792,7 +792,7 @@ app.post('/coordinator/clist/register', async (req, res , next) =>{
 })
 
 app.put('/coordinator/clist/new-admin/:username', async (req,res,next)=>{
-	const current = req.params.username
+	//const current = req.params.username
 
 	Coordinator.find({}, (err, docs) => {
 		if( err ) return res.status(503).json({message:'server error'})
@@ -800,7 +800,7 @@ app.put('/coordinator/clist/new-admin/:username', async (req,res,next)=>{
 		if( docs ){
 			console.log(docs)
 			docs.forEach( doc => {
-				if( doc.username == req.params.username ){
+				if( doc.status == 'active' ){
 					console.log(doc.username)
 					doc.status = 'inactive';
 
@@ -811,9 +811,7 @@ app.put('/coordinator/clist/new-admin/:username', async (req,res,next)=>{
 			});
 			return res.status(200).json({message:'welcome new coordinator please re log in'});
 		}
-	});
-
-	// Dahil siguro sa pagiging async nitong mga to wait
+	});	// Dahil siguro sa pagiging async nitong mga to wait
 })
 
 app.post('/auth-admin', async (req, res, next) => {
