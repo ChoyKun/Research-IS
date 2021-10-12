@@ -120,7 +120,8 @@ function Loading(props){
 
 
 function Item(props){
-	const { username } = useParams();
+	const { username, id } = useParams();
+
 
 	const handleOnChange = (e) => {
 		props.object.favorites = e.target.checked ? 'true' : 'false';
@@ -151,11 +152,11 @@ function Item(props){
 		console.log(itemState)
 		if(itemState == 'approved'){
 			console.log('full')
-			window.open("/research-full"," ")
+			window.open(`/research-full/${props.object._id}`," ")
 		}
 		else if(itemState == 'pending' || itemState == 'idle'){
 			console.log('abstract')
-			window.open("/research-abstract"," ")
+			window.open(`/research-abstract/${props.object._id}`," ")
 		}
 	}
 

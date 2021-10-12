@@ -369,11 +369,11 @@ function App() {
           </SFrame>
         </Route>
 
-        <Route path="/research-abstract">
+        <Route path="/research-abstract/:id">
             <AbstractView />        
         </Route>
 
-        <Route path="/research-full">
+        <Route path="/research-full/:id">
             <FullContent />        
         </Route>
 
