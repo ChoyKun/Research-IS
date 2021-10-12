@@ -14,7 +14,7 @@ export default function AbstractView(props) {
 		.then((res)=>{
 			res.data.forEach( elem => {
 				console.log( elem.status );
-				if( elem.status === 'public' ){
+				if( elem._id === id ){
 					setResearchData((researchData) => [...researchData, elem]);
 				}
 			})
