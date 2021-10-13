@@ -172,10 +172,10 @@ export default function FacultyReg(props){
 									<Field type='date' placeHolder='Enter Date Here' reqOnChange={(e) => {dispatch({type: 'birthdate', data: e.target.value});}}/>
 								</div>
 								<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
-									<Select className='aRegCourse' label='Select Course:' options={['BSIT','BSCS']} reqOnChange={(e)=>{dispatch({type:'_course',data: e.target.value})}}/>
+									<Select className='aRegCourse' label='Select Course:' options={['BSIT','BSCS']} reqOnChange={(e)=>{dispatch({type:'course',data: e.target.value})}}/>
 								</div>
 								<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
-									<Select className='aRegYear' label='Year Level' options={['1','2','3','4']} reqOnChange={(e)=>{dispatch({type:'_yearLevel',data: e.target.value})}}/>
+									<Select className='aRegYear' label='Year Level' options={['1','2','3','4']} reqOnChange={(e)=>{dispatch({type:'yearLevel',data: e.target.value})}}/>
 								</div>
 								<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
 									<label>Section:</label>
