@@ -238,13 +238,31 @@ app.put('/student/slist/pending/:username',async(req,res,next)=>{ //san mo to ti
 		if(err) return res.status( 503 ).json({ message: 'Server Error' });
 
 		if(data){
-			data.pending.push(...pending);
+			if(data.pending.length >1){
+				data.pending.forEach(async (elem) => {
+					if(elem._id == pending){
+						return res.status( 503 ).json({ message: 'You already requested this research' });
+					}
+					else{
+						data.pending.push(...pending);
 
-			data.save( err => {
-				if(err) return res.status( 503 ).json({ message: 'Server Error' });
-			})
+						data.save( err => {
+							if(err) return res.status( 503 ).json({ message: 'Server Error' });
+						})
 
-			return res.status(200).json({message: 'successfuly added to pending'})
+						return res.status(200).json({message: 'successfuly added to pending'})
+					}
+				})
+			}
+			else if(data.pending.length == 0){
+				data.pending.push(...pending);
+
+				data.save( err => {
+					if(err) return res.status( 503 ).json({ message: 'Server Error' });
+				})
+
+				return res.status(200).json({message: 'successfuly added to pending'})
+			}	
 		}
 	})
 })
@@ -351,7 +369,7 @@ app.get('/student/slist/approved-list/:username', async(req,res,next)=>{
 					}
 
 					if( index === data.approved.length - 1){
-						return res.status(200).json({data: pendList})
+						return res.status(200).json({data: apprList})
 					}
 				})
 			})

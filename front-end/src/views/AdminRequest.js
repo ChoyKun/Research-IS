@@ -103,7 +103,7 @@ const Request = ( props ) => {
 
 	useEffect(() => {
 		if( approved ){
-			axios.put(`http://localhost:7000/student/slist/approved/${props.studentNo}`, approved) 
+			axios.put(`http://localhost:7000/student/slist/approved/${props.name}`, approved) 
 			.then( res => {
 				console.log( res.data.message );
 				setSendApproved( false );
@@ -132,7 +132,7 @@ const Request = ( props ) => {
 			}} 
 			className="d-flex mb-1 flex-row justify-content-around align-items-center"
 		>
-			<div className="col-4 text-center"><p className="p-0 m-0"> { props.studentNo } </p></div>
+			<div className="col-4 text-center"><p className="p-0 m-0"> { props.name } </p></div>
 			<div className="col-4 text-center"><p className="p-0 m-0"> { props.title } </p></div>
 			<div className="col-4 text-center"><input onChange={handleChange} type="checkbox" name="approve"/></div>
 		</div>
