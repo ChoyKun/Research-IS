@@ -21,6 +21,7 @@ export default function RListFilter(props){
 	const [search, setSearch] = useState( null );
 	const [favorites, setFavorites] = useState([])
 	const [sendFavs, setSendFavs] = useState(false);
+	
 
 
 
@@ -122,6 +123,26 @@ function Loading(props){
 function Item(props){
 	const { username, id } = useParams();
 
+	const [pending, setPending] = useState([])
+	const [sendPend, setSendPend] = useState(false);
+
+	useEffect(()=>{
+		if( sendPend ){
+			setPending((pending) => [...pending, props.object._id]);
+		}
+	}, [sendPend]);
+
+	useEffect(() => {
+		if( pending ){
+			axios.put(`http://localhost:7000/student/slist/pending/${username}`, pending) 
+			.then( res => {
+				console.log( res.data.message );
+				setSendPend( false );
+			})
+			.catch((err)=>{console.log(err)});
+		}
+	}, [pending])
+
 
 	const handleOnChange = (e) => {
 		props.object.favorites = e.target.checked ? 'true' : 'false';
@@ -146,17 +167,19 @@ function Item(props){
 		.catch( err => {
 			console.log( err );
 		});
+
+		setSendPend(true);
 	}
 
 	const viewer = () =>{
 		console.log(itemState)
 		if(itemState == 'approved'){
 			console.log('full')
-			window.open(`/research-full/${props.object._id}`," ")
+			window.open(`/research-full/${props.object._id}`,"_self")
 		}
 		else if(itemState == 'pending' || itemState == 'idle'){
 			console.log('abstract')
-			window.open(`/research-abstract/${props.object._id}`," ")
+			window.open(`/research-abstract/${props.object._id}`,"_self")
 		}
 	}
 
@@ -183,6 +206,8 @@ function Item(props){
 
 		if( itemState === 'idle' ) checkFile();
 	}, [itemState]);
+
+	
 
 	return(
 		<div className="d-flex bg-secondary flex-row justify-content-around" style={{border:'1px solid black'}}>

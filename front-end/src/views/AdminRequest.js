@@ -88,11 +88,38 @@ const Header = ( props ) => {
  
 // stud num, name, title, by unique id
 const Request = ( props ) => {
+
+	const {username} = useParams();
+
+	const [approved, setApproved] = useState([])
+	const [sendApproved, setSendApproved] = useState(false);
+
+
+	useEffect(()=>{
+		if( sendApproved ){
+			setApproved((approved) => [...approved, props._id]);
+		}
+	}, [sendApproved]);
+
+	useEffect(() => {
+		if( approved ){
+			axios.put(`http://localhost:7000/student/slist/approved/${props.studentNo}`, approved) 
+			.then( res => {
+				console.log( res.data.message );
+				setSendApproved( false );
+			})
+			.catch((err)=>{console.log(err)});
+		}
+	}, [approved])
+
+
 	const handleChange = async () => {
 		axios.put(`http://localhost:7000/change-file-state/${ props.id }`)
 		.catch( err => {
 			console.log( err );
 		});
+
+		setSendApproved( true );
 	}
 
 	return(

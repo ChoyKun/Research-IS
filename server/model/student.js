@@ -16,6 +16,8 @@ const studentSchema = new Schema({
 	dateRegistered:{type:Date,default:Date.now},
 	img: String,
 	favorites: Array,
+	approved: Array,
+	pending: Array,
 	status: String
 
 })

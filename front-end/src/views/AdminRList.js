@@ -23,7 +23,7 @@ import Checkbox from '../components/fields/checkbox';
 export default function AdminRList(props){
 	
 	const {username} = useParams();
-	console.log(username)
+	
 	const [researchData, setResearchData] = useState([]);
 	const [filteredData, setFilteredData] = useState([]);
 	const [search, setSearch] = useState('');
@@ -124,7 +124,6 @@ export default function AdminRList(props){
 				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black',overflowY:'auto',overflowX:'auto'}}>
 					<Suspense fallback={<Loading/>}>
 						<RListHeader/>
-						{ console.log( filteredData ) }
 						{ filteredData }
 					</Suspense>
 				</div>
