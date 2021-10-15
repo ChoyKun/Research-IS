@@ -6,15 +6,15 @@
         "state": "approved"
     },
     {
-        "id": "61650757997a980a90bf859c",
+        "id": "6166323610c37c27e0079a60",
         "name": "1801025",
-        "title": "Research 1",
-        "state": "pending"
+        "title": "Research 2",
+        "state": "approved"
     },
     {
-        "id": "616638255bd7c21b7c5e4d4c",
+        "id": "616634f12f36491a9c86defd",
         "name": "1801025",
-        "title": "Research 4",
-        "state": "pending"
+        "title": "Research 3",
+        "state": "approved"
     }
 ]

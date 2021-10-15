@@ -83,7 +83,6 @@ export default function RListFilter(props){
 		if( favorites ){
 			axios.put(`http://localhost:7000/student/slist/favorites/${username}`, favorites) 
 			.then( res => {
-				console.log( res.data.message );
 				setSendFavs( false );
 			})
 			.catch((err)=>{console.log(err)});
@@ -136,7 +135,7 @@ function Item(props){
 		if( pending ){
 			axios.put(`http://localhost:7000/student/slist/pending/${username}`, pending) 
 			.then( res => {
-				console.log( res.data.message );
+				console.log( res.responese.message );
 				setSendPend( false );
 			})
 			.catch((err)=>{console.log(err)});

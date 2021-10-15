@@ -28,6 +28,7 @@ export default function AdminRequest( props ){
 			throw err;
 		});
 	},[])
+	
 	console.log(approved);
 
 	useEffect(()=>{

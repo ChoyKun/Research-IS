@@ -360,7 +360,7 @@ app.get('/student/slist/approved-list/:username', async(req,res,next)=>{
 			console.log(data);
 			const apprList = [];
 
-			data.pending.forEach(async (_id, index) => {
+			data.approved.forEach(async (_id, index) => {
 				await Research.findOne({_id: _id}, (err,doc)=>{
 					if(err) return res.status(503).json({message: 'Server Error' })
 

@@ -97,7 +97,7 @@ const Request = ( props ) => {
 
 	useEffect(()=>{
 		if( sendApproved ){
-			setApproved((approved) => [...approved, props._id]);
+			setApproved((approved) => [...approved, props.id]);
 		}
 	}, [sendApproved]);
 
