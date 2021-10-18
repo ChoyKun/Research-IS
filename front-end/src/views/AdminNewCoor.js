@@ -1,6 +1,7 @@
 import React,{useState, useEffect, useReducer} from 'react';
 import { Link,useParams, Redirect } from 'react-router-dom';
-import axios from 'axios'
+import axios from '../modules/config.js';
+
 
 
 //icons

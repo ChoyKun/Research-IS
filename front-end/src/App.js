@@ -1,5 +1,7 @@
 import React, { useReducer } from 'react';
 import { Redirect } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import axios from 'axios';
 
 import FormCard from './components/cards/form-card';
 import AdminAccess from './views/AdminAccess.js';
@@ -121,9 +123,58 @@ function App() {
   const pathname = window.location.pathname;
   const [requests, setRequests] = React.useState( null );
   const [secRequests, setSecRequests] = React.useState([]);
-  
-  
+  const [requestedView, setRequetedView] = React.useState( null );
 
+
+  /*
+    Etong function na to pwede mo ipasa as props sa lahat ng views( as in lahat WAHAHA ), tapos every request sa
+    loob ng view lalagay mo sya sa catch( err => ). ganto example.
+
+    check ko pala muna kung nagana WAHAHAHA
+  */
+  
+  React.useEffect(() => {
+    const token = Cookies.get('token');
+    const rtoken = Cookies.get('rtoken');
+
+    axios.defaults.headers.common['Authorization'] = token; // d ba pwede iset sa global na lang? pano ba iset as global?
+    // Bali eto na yung global eh kaso ayaw gumana nasa loob siya ng function d ba? d ba kapag global sa labas nung function? tapos import na lang?
+    // Same shit ata eh pero ang pwede mong gawin eh ganto
+
+    const authenticate = () => {
+      if( token ){
+        // allow access
+        axios.get('http://localhost:7000/verify-me', {
+          headers: {
+            'authentication': `Bearer ${token}`
+          }
+        })
+        .then(() => { 
+          setRequetedView( <Redirect to={ pathname }/> );
+        })
+        .catch( err => {
+          if( rtoken && err?.response?.status && (err?.response?.status === 403 || err?.response?.status === 401) ){
+            axios.post('http://localhost:7000/refresh-token', { rtoken })
+            .then( res => {
+              Cookies.set('token', res.data.accessToken);
+              authenticate();
+            })
+            .catch( err => {
+              setRequetedView( <Redirect to="/sign-in"/> );
+            });
+          }
+      
+          // setRequetedView( <Redirect to="/sign-in"/>);
+        });
+      }
+      else{
+        // sign in 
+        setRequetedView(() => <Redirect to="/sign-in"/>);
+      }
+    }
+
+    authenticate();
+  }, []);
 
 
   return (
@@ -377,13 +428,16 @@ function App() {
 
         <Route path="/research-full/:id">
             <FullContent />        
-        </Route>
-
-        { pathname === views[ 0 ] ? <Redirect to="/sign-in"/> : null }
-        
+        </Route>        
      </Switch>
+
+    { pathname === views[ 0 ] ? <Redirect to="/sign-in"/> : requestedView }  
    </div>
   );
 }
 
+/*
+  1. If username nasa db admin redirect to landing page
+  2. same logic sa ibang entity 
+*/
 export default App;

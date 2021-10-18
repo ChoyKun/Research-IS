@@ -1,7 +1,7 @@
 import React, { useState,useEffect } from 'react';
 import { Document, Page,pdfjs } from 'react-pdf';
 import { Link, useParams, Redirect} from 'react-router-dom';
-import axios from 'axios';
+import axios from '../modules/config.js';
 
 
 export default function Test() {

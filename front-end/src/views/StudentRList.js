@@ -1,6 +1,6 @@
 import React,{useState, useEffect, Suspense} from 'react';
 import { Link, Redirect,useParams} from 'react-router-dom';
-import axios from 'axios'
+import axios from '../modules/config.js';
 
 //icons
 import scslogo from "../images/scs-final.png";
@@ -131,14 +131,19 @@ function Item(props){
 		}
 	}, [sendPend]);
 
+	// wait may mali pala ako
+
 	useEffect(() => {
 		if( pending ){
 			axios.put(`http://localhost:7000/student/slist/pending/${username}`, pending) 
 			.then( res => {
-				console.log( res.responese.message );
+				console.log( res.data.message );
 				setSendPend( false );
 			})
-			.catch((err)=>{console.log(err)});
+			.catch((err) =>{
+				console.log( err.response );
+				if(err?.response?.data?.message) alert(`${ err?.response?.data?.message}`) 
+			});
 		}
 	}, [pending])
 

@@ -5,12 +5,17 @@ import Field from '../components/fields/txtfield';
 import Button from '../components/buttons/button'
 import Select from '../components/fields/select';
 import { Link, Redirect, useParams } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../modules/config.js';
+import Cookies from 'js-cookie';
 
 
 export default function Login(props){
 	const {username} = useParams();
 	const [redirect, setRedirect] = useState( null );
+
+	const token = Cookies.get('token');
+	const rtoken = Cookies.get('rtoken');
+
 
 	const state={
 		_username: null,
@@ -40,9 +45,12 @@ export default function Login(props){
 	const handler=()=>{
 		axios.post('http://localhost:7000/sign-in', data)
 		.then(res=>{
+			console.log(res.data);
+			Cookies.set('token', res.data.accessToken);
+			Cookies.set('rtoken', res.data.refreshToken);
+
 			alert(res.data.message);
 			if(res.status == 200 ){
-
 				if(data._label == 'Student'){
 					setRedirect( <Redirect to={`/student-rlist/${data._username}`}/> );
 				}
@@ -52,6 +60,7 @@ export default function Login(props){
 			}
 		})	
 		.catch(err=>{
+			console.log( err );
 			alert(JSON.parse(err.request.response).message);
 		})
 	}

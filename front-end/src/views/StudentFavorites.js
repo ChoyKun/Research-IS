@@ -1,6 +1,6 @@
 import React,{useState, useEffect, Suspense} from 'react';
 import { Link, useParams } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../modules/config.js';
 
 //icons
 import scslogo from "../images/scs-final.png";
