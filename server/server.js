@@ -1,6 +1,9 @@
+require('dotenv').config();
+
 const express = require('express');
 const fileUpload = require('express-fileupload');
 const app = express();
+const jwt = require('jsonwebtoken');
 
 const fs = require('fs');
 const path = require('path');
@@ -13,11 +16,13 @@ const port = process.env.PORT || 7000;
 
 const dbUri = 'mongodb://localhost/Research-ISdb'
 
+
 // Models
 const Student = require('./model/student');
 const Research = require('./model/research');
 const Faculty = require('./model/faculty');
 const Coordinator = require('./model/coordinator');
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
@@ -34,80 +39,147 @@ mongoose.connect(dbUri,{useNewUrlParser: true, useUnifiedTopology:true})
 	throw err
 })
 
-
 // paths
 const images_path = path.join(__dirname, '../front-end/public/images');
 const pdfs_path = path.join(__dirname, '../front-end/public/pdfs');
-
+const token_path = path.join(__dirname, '/data/tokens.json');
 const req_view_path = path.join(__dirname, 'data/view-requests.json');
+
+const requestAccessToken = ( user ) => {
+	return jwt.sign( user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '5s' }); // wait check ko
+}
+// so dapat after 5secs eh di padin sya maglalagout kasi may refresher na tayo
+
+const authentication = ( req, res, next ) => {
+	const authHeader = req.headers['authentication'];
+
+	console.log( req.url );
+	console.log( authHeader )
+	const token = authHeader && authHeader.split(' ')[ 1 ];
+
+	if( !token ) return res.sendStatus( 401 );
+
+	jwt.verify( token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+		if( err ) return res.sendStatus( 403 );
+
+		req.user = user;
+		next();
+	})
+}
+//  paps palagyan ng "authentication" lahat ng requests except sa sign in reguster at refresh
+
+app.get('/verify-me', authentication, async(req, res, next) => {
+	return res.sendStatus( 200 );
+});
 
 //Login
 app.post('/sign-in', async(req,res,next)=>{
 	const { _username, _password, _label } = req.body;
 
-	switch( _label ){
-		case 'Student':
-			console.log(_label)
-			Student.findOne({studentNo: _username, password:_password, status: 'active'}, (err, doc) => {
-				if( err ){
-					console.log( err );
-					return res.status( 401 ).json({ message: 'Server Error' });
-				}
+	fs.readFile( token_path, (err, data) => {
+		if( err ) return res.sendStatus( 503 );
 
-				if( !doc ){
-					Coordinator.findOne({username:_username, password:_password, status: 'active'},  (errs, docs) => {
-						if( errs ){
-							console.log( errs );
-							return res.status( 401 ).json({ message: 'Server Error' });
-						}
+		const token = JSON.parse( data );
 
-						if( docs ){
-							console.log(docs)
-							return res.status( 200 ).json({message: 'Welcome mr. coordinator'});
-						}
-						return res.status( 401 ).json({message: 'Unauthorized'});				
-					});
-				}
+		const saveTokens = ( token, cb ) => {
+			fs.writeFile( token_path, JSON.stringify( token, null, 4 ), ( err ) => {
+				if( err ) return res.sendStatus( 500 );
 
-				if( doc ){
-					return res.status( 200 ).json({message: 'logged-in successfuly'});
-				}
-					
+				if( cb ) cb();
 			});
-			break;
-		case 'MIS Officer':
-			Faculty.findOne({username:_username, password:_password, status: 'active'},  (err, doc) => {
-				if( err ){
-					console.log(err);
-					return res.status( 401 ).json({ message: 'Server Error' });
-				}
+		}
 
-				if( !doc ){
-					Coordinator.findOne({username:_username, password:_password, status: 'active'},  (errs, docs) => {
-						if( errs ){
-							console.log( errs );
-							return res.status( 401 ).json({ message: 'Server Error' });
-						}
+		switch( _label ){
+			case 'Student':
+				console.log(_label)
+				Student.findOne({studentNo: _username, password:_password, status: 'active'}, (err, doc) => {
+					if( err ){
+						console.log( err );
+						return res.status( 401 ).json({ message: 'Server Error' });
+					}
 
-						if( docs ){
-							console.log(docs)
-							return res.status( 200 ).json({message: 'Welcome mr. coordinator'});
-						}
-						return res.status( 401 ).json({message: 'Unauthorized'});				
-					});
-				}
+					const user = { name : _username };
+					const accessToken = requestAccessToken( user );
+					const refreshToken = jwt.sign( user, process.env.REFRESH_TOKEN_SECRET );
 
-				if( doc ){
-					return res.status( 200 ).json({message: 'logged-in successfuly'});
-				}
-			});
-			break;
+					token.push( refreshToken );
 
-		default:
-			return res.status( 401 ).json({message: 'Unauthorized 4'});
+					if( !doc ){
+						Coordinator.findOne({username:_username, password:_password, status: 'active'},  (errs, docs) => {
+							if( errs ){
+								console.log( errs );
+								return res.status( 401 ).json({ message: 'Server Error' });
+							}
 
-	}
+							if( docs ){
+								saveTokens( token, () => {
+									return res.status( 200 ).json({
+										accessToken: accessToken,
+										refreshToken: refreshToken,
+										message: 'Welcome mr. coordinator'
+									});
+								});
+							}
+
+							return res.status( 401 ).json({message: 'Unauthorized'});				
+						});
+					}
+
+					if( doc ){
+						saveTokens( token, () => {
+							return res.status( 200 ).json({
+								accessToken: accessToken,
+								refreshToken: refreshToken,
+								message: 'Loged in successfuly'});
+						});
+					}
+						
+				});
+				break;
+			case 'MIS Officer':
+				Faculty.findOne({username:_username, password:_password, status: 'active'},  (err, doc) => {
+					if( err ){
+						console.log(err);
+						return res.status( 401 ).json({ message: 'Server Error' });
+					}
+
+					if( !doc ){
+						Coordinator.findOne({username:_username, password:_password, status: 'active'},  (errs, docs) => {
+							if( errs ){
+								console.log( errs );
+								return res.status( 401 ).json({ message: 'Server Error' });
+							}
+
+							if( docs ){
+								saveTokens( token, () => {
+									return res.status( 200 ).json({
+									accessToken: accessToken,
+									refreshToken: refreshToken,
+									message: 'Welcome mr. coordinator'});
+								});
+							}
+							return res.status( 401 ).json({message: 'Unauthorized'});				
+						});
+					}
+
+					if( doc ){
+						saveTokens( token, () => {
+							return res.status( 200 ).json({
+								accessToken: accessToken,
+								refreshToken: refreshToken,
+								message: 'Loged in successfuly'});
+						});
+					}
+				});
+				break;
+
+			default:
+				return res.status( 401 ).json({message: 'Unauthorized 4'});
+
+		}
+	});
 })
+
 
 app.get('/student/slist/:studentNo', async(req, res, next)=>{
 	Student.findOne({studentNo: req.params.studentNo}, (err, doc)=>{
@@ -156,7 +228,7 @@ app.post('/student/slist/login', async (req, res, next)=>{
 	})
 })
 
-app.put('/student/slist/update',async(req,res,next)=>{
+app.put('/student/slist/update', async(req,res,next)=>{
 	const editData = req.body;
 
 	// console.log(  );
@@ -174,7 +246,7 @@ app.put('/student/slist/update',async(req,res,next)=>{
 	return res.status( 200 ).json({message: 'Updated successfully'});
 })
 
-app.put('/student/slist/changepassword/:studentNo',async(req,res,next)=>{
+app.put('/student/slist/changepassword/:studentNo', async(req,res,next)=>{
 	const studentNo = req.params.studentNo;
 
 	const data = await Student.findOne({studentNo: studentNo});
@@ -209,7 +281,7 @@ app.put('/student/slist/changepassword/:studentNo',async(req,res,next)=>{
 		
 })
 
-app.put('/student/slist/favorites/:username',async(req,res,next)=>{ //san mo to tinatwag? StudentRlist
+app.put('/student/slist/favorites/:username', async(req,res,next)=>{ //san mo to tinatwag? StudentRlist
 	const studentNo = req.params.username;
 
 	const favorite = req.body;
@@ -229,45 +301,32 @@ app.put('/student/slist/favorites/:username',async(req,res,next)=>{ //san mo to 
 	})
 })
 
-app.put('/student/slist/pending/:username',async(req,res,next)=>{ //san mo to tinatwag? StudentRlist
+app.put('/student/slist/pending/:username', async(req,res,next)=>{ //san mo to tinatwag? StudentRlist
 	const studentNo = req.params.username;
 
 	const pending = req.body;
 
+	if( !pending.length ) return res.end();
+
 	Student.findOne({studentNo:studentNo}, (err,data)=>{
 		if(err) return res.status( 503 ).json({ message: 'Server Error' });
 
-		if(data){
-			if(data.pending.length >1){
-				data.pending.forEach(async (elem) => {
-					if(elem._id == pending){
-						return res.status( 503 ).json({ message: 'You already requested this research' });
-					}
-					else{
-						data.pending.push(...pending);
-
-						data.save( err => {
-							if(err) return res.status( 503 ).json({ message: 'Server Error' });
-						})
-
-						return res.status(200).json({message: 'successfuly added to pending'})
-					}
-				})
+		if( data ){
+			if( data.approved.includes( pending[0] ) || data.pending.includes( pending[0] ) ){
+				return res.status( 503 ).json({ message: 'You already requested this research' });		
 			}
-			else if(data.pending.length == 0){
-				data.pending.push(...pending);
 
-				data.save( err => {
-					if(err) return res.status( 503 ).json({ message: 'Server Error' });
-				})
+			data.pending.push( pending[0]  );
+			data.save( err => {
+				if( err ) return res.status( 503 ).json({  message: 'Server error' });
 
-				return res.status(200).json({message: 'successfuly added to pending'})
-			}	
+				return res.status( 200 ).json({message: 'successfuly added to pending'});
+			});
 		}
 	})
 })
 
-app.put('/student/slist/approved/:username',async(req,res,next)=>{ //san mo to tinatwag? StudentRlist
+app.put('/student/slist/approved/:username', async(req,res,next)=>{ //san mo to tinatwag? StudentRlist
 	const studentNo = req.params.username;
 
 	const approved = req.body;
@@ -279,14 +338,13 @@ app.put('/student/slist/approved/:username',async(req,res,next)=>{ //san mo to t
 			data.pending.splice(...approved);
 			data.approved.push(...approved);
 
-			console.log(data.pending);
-			console.log(data.approved);
-
 			data.save( err => {
 				if(err) return res.status( 503 ).json({ message: 'Server Error' });
+
+				return res.status(200).json({message: 'successfuly added to pending'})
 			})
 
-			return res.status(200).json({message: 'successfuly added to pending'})
+			
 		}
 	})
 })
@@ -328,7 +386,6 @@ app.get('/student/slist/pending-list/:username', async(req,res,next)=>{
 		if(err) return res.status( 503 ).json({ message: 'Server Error' });
 
 		if(data){
-			console.log(data);
 			const pendList = [];
 
 			data.pending.forEach(async (_id, index) => {
@@ -387,28 +444,56 @@ app.post('/student/slist/register', async (req, res , next) =>{
 
 	const newStudent = new Student(studentData);
 
-	Student.find({ studentNo: studentData.studentNo}, (err, doc) => {
-		if(err) return res.status( 503 ).json({ message: 'Server Error' });
+	fs.readFile( token_path, (err, data) => {
+		if( err ) return res.sendStatus( 503 );
 
-		console.log( doc );
+		const token = JSON.parse( data );
 
-		if( doc.length > 1 ){ 
-			return res.status(400).json({message:'username already used'})
+		const saveTokens = ( token, cb ) => {
+			fs.writeFile( token_path, JSON.stringify( token, null, 4 ), ( err ) => {
+				if( err ) return res.sendStatus( 500 );
+
+				if( cb ) cb();
+			});
 		}
-		else{
-			newStudent.save((err) => {
-				if ( err ){
-					console.log(err);
-				}
-			})
 
-			return res.status(200).json({message:'successfuly registered'});
-		}
-		
+		Student.find({ studentNo: studentData.studentNo}, (err, doc) => {
+			if(err) return res.status( 503 ).json({ message: 'Server Error' });
+
+			console.log( doc );
+
+			const user = { name : studentData.studentNo };
+			const accessToken = requestAccessToken( user );
+			const refreshToken = jwt.sign( user, process.env.REFRESH_TOKEN_SECRET );
+
+			token.push( refreshToken );
+
+			if( doc.length > 1 ){ 
+				return res.status(400).json({message:'username already used'})
+			}
+			else{
+				newStudent.save((err) => {
+					if ( err ){
+						console.log(err);
+					}
+
+					saveTokens( token, () => {
+						return res.status( 200 ).json({
+							accessToken: accessToken,
+							refreshToken: refreshToken,
+							message: 'Welcome mr. coordinator'
+						});
+					});
+				})
+
+				
+			}
+			
+		})
 	})
 })
 
-
+//kasama toh? yes paps
 // =====================================================================
 // ============= GET PICTURE ================
 app.get('/picture/:username', async (req, res, next) => {
@@ -625,7 +710,7 @@ app.post('/research/rlist/upload', async (req, res , next) =>{
 })
 
 
-app.put('/research/rlist/update',async(req,res,next)=>{
+app.put('/research/rlist/update', async(req,res,next)=>{
 	const editData = req.body;
 
 	// console.log(  );
@@ -658,25 +743,54 @@ app.post('/faculty/flist/register', async (req, res , next) =>{
 
 	const newFaculty = new Faculty(facultyData);
 
-	Faculty.find({ username: facultyData.username}, (err, doc) => {
-		if(err) return res.status( 503 ).json({ message: 'Server Error' });
+	fs.readFile( token_path, (err, data) => {
+		if( err ) return res.sendStatus( 503 );
 
-		console.log( doc );
+		const token = JSON.parse( data );
 
-		if( doc.length > 0 ){ // san yung part na nagaadd ka?
-			return res.status(400).json({message:'username already used'})
+		const saveTokens = ( token, cb ) => {
+			fs.writeFile( token_path, JSON.stringify( token, null, 4 ), ( err ) => {
+				if( err ) return res.sendStatus( 500 );
+
+				if( cb ) cb();
+			});
 		}
-		else{
-			newFaculty.save((err) => {
-				if ( err ){
-					console.log(err);
-				}
-			})
 
-			return res.status(200).json({message:'successfuly registered'});
-		}
-		
+
+		Faculty.find({ username: facultyData.username}, (err, doc) => {
+			if(err) return res.status( 503 ).json({ message: 'Server Error' });
+
+			const user = { name : facultyData.username };
+			const accessToken = requestAccessToken( user );
+			const refreshToken = jwt.sign( user, process.env.REFRESH_TOKEN_SECRET );
+
+			token.push( refreshToken );
+
+			if( doc.length > 0 ){ // san yung part na nagaadd ka?
+				return res.status(400).json({message:'username already used'})
+			}
+			else{
+				newFaculty.save((err) => {
+					if ( err ){
+						console.log(err);
+					}
+
+					saveTokens( token, () => {
+					
+						return res.status( 200 ).json({
+						accessToken: accessToken,
+						refreshToken: refreshToken,
+						message: 'Welcome mr. coordinator'});
+					});
+				})
+
+				
+			}
+			
+		})
 	})
+
+	
 })
 
 app.put('/faculty/flist/new-officer', async(req,res,next)=>{
@@ -698,7 +812,7 @@ app.put('/faculty/flist/new-officer', async(req,res,next)=>{
 	});
 })
 
-app.put('/faculty/flist/changeofficer/:username',async (req,res,next)=>{
+app.put('/faculty/flist/changeofficer/:username', async (req,res,next)=>{
 	console.log(req.params.username);
 
 	// yung username ano yon? ung username ng current kahit ba hindi na need yon? Wait so yung current dapat yung magiging active? inactive meron na siya request sa taas
@@ -735,7 +849,7 @@ app.put('/faculty/flist/changeofficer/:username',async (req,res,next)=>{
 	});
 });
 
-app.put('/faculty/flist/changepassword/:username',async(req,res,next)=>{
+app.put('/faculty/flist/changepassword/:username', async(req,res,next)=>{
 	const username = req.params.username;
 
 	const data = await Faculty.findOne({username: username});
@@ -770,7 +884,7 @@ app.put('/faculty/flist/changepassword/:username',async(req,res,next)=>{
 })
 
 
-app.put('/faculty/flist/editprofile/:username',async (req,res,next)=>{
+app.put('/faculty/flist/editprofile/:username', async (req,res,next)=>{
 	const username = req.params.username;
 
 	console.log( req.body );	
@@ -890,25 +1004,54 @@ app.post('/coordinator/clist/register', async (req, res , next) =>{
 	console.log(coorData)
 	const newCoor = new Coordinator(coorData);
 
-	Coordinator.find({ username: coorData.username}, (err, doc) => {
-		if(err) return res.status( 503 ).json({ message: 'Server Error' });
+	fs.readFile( token_path, (err, data) => {
+		if( err ) return res.sendStatus( 503 );
 
-		console.log( doc );
+		const token = JSON.parse( data );
 
-		if( doc.length > 0 ){ 
-			return res.status(400).json({message:'username already used'})
+		const saveTokens = ( token, cb ) => {
+			fs.writeFile( token_path, JSON.stringify( token, null, 4 ), ( err ) => {
+				if( err ) return res.sendStatus( 500 );
+
+				if( cb ) cb();
+			});
 		}
-		else{
-			newCoor.save((err) => {
-				if ( err ){
-					console.log(err);
-				}
-			})
 
-			return res.status(200).json({message:'successfuly registered'});
-		}
-		
+		Coordinator.find({ username: coorData.username}, (err, doc) => {
+			if(err) return res.status( 503 ).json({ message: 'Server Error' });
+
+			console.log( doc );
+
+			const user = { name : coorData.username };
+			const accessToken = requestAccessToken( user );
+			const refreshToken = jwt.sign( user, process.env.REFRESH_TOKEN_SECRET );
+
+			token.push( refreshToken );
+
+			if( doc.length > 0 ){ 
+				return res.status(400).json({message:'username already used'})
+			}
+			else{
+				newCoor.save((err) => {
+					if ( err ){
+						console.log(err);
+					}
+
+					saveTokens( token, () => {
+						return res.status( 200 ).json({
+						accessToken: accessToken,
+						refreshToken: refreshToken,
+						message: 'Welcome mr. coordinator'
+						});
+					});
+				})
+
+				
+			}
+			
+		})
 	})
+	
 })
 
 app.put('/coordinator/clist/new-admin/:username', async (req,res,next)=>{
@@ -961,7 +1104,7 @@ app.post('/auth-admin', async (req, res, next) => {
 	});
 });
 
-app.put('/coordinator/clist/changecoor/:username',async (req,res,next)=>{
+app.put('/coordinator/clist/changecoor/:username', async (req,res,next)=>{
 	console.log(req.params.username);
 
 	// yung username ano yon? ung username ng current kahit ba hindi na need yon? Wait so yung current dapat yung magiging active? inactive meron na siya request sa taas
@@ -1180,5 +1323,30 @@ app.post('/request-view', async ( req, res, next ) => {
 		});
 	});
 });
+
+// Wait mag iisip lang ako WAHAHHAAAHAH
+
+app.post('/refresh-token', async ( req, res ) => {
+	fs.readFile( token_path, ( err, tokens ) => {
+		if( err ) return res.sendStatus( 500 );
+
+		const refreshToken = req.body.token;
+
+		if( !refreshToken ) return res.sendStatus( 401 );
+		if( !tokens.includes( refreshToken ) ) return res.sendStatus( 403 );
+
+		jwt.verify( refreshToken, process.env.REFRESH_TOKEN_SECRET, ( err, user ) => {
+			if( err ) return res.sendStatus( 403 );
+
+			const accessToken = requestAccessToken({ name: user.name });
+
+			return res.status( 200 ).json({ 
+				message: 'token has successfully received', 
+				accessToken: accessToken
+			});
+		});
+	});
+});
+
 
 const match = (leftOp, rightOp) => leftOp === rightOp;
