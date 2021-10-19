@@ -434,10 +434,6 @@ function App() {
     { pathname === views[ 0 ] ? <Redirect to="/sign-in"/> : requestedView }  
    </div>
   );
+  
 }
-
-/*
-  1. If username nasa db admin redirect to landing page
-  2. same logic sa ibang entity 
-*/
 export default App;

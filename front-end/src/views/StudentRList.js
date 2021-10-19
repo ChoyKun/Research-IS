@@ -176,15 +176,13 @@ function Item(props){
 	}
 
 	const viewer = () =>{
-		console.log(itemState)
-		if(itemState == 'approved'){
-			console.log('full')
-			window.open(`/research-full/${props.object._id}`,"_self")
-		}
-		else if(itemState == 'pending' || itemState == 'idle'){
-			console.log('abstract')
-			window.open(`/research-abstract/${props.object._id}`,"_self")
-		}
+		axios.post(`http://localhost:7000/check-research-state/${username}/${props.object._id}`)
+		.then((res)=>{
+			window.open(`/research-full/${props.object._id}`)
+		})
+		.catch((err)=>{
+			window.open(`/research-abstract/${props.object._id}`)
+		})
 	}
 
 	useEffect(() => {

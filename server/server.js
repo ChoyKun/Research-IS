@@ -1348,5 +1348,20 @@ app.post('/refresh-token', async ( req, res ) => {
 	});
 });
 
+app.post('/check-research-state/:username/:id', async (req, res , next )=>{
+	const username = req.params.username;
+	const rID = req.params.id;
+
+	Student.findOne({studentNo: username}, (err,doc)=>{
+		if(err) return res.status(503).json({message:'Server Error'})
+
+		if(doc){
+			if(doc.approved.includes(rID)){
+				return res.sendStatus(200)
+			}
+		}
+	})
+})
+
 
 const match = (leftOp, rightOp) => leftOp === rightOp;
