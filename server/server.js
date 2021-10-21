@@ -119,9 +119,7 @@ app.post('/sign-in', async(req,res,next)=>{
 										message: 'Welcome mr. coordinator'
 									});
 								});
-							}
-
-							return res.status( 401 ).json({message: 'Unauthorized'});				
+							}		
 						});
 					}
 
@@ -133,6 +131,9 @@ app.post('/sign-in', async(req,res,next)=>{
 								message: 'Loged in successfuly'});
 						});
 					}
+					else{
+						return res.status( 401 ).json({message: 'Unauthorized'});
+					}	
 						
 				});
 				break;
@@ -142,6 +143,12 @@ app.post('/sign-in', async(req,res,next)=>{
 						console.log(err);
 						return res.status( 401 ).json({ message: 'Server Error' });
 					}
+
+					const user = { name : _username };
+					const accessToken = requestAccessToken( user );
+					const refreshToken = jwt.sign( user, process.env.REFRESH_TOKEN_SECRET );
+
+					token.push( refreshToken );
 
 					if( !doc ){
 						Coordinator.findOne({username:_username, password:_password, status: 'active'},  (errs, docs) => {
@@ -153,12 +160,14 @@ app.post('/sign-in', async(req,res,next)=>{
 							if( docs ){
 								saveTokens( token, () => {
 									return res.status( 200 ).json({
-									accessToken: accessToken,
-									refreshToken: refreshToken,
-									message: 'Welcome mr. coordinator'});
-								});
+										accessToken: accessToken,
+										refreshToken: refreshToken,
+										message: 'Welcome mr. coordinator'});
+									});
 							}
-							return res.status( 401 ).json({message: 'Unauthorized'});				
+							else{
+								return res.status( 401 ).json({message: 'Unauthorized'});
+							}		
 						});
 					}
 
@@ -1361,6 +1370,10 @@ app.post('/check-research-state/:username/:id', async (req, res , next )=>{
 			}
 		}
 	})
+})
+
+app.post('/clear-requests', async(req,res,next)=>{
+	fs.write( path, JSON.stringify( [] ), err => {});
 })
 
 

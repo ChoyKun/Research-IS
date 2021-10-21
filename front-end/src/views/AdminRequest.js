@@ -41,6 +41,13 @@ export default function AdminRequest( props ){
 		return () => clearInterval( getRequests );
 	}, []);
 
+	const clear = () =>{
+		axios.post('http://localhost:7000/clear-requests')
+		.catch((err)=>{
+			console.log(err);
+		})
+	}
+
 	return(
 		<>
 			<div style={{height:'8%', width:'100%', backgroundColor:'#595959', color:'white'}} className='d-flex justify-content-center align-items-center'>
@@ -51,6 +58,9 @@ export default function AdminRequest( props ){
 				<Link to={`/admin-archive/${username}`}><Button className='AdminMenu' title='Archived'/></Link>
 				<Link to={`/admin-upload/${username}`}><Button className='AdminMenu' title='Upload new Research'/></Link>
 				<Link to={`/admin-request/${username}`}><Button className='AdminMenu' title='Research Requests'/></Link>					
+			</div>
+			<div className="d-flex flex-row-reverse">
+				<Button title="Clear Request" click={clear}/>
 			</div>
 			<div style={{width: '100%', height: '100%'}} className='d-flex flex-column justify-content-center align-items-center'>
 				<Header/>
@@ -135,7 +145,7 @@ const Request = ( props ) => {
 		>
 			<div className="col-4 text-center"><p className="p-0 m-0"> { props.name } </p></div>
 			<div className="col-4 text-center"><p className="p-0 m-0"> { props.title } </p></div>
-			<div className="col-4 text-center"><input onChange={handleChange} type="checkbox" name="approve"/></div>
+			<div className="col-4 text-center"><Button click={handleChange} title="Approve"/></div>
 		</div>
 	);
 }

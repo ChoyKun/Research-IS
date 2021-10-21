@@ -70,12 +70,6 @@ function OpenedMenu( props ){
 						<h6 style={{fontSize:'16px'}}>Research Lists</h6>
 					</div>
 				</Link>
-				<Link to='/student-favorites'>
-					<div className='d-flex justify-content-around'>
-						<img style={{height:'30px',width:'30px'}} src={favorites}/>
-						<h6 style={{fontSize:'16px'}}>Favorites</h6>
-					</div>
-				</Link>
 				<Link to="/student-changepass">
 					<div className='d-flex justify-content-around align-items-center'>
 						<img style={{height:'30px',width:'30px'}} src={lock}/>

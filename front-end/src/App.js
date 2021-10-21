@@ -33,13 +33,9 @@ import EmergencyAdmin from './views/EmergencyAdmin.js';
 import MobileRList from './views/MobileRList.js';
 import MobileRListFilter from './views/MobileRListFilter.js';
 import MobileStudentChangePass from './views/MobileStudentChangePass.js';
-import MobileStudentCopyright from './views/MobileStudentCopyright.js';
-import MobileStudentFavorites from './views/MobileStudentFavorites.js';
 import RListFilter from './views/RListFilter.js';
 import SListFilter from './views/SListFilter.js';
 import StudentChangePass from './views/StudentChangePass.js';
-import StudentFavorites from './views/StudentFavorites.js';
-import StudentCopyRight from './views/StudentCopyRight.js';
 import StudentRList from './views/StudentRList.js';
 import StudentProfile from './views/StudentProfile.js';
 import StudentPending from './views/StudentPending.js';
@@ -94,12 +90,10 @@ const views = [
   '/m-rlistfilter',
   '/m-changepass',
   '/m-copyright',
-  '/m-favorites',
   '/rlist-filter',
   '/slist-filter',
   '/student-changepass',
   '/student-copyright',
-  '/student-favorites',
   '/student-rlist',
   '/student-approved',
   '/student-pending',
@@ -126,55 +120,58 @@ function App() {
   const [requestedView, setRequetedView] = React.useState( null );
 
 
-  /*
-    Etong function na to pwede mo ipasa as props sa lahat ng views( as in lahat WAHAHA ), tapos every request sa
-    loob ng view lalagay mo sya sa catch( err => ). ganto example.
+  function isIncognito(){
+    const largeStrings = [
+  // These strings are 5000 characters long. I generated them by running
+  // base64 /dev/urandom -w 0 | head -c 5000
+  'odE141SCRsNhfNBb95VhqRubp+fXTF1Dricc0G9wWrQcXRvu3uhGRh4t2TiUZF1BdSKLOrnG...',
+  'pdfhLvvnkBGjbuR1/0WcCcM2li/cYOQ/wZGPAofjBXxo6PvhoEAWYtEMtTlbcLm+dPxwQFm8...',
+  'Xfo5aKCHnIQc9zMtUWmGYiwzBJuDQLEVyg0t9ID2ZsCVMnVD7h8juo9Bmd+e2VdmofvGkFoa...',
+  'jsYalJDnye4x5Vvl9w+F7aRrVx+WcJT5E7rzB9UNxb7iyY+mFAvsllN95ZDom50+GhhBuT+l...',
+  'QcaZ/f91np7UkMvy4jrJks5Iogpgik0JZA0kCeXEPc2vdFYHKKIVT+nKmrva0qUee14LXh9Y...'
+]
+const SIZE = 6*1024*1024 // 6 MB
+// Completely arbitrary numbers. Probably make them as high as you can tolerate:
+const NUM_BENCHMARK_ITERATIONS = 200
+const NUM_MEASUREMENTS = 100
 
-    check ko pala muna kung nagana WAHAHAHA
-  */
-  
-  React.useEffect(() => {
-    const token = Cookies.get('token');
-    const rtoken = Cookies.get('rtoken');
+const writeToFile = (fs, data) => {
+  return new Promise((resolve) => {
+    fs.root.getFile('data', { create: true }, (fileEntry) => {
+      fileEntry.createWriter((fileWriter) => {
+        fileWriter.onwriteend = resolve
 
-    axios.defaults.headers.common['Authorization'] = token; // d ba pwede iset sa global na lang? pano ba iset as global?
-    // Bali eto na yung global eh kaso ayaw gumana nasa loob siya ng function d ba? d ba kapag global sa labas nung function? tapos import na lang?
-    // Same shit ata eh pero ang pwede mong gawin eh ganto
+        var blob = new Blob([data], { type: 'text/plain' });
+        fileWriter.write(blob);
+      })
+    })
+  })
+}
 
-    const authenticate = () => {
-      if( token ){
-        // allow access
-        axios.get('http://localhost:7000/verify-me', {
-          headers: {
-            'authentication': `Bearer ${token}`
-          }
-        })
-        .then(() => { 
-          setRequetedView( <Redirect to={ pathname }/> );
-        })
-        .catch( err => {
-          if( rtoken && err?.response?.status && (err?.response?.status === 403 || err?.response?.status === 401) ){
-            axios.post('http://localhost:7000/refresh-token', { rtoken })
-            .then( res => {
-              Cookies.set('token', res.data.accessToken);
-              authenticate();
-            })
-            .catch( err => {
-              setRequetedView( <Redirect to="/sign-in"/> );
-            });
-          }
-      
-          // setRequetedView( <Redirect to="/sign-in"/>);
-        });
-      }
-      else{
-        // sign in 
-        setRequetedView(() => <Redirect to="/sign-in"/>);
-      }
+const runBenchmark = async (fs) => {
+  const time = new Date()
+  for (let i = 0; i < NUM_BENCHMARK_ITERATIONS; i++) {
+    for (let j = 0; j < largeStrings.length; j++) {
+      await writeToFile(fs, largeStrings[j])
     }
+  }
+  return new Date() - time
+}
 
-    authenticate();
-  }, []);
+const onInitFs = async (fs) => {
+  const timings = []
+  for (let i = 0; i < NUM_MEASUREMENTS; i++) {
+    timings.push(await runBenchmark(fs))
+  }
+
+  console.log(timings)
+}
+
+window.webkitRequestFileSystem(window.TEMPORARY, SIZE, onInitFs)
+}
+
+isIncognito();
+  
 
 
   return (
@@ -354,18 +351,6 @@ function App() {
           </MFrame>
         </Route>
 
-        <Route path="/m-copyright">
-          <MFrame>
-            <MobileStudentCopyright />
-          </MFrame>
-        </Route>
-
-        <Route path="/m-favorites">
-          <MFrame>
-            <MobileStudentFavorites />
-          </MFrame>
-        </Route>
-
         <Route path="/rlist-filter">
           <EmptyFrame>
             <RListFilter />
@@ -381,18 +366,6 @@ function App() {
         <Route path="/student-changepass/:username">
           <SFrame>          
             <StudentChangePass />
-          </SFrame>
-        </Route>
-
-        <Route path="/student-favorites/:username">
-          <SFrame>
-            <StudentFavorites />
-          </SFrame>
-        </Route>
-
-        <Route path="/student-copyright/:username">
-          <SFrame>
-            <StudentCopyRight />
           </SFrame>
         </Route>
 
@@ -436,4 +409,6 @@ function App() {
   );
   
 }
+
+
 export default App;
