@@ -14,6 +14,7 @@ import AdminProfile from './views/AdminProfile.js';
 import AdminEditProfile from './views/AdminEditProfile.js';
 import AdminRlist from './views/AdminRList';
 import AdminSList from './views/AdminSList.js';
+import AdminSApproved from './views/AdminSApproved.js';
 import AdminInactiveSList from './views/AdminInactiveSList.js';
 import AdminFList from './views/AdminFList.js';
 import AdminUpload from './views/AdminUpload.js';
@@ -73,6 +74,7 @@ const views = [
   '/admin-current-officer',
   '/admin-rlist',
   '/admin-slist',
+  '/admin-sapproved',
   '/admin-inactive-slist',
   '/admin-flist',
   '/admin-upload',
@@ -120,58 +122,50 @@ function App() {
   const [requestedView, setRequetedView] = React.useState( null );
 
 
-  function isIncognito(){
-    const largeStrings = [
-  // These strings are 5000 characters long. I generated them by running
-  // base64 /dev/urandom -w 0 | head -c 5000
-  'odE141SCRsNhfNBb95VhqRubp+fXTF1Dricc0G9wWrQcXRvu3uhGRh4t2TiUZF1BdSKLOrnG...',
-  'pdfhLvvnkBGjbuR1/0WcCcM2li/cYOQ/wZGPAofjBXxo6PvhoEAWYtEMtTlbcLm+dPxwQFm8...',
-  'Xfo5aKCHnIQc9zMtUWmGYiwzBJuDQLEVyg0t9ID2ZsCVMnVD7h8juo9Bmd+e2VdmofvGkFoa...',
-  'jsYalJDnye4x5Vvl9w+F7aRrVx+WcJT5E7rzB9UNxb7iyY+mFAvsllN95ZDom50+GhhBuT+l...',
-  'QcaZ/f91np7UkMvy4jrJks5Iogpgik0JZA0kCeXEPc2vdFYHKKIVT+nKmrva0qUee14LXh9Y...'
-]
-const SIZE = 6*1024*1024 // 6 MB
-// Completely arbitrary numbers. Probably make them as high as you can tolerate:
-const NUM_BENCHMARK_ITERATIONS = 200
-const NUM_MEASUREMENTS = 100
-
-const writeToFile = (fs, data) => {
-  return new Promise((resolve) => {
-    fs.root.getFile('data', { create: true }, (fileEntry) => {
-      fileEntry.createWriter((fileWriter) => {
-        fileWriter.onwriteend = resolve
-
-        var blob = new Blob([data], { type: 'text/plain' });
-        fileWriter.write(blob);
-      })
-    })
-  })
-}
-
-const runBenchmark = async (fs) => {
-  const time = new Date()
-  for (let i = 0; i < NUM_BENCHMARK_ITERATIONS; i++) {
-    for (let j = 0; j < largeStrings.length; j++) {
-      await writeToFile(fs, largeStrings[j])
-    }
-  }
-  return new Date() - time
-}
-
-const onInitFs = async (fs) => {
-  const timings = []
-  for (let i = 0; i < NUM_MEASUREMENTS; i++) {
-    timings.push(await runBenchmark(fs))
-  }
-
-  console.log(timings)
-}
-
-window.webkitRequestFileSystem(window.TEMPORARY, SIZE, onInitFs)
-}
-
-isIncognito();
   
+  
+  React.useEffect(() => {
+    const token = Cookies.get('token');
+    const rtoken = Cookies.get('rtoken');
+
+    axios.defaults.headers.common['Authorization'] = token; // d ba pwede iset sa global na lang? pano ba iset as global?
+    // Bali eto na yung global eh kaso ayaw gumana nasa loob siya ng function d ba? d ba kapag global sa labas nung function? tapos import na lang?
+    // Same shit ata eh pero ang pwede mong gawin eh ganto
+
+    const authenticate = () => {
+      if( token ){
+        // allow access
+        axios.get('http://localhost:7000/verify-me', {
+          headers: {
+            'authentication': `Bearer ${token}`
+          }
+        })
+        .then(() => { 
+          setRequetedView( <Redirect to={ pathname }/> );
+        })
+        .catch( err => {
+          if( rtoken && err?.response?.status && (err?.response?.status === 403 || err?.response?.status === 401) ){
+            axios.post('http://localhost:7000/refresh-token', { rtoken })
+            .then( res => {
+              Cookies.set('token', res.data.accessToken);
+              authenticate();
+            })
+            .catch( err => {
+              setRequetedView( <Redirect to="/sign-in"/> );
+            });
+          }
+      
+          // setRequetedView( <Redirect to="/sign-in"/>);
+        });
+      }
+      else{
+        // sign in 
+        setRequetedView(() => <Redirect to="/sign-in"/>);
+      }
+    }
+
+    authenticate();
+  }, []);
 
 
   return (
@@ -254,6 +248,12 @@ isIncognito();
         <Route exact path="/admin-slist/:username">
           <AdminFrame>
             <AdminSList />
+          </AdminFrame>
+        </Route>
+
+        <Route exact path="/admin-sapproved/:username/:studentNo">
+          <AdminFrame>
+            <AdminSApproved />
           </AdminFrame>
         </Route>
 

@@ -19,8 +19,6 @@ export default function RListFilter(props){
 	const [researchData, setResearchData] = useState([]);
 	const [filteredData, setFilteredData] = useState( [] );
 	const [search, setSearch] = useState( null );
-	const [favorites, setFavorites] = useState([])
-	const [sendFavs, setSendFavs] = useState(false);
 	
 
 
@@ -66,36 +64,10 @@ export default function RListFilter(props){
 		// console.log( filteredData )
 	}, [search, researchData])
 
-	useEffect(()=>{
-		if( sendFavs ){
-			researchData.forEach((elem) => {
-				if(elem.favorites === 'true') {
-					console.log('here')
-					setFavorites((favorites) => [...favorites, elem._id]);
-					console.log(favorites)
-				}	
-			});		
-			console.log( favorites );	
-		}
-	}, [sendFavs]);
-
-	useEffect(() => {
-		if( favorites ){
-			axios.put(`http://localhost:7000/student/slist/favorites/${username}`, favorites) 
-			.then( res => {
-				setSendFavs( false );
-			})
-			.catch((err)=>{console.log(err)});
-		}
-	}, [favorites])
-
 	return(
 		<>
 			<div style={{height:'20%', width:'100% !important'}}className="d-flex flex-column justify-content-around align-items-center">
-				<SearcBar location='/rlist-filter' setSearch={setSearch}/>
-				<div style={{height:'10%', width:'90%'}}className="d-flex flex-row justify-content-start flex-row-reverse">
-					<Button style={{height: '30px',width:'100px',backgroundColor:'#385723',color: 'white'}} click={() => setSendFavs(true)} title='Add to Favorites'/>		
-				</div>				
+				<SearcBar location='/rlist-filter' setSearch={setSearch}/>			
 			</div>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
 				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black', color:'black',overflowY:'auto',overflowX:'auto'}}>
@@ -146,12 +118,6 @@ function Item(props){
 			});
 		}
 	}, [pending])
-
-
-	const handleOnChange = (e) => {
-		props.object.favorites = e.target.checked ? 'true' : 'false';
-		console.log(props.object.favorites)
-	}
 	
 	const [itemState, setItemState] = useState('idle');
 
@@ -213,7 +179,6 @@ function Item(props){
 
 	return(
 		<div className="d-flex bg-secondary flex-row justify-content-around" style={{border:'1px solid black'}}>
-			<div className="col-1 text-center"><Checkbox reqOnChange={handleOnChange}/></div>
 			<div className="col-2 text-center">{props.object.title}</div>
 			<div className="col-1 text-center">{props.object.course??'N/A'}</div>
 			<div className="col-4 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
@@ -227,9 +192,6 @@ function Item(props){
 function RListHeader(props){
 	return(
 		<div style={{height:'30px',width:'100%',border:'1px solid black', backgroundColor:'#4472c4'}} className='d-flex flex-row justify-content-around'>
-			<div className='col-1 text-center'>
-				<Checkbox/>
-			</div>
 			<div className='col-2 text-center'>
 				Title
 			</div>

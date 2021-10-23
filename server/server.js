@@ -119,7 +119,10 @@ app.post('/sign-in', async(req,res,next)=>{
 										message: 'Welcome mr. coordinator'
 									});
 								});
-							}		
+							}
+							else{
+								return res.status( 401 ).json({message: 'Unauthorized'});
+							}			
 						});
 					}
 
@@ -131,9 +134,7 @@ app.post('/sign-in', async(req,res,next)=>{
 								message: 'Loged in successfuly'});
 						});
 					}
-					else{
-						return res.status( 401 ).json({message: 'Unauthorized'});
-					}	
+					
 						
 				});
 				break;
@@ -1005,6 +1006,32 @@ app.get('/auth-admin/profile/:username', async(req, res, next)=>{
 	});
 });
 
+app.put('/coordinator/clist/remove-approved/:studentNo', async (req,res,next)=>{
+	const studentNo = req.params.studentNo;
+
+	const removed = req.body;
+
+	console.log(removed)
+
+	Student.findOne({studentNo:studentNo}, (err,data)=>{
+		if(err) return res.status( 503 ).json({ message: 'Server Error' });
+
+		if(data){
+			console.log(data)
+			if(data.approved.includes(removed)){
+
+				data.approved.splice(...removed);
+
+				data.save( err => {
+					if(err) return res.status( 503 ).json({ message: 'Server Error' });
+
+					return res.status(200).json({message: 'successfuly removed'})
+				})
+			}
+		}
+	})
+})
+
 
 app.post('/coordinator/clist/register', async (req, res , next) =>{
 	// console.log(req.body);
@@ -1312,9 +1339,7 @@ app.get('/request-views', async ( req, res, next ) => {
 
 
 app.post('/request-view', async ( req, res, next ) => {
-	const data = req.body.data;
-
-	fs.readFile( req_view_path, ( err, reqList ) => {
+	const data = req.body.data;	fs.readFile( req_view_path, ( err, reqList ) => {
 		if( err ) return res.sendStatus( 503 );
 
 
@@ -1323,6 +1348,7 @@ app.post('/request-view', async ( req, res, next ) => {
 		if( list.length && list.map( item => item.id ).includes( data.id ) ) return res.sendStatus( 200 );
 		else if( !data ) return res.sendStatus( 200 );
 		list.push( data );
+
 
 		fs.writeFile( req_view_path, JSON.stringify( list, null, 4 ), ( err ) => {
 			if( err ) return res.sendStatus( 503 );
@@ -1373,8 +1399,7 @@ app.post('/check-research-state/:username/:id', async (req, res , next )=>{
 })
 
 app.post('/clear-requests', async(req,res,next)=>{
-	fs.write( path, JSON.stringify( [] ), err => {});
+	fs.writeFile( req_view_path, JSON.stringify( [] ), err => {});
 })
-
 
 const match = (leftOp, rightOp) => leftOp === rightOp;

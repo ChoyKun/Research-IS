@@ -1,4 +1,4 @@
-import React,{useState, useEffect, Suspense} from 'react';
+import React,{useState, useEffect, Suspense, useReducer, useRef} from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from '../modules/config.js';
 
@@ -53,18 +53,29 @@ export default function AdminRList(props){
 			if(search){
 				for( let key of Object.keys(object)){
 					if(object[key]?.toLowerCase?.()?.startsWith(search?.charAt?.(0)?.toLowerCase?.())){
-						return <Item key={object._id} object={object}/>
+						return <Item key={object._id} object={object} dispatch={selectedDispatch}/>
 					}
 				}
 			}
 			else{
-				console.log(Item)
-				return <Item key={object._id} object={object}/>
+				return <Item key={object._id} object={object} dispatch={selectedDispatch}/>
 			}
 		}))
 	},[search, studentData])
 
+	const reducer = (state, action)=>{
+		if(!state.item){
+			setColorToSelected( action.item );
+		} 
+		else{
+			setColorToSelected( state.item, true );
+			setColorToSelected( action.item );
+		}
+		console.log(action.data);
+		return {item: action.item, data: action.data};		
+	}
 
+	const [selected, selectedDispatch] = useReducer(reducer, {item: null, data: null});
 	
 
 	return(
@@ -77,7 +88,10 @@ export default function AdminRList(props){
 				<Link to={`/admin-inactive-slist/${username}`}><Button className='AdminMenu' title='Inactive Students'/></Link>				
 			</div>
 			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center flex-column">
-				<SearcBar location="/slist-filter" setSearch={setSearch} className='Search'/>		
+				<SearcBar location="/slist-filter" setSearch={setSearch} className='Search'/>
+				<div style={{height:'20%', width:'90%'}}className="d-flex flex-row justify-content-end flex-row">
+					<Link to ={`/admin-sapproved/${username}/${selected?.data?.studentNo}`}><Button style={{height: '30px',width:'100px',backgroundColor:'#385723',color: 'white'}} title='Approved Researches'/></Link>		
+				</div>		
 			</div>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
 				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black', color:'black'}}>
@@ -95,8 +109,18 @@ export default function AdminRList(props){
 
 function Item(props){
 
+	const item = useRef();
+
+	const handleClick = () => {
+		if( !item.current ) return;
+
+		props.dispatch({ item: item.current, data: props.object });
+
+
+	}
+
 	return(
-		<div onClick={() => console.log('clicked')}style={{border:'1px solid black'}} className="d-flex bg-secondary flex-row justify-content-around">
+		<div onClick={handleClick} ref={item} style={{border:'1px solid black'}} className="d-flex bg-secondary flex-row justify-content-around">
 			<div className="col-1 text-center">{props.object.studentNo}</div>
 			<div className="col-1 text-center">{props.object.password}</div>
 			<div className="col-1 text-center">{props.object.firstName}</div>
@@ -168,3 +192,20 @@ function SlistHeader(props){
 	);
 }
 
+
+const setColorToSelected = (item, reverse = false) => {
+	console.log( item );
+	if( !item ) return ;
+
+	const list = item.classList;
+
+	if( !reverse ){
+		console.log( item.classList );
+		list.replace('bg-secondary', 'bg-success');
+	}
+	else{
+		list.replace('bg-success', 'bg-secondary');
+	}
+	
+
+}
