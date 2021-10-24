@@ -345,7 +345,8 @@ app.put('/student/slist/approved/:username', async(req,res,next)=>{ //san mo to 
 		if(err) return res.status( 503 ).json({ message: 'Server Error' });
 
 		if(data){
-			data.pending.splice(...approved);
+			const ind = data.pending.indexOf(approved)
+			data.pending.splice(ind,1);
 			data.approved.push(...approved);
 
 			data.save( err => {
@@ -1018,9 +1019,10 @@ app.put('/coordinator/clist/remove-approved/:studentNo', async (req,res,next)=>{
 
 		if(data){
 			console.log(data)
-			if(data.approved.includes(removed)){
-
-				data.approved.splice(...removed);
+			if(data.approved.includes(removed[0])){
+				const ind = data.approved.indexOf(removed);
+				console.log(ind)
+				data.approved.splice(ind,1);
 
 				data.save( err => {
 					if(err) return res.status( 503 ).json({ message: 'Server Error' });

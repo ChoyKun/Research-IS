@@ -103,8 +103,6 @@ function Item(props){
 		}
 	}, [sendPend]);
 
-	// wait may mali pala ako
-
 	useEffect(() => {
 		if( pending ){
 			axios.put(`http://localhost:7000/student/slist/pending/${username}`, pending) 

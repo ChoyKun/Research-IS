@@ -118,20 +118,43 @@ function Loading(props){
 
 
 function Item(props){
-	const handleOnChange = (e) => {
-		props.object.status = e.target.checked ? 'inactive' : 'active';
+	const {username, studentNo} = useParams();
 
-		console.log(props.object.status)
+	const [remove, setRemove] = useState([])
+	const [sendRemove, setSendRemove] = useState(false);
+
+	useEffect(()=>{
+		if( sendRemove ){
+			setRemove((remove) => [...remove, props.object._id]);
+		}
+	}, [sendRemove]);
+
+	useEffect(() => {
+		if( remove ){
+			axios.put(`http://localhost:7000/coordinator/clist/remove-approved/${studentNo}`, remove) 
+			.then( res => {
+				console.log( res.data.message );
+				setSendRemove( false );
+			})
+			.catch((err) =>{
+				console.log( err.response );
+				if(err?.response?.data?.message) alert(`${ err?.response?.data?.message}`) 
+			});
+		}
+	}, [remove])
+
+	const sender = () =>{
+		setSendRemove(true);
 	}
 
 
 	return(
 		<div className="d-flex bg-secondary flex-row justify-content-around" style={{border:'1px solid black'}}>
-			<div className="col-1 text-center"><Checkbox reqOnChange={handleOnChange}/></div>
 			<div className="col-2 text-center">{props.object.title}</div>
 			<div className="col-1 text-center">{props.object.course??'N/A'}</div>
 			<div className="col-4 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
 			<div className="col-2 text-center">{props.object.yearSubmitted}</div>
+			<Button click={sender} style={{backgroundColor:'#385723', color:'white'}} title='Remove' />
 		</div>
 	);
 }
@@ -140,7 +163,6 @@ function Item(props){
 function RListHeader(props){
 	return(
 		<div style={{height:'30px',width:'100%',border:'1px solid black', backgroundColor:'#4472c4'}} className='d-flex flex-row justify-content-around'>
-			<div className="col-1 text-center"><Checkbox/></div>
 			<div className='col-2 text-center'>
 				Title
 			</div>
