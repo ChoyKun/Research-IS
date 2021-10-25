@@ -1396,6 +1396,9 @@ app.post('/check-research-state/:username/:id', async (req, res , next )=>{
 			if(doc.approved.includes(rID)){
 				return res.sendStatus(200)
 			}
+			else{
+				return res.sendStatus(403)
+			}
 		}
 	})
 })

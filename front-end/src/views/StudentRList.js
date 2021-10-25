@@ -96,6 +96,7 @@ function Item(props){
 
 	const [pending, setPending] = useState([])
 	const [sendPend, setSendPend] = useState(false);
+	const [url, setUrl] = useState(null)
 
 	useEffect(()=>{
 		if( sendPend ){
@@ -139,15 +140,16 @@ function Item(props){
 		setSendPend(true);
 	}
 
-	const viewer = () =>{
+	useEffect(() => {
 		axios.post(`http://localhost:7000/check-research-state/${username}/${props.object._id}`)
 		.then((res)=>{
-			window.open(`/research-full/${props.object._id}`)
+			setUrl(`/research-full`)
 		})
 		.catch((err)=>{
-			window.open(`/research-abstract/${props.object._id}`)
+			setUrl(`/research-abstract`)
 		})
-	}
+	}, [])
+
 
 	useEffect(() => {
 		const checkFile = async () => {
@@ -181,7 +183,7 @@ function Item(props){
 			<div className="col-1 text-center">{props.object.course??'N/A'}</div>
 			<div className="col-4 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
 			<div className="col-2 text-center">{props.object.yearSubmitted}</div>
-			<Button click={viewer} style={{backgroundColor:'#385723', color:'white'}} title='View' />
+			<Link to={`${url}/${props.object._id}`}><Button style={{backgroundColor:'#385723', color:'white'}} title='View' /></Link>
 			<Button click={requestForView} className={`col-1 ${itemState === 'approved' ? 'bg-success' : 'bg-danger'} text-center`} style={{backgroundColor:'#385723', color:'white'}} title='Request'/>
 		</div>
 	);
