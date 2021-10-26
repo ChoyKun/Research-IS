@@ -330,7 +330,10 @@ app.put('/student/slist/pending/:username', async(req,res,next)=>{ //san mo to t
 			data.save( err => {
 				if( err ) return res.status( 503 ).json({  message: 'Server error' });
 
-				return res.status( 200 ).json({message: 'successfuly added to pending'});
+				return (
+					date,
+					res.status( 200 ).json({message: 'successfuly added to pending'})
+				);
 			});
 		}
 	})
@@ -338,6 +341,8 @@ app.put('/student/slist/pending/:username', async(req,res,next)=>{ //san mo to t
 
 app.put('/student/slist/approved/:username', async(req,res,next)=>{ //san mo to tinatwag? StudentRlist
 	const studentNo = req.params.username;
+
+	const { date } = req.body;
 
 	const approved = req.body;
 
@@ -354,7 +359,6 @@ app.put('/student/slist/approved/:username', async(req,res,next)=>{ //san mo to 
 
 				return res.status(200).json({message: 'successfuly added to pending'})
 			})
-
 			
 		}
 	})
@@ -1329,7 +1333,7 @@ app.put('/change-file-state/:id', async ( req, res, next ) => {
 	});
 });
 
-app.get('/request-views', async ( req, res, next ) => {
+app.get('/c-views', async ( req, res, next ) => {
 	const data = req.body.data;
 
 	fs.readFile( req_view_path, ( err, reqList ) => {

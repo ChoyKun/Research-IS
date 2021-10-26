@@ -90,9 +90,11 @@ const Header = ( props ) => {
 
 			className="d-flex flex-row justify-content-around align-items-center"
 		>
-			<div className="col-4 text-center"><p className="p-0 m-0"> STUDENT NO. </p></div>
-			<div className="col-4 text-center"><p className="p-0 m-0"> TITLE </p></div>
-			<div className="col-4 text-center"><label htmlFor="approveAll">APPROVE ALL </label><input type="checkbox" name="approveAll"/></div>
+			<div className="col-2 text-center"><p className="p-0 m-0"> Student No. </p></div>
+			<div className="col-2 text-center"><p className="p-0 m-0"> Student Name </p></div>
+			<div className="col-4 text-center"><p className="p-0 m-0"> Title </p></div>
+			<div className="col-2 text-center"><p className="p-0 m-0"> Date Requested </p></div>
+			<div className="col-2 text-center"><label htmlFor="approveAll">APPROVE ALL </label><input type="checkbox" name="approveAll"/></div>
 		</div>
 	);
 }
@@ -105,6 +107,10 @@ const Request = ( props ) => {
 	const [approved, setApproved] = useState([])
 	const [sendApproved, setSendApproved] = useState(false);
 
+	const today = new Date();
+
+	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+
 
 	useEffect(()=>{
 		if( sendApproved ){
@@ -114,7 +120,7 @@ const Request = ( props ) => {
 
 	useEffect(() => {
 		if( approved ){
-			axios.put(`http://localhost:7000/student/slist/approved/${props.name}`, approved) 
+			axios.put(`http://localhost:7000/student/slist/approved/${props.studentID}`, approved) 
 			.then( res => {
 				console.log( res.data.message );
 				setSendApproved( false );
@@ -143,9 +149,11 @@ const Request = ( props ) => {
 			}} 
 			className="d-flex mb-1 flex-row justify-content-around align-items-center"
 		>
-			<div className="col-4 text-center"><p className="p-0 m-0"> { props.name } </p></div>
+			<div className="col-2 text-center"><p className="p-0 m-0"> { props.studentID } </p></div>
+			<div className="col-2 text-center"><p className="p-0 m-0"> { props.studentName } </p></div>
 			<div className="col-4 text-center"><p className="p-0 m-0"> { props.title } </p></div>
-			<div className="col-4 text-center"><Button click={handleChange} title="Approve"/></div>
+			<div className="col-2 text-center"><p className="p-0 m-0"> { props.dateRequested } </p></div>
+			<div className="col-2 text-center"><Button click={handleChange} title="Approve"/></div>
 		</div>
 	);
 }

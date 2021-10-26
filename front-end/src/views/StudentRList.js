@@ -97,6 +97,17 @@ function Item(props){
 	const [pending, setPending] = useState([])
 	const [sendPend, setSendPend] = useState(false);
 	const [url, setUrl] = useState(null)
+	const [name, setName] = useState(null);
+
+	useEffect(() => {
+		axios.get(`http://localhost:7000/student/slist/${username}`)
+		.then(res=>{
+			setName(res.data.data);
+		})
+		.catch(err=>{
+			console.log(err);
+		})	
+	}, [])
 
 	useEffect(()=>{
 		if( sendPend ){
@@ -123,11 +134,19 @@ function Item(props){
 	const requestForView = async () => {
 		setItemState(() => 'pending');
 
+		const today = new Date();
+
+		var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+
+		console.log(date);
+
 		const data = {
 			id: props.object._id,
-			name: username,
+			studentID: username,
+			studentName: name,
 			title: props.object.title,
-			state: 'pending'
+			state: 'pending',
+			dateRequested: date
 		};
 
 		alert(`Pending to accept viewing of "${data.title}" research by admin.\nIf approved then view button will turn into green`);
