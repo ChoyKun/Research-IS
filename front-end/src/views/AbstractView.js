@@ -3,6 +3,7 @@ import { Document, Page,pdfjs } from 'react-pdf';
 import { Link, useParams, Redirect} from 'react-router-dom';
 import axios from '../modules/config.js';
 
+import "../styles/txt.css"
   
 //PDFjs worker from an external cdn
   
@@ -42,8 +43,10 @@ export default function Test() {
       {researchData?.map?.(object =>(
         <div style={{height:'90%', width:'100%',backgroundColor:'gray',fontSize:'100px'}} className="d-flex justify-content-center align-items-center overflow-auto">
           <Document
+            className='noselect'
             file={object.PDFFile}
             onLoadSuccess={onDocumentLoadSuccess}
+            protectContent = {true}
             >
             <Page pageNumber={pageNumber} />
           </Document>

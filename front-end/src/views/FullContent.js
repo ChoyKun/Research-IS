@@ -3,6 +3,8 @@ import { Document, Page,pdfjs } from 'react-pdf';
 import { Link, useParams, Redirect} from 'react-router-dom';
 import axios from '../modules/config.js';
 
+import "../styles/txt.css"
+
 
 export default function Test() {
 
@@ -74,10 +76,14 @@ export default function Test() {
 					Previous
 					</button>
 					<Document
+						className="noselect"
 						file={object.PDFFile}
 						onLoadSuccess={onDocumentLoadSuccess}
+						protectContent = {true}
 					>
-						<Page pageNumber={pageNumber} />
+						<Page 
+							pageNumber={pageNumber}
+						/>
 					</Document>
 					<button
 					style={{height:'70px',width:'150px',fontSize:'20px'}}
