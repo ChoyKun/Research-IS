@@ -98,6 +98,17 @@ function Item(props){
 	const [sendPend, setSendPend] = useState(false);
 	const [url, setUrl] = useState(null)
 	const [name, setName] = useState(null);
+	const [disabled, setDisabled] = useState(false);
+
+	useEffect(()=>{
+		axios.post(`http://localhost:7000/student/slist/disable/${username}/${props.object._id}`)
+		.then((res)=>{
+			setDisabled(true)
+		})
+		.catch((err)=>{
+			console.log(err);
+		})
+	},[])
 
 	useEffect(() => {
 		axios.get(`http://localhost:7000/student/slist/${username}`)
@@ -203,7 +214,7 @@ function Item(props){
 			<div className="col-4 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
 			<div className="col-2 text-center">{props.object.yearSubmitted}</div>
 			<Link to={`${url}/${props.object._id}`}><Button style={{backgroundColor:'#385723', color:'white'}} title='View' /></Link>
-			<Button click={requestForView} className={`col-1 ${itemState === 'approved' ? 'bg-success' : 'bg-danger'} text-center`} style={{backgroundColor:'#385723', color:'white'}} title='Request'/>
+			<Button click={requestForView} disabled={disabled} className={`col-1 ${itemState === 'approved' ? 'bg-success' : 'bg-danger'} text-center`} style={{backgroundColor:'#385723', color:'white'}} title='Request'/>
 		</div>
 	);
 }

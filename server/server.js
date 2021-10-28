@@ -339,6 +339,22 @@ app.put('/student/slist/pending/:username', async(req,res,next)=>{ //san mo to t
 	})
 })
 
+app.post('/student/slist/disable/:username/:id',async(req,res,next)=>{
+	const studentNo = req.params.username;
+
+	const rID = req.params.id
+
+	Student.findOne({studentNo:studentNo},(err,data)=>{
+		if(err) return res.status( 503 ).json({ message: 'Server Error' });
+
+		if( data ){
+			if( data.approved.includes( rID ) || data.pending.includes( rID ) ){
+				return res.status( 200 ).json({ message: 'button is diabled' });		
+			}
+		}
+	})
+})
+
 app.put('/student/slist/approved/:username', async(req,res,next)=>{ //san mo to tinatwag? StudentRlist
 	const studentNo = req.params.username;
 

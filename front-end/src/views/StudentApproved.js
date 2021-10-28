@@ -76,7 +76,7 @@ function Item(props){
 			<div className="col-4 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
 			<div className="col-2 text-center">{props.object.yearSubmitted}</div>
 			<div className="col-2 text-center">{props.date}</div>
-			<Button className='col-1 text-center' style={{backgroundColor:'#385723', color:'white'}} title='View' click={()=>window.open(`/research-abstract/${props.object._id}`," ")}/>
+			<Link to={`/research-full/${props.object._id}`}><Button className='col-1 text-center' style={{height:'30px',width:'70px',backgroundColor:'#385723', color:'white'}} title='View' /></Link>
 		</div>
 	);
 }
