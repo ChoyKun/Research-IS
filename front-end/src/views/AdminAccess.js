@@ -25,8 +25,8 @@ export default function AdminAccess( props ){
 								<p style={{fontSize:'25px'}}>Looks like the page you’re trying to access is available from Research Coordinator view only. Meanwhile, let us take you back to safety. </p>
 							</div>
 							<div style={{height:'30%',width:'95%'}} className="d-flex flex-row-reverse justify-content-around">
-								<Link to={`/admin-log-in/${username}`}><Button className='crAccept' title='Login As Admin'/></Link>
-								<Button className='crDecline' title='Go Back' click={()=> window.history.back()}/>
+								<Link to={`/admin-log-in/${username}`}><Button style={{height:'50px',width:'200px'}} title='Login As Admin'/></Link>
+								<Button style={{height:'50px',width:'200px'}} title='Go Back' click={()=> window.history.back()}/>
 							</div>
 						</div>
 					</div>

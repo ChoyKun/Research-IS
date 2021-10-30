@@ -105,8 +105,8 @@ export default function AdminRList(props){
 			<div style={{height:'20%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center flex-column">
 				<SearcBar location='rlist-filter' setSearch={setSearch} className='Search'/>
 				<div style={{height:'20%', width:'30%'}}className="d-flex flex-row justify-content-between flex-row-reverse">
-					<Button style={{height: '30px',width:'100px',backgroundColor:'#385723',color: 'white'}} title='Activate' click={handler}/>
-					<Button style={{height: '30px',width:'100px',backgroundColor:'white',color: 'black'}} click={()=>window.history.back()}title='Cancel'/>		
+					<Button style={{height: '30px',width:'100px'}} title='Activate' click={handler}/>
+					<Button style={{height: '30px',width:'100px'}} click={()=>window.history.back()}title='Cancel'/>		
 				</div>	
 			</div>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>

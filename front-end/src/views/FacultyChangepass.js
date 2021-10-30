@@ -68,11 +68,11 @@ export default function FacultyChangepass(props){
 				<h2>Change Password</h2>				
 			</div>
 			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center">
-				<Link to={`/MIS-slist/${username}`}><Button className='AdminMenu' title='Active Students'/></Link>
-				<Link to={`/MIS-inactive-slist/${username}`}><Button className='AdminMenu' title='Inactive Students'/></Link>
-				<Link to={`/MIS-reg/${username}`}><Button className='AdminMenu' title='Register New Student'/></Link>				
+				<Link to={`/MIS-slist/${username}`}><Button style={{height:'50px',width:'200px'}} title='Active Students'/></Link>
+				<Link to={`/MIS-inactive-slist/${username}`}><Button style={{height:'50px',width:'200px'}} title='Inactive Students'/></Link>
+				<Link to={`/MIS-reg/${username}`}><Button style={{height:'50px',width:'200px'}} title='Register New Student'/></Link>				
 			</div>
-			<div style={{height:'100%',width:'100%'}} className='d-flex flex-column justify-content-center align-items-center'>
+			<div style={{height:'80%',width:'100%'}} className='d-flex flex-column justify-content-center align-items-center'>
 				<div style={{height:'90%', width:'90%', color:'black',backgroundColor:'white', border:'1px solid black'}} className='d-flex  flex-column justify-content-center align-items-center'>
 					<div style={{height:'70%', width:'100%'}} className='d-flex justify-content-center flex-column'>
 						<div style={{width:'100%', height:'30%'}} className='d-flex align-items-center flex-column'>
@@ -89,7 +89,7 @@ export default function FacultyChangepass(props){
 						</div>
 					</div>
 					<div style={{height:'20%', width:'100%'}} className='d-flex align-items-center justify-content-center'>
-						<Button className='changePassBtn' title='Save Changes' click={handler}/>
+						<Button style={{height:'50px',width:'200px'}} title='Save Changes' click={handler}/>
 					</div>
 				</div>
 			</div>

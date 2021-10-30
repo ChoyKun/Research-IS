@@ -76,8 +76,8 @@ export default function AdminLogin(props){
 								<div style={{height:'70%',width:'100%'}} className="login-field d-flex flex-column align-items-center justify-content-around flex-column">
 									<Field className='txt' placeHolder="username" reqOnChange={(e)=>{dispatch({type:'username',data:e.target.value})}}/>
 									<Field className='txt' placeHolder="password" reqOnChange={(e)=>{dispatch({type:'password',data:e.target.value})}}/>
-									<Button className="login-button" title="Sign me in" click={handler}/>
-									<Link to='/admin-access' style={{width:'80%'}}><Button className="GoBack" title="Go Back" /></Link>
+									<Button style={{height:'30px',width:'600px'}} title="Sign me in" click={handler}/>
+									<Link to='/admin-access'><Button style={{height:'30px',width:'600px'}} title="Go Back" /></Link>
 								</div>
 							</div>
 						</div>

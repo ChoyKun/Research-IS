@@ -2,6 +2,8 @@ import React,{useState, useEffect, Suspense} from 'react';
 import { Link, Redirect,useParams} from 'react-router-dom';
 import axios from '../modules/config.js';
 
+import "../styles/button.css";
+
 //icons
 import scslogo from "../images/scs-final.png";
 import favorites from "../images/heart.png";
@@ -213,8 +215,8 @@ function Item(props){
 			<div className="col-1 text-center">{props.object.course??'N/A'}</div>
 			<div className="col-4 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
 			<div className="col-2 text-center">{props.object.yearSubmitted}</div>
-			<Link to={`${url}/${props.object._id}`}><Button style={{backgroundColor:'#385723', color:'white'}} title='View' /></Link>
-			<Button click={requestForView} disabled={disabled} className={`col-1 ${itemState === 'approved' ? 'bg-success' : 'bg-danger'} text-center`} style={{backgroundColor:'#385723', color:'white'}} title='Request'/>
+			<Link to={`${url}/${props.object._id}`}><Button title='View' /></Link>
+			<Button click={requestForView} disabled={disabled} className={`col-1 text-center`} title='Request'/>
 		</div>
 	);
 }

@@ -106,8 +106,8 @@ export default function AdminCList(props){
 			<div style={{height:'15%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center flex-column">
 				<SearcBar location='/slist-filter'/>
 				<div style={{height:'20%', width:'40%'}}className="d-flex flex-row justify-content-between flex-row-reverse">
-					<Button style={{height: '30px',width:'200px',backgroundColor:'#385723',color: 'white'}} title='Change Coordinator' click={handler}/>
-					<Button style={{height: '30px',width:'200px',backgroundColor:'#385723',color: 'white'}} title='Cancel' click={()=>window.history.back()}/>
+					<Button style={{height: '30px',width:'200px'}} title='Change Coordinator' click={handler}/>
+					<Button style={{height: '30px',width:'200px'}} title='Cancel' click={()=>window.history.back()}/>
 				</div>		
 			</div>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>

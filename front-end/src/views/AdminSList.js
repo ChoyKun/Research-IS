@@ -84,16 +84,16 @@ export default function AdminRList(props){
 				<h2>Active Students</h2>				
 			</div>
 			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center">
-				<Link to={`/admin-slist/${username}`}><Button className='AdminMenu' title='Active Students'/></Link>
-				<Link to={`/admin-inactive-slist/${username}`}><Button className='AdminMenu' title='Inactive Students'/></Link>				
+				<Link to={`/admin-slist/${username}`}><Button style={{height:'50px',width:'200px'}} title='Active Students'/></Link>
+				<Link to={`/admin-inactive-slist/${username}`}><Button style={{height:'50px',width:'200px'}} title='Inactive Students'/></Link>				
 			</div>
 			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center flex-column">
 				<SearcBar location="/slist-filter" setSearch={setSearch} className='Search'/>
 				<div style={{height:'20%', width:'90%'}}className="d-flex flex-row justify-content-end flex-row">
-					<Link to ={`/admin-sapproved/${username}/${selected?.data?.studentNo}`}><Button style={{height: '30px',width:'100px',backgroundColor:'#385723',color: 'white'}} title='Approved Researches'/></Link>		
+					<Link to ={`/admin-sapproved/${username}/${selected?.data?.studentNo}`}><Button style={{height: '30px',width:'100px'}} title='Approved Researches'/></Link>		
 				</div>		
 			</div>
-			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
+			<div style={{width: '100%', height: '70%'}} className='d-flex justify-content-center align-items-center'>
 				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black', color:'black'}}>
 					<Suspense fallback={<Loading/>}>
 						<SlistHeader/>

@@ -110,15 +110,15 @@ export default function AdminRList(props){
 				<h2>Archived Researches</h2>				
 			</div>
 			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center">
-				<Link to={`/admin-rlist/${username}`}><Button className='AdminMenu' title='Public Research'/></Link>
-				<Link to={`/admin-archive/${username}`}><Button className='AdminMenu' title='Archived'/></Link>
-				<Link to={`/admin-upload/${username}`}><Button className='AdminMenu' title='Upload new Research'/></Link>
-				<Link to={`/admin-request/${username}`}><Button className='AdminMenu' title='Research Requests'/></Link>			
+				<Link to={`/admin-rlist/${username}`}><Button style={{height:'50px',width:'200px'}} title='Public Research'/></Link>
+				<Link to={`/admin-archive/${username}`}><Button style={{height:'50px',width:'200px'}} title='Archived'/></Link>
+				<Link to={`/admin-upload/${username}`}><Button style={{height:'50px',width:'200px'}} title='Upload new Research'/></Link>
+				<Link to={`/admin-request/${username}`}><Button style={{height:'50px',width:'200px'}}	 title='Research Requests'/></Link>			
 			</div>
 			<div style={{height:'20%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center flex-column">
 				<SearcBar location='rlist-filter' setSearch={setSearch} className='Search'/>
 				<div style={{height:'20%', width:'90%'}}className="d-flex flex-row justify-content-start flex-row-reverse">
-					<Button style={{height: '30px',width:'100px',backgroundColor:'#385723',color: 'white'}} click={sender} title='Publish'/>		
+					<Button style={{height: '30px',width:'100px'}} click={sender} title='Publish'/>		
 				</div>	
 			</div>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>

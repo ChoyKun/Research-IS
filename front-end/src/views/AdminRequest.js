@@ -54,10 +54,10 @@ export default function AdminRequest( props ){
 				<h2>Student's Requests</h2>				
 			</div>
 			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center">
-				<Link to={`/admin-rlist/${username}`}><Button className='AdminMenu' title='Public Research'/></Link>
-				<Link to={`/admin-archive/${username}`}><Button className='AdminMenu' title='Archived'/></Link>
-				<Link to={`/admin-upload/${username}`}><Button className='AdminMenu' title='Upload new Research'/></Link>
-				<Link to={`/admin-request/${username}`}><Button className='AdminMenu' title='Research Requests'/></Link>					
+				<Link to={`/admin-rlist/${username}`}><Button style={{height:'50px',width:'200px'}} title='Public Research'/></Link>
+				<Link to={`/admin-archive/${username}`}><Button style={{height:'50px',width:'200px'}} title='Archived'/></Link>
+				<Link to={`/admin-upload/${username}`}><Button style={{height:'50px',width:'200px'}} title='Upload new Research'/></Link>
+				<Link to={`/admin-request/${username}`}><Button style={{height:'50px',width:'200px'}} title='Research Requests'/></Link>					
 			</div>
 			<div className="d-flex flex-row-reverse">
 				<Button title="Clear Request" click={clear}/>

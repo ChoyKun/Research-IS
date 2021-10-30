@@ -28,7 +28,6 @@ import FacultyEditStudent from './views/FacultyEditStudent.js';
 import FacultyChangepass from './views/FacultyChangepass.js';
 import FacultySList from './views/FacultySList.js';
 import FacultyInactiveSList from './views/FacultyInactiveSList.js';
-import FacultyUpload from './views/FacultyUpload.js';
 import Login from './views/Login.js';
 import EmergencyAdmin from './views/EmergencyAdmin.js';
 import MobileRList from './views/MobileRList.js';
@@ -87,7 +86,6 @@ const views = [
   '/MIS-changepass',
   '/MIS-slist',
   '/MIS-inactive-slist',
-  '/MIS-upload',
   '/m-rlist',
   '/m-rlistfilter',
   '/m-changepass',
@@ -320,12 +318,6 @@ function App() {
          <Route path="/MIS-inactive-slist/:username">
           <FacultyFrame>
             <FacultyInactiveSList />
-          </FacultyFrame>
-        </Route>
-
-        <Route path="/MIS-upload/:username">
-          <FacultyFrame>
-            <FacultyUpload />
           </FacultyFrame>
         </Route>
 

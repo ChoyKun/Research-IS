@@ -92,7 +92,7 @@ export default function RListFilter(props){
 			<div style={{height:'20%', width:'100% !important'}}className="d-flex flex-column justify-content-around align-items-center">
 				<SearcBar location='/rlist-filter' setSearch={setSearch}/>
 				<div style={{height:'20%', width:'90%'}}className="d-flex flex-row justify-content-start flex-row-reverse">
-					<Button style={{height: '30px',width:'100px',backgroundColor:'#385723',color: 'white'}} title='Remove' click={sender}/>		
+					<Button style={{height: '30px',width:'100px'}} title='Remove' click={sender}/>		
 				</div>			
 			</div>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
@@ -154,7 +154,7 @@ function Item(props){
 			<div className="col-1 text-center">{props.object.course??'N/A'}</div>
 			<div className="col-4 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
 			<div className="col-2 text-center">{props.object.yearSubmitted}</div>
-			<Button click={sender} style={{backgroundColor:'#385723', color:'white'}} title='Remove' />
+			<Button click={sender} title='Remove' />
 		</div>
 	);
 }

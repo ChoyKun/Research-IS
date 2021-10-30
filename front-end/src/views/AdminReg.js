@@ -146,8 +146,8 @@ export default function AdminReg(props){
 									<Field type='date' placeHolder='Enter Date Here' reqOnChange={(e) => {dispatch({type: 'dateRegistered', data: e.target.value});}}/>
 								</div>
 								<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
-									<Button title='Cancel' className='crDecline' click={()=>window.history.back()}/>
-									<Button title='Register' className='aRegUploadBtn' click={handler}/>
+									<Button title='Cancel' style={{height:'30px',width:'130px'}} click={()=>window.history.back()}/>
+									<Button title='Register' style={{height:'30px',width:'130px'}} click={handler}/>
 								</div>
 							</div>						
 						</div>

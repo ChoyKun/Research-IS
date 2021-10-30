@@ -126,9 +126,9 @@ export default function FacultyEditProfile(props){
 				<h2>Edit Profile</h2>				
 			</div>
 			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center">
-				<Link to={`/MIS-slist/${username}`}><Button className='AdminMenu' title='Active Students'/></Link>
-				<Link to={`/MIS-inactive-slist/${username}`}><Button className='AdminMenu' title='Inactive Students'/></Link>
-				<Link to={`/MIS-reg/${username}`}><Button className='AdminMenu' title='Register New Student'/></Link>				
+				<Link to={`/MIS-slist/${username}`}><Button style={{height:'50px',width:'200px'}} title='Active Students'/></Link>
+				<Link to={`/MIS-inactive-slist/${username}`}><Button style={{height:'50px',width:'200px'}} title='Inactive Students'/></Link>
+				<Link to={`/MIS-reg/${username}`}><Button style={{height:'50px',width:'200px'}} title='Register New Student'/></Link>				
 			</div>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
 				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black'}} className='d-flex justify-content-around'>
@@ -194,9 +194,9 @@ export default function FacultyEditProfile(props){
 							<div style={{height:'100%',width:'30%'}} className='d-flex justify-content-around'>
 								<Field style={{width:'200px',height:'30px'}} placeHolder='password' reqOnChange={(e)=>{dispatch({type:'_password',data: e.target.value})}}/>
 							</div>
-							<div style={{height:'100%',width:'30%'}} className='d-flex justify-content-around '>
+							<div style={{height:'100%',width:'40%'}} className='d-flex justify-content-around '>
 								<Button style={{height:'30px',width:'100px'}} title='Cancel' click={()=>window.history.back()}/>
-								<Button style={{height:'30px',width:'150px',backgroundColor:'#595959',color:'white'}} title='Save Changes' click={handler}/>
+								<Button style={{height:'30px',width:'150px'}} title='Save Changes' click={handler}/>
 							</div>
 						</div>
 					</div>

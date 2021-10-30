@@ -69,8 +69,8 @@ export default function AdminRList(props){
 				<h2>Inactive</h2>				
 			</div>
 			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center">
-				<Link to={`/admin-slist/${username}`}><Button className='AdminMenu' title='Active Students'/></Link>
-				<Link to={`/admin-inactive-slist/${username}`}><Button className='AdminMenu' title='Inactive Students'/></Link>				
+				<Link to={`/admin-slist/${username}`}><Button style={{height:'50px',width:'200px'}} title='Active Students'/></Link>
+				<Link to={`/admin-inactive-slist/${username}`}><Button style={{height:'50px',width:'200px'}} title='Inactive Students'/></Link>				
 			</div>
 			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center flex-column">
 				<SearcBar location="/slist-filter" setSearch={setSearch}className='Search'/>		

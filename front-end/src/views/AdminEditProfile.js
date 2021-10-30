@@ -174,9 +174,9 @@ export default function AdminEditProfile(props){
 							<div style={{height:'100%',width:'30%'}} className='d-flex justify-content-around'>
 								<Field style={{width:'200px',height:'30px'}} placeHolder='password' reqOnChange={(e)=>{dispatch({type:'_password',data: e.target.value})}}/>
 							</div>
-							<div style={{height:'100%',width:'30%'}} className='d-flex justify-content-around '>
+							<div style={{height:'100%',width:'40%'}} className='d-flex justify-content-around '>
 								<Button style={{height:'30px',width:'100px'}} title='Cancel' click={()=>window.history.back()}/>
-								<Button style={{height:'30px',width:'150px',backgroundColor:'#595959',color:'white'}} title='Save Changes' click={handler}/>
+								<Button style={{height:'30px',width:'150px'}} title='Save Changes' click={handler}/>
 							</div>
 						</div>
 					</div>

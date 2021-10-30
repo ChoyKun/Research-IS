@@ -88,4 +88,15 @@
 	background-color:white;
 	color: black;
 }
-
+.button{
+	background-color: white; /* Green */
+  	border: 2px solid #385723;
+  	color: black;
+}
+.button:hover {
+	background-color: #385723;
+	color: white;
+}
+.disabledButton{
+	background-color: #385723;
+	color: white}

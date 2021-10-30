@@ -52,8 +52,8 @@ export default function AdminRequest( props ){
 				<h2>Approved Requests</h2>				
 			</div>
 			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center">
-				<Link to={`/student-approved/${username}`}><Button className='AdminMenu' title='Approved Researches'/></Link>
-				<Link to={`/student-pending/${username}`}><Button className='AdminMenu' title='Pending Requests'/></Link>				
+				<Link to={`/student-approved/${username}`}><Button style={{height:'50px',width:'200px'}} title='Approved Researches'/></Link>
+				<Link to={`/student-pending/${username}`}><Button style={{height:'50px',width:'200px'}} title='Pending Requests'/></Link>				
 			</div>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
 				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black', color:'black',overflowY:'auto',overflowX:'auto'}}>

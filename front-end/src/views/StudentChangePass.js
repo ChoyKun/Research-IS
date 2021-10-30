@@ -76,7 +76,7 @@ export default function StudentChangePass(props){
 						</div>
 					</div>
 					<div style={{height:'20%', width:'100%'}} className='d-flex align-items-center justify-content-center'>
-						<Button className='changePassBtn' title='Save Changes' click={handler}/>
+						<Button title='Save Changes' click={handler} style={{height:'50px', width:'200px'}}/>
 					</div>
 				</div>
 			</div>

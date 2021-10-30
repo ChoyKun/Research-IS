@@ -83,7 +83,7 @@ export default function Login(props){
 						<div style={{width:"80%"}}>
 							<Select className="login-select" label='Select Position:'options={['Student','MIS Officer']} reqOnChange={(e)=>{dispatch({type:'label',data: e.target.value})}}/>
 						</div>
-						<Button className="login-button" title="Sign me in" click={handler}/>
+						<Button style={{height:"30px", width:"80%"}} title="Sign me in" click={handler}/>
 					</div>
 				</div>
 			</div>

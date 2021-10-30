@@ -330,10 +330,7 @@ app.put('/student/slist/pending/:username', async(req,res,next)=>{ //san mo to t
 			data.save( err => {
 				if( err ) return res.status( 503 ).json({  message: 'Server error' });
 
-				return (
-					date,
-					res.status( 200 ).json({message: 'successfuly added to pending'})
-				);
+				return res.status( 200 ).json({message: 'successfuly added to pending'})
 			});
 		}
 	})
