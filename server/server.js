@@ -377,6 +377,30 @@ app.put('/student/slist/approved/:username', async(req,res,next)=>{ //san mo to 
 	})
 })
 
+app.put('/student/slist/declined/:username', async(req,res,next)=>{ //san mo to tinatwag? StudentRlist
+	const studentNo = req.params.username;
+
+	const { date } = req.body;
+
+	const declined = req.body;
+
+	Student.findOne({studentNo:studentNo}, (err,data)=>{
+		if(err) return res.status( 503 ).json({ message: 'Server Error' });
+
+		if(data){
+			const ind = data.pending.indexOf(declined)
+			data.pending.splice(ind,1);
+
+			data.save( err => {
+				if(err) return res.status( 503 ).json({ message: 'Server Error' });
+
+				return res.status(200).json({message: 'successfuly declined request'})
+			})
+			
+		}
+	})
+})
+
 app.get('/student/slist/favlist/:username', async(req,res,next)=>{
 	const studentNo= req.params.username;
 
@@ -1324,7 +1348,7 @@ app.get('/check-file/:id', async ( req, res, next ) => {
 	});
 });
 
-app.put('/change-file-state/:id', async ( req, res, next ) => {
+app.put('approved/change-file-state/:id', async ( req, res, next ) => {
 	const id = req.params.id;
 
 	fs.readFile( req_view_path, ( err, reqList ) => {
@@ -1335,6 +1359,28 @@ app.put('/change-file-state/:id', async ( req, res, next ) => {
 		list.forEach( (item, index) => {
 			if( item.id === id ){
 				list[index].state = 'approved';
+			}
+		});
+
+		fs.writeFile( req_view_path, JSON.stringify(list, null, 4), err => {
+			if( err ) return res.sendStatus( 503 );
+
+			return res.sendStatus( 200 );
+		});
+	});
+});
+
+app.put('declined/change-file-state/:id', async ( req, res, next ) => {
+	const id = req.params.id;
+
+	fs.readFile( req_view_path, ( err, reqList ) => {
+		if( err ) return res.sendStatus( 503 );
+
+		const list = JSON.parse( reqList );
+
+		list.forEach( (item, index) => {
+			if( item.id === id ){
+				list[index].state = 'declined';
 			}
 		});
 

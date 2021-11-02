@@ -22,5 +22,21 @@
         "title": "Research 4",
         "state": "pending",
         "dateRequested": "2021-10-30"
+    },
+    {
+        "id": "6166323610c37c27e0079a60",
+        "studentID": "1801025",
+        "studentName": "Mitch S Canciano",
+        "title": "Research 2",
+        "state": "pending",
+        "dateRequested": "2021-11-2"
+    },
+    {
+        "id": "616634f12f36491a9c86defd",
+        "studentID": "1801025",
+        "studentName": "Mitch S Canciano",
+        "title": "Research 3",
+        "state": "pending",
+        "dateRequested": "2021-11-2"
     }
 ]

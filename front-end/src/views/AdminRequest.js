@@ -19,7 +19,7 @@ export default function AdminRequest( props ){
 
 	useEffect(() => {
 		const getRequests = setInterval(() => {
-			axios.get('http://localhost:7000/request-views')
+			axios.get('http://localhost:7000/c-views')
 			.then( res => {
 				if( !requests.length ){
 					setRequests([...res.data.reqViews]);
@@ -90,11 +90,12 @@ const Header = ( props ) => {
 
 			className="d-flex flex-row justify-content-around align-items-center"
 		>
-			<div className="col-2 text-center"><p className="p-0 m-0"> Student No. </p></div>
+			<div className="col-1 text-center"><p className="p-0 m-0"> Student No. </p></div>
 			<div className="col-2 text-center"><p className="p-0 m-0"> Student Name </p></div>
-			<div className="col-4 text-center"><p className="p-0 m-0"> Title </p></div>
+			<div className="col-3 text-center"><p className="p-0 m-0"> Title </p></div>
 			<div className="col-2 text-center"><p className="p-0 m-0"> Date Requested </p></div>
-			<div className="col-2 text-center"><label htmlFor="approveAll">APPROVE ALL </label><input type="checkbox" name="approveAll"/></div>
+			<div className="col-1 text-center"><label htmlFor="approveAll">Approve all </label><input type="checkbox" name="approveAll"/></div>
+			<div className="col-1 text-center"><label htmlFor="approveAll">Decline all </label><input type="checkbox" name="approveAll"/></div>
 		</div>
 	);
 }
@@ -105,7 +106,9 @@ const Request = ( props ) => {
 	const {username} = useParams();
 
 	const [approved, setApproved] = useState([])
+	const [declined, setDeclined] = useState([])
 	const [sendApproved, setSendApproved] = useState(false);
+	const [sendDeclined, setSendDeclined] = useState(false);
 
 	const today = new Date();
 
@@ -129,14 +132,40 @@ const Request = ( props ) => {
 		}
 	}, [approved])
 
+	useEffect(()=>{
+		if( sendDeclined ){
+			setDeclined((declined) => [...declined, props.id]);
+		}
+	}, [sendDeclined]);
 
-	const handleChange = async () => {
-		axios.put(`http://localhost:7000/change-file-state/${ props.id }`)
+	useEffect(() => {
+		if( declined ){
+			axios.put(`http://localhost:7000/student/slist/declined/${props.studentID}`, declined) 
+			.then( res => {
+				console.log( res.data.message );
+				setSendDeclined( false );
+			})
+			.catch((err)=>{console.log(err)});
+		}
+	}, [declined])
+
+
+	const approve = async () => {
+		axios.put(`http://localhost:7000/approved/change-file-state/${ props.id }`)
 		.catch( err => {
 			console.log( err );
 		});
 
 		setSendApproved( true );
+	}
+
+	const decline = async () => {
+		axios.put(`http://localhost:7000/declined/change-file-state/${ props.id }`)
+		.catch( err => {
+			console.log( err );
+		});
+
+		setSendDeclined( true );
 	}
 
 	return(
@@ -149,11 +178,12 @@ const Request = ( props ) => {
 			}} 
 			className="d-flex mb-1 flex-row justify-content-around align-items-center"
 		>
-			<div className="col-2 text-center"><p className="p-0 m-0"> { props.studentID } </p></div>
+			<div className="col-1 text-center"><p className="p-0 m-0"> { props.studentID } </p></div>
 			<div className="col-2 text-center"><p className="p-0 m-0"> { props.studentName } </p></div>
-			<div className="col-4 text-center"><p className="p-0 m-0"> { props.title } </p></div>
+			<div className="col-3 text-center"><p className="p-0 m-0"> { props.title } </p></div>
 			<div className="col-2 text-center"><p className="p-0 m-0"> { props.dateRequested } </p></div>
-			<div className="col-2 text-center"><Button click={handleChange} title="Approve"/></div>
+			<div className="col-1 text-center"><Button click={approve} title="Approve"/></div>
+			<div className="col-1 text-center"><Button click={decline} title="Decline"/></div>
 		</div>
 	);
 }
