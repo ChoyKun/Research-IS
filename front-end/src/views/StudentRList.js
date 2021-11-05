@@ -21,16 +21,11 @@ export default function RListFilter(props){
 	const [researchData, setResearchData] = useState([]);
 	const [filteredData, setFilteredData] = useState( [] );
 	const [search, setSearch] = useState( null );
-	
-
-
-
 
 	useEffect(()=>{
 		axios.get('http://localhost:7000/research/rlist')
 		.then((res)=>{
 			res.data.forEach( elem => {
-				console.log( elem.status );
 				if( elem.status === 'public' ){
 					setResearchData((researchData) => [...researchData, elem]);
 				}
@@ -41,16 +36,12 @@ export default function RListFilter(props){
 		})
 	},[]);
 
-
-
-
 	useEffect(() => {
 		setFilteredData(researchData?.map?.( object => {
 			if( search ){
 				for( let key of Object.keys( object ) ){
 					// console.log(object)									
 					if(object[key]?.toLowerCase?.()?.startsWith( search?.charAt?.(0)?.toLowerCase?.() )){
-
 						return <Item key={object._id} object={object}/>
 
 					}
@@ -83,6 +74,7 @@ export default function RListFilter(props){
 	);
 }
 
+
 function Loading(props){
 	return(
 		<div>
@@ -90,8 +82,6 @@ function Loading(props){
 		</div>
 	);
 }
-
-
 
 function Item(props){
 	const { username, id } = useParams();
@@ -102,6 +92,7 @@ function Item(props){
 	const [name, setName] = useState(null);
 	const [disabled, setDisabled] = useState(false);
 
+
 	useEffect(()=>{
 		axios.post(`http://localhost:7000/student/slist/disable/${username}/${props.object._id}`)
 		.then((res)=>{
@@ -110,17 +101,24 @@ function Item(props){
 		.catch((err)=>{
 			console.log(err);
 		})
-	},[])
 
-	useEffect(() => {
 		axios.get(`http://localhost:7000/student/slist/${username}`)
 		.then(res=>{
 			setName(res.data.data);
 		})
 		.catch(err=>{
 			console.log(err);
+		})
+
+		axios.post(`http://localhost:7000/check-research-state/${username}/${props.object._id}`)
+		.then((res)=>{
+			setUrl(`/research-full`)
+		})
+		.catch((err)=>{
+			setUrl(`/research-abstract`)
 		})	
-	}, [])
+	},[])
+
 
 	useEffect(()=>{
 		if( sendPend ){
@@ -141,11 +139,8 @@ function Item(props){
 			});
 		}
 	}, [pending])
-	
-	const [itemState, setItemState] = useState('idle');
 
 	const requestForView = async () => {
-		setItemState(() => 'pending');
 
 		const today = new Date();
 
@@ -171,44 +166,6 @@ function Item(props){
 
 		setSendPend(true);
 	}
-
-	useEffect(() => {
-		axios.post(`http://localhost:7000/check-research-state/${username}/${props.object._id}`)
-		.then((res)=>{
-			setUrl(`/research-full`)
-		})
-		.catch((err)=>{
-			setUrl(`/research-abstract`)
-		})
-	}, [])
-
-
-	useEffect(() => {
-		const checkFile = async () => {
-			axios.get(`http://localhost:7000/check-file/${props.object._id}`)
-			.then( res => {
-				if( res.data.itemState === 'approved' ){
-					setItemState(() => res.data.itemState);
-					
-					axios.delete(`http://localhost:7000/delete-file-req/${props.object._id}`)
-					.catch( err => {
-						console.log( err );
-					});
-				}
-				else{
-					setTimeout(() => checkFile(), 10000);
-				}
-			})
-			.catch( err => {
-				console.log( err );
-			});
-		}
-
-		if( itemState === 'idle' ) checkFile();
-	}, [itemState]);
-
-	
-
 	return(
 		<div className="d-flex bg-secondary flex-row justify-content-around" style={{border:'1px solid black'}}>
 			<div className="col-2 text-center">{props.object.title}</div>

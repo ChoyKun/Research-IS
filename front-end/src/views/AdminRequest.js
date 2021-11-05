@@ -132,22 +132,22 @@ const Request = ( props ) => {
 		}
 	}, [approved])
 
-	useEffect(()=>{
-		if( sendDeclined ){
-			setDeclined((declined) => [...declined, props.id]);
-		}
-	}, [sendDeclined]);
+	// useEffect(()=>{
+	// 	if( sendDeclined ){
+	// 		setDeclined((declined) => [...declined, props.id]);
+	// 	}
+	// }, [sendDeclined]);
 
-	useEffect(() => {
-		if( declined ){
-			axios.put(`http://localhost:7000/student/slist/declined/${props.studentID}`, declined) 
-			.then( res => {
-				console.log( res.data.message );
-				setSendDeclined( false );
-			})
-			.catch((err)=>{console.log(err)});
-		}
-	}, [declined])
+	// useEffect(() => {
+	// 	if( declined ){
+	// 		axios.put(`http://localhost:7000/student/slist/declined/${props.studentID}`, declined) 
+	// 		.then( res => {
+	// 			console.log( res.data.message );
+	// 			setSendDeclined( false );
+	// 		})
+	// 		.catch((err)=>{console.log(err)});
+	// 	}
+	// }, [declined])
 
 
 	const approve = async () => {
@@ -159,14 +159,14 @@ const Request = ( props ) => {
 		setSendApproved( true );
 	}
 
-	const decline = async () => {
-		axios.put(`http://localhost:7000/declined/change-file-state/${ props.id }`)
-		.catch( err => {
-			console.log( err );
-		});
+	// const decline = async () => {
+	// 	axios.put(`http://localhost:7000/declined/change-file-state/${ props.id }`)
+	// 	.catch( err => {
+	// 		console.log( err );
+	// 	});
 
-		setSendDeclined( true );
-	}
+	// 	setSendDeclined( true );
+	// }
 
 	return(
 		<div 
@@ -183,7 +183,7 @@ const Request = ( props ) => {
 			<div className="col-3 text-center"><p className="p-0 m-0"> { props.title } </p></div>
 			<div className="col-2 text-center"><p className="p-0 m-0"> { props.dateRequested } </p></div>
 			<div className="col-1 text-center"><Button click={approve} title="Approve"/></div>
-			<div className="col-1 text-center"><Button click={decline} title="Decline"/></div>
+			{/*<div className="col-1 text-center"><Button click={decline} title="Decline"/></div>*/}
 		</div>
 	);
 }

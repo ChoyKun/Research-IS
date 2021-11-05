@@ -2,41 +2,9 @@
     {
         "id": "61650757997a980a90bf859c",
         "studentID": "1801025",
-        "studentName": "Mitch S Canciano",
+        "studentName": null,
         "title": "Research 1",
         "state": "pending",
-        "dateRequested": "2021-10-27"
-    },
-    {
-        "id": "616f6009e7800b194421ac41",
-        "studentID": "1801025",
-        "studentName": "Mitch S Canciano",
-        "title": "Research 6",
-        "state": "pending",
-        "dateRequested": "2021-10-28"
-    },
-    {
-        "id": "616638255bd7c21b7c5e4d4c",
-        "studentID": "1801025",
-        "studentName": "Mitch S Canciano",
-        "title": "Research 4",
-        "state": "pending",
-        "dateRequested": "2021-10-30"
-    },
-    {
-        "id": "6166323610c37c27e0079a60",
-        "studentID": "1801025",
-        "studentName": "Mitch S Canciano",
-        "title": "Research 2",
-        "state": "pending",
-        "dateRequested": "2021-11-2"
-    },
-    {
-        "id": "616634f12f36491a9c86defd",
-        "studentID": "1801025",
-        "studentName": "Mitch S Canciano",
-        "title": "Research 3",
-        "state": "pending",
-        "dateRequested": "2021-11-2"
+        "dateRequested": "2021-11-3"
     }
 ]
