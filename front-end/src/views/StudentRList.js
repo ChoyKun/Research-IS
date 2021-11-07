@@ -23,7 +23,7 @@ export default function StudentRList(props){
 	const filter = useContext( FilterContext );
 
 	const [researchData, setResearchData] = useState([]);
-	const [filteredData, setFilteredData] = useState( [] );
+
 	const [search, setSearch] = useState( '' );
 
 	useEffect(()=>{
@@ -41,7 +41,6 @@ export default function StudentRList(props){
 				console.log(err)
 			})
 		}
-
 		getResearchList();
 
 		console.log('hereee mother fucker');
@@ -99,6 +98,7 @@ export default function StudentRList(props){
 	);
 }
 
+
 function Loading(props){
 	return(
 		<div>
@@ -106,8 +106,6 @@ function Loading(props){
 		</div>
 	);
 }
-
-
 
 function Item(props){
 	const { username, id } = useParams();
@@ -117,6 +115,7 @@ function Item(props){
 	const [url, setUrl] = useState(null)
 	const [name, setName] = useState(null);
 	const [disabled, setDisabled] = useState(false);
+
 
 	useEffect(()=>{
 		const token = Cookies.get('token');
@@ -152,8 +151,17 @@ function Item(props){
 		})
 		.catch(err=>{
 			console.log(err);
+		})
+
+		axios.post(`http://localhost:7000/check-research-state/${username}/${props.object._id}`)
+		.then((res)=>{
+			setUrl(`/research-full`)
+		})
+		.catch((err)=>{
+			setUrl(`/research-abstract`)
 		})	
-	}, [])
+	},[])
+
 
 	useEffect(()=>{
 		if( sendPend ){
@@ -180,11 +188,8 @@ function Item(props){
 			});
 		}
 	}, [pending])
-	
-	const [itemState, setItemState] = useState('idle');
 
 	const requestForView = async () => {
-		setItemState(() => 'pending');
 
 		const today = new Date();
 
@@ -211,6 +216,7 @@ function Item(props){
 		setSendPend(true);
 	}
 
+
 	useEffect(() => {
 		const token = Cookies.get('token');
 
@@ -228,42 +234,7 @@ function Item(props){
 	}, [])
 
 
-	// useEffect(() => {
-	// 	const checkFile = async () => {
-	// 		const token =Cookies.get('token')
-	// 		axios.get(`http://localhost:7000/check-file/${props.object._id}`,{
-	// 			headers: {
-	// 				authorization: `Bearer ${token}`
-	// 			}
-	// 		})
-	// 		.then( res => {
-	// 			if( res.data.itemState === 'approved' ){
-	// 				setItemState(() => res.data.itemState);
-	// 				const token = Cookies.get('token');
-
-	// 				axios.delete(`http://localhost:7000/delete-file-req/${props.object._id}`,{
-	// 					headers: {
-	// 						authorization: `Bearer ${token}`
-	// 					}
-	// 				})
-	// 				.catch( err => {
-	// 					console.log( err );
-	// 				});
-	// 			}
-	// 			else{
-	// 				setTimeout(() => checkFile(), 10000);
-	// 			}
-	// 		})
-	// 		.catch( err => {
-	// 			console.log( err );
-	// 		});
-	// 	}
-
-	// 	if( itemState === 'idle' ) checkFile();
-	// }, []);
-
 	
-
 	return(
 		<div className="d-flex bg-secondary flex-row justify-content-around" style={{border:'1px solid black'}}>
 			<div className="col-2 text-center">{props.object.title}</div>

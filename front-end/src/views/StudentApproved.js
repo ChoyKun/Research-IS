@@ -21,7 +21,6 @@ export default function AdminRequest( props ){
 	useEffect(()=>{
 		axios.get(`http://localhost:7000/student/slist/approved-list/${username}`)
 		.then((res)=>{
-			// console.log( res.data );
 			setApproved( res.data.data );
 		})
 		.catch((err)=>{
