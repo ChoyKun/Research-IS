@@ -34,11 +34,15 @@ export default function AdminRequest( props ){
 	useEffect(()=>{
 		setFilteredData(approved?.map?.(object =>{
 			if(search){
-					for( let key of Object.keys(object)){
-							if(object[key]?.toLowerCase?.()?.startsWith(search?.charAt?.(0)?.toLowerCase?.())){
-								return <Item key={object._id} object={object}/>
-							}
-					}
+				// for( let key of Object.keys(object)){
+				// 	if(object[key]?.toLowerCase?.()?.startsWith(search?.charAt?.(0)?.toLowerCase?.())){
+				// 		return <Item key={object._id} object={object}/>
+				// 	}
+				// }
+				let result = [];
+				if( object.title.toLowerCase().includes( search.toLowerCase() ) ){
+					return <Item key={object._id} object={object}/>
+				}
 			}
 			else{
 				return <Item key={object._id} object={object}/>
@@ -75,7 +79,7 @@ function Item(props){
 			<div className="col-1 text-center">{props.object.course??'N/A'}</div>
 			<div className="col-4 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
 			<div className="col-2 text-center">{props.object.yearSubmitted}</div>
-			<div className="col-2 text-center">{props.date}</div>
+			<div className="col-2 text-center">{props.object.dateApproved}</div>
 			<Link to={`/research-full/${props.object._id}`}><Button className='col-1 text-center' style={{height:'30px',width:'70px',backgroundColor:'#385723', color:'white'}} title='View' /></Link>
 		</div>
 	);
@@ -99,7 +103,7 @@ function RListHeader(props){
 			<div className='col-1 text-center'>
 				Course
 			</div>
-			<div className='col-4 text-center'>
+			<div className='col-3 text-center'>
 				ResearchCategories
 			</div>
 			<div className='col-2 text-center'>

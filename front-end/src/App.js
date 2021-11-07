@@ -55,6 +55,7 @@ import EventEmitter from './modules/custom-event-emitter';
 
 import {Route, Switch} from 'react-router-dom';
 
+import FilterContext from './contexts/filter-context';
 import './styles/app.css';
 
 const ROOT = '/'
@@ -119,14 +120,14 @@ function App() {
   const [secRequests, setSecRequests] = React.useState([]);
   const [requestedView, setRequetedView] = React.useState( null );
 
-
+  const [sFilter, setSFilter] = React.useState( null );
   
   
   React.useEffect(() => {
     const token = Cookies.get('token');
     const rtoken = Cookies.get('rtoken');
 
-    axios.defaults.headers.common['Authorization'] = token; // d ba pwede iset sa global na lang? pano ba iset as global?
+    // axios.defaults.headers.common['Authorization'] = token; // d ba pwede iset sa global na lang? pano ba iset as global?
     // Bali eto na yung global eh kaso ayaw gumana nasa loob siya ng function d ba? d ba kapag global sa labas nung function? tapos import na lang?
     // Same shit ata eh pero ang pwede mong gawin eh ganto
 
@@ -168,7 +169,8 @@ function App() {
 
   return (
    <div className="app">
-     <Switch>
+    <FilterContext.Provider value={{setSFilter: setSFilter, sFilter: sFilter}}>
+      <Switch>
         <Route path="/admin-profile/:username">
           <AdminFrame>
             <AdminProfile />
@@ -345,7 +347,7 @@ function App() {
 
         <Route path="/rlist-filter">
           <EmptyFrame>
-            <RListFilter />
+            <RListFilter setSFilter={setSFilter}/>
           </EmptyFrame>
         </Route>
 
@@ -362,10 +364,9 @@ function App() {
         </Route>
 
         <Route path="/student-rlist/:username">
-          <SFrame>
-
+          
+          <SFrame >
             <StudentRList />
-
           </SFrame>
         </Route>
 
@@ -394,7 +395,8 @@ function App() {
         <Route path="/research-full/:id">
             <FullContent />        
         </Route>        
-     </Switch>
+      </Switch>
+    </FilterContext.Provider>
 
     { pathname === views[ 0 ] ? <Redirect to="/sign-in"/> : requestedView }  
    </div>

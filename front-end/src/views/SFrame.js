@@ -26,7 +26,7 @@ export default function SFrame(props){
 		})
 		.catch(err=>{
 			console.log(err);
-		})	
+		});
 	}, [])
 
 	const reqOpenMenu = () => {

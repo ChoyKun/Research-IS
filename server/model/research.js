@@ -6,7 +6,7 @@ const researchSchema = new Schema({
 	title: String,
 	course: String,
 	researchCategories: String,
-	yearSubmitted: String,
+	yearSubmitted: {type: String, required: true},
 	lead: String,
 	mem1: String,
 	mem2: String,

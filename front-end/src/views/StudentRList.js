@@ -1,6 +1,7 @@
-import React,{useState, useEffect, Suspense} from 'react';
+import React,{useState, useEffect, Suspense, useContext} from 'react';
 import { Link, Redirect,useParams} from 'react-router-dom';
-import axios from '../modules/config.js';
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
 import "../styles/button.css";
 
@@ -8,6 +9,7 @@ import "../styles/button.css";
 import scslogo from "../images/scs-final.png";
 import favorites from "../images/heart.png";
 import profile from "../images/profile.png";
+import FilterContext from '../contexts/filter-context';
 
 // components
 import Button from '../components/buttons/button';
@@ -15,56 +17,70 @@ import Field from '../components/fields/txtfield';
 import SearcBar from '../components/contents/SearchBar';
 import Checkbox from '../components/fields/checkbox';
 
-export default function RListFilter(props){
+
+export default function StudentRList(props){
 	const {username} = useParams();
+	const filter = useContext( FilterContext );
 
 	const [researchData, setResearchData] = useState([]);
 	const [filteredData, setFilteredData] = useState( [] );
-	const [search, setSearch] = useState( null );
-	
-
-
-
+	const [search, setSearch] = useState( '' );
 
 	useEffect(()=>{
-		axios.get('http://localhost:7000/research/rlist')
-		.then((res)=>{
-			res.data.forEach( elem => {
-				console.log( elem.status );
-				if( elem.status === 'public' ){
-					setResearchData((researchData) => [...researchData, elem]);
-				}
+		const getResearchList = async () => {
+			axios.get('http://localhost:7000/research/rlist')
+			.then((res)=>{
+				res.data.forEach( elem => {
+					console.log( elem.status );
+					if( elem.status === 'public' ){
+						setResearchData((researchData) => [...researchData, elem]);
+					}
+				})
 			})
-		})
-		.catch((err)=>{
-			console.log(err)
-		})
+			.catch((err)=>{
+				console.log(err)
+			})
+		}
+
+		getResearchList();
+
+		console.log('hereee mother fucker');
 	},[]);
 
 
-
-
 	useEffect(() => {
-		setFilteredData(researchData?.map?.( object => {
-			if( search ){
-				for( let key of Object.keys( object ) ){
-					// console.log(object)									
-					if(object[key]?.toLowerCase?.()?.startsWith( search?.charAt?.(0)?.toLowerCase?.() )){
+		let result = [];
 
-						return <Item key={object._id} object={object}/>
+		const handleSearch = async () => {
+			researchData.forEach( item =>{
+				if( filter.sFilter ){
+					const { 
+						course,
+						category,
+						yearSubmitted,
+						order,
+						year
+					} = filter.sFilter;
 
-					}
+					// ?course=${course}&category=${category}&yearSubmitted=${yearSubmitted}&order=${order}&year=${year}
+					axios.get(`http://localhost:7000/filter-query/${course}/${category}/${yearSubmitted}/${order}/${year}`)
+					.then( res => {
+						res.data.result.forEach( item => {
+							setFilteredData( filteredData => [...filteredData, <Item key={item._id} object={item}/>] );
+						});
+					})
 				}
-			}
-			else{
+				else if( item.title.toLowerCase().startsWith(search?.[0]?.toLowerCase?.() ?? '') && item.title.toLowerCase().includes(search.toLowerCase())){
+					result.push( <Item key={item._id} object={item}/> );
+				}
+			});
 
-				return <Item key={object._id} object={object} />
-
-			}
+			if( !filter.sFilter ) setFilteredData([ ...result ]);
 		}
-	))
-		// console.log( filteredData )
-	}, [search, researchData])
+
+		handleSearch();			
+
+	}, [search, researchData, filter.sFilter]);
 
 	return(
 		<>
@@ -103,17 +119,34 @@ function Item(props){
 	const [disabled, setDisabled] = useState(false);
 
 	useEffect(()=>{
-		axios.post(`http://localhost:7000/student/slist/disable/${username}/${props.object._id}`)
-		.then((res)=>{
-			setDisabled(true)
-		})
-		.catch((err)=>{
-			console.log(err);
-		})
+		const token = Cookies.get('token');
+
+		const checkFile = async () => {
+			axios.post(`http://localhost:7000/student/slist/disable/${username}/${props.object._id}`, null, {
+				headers: {
+					authorization: `Bearer ${token}`
+				},
+				timeout: 5
+			})
+			.then((res)=>{
+				setDisabled(true)
+			})
+			.catch((err)=>{
+				console.log(err);
+			});
+		}
+
+		checkFile();
 	},[])
 
 	useEffect(() => {
-		axios.get(`http://localhost:7000/student/slist/${username}`)
+		const token = Cookies.get('token'); 
+
+		axios.get(`http://localhost:7000/student/slist/${username}`,{
+			headers: {
+				authorization: `Bearer ${token}`
+			}
+		})
 		.then(res=>{
 			setName(res.data.data);
 		})
@@ -129,8 +162,14 @@ function Item(props){
 	}, [sendPend]);
 
 	useEffect(() => {
+		const token = Cookies.get('token')
+
 		if( pending ){
-			axios.put(`http://localhost:7000/student/slist/pending/${username}`, pending) 
+			axios.put(`http://localhost:7000/student/slist/pending/${username}`, pending,{
+			headers: {
+				authorization: `Bearer ${token}`
+			}
+		}) 
 			.then( res => {
 				console.log( res.data.message );
 				setSendPend( false );
@@ -173,7 +212,13 @@ function Item(props){
 	}
 
 	useEffect(() => {
-		axios.post(`http://localhost:7000/check-research-state/${username}/${props.object._id}`)
+		const token = Cookies.get('token');
+
+		axios.post(`http://localhost:7000/check-research-state/${username}/${props.object._id}`,{
+			headers: {
+				authorization: `Bearer ${token}`
+			}
+		})
 		.then((res)=>{
 			setUrl(`/research-full`)
 		})
@@ -183,29 +228,39 @@ function Item(props){
 	}, [])
 
 
-	useEffect(() => {
-		const checkFile = async () => {
-			axios.get(`http://localhost:7000/check-file/${props.object._id}`)
-			.then( res => {
-				if( res.data.itemState === 'approved' ){
-					setItemState(() => res.data.itemState);
-					
-					axios.delete(`http://localhost:7000/delete-file-req/${props.object._id}`)
-					.catch( err => {
-						console.log( err );
-					});
-				}
-				else{
-					setTimeout(() => checkFile(), 10000);
-				}
-			})
-			.catch( err => {
-				console.log( err );
-			});
-		}
+	// useEffect(() => {
+	// 	const checkFile = async () => {
+	// 		const token =Cookies.get('token')
+	// 		axios.get(`http://localhost:7000/check-file/${props.object._id}`,{
+	// 			headers: {
+	// 				authorization: `Bearer ${token}`
+	// 			}
+	// 		})
+	// 		.then( res => {
+	// 			if( res.data.itemState === 'approved' ){
+	// 				setItemState(() => res.data.itemState);
+	// 				const token = Cookies.get('token');
 
-		if( itemState === 'idle' ) checkFile();
-	}, [itemState]);
+	// 				axios.delete(`http://localhost:7000/delete-file-req/${props.object._id}`,{
+	// 					headers: {
+	// 						authorization: `Bearer ${token}`
+	// 					}
+	// 				})
+	// 				.catch( err => {
+	// 					console.log( err );
+	// 				});
+	// 			}
+	// 			else{
+	// 				setTimeout(() => checkFile(), 10000);
+	// 			}
+	// 		})
+	// 		.catch( err => {
+	// 			console.log( err );
+	// 		});
+	// 	}
+
+	// 	if( itemState === 'idle' ) checkFile();
+	// }, []);
 
 	
 

@@ -51,7 +51,7 @@ const requestAccessToken = ( user ) => {
 // so dapat after 5secs eh di padin sya maglalagout kasi may refresher na tayo
 
 const authentication = ( req, res, next ) => {
-	const authHeader = req.headers['authentication'];
+	const authHeader = req.headers['authorization'];
 
 	console.log( req.url );
 	console.log( authHeader )
@@ -70,6 +70,57 @@ const authentication = ( req, res, next ) => {
 
 app.get('/verify-me', authentication, async(req, res, next) => {
 	return res.sendStatus( 200 );
+});
+
+app.get('/filter-query/:course/:category/:yearSubmitted/:order/:year', async( req, res, next ) => {
+	const { 
+		course,
+		category,
+		yearSubmitted,
+		order,
+		year
+	} = req.params;
+
+	const result = [];
+
+	console.log( course, category, yearSubmitted, order, year );
+	Research.find(
+		{ course: course, yearSubmitted: yearSubmitted }, 
+		null, 
+		{ sort: { 
+			title: order === 'A-Z' ? 1 : -1,
+			yearSubmitted: year === 'Newest' ? 1 : -1
+		}},
+		( err, docs ) => {
+			if( err ) return res.status( 503 ).json({ message:'Server Error' });
+
+			if( docs ){
+				docs.forEach( doc => {
+					JSON.parse( doc.researchCategories )
+					.forEach( categ => {
+						if( category.includes( categ ) ){
+							return result.push( doc );
+						}
+					});
+				});
+
+				return res.json({ result });
+			}
+			else{
+				return res.sendStatus( 403 );
+			}
+		}
+	);
+
+	// let docs = await Research.find({
+	// 	course: course,
+	// 	yearSubmitted: yearSubmitted
+	// })
+	// .sort({ 
+	// 	field: order === 'A-Z' ? 'asc' : 'desc', 
+	// 	test: order === 'A-Z' ? 1 : -1 
+	// });
+	
 });
 
 //Login
@@ -231,7 +282,7 @@ app.post('/student/slist/login', async (req, res, next)=>{
 			return res.status( 401 ).json({message: 'Unauthorized'});
 		}
 
-		console.log( doc );
+		
 
 		return res.status( 200 ).json({message: 'logged-in successfuly'});
 
@@ -349,13 +400,14 @@ app.post('/student/slist/disable/:username/:id',async(req,res,next)=>{
 				return res.status( 200 ).json({ message: 'button is diabled' });		
 			}
 		}
-	})
+
+		return res.sendStatus( 404 );
+	});
 })
 
-app.put('/student/slist/approved/:username', async(req,res,next)=>{ //san mo to tinatwag? StudentRlist
+app.put('/student/slist/approved/:username/:date', async(req,res,next)=>{ //san mo to tinatwag? StudentRlist
 	const studentNo = req.params.username;
-
-	const { date } = req.body;
+	const date = req.params.date;
 
 	const approved = req.body;
 
@@ -363,21 +415,30 @@ app.put('/student/slist/approved/:username', async(req,res,next)=>{ //san mo to 
 		if(err) return res.status( 503 ).json({ message: 'Server Error' });
 
 		if(data){
-			const ind = data.pending.indexOf(approved)
+			const ind = data.pending.indexOf(approved[0])
 			data.pending.splice(ind,1);
-			data.approved.push(...approved);
+			data.approved.push({ id: approved[0], dateApproved: date });
 
-			data.save( err => {
+			fs.readFile( req_view_path, (err, list) => {
 				if(err) return res.status( 503 ).json({ message: 'Server Error' });
 
-				return res.status(200).json({message: 'successfuly added to pending'})
-			})
-			
+				const approvedList = JSON.parse(list).filter( datum => datum.id != approved[0] );
+
+				fs.writeFile( req_view_path, JSON.stringify( approvedList, null, 4 ), err => {
+					if(err) return res.status( 503 ).json({ message: 'Server Error' });
+
+					data.save( err => {
+						if(err) return res.status( 503 ).json({ message: 'Server Error' });
+
+						return res.status(200).json({message: 'successfuly added to pending'})
+					});
+				});
+			});
 		}
 	})
-})
+});
 
-app.put('/student/slist/declined/:username', async(req,res,next)=>{ //san mo to tinatwag? StudentRlist
+app.put('/student/slist/declined/:username', async(req,res,next)=>{
 	const studentNo = req.params.username;
 
 	const { date } = req.body;
@@ -440,21 +501,27 @@ app.get('/student/slist/pending-list/:username', async(req,res,next)=>{
 		if(data){
 			const pendList = [];
 
-			data.pending.forEach(async (_id, index) => {
-				await Research.findOne({_id: _id}, (err,doc)=>{
-					if(err) return res.status(503).json({message: 'Server Error' })
+			if(data.pending.length){
+				data.pending.forEach(async (_id, index) => {
+					await Research.findOne({_id: _id}, (err,doc)=>{
+						if(err) return res.status(503).json({message: 'Server Error' })
 
-					if(doc){
-						pendList.push(doc);
-					}
+						if(doc){
+							pendList.push(doc);
+						}
 
-					if( index === data.pending.length - 1){
-						return res.status(200).json({data: pendList})
-					}
+						if( index === data.pending.length - 1){
+							return res.status(200).json({data: pendList})
+						}
+						else{
+							return res.sendStatus(404);
+						}
+					})
 				})
-			})
-
-
+			}
+			else{
+				return res.sendStatus(404);
+			}
 		}
 	})
 })
@@ -466,24 +533,59 @@ app.get('/student/slist/approved-list/:username', async(req,res,next)=>{
 		if(err) return res.status( 503 ).json({ message: 'Server Error' });
 
 		if(data){
-			console.log(data);
 			const apprList = [];
 
-			data.approved.forEach(async (_id, index) => {
-				await Research.findOne({_id: _id}, (err,doc)=>{
-					if(err) return res.status(503).json({message: 'Server Error' })
+			if(data.approved.length){
+				data.approved.forEach(async (datum, index) => {
+					await Research.findOne({_id: datum.id}, (err,doc)=>{
+						if(err) return res.status(503).json({message: 'Server Error' })
 
-					if(doc){
-						apprList.push(doc);
-					}
+						if(doc){
+							console.log(doc);
 
-					if( index === data.approved.length - 1){
-						return res.status(200).json({data: apprList})
-					}
+							const {
+								_id,
+								title,
+								course,
+								researchCategories,
+								yearSubmitted,
+								state,
+								favorites,
+								PDFFile,
+								lead
+							} = doc;
+
+							apprList.push({ 
+								_id, 
+								title, 
+								course,
+								researchCategories,
+								yearSubmitted,
+								state,
+								favorites,
+								PDFFile,
+								lead,
+								dateApproved: datum.dateApproved
+							});
+
+						}
+
+
+						if( index === data.approved.length - 1){
+							return res.status(200).json({data: apprList})
+						}
+						else{
+							return res.sendStatus(404);
+						}	
+					})
 				})
-			})
-
-
+			}
+			else{
+				return res.sendStatus(404);
+			}	
+		}
+		else{
+			return res.sendStatus(404);
 		}
 	})
 })
@@ -512,7 +614,7 @@ app.post('/student/slist/register', async (req, res , next) =>{
 		Student.find({ studentNo: studentData.studentNo}, (err, doc) => {
 			if(err) return res.status( 503 ).json({ message: 'Server Error' });
 
-			console.log( doc );
+			
 
 			const user = { name : studentData.studentNo };
 			const accessToken = requestAccessToken( user );
@@ -741,11 +843,18 @@ app.delete('/delete-file/:filename', async (req, res, next) => {
 
 //Research List
 app.get('/research/rlist', async (req, res, next) =>{
-	const circularData = await Research.find({});
-	const data = CircularJSON.stringify( circularData );
+	// const circularData = await Research.find({});
+	// const data = CircularJSON.stringify( circularData );
 
-	return res.status( 200 ).json( JSON.parse(data) );
-})
+	// return res.status( 200 ).json( JSON.parse(data) );
+	Research.find({}, (err, doc) => {
+		if( err ) res.sendStatus( 503 );
+
+
+		console.log('hereeee rlist');
+		return res.json( doc );
+	})
+});
 
 app.post('/research/rlist/upload', async (req, res , next) =>{
 	// console.log(req.body);
@@ -766,7 +875,7 @@ app.put('/research/rlist/update', async(req,res,next)=>{
 	const editData = req.body;
 
 	// console.log(  );
-	console.log( editData );
+	// console.log( editData );
 
 	editData.forEach(async (elem) => {
 		Research.findOneAndUpdate({_id: elem._id}, {status: elem.status}, null, ( err ) => {
@@ -790,7 +899,7 @@ app.get('/faculty/flist', async (req, res, next) =>{
 })
 
 app.post('/faculty/flist/register', async (req, res , next) =>{
-	console.log(req.body);
+	// console.log(req.body);
 	const facultyData = req.body;
 
 	const newFaculty = new Faculty(facultyData);
@@ -849,7 +958,7 @@ app.put('/faculty/flist/new-officer', async(req,res,next)=>{
 
 	Faculty.findOne({status:'active'}, (err, docs) => {
 		if( err ) return res.status(503).json({message:'server error'})
-		console.log(docs)
+		// console.log(docs)
 		if( docs ){
 				
 
@@ -865,7 +974,7 @@ app.put('/faculty/flist/new-officer', async(req,res,next)=>{
 })
 
 app.put('/faculty/flist/changeofficer/:username', async (req,res,next)=>{
-	console.log(req.params.username);
+	// console.log(req.params.username);
 
 	// yung username ano yon? ung username ng current kahit ba hindi na need yon? Wait so yung current dapat yung magiging active? inactive meron na siya request sa taas
 
@@ -887,7 +996,7 @@ app.put('/faculty/flist/changeofficer/:username', async (req,res,next)=>{
 	Faculty.find({}, (err, doc) => {
 		if(err)	return res.status(503).json({ message: 'Server Error' })
 
-		console.log( doc ); // try ulit paps
+		//  // try ulit paps
 		if( doc.length ){
 			doc.forEach(doc=>{
 				checkMatch( doc, prevCoor );
@@ -939,7 +1048,7 @@ app.put('/faculty/flist/changepassword/:username', async(req,res,next)=>{
 app.put('/faculty/flist/editprofile/:username', async (req,res,next)=>{
 	const username = req.params.username;
 
-	console.log( req.body );	
+	// console.log( req.body );	
 	const {
 		_username ,
 		_password,
@@ -958,7 +1067,7 @@ app.put('/faculty/flist/editprofile/:username', async (req,res,next)=>{
 
 			
 		if( doc ){
-			console.log( doc );
+			
 			if( match(doc.password, _password) ){
 		
 				doc.username  = _username ?? doc.username;
@@ -991,7 +1100,7 @@ app.put('/faculty/flist/editstudent/:username/:studentNo',async (req,res,next)=>
 
 	const facultyData = Faculty.findOne({username: username})
 
-	console.log( req.body );	
+	// console.log( req.body );	
 	const {_password,_firstName, _middleInitial,_lastName, _extentionName, _birthdate,_course,_yearLevel,_section,_img } =req.body;
 	const { password } = await Faculty.findOne({username: username}).exec();
 
@@ -1001,7 +1110,7 @@ app.put('/faculty/flist/editstudent/:username/:studentNo',async (req,res,next)=>
 
 			
 		if( doc ){
-			console.log( doc );
+			// 
 			console.log(password, _password)
 			if( match(password, _password) ){
 		
@@ -1098,8 +1207,6 @@ app.post('/coordinator/clist/register', async (req, res , next) =>{
 
 		Coordinator.find({ username: coorData.username}, (err, doc) => {
 			if(err) return res.status( 503 ).json({ message: 'Server Error' });
-
-			console.log( doc );
 
 			const user = { name : coorData.username };
 			const accessToken = requestAccessToken( user );
@@ -1206,7 +1313,7 @@ app.put('/coordinator/clist/changecoor/:username', async (req,res,next)=>{
 	Coordinator.find({}, (err, doc) => {
 		if(err)	return res.status(503).json({ message: 'Server Error' })
 
-		console.log( doc ); // try ulit paps
+		 // try ulit paps
 		if( doc.length ){
 			doc.forEach(doc=>{
 				checkMatch( doc, prevCoor );
@@ -1243,7 +1350,7 @@ app.put('/auth-admin/editprofile/:username', async(req,res,next)=>{
 
 		console.log(doc);
 		if( doc ){
-			console.log( doc );
+			
 			if( match(doc.password, _password) ){
 		
 				
@@ -1404,7 +1511,9 @@ app.get('/c-views', async ( req, res, next ) => {
 
 
 app.post('/request-view', async ( req, res, next ) => {
-	const data = req.body.data;	fs.readFile( req_view_path, ( err, reqList ) => {
+	const data = req.body.data;	
+
+	fs.readFile( req_view_path, ( err, reqList ) => {
 		if( err ) return res.sendStatus( 503 );
 
 
@@ -1463,11 +1572,18 @@ app.post('/check-research-state/:username/:id', async (req, res , next )=>{
 				return res.sendStatus(403)
 			}
 		}
-	})
+		else{
+			return res.sendStatus( 404 );
+		}
+	});
+
+
 })
 
 app.post('/clear-requests', async(req,res,next)=>{
 	fs.writeFile( req_view_path, JSON.stringify( [] ), err => {});
-})
+});
+
+
 
 const match = (leftOp, rightOp) => leftOp === rightOp;

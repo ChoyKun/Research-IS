@@ -123,7 +123,7 @@ const Request = ( props ) => {
 
 	useEffect(() => {
 		if( approved ){
-			axios.put(`http://localhost:7000/student/slist/approved/${props.studentID}`, approved) 
+			axios.put(`http://localhost:7000/student/slist/approved/${props.studentID}/${date}`, approved) 
 			.then( res => {
 				console.log( res.data.message );
 				setSendApproved( false );

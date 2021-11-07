@@ -9,7 +9,6 @@ import '../../styles/txt.css';
 export default function SearchBar( props ){
 	const [fieldContent, setFieldContent] = useState(null);
 
-
 	const sendRequest = (e) => {
 		props.setSearch(fieldContent);
 	}
