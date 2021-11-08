@@ -29,5 +29,8 @@
   },
   "devDependencies": {
     "webpack-bundle-tracker": "^1.2.0"
+  },
+  "nodemonConfig": {
+    "ignore": ["data/*"]
   }
 }

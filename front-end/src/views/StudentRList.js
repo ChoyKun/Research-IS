@@ -23,7 +23,7 @@ export default function StudentRList(props){
 	const filter = useContext( FilterContext );
 
 	const [researchData, setResearchData] = useState([]);
-
+	const [filteredData, setFilteredData] = useState([]);
 	const [search, setSearch] = useState( '' );
 
 	useEffect(()=>{
@@ -220,11 +220,7 @@ function Item(props){
 	useEffect(() => {
 		const token = Cookies.get('token');
 
-		axios.post(`http://localhost:7000/check-research-state/${username}/${props.object._id}`,{
-			headers: {
-				authorization: `Bearer ${token}`
-			}
-		})
+		axios.post(`http://localhost:7000/check-research-state/${username}/${props.object._id}`)
 		.then((res)=>{
 			setUrl(`/research-full`)
 		})

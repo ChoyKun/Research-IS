@@ -46,9 +46,9 @@ const token_path = path.join(__dirname, '/data/tokens.json');
 const req_view_path = path.join(__dirname, 'data/view-requests.json');
 
 const requestAccessToken = ( user ) => {
-	return jwt.sign( user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '5s' }); // wait check ko
+	return jwt.sign( user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '24hr' }); // wait check ko
 }
-// so dapat after 5secs eh di padin sya maglalagout kasi may refresher na tayo
+
 
 const authentication = ( req, res, next ) => {
 	const authHeader = req.headers['authorization'];
@@ -451,6 +451,7 @@ app.put('/student/slist/declined/:username', async(req,res,next)=>{
 		if(data){
 			const ind = data.pending.indexOf(declined)
 			data.pending.splice(ind,1);
+			data.declined.push(declined);
 
 			data.save( err => {
 				if(err) return res.status( 503 ).json({ message: 'Server Error' });
@@ -1565,7 +1566,9 @@ app.post('/check-research-state/:username/:id', async (req, res , next )=>{
 		if(err) return res.status(503).json({message:'Server Error'})
 
 		if(doc){
-			if(doc.approved.includes(rID)){
+			console.log(doc.approved)
+			console.log(rID)
+			if(doc.approved.map(elem => elem.id).includes(rID)){
 				return res.sendStatus(200)
 			}
 			else{

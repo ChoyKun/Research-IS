@@ -2,6 +2,7 @@ import React, { useReducer } from 'react';
 import { Redirect } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import axios from 'axios';
+import { SnackbarProvider } from 'notistack';
 
 import FormCard from './components/cards/form-card';
 import AdminAccess from './views/AdminAccess.js';
@@ -168,238 +169,240 @@ function App() {
 
 
   return (
-   <div className="app">
-    <FilterContext.Provider value={{setSFilter: setSFilter, sFilter: sFilter}}>
-      <Switch>
-        <Route path="/admin-profile/:username">
-          <AdminFrame>
-            <AdminProfile />
-          </AdminFrame>
-        </Route>
+    <SnackbarProvider maxSnack={3}>
+       <div className="app">
+        <FilterContext.Provider value={{setSFilter: setSFilter, sFilter: sFilter}}>
+          <Switch>
+            <Route path="/admin-profile/:username">
+              <AdminFrame>
+                <AdminProfile />
+              </AdminFrame>
+            </Route>
 
-        <Route path="/admin-access/:username">
-          <FacultyFrame>
-            <AdminAccess />
-          </FacultyFrame>
-        </Route>
+            <Route path="/admin-access/:username">
+              <FacultyFrame>
+                <AdminAccess />
+              </FacultyFrame>
+            </Route>
 
-        <Route path="/admin-archive/:username">
-          <AdminFrame>
-            <AdminArchive />
-          </AdminFrame>
-        </Route>
+            <Route path="/admin-archive/:username">
+              <AdminFrame>
+                <AdminArchive />
+              </AdminFrame>
+            </Route>
 
-        <Route path="/admin-edit-profile/:username">
-          <AdminFrame>
-            <AdminEditProfile />
-          </AdminFrame>
-        </Route>
+            <Route path="/admin-edit-profile/:username">
+              <AdminFrame>
+                <AdminEditProfile />
+              </AdminFrame>
+            </Route>
 
-        <Route path="/admin-changepass/:username">
-          <AdminFrame>
-            <AdminChangepass />
-          </AdminFrame>
-        </Route>
+            <Route path="/admin-changepass/:username">
+              <AdminFrame>
+                <AdminChangepass />
+              </AdminFrame>
+            </Route>
 
-        <Route path="/admin-log-in/:username">
-          <FacultyFrame>
-            <AdminLogin />
-          </FacultyFrame>
-        </Route>
+            <Route path="/admin-log-in/:username">
+              <FacultyFrame>
+                <AdminLogin />
+              </FacultyFrame>
+            </Route>
 
-        <Route path="/admin-reg/:username">
-          <AdminFrame>
-            <AdminReg />
-          </AdminFrame>
-        </Route>
+            <Route path="/admin-reg/:username">
+              <AdminFrame>
+                <AdminReg />
+              </AdminFrame>
+            </Route>
 
-        <Route path="/admin-request/:username">
-          <AdminFrame>
+            <Route path="/admin-request/:username">
+              <AdminFrame>
 
-            <AdminRequest />
+                <AdminRequest />
 
-          </AdminFrame>
-        </Route>
+              </AdminFrame>
+            </Route>
 
-        <Route path="/admin-new-coor">
-          <AdminFrame>
-            <AdminNewCoor />
-          </AdminFrame>
-        </Route>
+            <Route path="/admin-new-coor">
+              <AdminFrame>
+                <AdminNewCoor />
+              </AdminFrame>
+            </Route>
 
-        <Route path="/admin-coor-list/:username">
-          <AdminFrame>
-            <AdminCList />
-          </AdminFrame>
-        </Route>
+            <Route path="/admin-coor-list/:username">
+              <AdminFrame>
+                <AdminCList />
+              </AdminFrame>
+            </Route>
 
-        <Route path="/admin-current-officer/:username">
-          <AdminFrame>
-            <AdminCO />
-          </AdminFrame>
-        </Route>
+            <Route path="/admin-current-officer/:username">
+              <AdminFrame>
+                <AdminCO />
+              </AdminFrame>
+            </Route>
 
-        <Route exact path="/admin-rlist/:username">
-          <AdminFrame>
-            <AdminRlist />
-          </AdminFrame>
-        </Route>
+            <Route exact path="/admin-rlist/:username">
+              <AdminFrame>
+                <AdminRlist />
+              </AdminFrame>
+            </Route>
 
-        <Route exact path="/admin-slist/:username">
-          <AdminFrame>
-            <AdminSList />
-          </AdminFrame>
-        </Route>
+            <Route exact path="/admin-slist/:username">
+              <AdminFrame>
+                <AdminSList />
+              </AdminFrame>
+            </Route>
 
-        <Route exact path="/admin-sapproved/:username/:studentNo">
-          <AdminFrame>
-            <AdminSApproved />
-          </AdminFrame>
-        </Route>
+            <Route exact path="/admin-sapproved/:username/:studentNo">
+              <AdminFrame>
+                <AdminSApproved />
+              </AdminFrame>
+            </Route>
 
-        <Route exact path="/admin-inactive-slist/:username">
-          <AdminFrame>
-            <AdminInactiveSList />
-          </AdminFrame>
-        </Route>
+            <Route exact path="/admin-inactive-slist/:username">
+              <AdminFrame>
+                <AdminInactiveSList />
+              </AdminFrame>
+            </Route>
 
-        <Route exact path="/admin-flist/:username">
-          <AdminFrame>
-            <AdminFList />
-          </AdminFrame>
-        </Route>
+            <Route exact path="/admin-flist/:username">
+              <AdminFrame>
+                <AdminFList />
+              </AdminFrame>
+            </Route>
 
-        <Route path="/admin-upload/:username">
-          <AdminFrame>
-            <AdminUpload />
-          </AdminFrame>
-        </Route>
+            <Route path="/admin-upload/:username">
+              <AdminFrame>
+                <AdminUpload />
+              </AdminFrame>
+            </Route>
 
-        <Route path="/MIS-reg/:username">
-          <FacultyFrame>
-            <FacultyReg />
-          </FacultyFrame>
-        </Route>
+            <Route path="/MIS-reg/:username">
+              <FacultyFrame>
+                <FacultyReg />
+              </FacultyFrame>
+            </Route>
 
-        <Route path="/emergency-admin">
-          <FacultyFrame>
-            <EmergencyAdmin />
-          </FacultyFrame>
-        </Route>
+            <Route path="/emergency-admin">
+              <FacultyFrame>
+                <EmergencyAdmin />
+              </FacultyFrame>
+            </Route>
 
-        <Route path="/MIS-profile/:username">
-          <FacultyFrame>
-            <FacultyProfile />
-          </FacultyFrame>
-        </Route>
+            <Route path="/MIS-profile/:username">
+              <FacultyFrame>
+                <FacultyProfile />
+              </FacultyFrame>
+            </Route>
 
-        <Route path="/MIS-edit-profile/:username">
-          <FacultyFrame>
-            <FacultyEditProfile />
-          </FacultyFrame>
-        </Route>
+            <Route path="/MIS-edit-profile/:username">
+              <FacultyFrame>
+                <FacultyEditProfile />
+              </FacultyFrame>
+            </Route>
 
-        <Route path="/MIS-edit-student/:username/:studentNo">
-          <FacultyFrame>
-            <FacultyEditStudent />
-          </FacultyFrame>
-        </Route>
+            <Route path="/MIS-edit-student/:username/:studentNo">
+              <FacultyFrame>
+                <FacultyEditStudent />
+              </FacultyFrame>
+            </Route>
 
-        <Route path="/MIS-changepass/:username">
-          <FacultyFrame>
-            <FacultyChangepass />
-          </FacultyFrame>
-        </Route>
+            <Route path="/MIS-changepass/:username">
+              <FacultyFrame>
+                <FacultyChangepass />
+              </FacultyFrame>
+            </Route>
 
-        <Route path="/MIS-slist/:username">
-          <FacultyFrame>
-            <FacultySList />
-          </FacultyFrame>
-        </Route>
+            <Route path="/MIS-slist/:username">
+              <FacultyFrame>
+                <FacultySList />
+              </FacultyFrame>
+            </Route>
 
-         <Route path="/MIS-inactive-slist/:username">
-          <FacultyFrame>
-            <FacultyInactiveSList />
-          </FacultyFrame>
-        </Route>
+             <Route path="/MIS-inactive-slist/:username">
+              <FacultyFrame>
+                <FacultyInactiveSList />
+              </FacultyFrame>
+            </Route>
 
-        <Route path="/sign-in">
-          <Login />
-        </Route>
+            <Route path="/sign-in">
+              <Login />
+            </Route>
 
-        <Route path="/m-rlist">
-          <MFrame>
-            <MobileRList />
-          </MFrame>
-        </Route>
+            <Route path="/m-rlist">
+              <MFrame>
+                <MobileRList />
+              </MFrame>
+            </Route>
 
-        <Route path="/m-rlistfilter">
-          <MFrame>
-            <MobileRListFilter />
-          </MFrame>
-        </Route>
+            <Route path="/m-rlistfilter">
+              <MFrame>
+                <MobileRListFilter />
+              </MFrame>
+            </Route>
 
-        <Route path="/m-changepass">
-          <MFrame>
-            <MobileStudentChangePass />
-          </MFrame>
-        </Route>
+            <Route path="/m-changepass">
+              <MFrame>
+                <MobileStudentChangePass />
+              </MFrame>
+            </Route>
 
-        <Route path="/rlist-filter">
-          <EmptyFrame>
-            <RListFilter setSFilter={setSFilter}/>
-          </EmptyFrame>
-        </Route>
+            <Route path="/rlist-filter">
+              <EmptyFrame>
+                <RListFilter setSFilter={setSFilter}/>
+              </EmptyFrame>
+            </Route>
 
-        <Route path="/slist-filter">
-          <EmptyFrame>
-            <SListFilter />
-          </EmptyFrame>
-        </Route>
+            <Route path="/slist-filter">
+              <EmptyFrame>
+                <SListFilter />
+              </EmptyFrame>
+            </Route>
 
-        <Route path="/student-changepass/:username">
-          <SFrame>          
-            <StudentChangePass />
-          </SFrame>
-        </Route>
+            <Route path="/student-changepass/:username">
+              <SFrame>          
+                <StudentChangePass />
+              </SFrame>
+            </Route>
 
-        <Route path="/student-rlist/:username">
-          
-          <SFrame >
-            <StudentRList />
-          </SFrame>
-        </Route>
+            <Route path="/student-rlist/:username">
+              
+              <SFrame >
+                <StudentRList />
+              </SFrame>
+            </Route>
 
-        <Route path="/student-approved/:username">
-          <SFrame>
-            <StudentApproved />
-          </SFrame>
-        </Route>
+            <Route path="/student-approved/:username">
+              <SFrame>
+                <StudentApproved />
+              </SFrame>
+            </Route>
 
-        <Route path="/student-pending/:username">
-          <SFrame>
-            <StudentPending />
-          </SFrame>
-        </Route>
+            <Route path="/student-pending/:username">
+              <SFrame>
+                <StudentPending />
+              </SFrame>
+            </Route>
 
-        <Route path="/student-profile/:username">
-          <SFrame>
-            <StudentProfile />
-          </SFrame>
-        </Route>
+            <Route path="/student-profile/:username">
+              <SFrame>
+                <StudentProfile />
+              </SFrame>
+            </Route>
 
-        <Route path="/research-abstract/:id">
-            <AbstractView />        
-        </Route>
+            <Route path="/research-abstract/:id">
+                <AbstractView />        
+            </Route>
 
-        <Route path="/research-full/:id">
-            <FullContent />        
-        </Route>        
-      </Switch>
-    </FilterContext.Provider>
+            <Route path="/research-full/:id">
+                <FullContent />        
+            </Route>        
+          </Switch>
+        </FilterContext.Provider>
 
-    { pathname === views[ 0 ] ? <Redirect to="/sign-in"/> : requestedView }  
-   </div>
+        { pathname === views[ 0 ] ? <Redirect to="/sign-in"/> : requestedView }  
+       </div>
+       </SnackbarProvider>
   );
   
 }
