@@ -42,8 +42,6 @@ export default function StudentRList(props){
 			})
 		}
 		getResearchList();
-
-		console.log('hereee mother fucker');
 	},[]);
 
 
@@ -51,35 +49,43 @@ export default function StudentRList(props){
 		let result = [];
 
 		const handleSearch = async () => {
-			researchData.forEach( item =>{
-				if( filter.sFilter ){
-					const { 
-						course,
-						category,
-						yearSubmitted,
-						order,
-						year
-					} = filter.sFilter;
 
-					// ?course=${course}&category=${category}&yearSubmitted=${yearSubmitted}&order=${order}&year=${year}
-					axios.get(`http://localhost:7000/filter-query/${course}/${category}/${yearSubmitted}/${order}/${year}`)
-					.then( res => {
-						res.data.result.forEach( item => {
-							setFilteredData( filteredData => [...filteredData, <Item key={item._id} object={item}/>] );
-						});
-					})
-				}
-				else if( item.title.toLowerCase().startsWith(search?.[0]?.toLowerCase?.() ?? '') && item.title.toLowerCase().includes(search.toLowerCase())){
-					result.push( <Item key={item._id} object={item}/> );
-				}
-			});
+			if( filter.sFilter ){		
+				const { 
+					course,
+					category,
+					yearSubmitted,
+					order,
+					year
+				} = filter.sFilter;
+
+				// ?course=${course}&category=${category}&yearSubmitted=${yearSubmitted}&order=${order}&year=${year}
+				axios.get(`http://localhost:7000/filter-query/${course}/${category}/${yearSubmitted}/${order}/${year}`)
+				.then( res => {
+					res.data.result.forEach( item => {
+						result.push(<Item key={item._id} object={item}/>);
+					});
+
+					setFilteredData([...result]);
+				})
+			}
 
 			if( !filter.sFilter ) setFilteredData([ ...result ]);
 		}
 
 		handleSearch();			
 
-	}, [search, researchData, filter.sFilter]);
+	}, [researchData, filter.sFilter]);
+
+	useEffect(()=>{
+		if(!filter.sFilter){
+			researchData.forEach( item =>{
+				if( item.title.toLowerCase().startsWith(search?.[0]?.toLowerCase?.() ?? '') && item.title.toLowerCase().includes(search.toLowerCase())){
+					setFilteredData( filteredData => [...filteredData, <Item key={item._id} object={item}/>] );
+				}
+			})		
+		}
+	},[search, researchData]);
 
 	return(
 		<>

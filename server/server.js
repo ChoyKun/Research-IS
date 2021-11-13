@@ -111,16 +111,6 @@ app.get('/filter-query/:course/:category/:yearSubmitted/:order/:year', async( re
 			}
 		}
 	);
-
-	// let docs = await Research.find({
-	// 	course: course,
-	// 	yearSubmitted: yearSubmitted
-	// })
-	// .sort({ 
-	// 	field: order === 'A-Z' ? 'asc' : 'desc', 
-	// 	test: order === 'A-Z' ? 1 : -1 
-	// });
-	
 });
 
 //Login
