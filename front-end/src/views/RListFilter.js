@@ -107,10 +107,10 @@ export default function RListFilter(props){
 								<Field type="number" placeHolder='ex. 2001' reqOnChange={e => dispatch({type: 'yearSubmitted', data: e.target.value})}/>
 							</div>
 							<div style={{width:'20%', color:'black'}}>
-								<Select className='sfilterAlphabetical' label='Sort from:' options={['A-Z','Z-A']}/>
+								<Select className='sfilterAlphabetical' label='Sort from:' options={['A-Z','Z-A']}reqOnChange={e => dispatch({type: 'order', data: e.target.value})}/>
 							</div>
 							<div style={{width:'30%', color:'black'}}>
-								<Select className='sfilterYear' label='Sort by year:' options={['Newest','Oldest']}/>
+								<Select className='sfilterYear' label='Sort by year:' options={['Newest','Oldest']} reqOnChange={e => dispatch({type: 'year', data: e.target.value})}/>
 							</div>
 						</div>
 						<div style={{height:'20%',width: '100%'}}>

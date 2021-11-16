@@ -1,4 +1,4 @@
-import React,{useState, useRef, useEffect, Suspense, useReducer} from 'react';
+import React,{useState, useRef, useEffect, Suspense, useReducer, useContext	} from 'react';
 import { Link, useParams} from 'react-router-dom';
 import axios from '../modules/config.js';
 
@@ -7,6 +7,8 @@ import scslogo from "../images/scs-final.png";
 import favorites from "../images/heart.png";
 import profile from "../images/profile.png";
 import lock from "../images/lock.png"
+import FilterContext from '../contexts/filter-context';
+
 
 //styles
 import '../styles/button.css';
@@ -19,12 +21,14 @@ import SearcBar from '../components/contents/SearchBar';
 import Checkbox from '../components/fields/checkbox';
 
 
+
 export default function FacultyRList(props){
 	const {username} = useParams();
+	const filter = useContext( FilterContext );
 
 	const [studentData, setStudentData] = useState( [] );
 	const [filteredData, setFilteredData] = useState(null);
-	const [search, setSearch]=useState(null);
+	const [search, setSearch]=useState('');
 	const [sendInactive, setSendInactive] = useState(false);
 	const [inacAccum, setInacAccum]= useState([])
 
@@ -43,38 +47,61 @@ export default function FacultyRList(props){
 
 	const [selected, selectedDispatch] = useReducer(reducer, {item: null, data: null});
 
-	useEffect(() => {
-		axios.get('http://localhost:7000/student/slist')
-		.then( res => {
-			res.data.forEach( elem => {
-				if( elem.status === 'active' ){
-					setStudentData((studentData) => [...studentData, elem]);
-				}
-			})
-		})
-		.catch( err => {
-			console.log( err );
-		})
-	}, [])
-
 	useEffect(()=>{
-		if( studentData.length	){
-			console.log( studentData );
-			setFilteredData(studentData.map(object =>{
-				if(search){
-					for(let key of Object.keys(object)){
-						if(object[key]?.toLowerCase?.()?.startsWith?.(search?.charAt?.(0).toLowerCase?.())){
-							console.log(object);
-							return<Item key={object._id} object={object} dispatch={selectedDispatch}/>
-						}
+		const getStudentList = async () => {
+			axios.get('http://localhost:7000/student/slist')
+			.then((res)=>{
+				res.data.forEach( elem => {
+					console.log( elem.status );
+					if( elem.status === 'active' ){
+						setStudentData((studentData) => [...studentData, elem]);
 					}
-				}
-				else{
-					return <Item key={object._id} object={object} dispatch={selectedDispatch}/>
-				}
-			}))
+				})
+			})
+			.catch((err)=>{
+				console.log(err)
+			})
 		}
-	},[search, studentData])
+		getStudentList();
+	},[]);
+
+	useEffect(() => {
+		let result = [];
+
+		const handleSearch = async () => {
+			
+			if( filter.sFilter ){
+				const { 
+					course,
+					section,	
+					yearLevel,
+					order
+				} = filter.sFilter;
+
+				// ?course=${course}&category=${category}&yearSubmitted=${yearSubmitted}&order=${order}&year=${year}
+				axios.get(`http://localhost:7000/student-filter-query/${course}/${section}/${yearLevel}/${order}`)
+				.then( res => {
+					res.data.result.forEach( item => {
+						result.push(<Item key={item._id} object={item}/>);
+					});
+
+					setFilteredData([...result]);
+				})
+			}
+			else if(!filter.sFilter){
+				studentData.forEach( item =>{
+					if( (item.firstName.toLowerCase().startsWith(search?.[0]?.toLowerCase?.() ?? '') || item.lastName.toLowerCase().startsWith(search?.[0]?.toLowerCase?.() ?? '')) && (item.firstName.toLowerCase().includes(search.toLowerCase()) || item.lastName.toLowerCase().includes(search.toLowerCase()))){
+						result.push( <Item key={item._id} object={item}/> );
+					}
+				});
+
+				setFilteredData([...result]);
+			}
+		}
+
+		handleSearch();			
+
+	}, [search, studentData, filter.sFilter]);
 
 	useEffect(()=>{
 		if( sendInactive ){
@@ -128,7 +155,7 @@ export default function FacultyRList(props){
 				<Link to={`/MIS-reg/${username}`}><Button style={{height:'50px',width:'200px'}} title='Register New Student'/></Link>					
 			</div>
 			<div style={{height:'13%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center flex-column">
-				<SearcBar location='/slist-filter'/>
+				<SearcBar location='/slist-filter' setSearch={setSearch} placeHolder={'Enter First Name or Last Name'}/>
 				<div style={{height:'20%', width:'30%'}}className="d-flex flex-row justify-content-between flex-row-reverse">
 					<Button style={{height: '30px',width:'100px'}} title='Deactivate' click={sender}/>
 					<Link to ={`/MIS-edit-student/${username}/${selected?.data?.studentNo}`}><Button style={{height: '30px',width:'100px'}} title='Edit'/></Link>		
@@ -170,9 +197,9 @@ function Item(props){ //getData
 			<div className="col-1 text-center"><Checkbox reqOnChange={handleOnChange}/></div>
 			<div className="col-1 text-center">{props.object.studentNo}</div>
 			<div className="col-1 text-center">{props.object.password}</div>
+			<div className="col-1 text-center">{props.object.lastName}</div>
 			<div className="col-1 text-center">{props.object.firstName}</div>
 			<div className="col-1 text-center">{props.object.middleInitial}</div>
-			<div className="col-1 text-center">{props.object.lastName}</div>
 			<div className="col-1 text-center">{props.object.extentionName ?? "N/A"}</div>
 			<div className="col-1 text-center">{(() => {
 											const date = new Date(props.object.birthdate);

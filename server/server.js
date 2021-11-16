@@ -113,6 +113,43 @@ app.get('/filter-query/:course/:category/:yearSubmitted/:order/:year', async( re
 	);
 });
 
+app.get('/student-filter-query/:course/:section/:yearLevel/:order', async( req, res, next ) => {
+	const { 
+		course,
+		section,
+		yearLevel,
+		order
+	} = req.params;
+
+	console.log( course, section, yearLevel, order );
+	const result = [];
+
+
+	Student.find(
+		{ course: course, section:section }, 
+		null, 
+		{ sort: { 
+			lastName: order === 'A-Z' ? 1 : -1,
+			yearLevel: yearLevel === '1-4' ? 1 : -1
+		}},
+		( err, docs ) => {
+			if( err ) return res.status( 503 ).json({ message:'Server Error' });
+
+			if( docs ){
+				docs.forEach( doc => {
+					return result.push( doc );
+				});
+				console.log(result);
+
+				return res.json({ result });
+			}
+			else{
+				return res.sendStatus( 403 );
+			}
+		}
+	);
+});
+
 //Login
 app.post('/sign-in', async(req,res,next)=>{
 	const { _username, _password, _label } = req.body;
@@ -257,10 +294,13 @@ app.get('/faculty/flist/:username', async(req, res, next)=>{
 
 // Student List
 app.get('/student/slist', async (req, res, next) =>{
-	const circularData = await Student.find({});
-	const data = CircularJSON.stringify( circularData );
+	Student.find({}, (err, doc) => {
+		if( err ) res.sendStatus( 503 );
 
-	return res.status( 200 ).json( JSON.parse(data) );
+
+		console.log('hereeee rlist');
+		return res.json( doc );
+	})
 })
 
 
@@ -701,9 +741,12 @@ app.put('/upload-picture/:username', async (req, res, next) => {
 		    if( err ) return res.sendStatus( 503 );
 
 			image.mv( destination_path, async (err) => {
-			    if( err ) return res.status( 503 );
-
-				return res.status( 200 ).json({ path: `/images/${image_name}` });    
+			    if( err ){
+			    	return res.status( 503 );
+			    }
+			    else{
+			    	return res.status( 200 ).json({ path: `/images/${image_name}` });    
+			    }
 			});
 		});
 	}

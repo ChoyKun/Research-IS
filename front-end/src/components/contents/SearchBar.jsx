@@ -20,7 +20,7 @@ export default function SearchBar( props ){
 	return(
 		<div style={{height:'10%', width:'100%'}} className="search-bar d-flex flex-row justify-content-around align-items-center">
 			<Button style={{height: '30px',width:'100px',backgroundColor:'#385723',color: 'white'}} click={sendRequest} title="Search"/>
-			<Field style={{width:'700px'}} className={props.className} reqOnChange={linkToButton}/>
+			<Field style={{width:'700px'}} className={props.className} reqOnChange={linkToButton} placeHolder={props.placeHolder}/>
 			<Link to={props.location}>
 				Add filter
 			</Link>

@@ -64,7 +64,7 @@ export default function FacultyProfile(props){
 						</div>
 						<div style={{height:'40%',width:'100%',color:'black'}} className='d-flex justify-content-center flex-column'>
 							{adminData?.map?.( object=>(
-								<div onClick={() => console.log('clicked')} key={adminData.indexOf(object)} className="d-flex flex-column justify-content-start">
+								<div key={adminData.indexOf(object)} className="d-flex flex-column justify-content-start">
 									<div style={{height:'40%',width:'50%'}} className='d-flex flex-row justify-content-start'>
 										<label style={{fontSize:'20px'}}>Name:</label>
 										<label style={{fontSize:'20px'}}>{name ?? 'Loading'}</label> 
