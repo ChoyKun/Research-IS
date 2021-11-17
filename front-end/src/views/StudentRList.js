@@ -92,31 +92,16 @@ export default function StudentRList(props){
 	console.log(filter.sFilter)
 
 	const removeFilter = async () =>{	
-        filter.setSFilter(null);
-
-        console.log(filter.sFilter)
+        window.location.reload();
 	}
 
-	const addElements = async () =>{
-		researchData.forEach( item =>{
-			if( item.title.toLowerCase().startsWith(search?.[0]?.toLowerCase?.() ?? '') && item.title.toLowerCase().includes(search.toLowerCase())){
-				setFilteredData( filteredData => [...filteredData, <Item key={item._id} object={item}/>] );
-			}
-		})
-	}
-
-	const remove = async () =>{
-		removeFilter();
-
-		await addElements();
-	}
 
 	return(
 		<>
 			<div style={{height:'20%', width:'100% !important'}}className="d-flex flex-column justify-content-around align-items-center">
 				<SearcBar location='/rlist-filter' setSearch={setSearch} placeHolder={'Enter Title Here'}/>
 				<div style={{height:'20%', width:'90%'}}className="d-flex flex-row justify-content-end flex-row">
-					<Button style={{height: '30px',width:'150px'}} title='Remove Filter' click={remove}/>
+					<Button style={{height: '30px',width:'150px'}} title='Remove Filter' click={removeFilter}/>
 				</div>			
 			</div>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>

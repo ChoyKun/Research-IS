@@ -23,6 +23,10 @@ import SearcBar from '../components/contents/SearchBar';
 export default function FacultyEditProfile(props){
 
 	const {username} = useParams();
+
+	const [selectedImage, setSelectedImage] = useState(null);
+
+
 	
 
 	const state={
@@ -73,6 +77,13 @@ export default function FacultyEditProfile(props){
 
 	const [data,dispatch] = useReducer(reducer, state);
 
+	const handleChangePhoto = async (e) => {
+		const image = e.target.files[0];
+		const formData = new FormData();
+
+		formData.append('MISImg', image );
+	}
+
 	const handler =()=>{
 		const send = window.confirm("Do you want to update your profile?");
 		if(send == true){
@@ -120,6 +131,8 @@ export default function FacultyEditProfile(props){
 		return formated;
     }
 
+
+
 	return(
 		<>
 			<div style={{height:'8%', width:'100%', backgroundColor:'#385723', color:'white'}} className='d-flex justify-content-center align-items-center'>
@@ -135,7 +148,7 @@ export default function FacultyEditProfile(props){
 					<div style={{height:'95%', width:'95%'}} className='d-flex justify-content-around flex-column'>
 						<div style={{height:'40%',width:'100%'}} className='d-flex justify-content-start'>
 							<div style={{height:'100%',width:'225px', border:'1px solid black'}}>
-								<Image active={true} username={username}/>
+								<img className="image-img loading" width="100%" height="100%"/>
 							</div>
 						</div>
 						<div style={{height:'8%',width:'20%'}} className='d-flex justify-content-start'>

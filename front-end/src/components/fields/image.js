@@ -6,6 +6,7 @@ import '../../styles/image.css';
 const Image = ( props ) => {
 	const [isVisible, setIsVisible] = useState( false );
 	const [newImage, setNewImage] = useState( null );
+	const [image, setImage]= useState(null);
 
 	const handleMouseOver = () => setIsVisible( true );
 	const handleMouseLeave = () => setIsVisible( false );
@@ -25,17 +26,15 @@ const Image = ( props ) => {
 		});
 	}
 
-	const getPhoto = async () => {
-		await axios.get(`http://localhost:7000/picture/${props.username}`)
+	useEffect(() =>{
+		axios.get(`http://localhost:7000/picture/${props.username}`)
 		.then( res => {
-			setNewImage( () => res.data.path );			
+			setImage( () => res.data.path );			
 		})
 		.catch( err => {
 			console.log( err );
 		});
-	}
-
-	useEffect(() => getPhoto(), []);
+	}, []);
 
 	return(
 		<div 

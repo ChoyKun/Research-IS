@@ -696,18 +696,6 @@ app.get('/picture/:username', async (req, res, next) => {
 		}
 	});
 
-	Student.findOne({username: reqUsername}, (err, doc) => {
-		if( err ) return res.sendStatus( 503 );
-
-		if( doc ){
-			doc.save( err => {
-			    if( err ) return res.sendStatus( 503 );
-
-				return res.status( 200 ).json({ path: doc.img });    
-			});
-		}
-	});
-
 	Faculty.findOne({username: reqUsername}, (err, doc) => {
 		if( err ) return res.sendStatus( 503 );
 
@@ -752,17 +740,28 @@ app.put('/upload-picture/:username', async (req, res, next) => {
 	}
 
 	Faculty.findOne({username: reqUsername}, (err, doc) => {
-		if( err ) return res.sendStatus( 503 );
+		if( err ) {
+			console.log("here err 1")
+			return res.sendStatus( 503 );
+		}
 
 		if( doc ){
+			console.log("here1")
 			if( doc.img ){
+				console.log("here2")
 				fs.readdir( images_path, (err, files) => {
-					if( err ) return res.status( 503 );
+					if( err ) {
+						console.log("here err 2")
+						return res.status( 503 );
+					}
 
 					files.forEach( async (file) => {
 						if( doc.img === `/images/${file}` ){
 							fs.unlink( path.join( images_path, '/',file), (err) => {
-								if( err ) return res.status( 503 );
+								if( err ) {
+									console.log("here err 3")
+									return res.status( 503 );
+								}
 
 								updateImage( doc );
 							});
@@ -777,31 +776,6 @@ app.put('/upload-picture/:username', async (req, res, next) => {
 	});
 
 	Coordinator.findOne({username: reqUsername}, (err, doc) => {
-		if( err ) return res.sendStatus( 503 );
-
-		if( doc ){
-			if( doc.img ){
-				fs.readdir( images_path, (err, files) => {
-					if( err ) return res.status( 503 );
-
-					files.forEach( async (file) => {
-						if( doc.img === `/images/${file}` ){
-							fs.unlink( path.join( images_path, '/',file), (err) => {
-								if( err ) return res.status( 503 );
-
-								updateImage( doc );
-							});
-						}
-					});
-				});
-			}
-			else{
-				updateImage( doc );
-			}
-		}
-	});
-
-	Student.findOne({username: reqUsername}, (err, doc) => {
 		if( err ) return res.sendStatus( 503 );
 
 		if( doc ){
@@ -1113,8 +1087,6 @@ app.put('/faculty/flist/editprofile/:username', async (req,res,next)=>{
 				doc.dateRegistered = _dateRegistered ?? doc.dateRegistered;
 				doc.img = _img ?? doc.img;
 
-
-				// may nakalimutan pala ako WAHAHAH
 				doc.save( err => {
 					if(err)	return res.status(503).json({ message: 'Server Error' })
 					

@@ -66,7 +66,7 @@ export default function FacultyProfile(props){
 					<div style={{height:'95%', width:'95%'}} className='d-flex justify-content-around align-items-center flex-column'>
 						<div style={{height:'40%',width:'100%'}} className='d-flex justify-content-start'>
 							<div style={{height:'100%',width:'225px', border:'1px solid black'}}> 
-								<Image username={username}/>
+								
 							</div>
 						</div>
 						<div style={{height:'40%',width:'100%',color:'black'}} className='d-flex justify-content-center flex-column'>
