@@ -746,9 +746,7 @@ app.put('/upload-picture/:username', async (req, res, next) => {
 		}
 
 		if( doc ){
-			console.log("here1")
 			if( doc.img ){
-				console.log("here2")
 				fs.readdir( images_path, (err, files) => {
 					if( err ) {
 						console.log("here err 2")
@@ -1056,7 +1054,11 @@ app.put('/faculty/flist/changepassword/:username', async(req,res,next)=>{
 app.put('/faculty/flist/editprofile/:username', async (req,res,next)=>{
 	const username = req.params.username;
 
-	// console.log( req.body );	
+	const image = req.files._img;
+	const image_name = `client-pic-${new Date().getMilliseconds()}.png`
+	const destination_path = path.join( images_path, image_name );
+	docu.img = `/images/${image_name}`;
+
 	const {
 		_username ,
 		_password,
@@ -1066,18 +1068,35 @@ app.put('/faculty/flist/editprofile/:username', async (req,res,next)=>{
 		_extentionName,
 		_birthdate,
 		_dateRegistered,
-		_img,
 	} =req.body;
-
 
 	Faculty.findOne({username: username}, (err, doc) => {
 		if(err)	return res.status(503).json({ message: 'Server Error' })
 
 			
 		if( doc ){
-			
 			if( match(doc.password, _password) ){
-		
+
+				if( doc.img ){
+					fs.readdir( images_path, (err, files) => {
+						if( err ) {
+							console.log("here err 2")
+							return res.status( 503 );
+						}
+
+						files.forEach( async (file) => {
+							if( doc.img === `/images/${file}` ){
+								fs.unlink( path.join( images_path, '/',file), (err) => {
+									if( err ) {
+										console.log("here err 3")
+										return res.status( 503 );
+									}
+								});
+							}
+						});
+					});
+				}
+
 				doc.username  = _username ?? doc.username;
 				doc.firstName = _firstName ?? doc.firstName;
 				doc.middleInitial = _middleInitial ?? doc.middleInitial;
@@ -1085,12 +1104,18 @@ app.put('/faculty/flist/editprofile/:username', async (req,res,next)=>{
 				doc.extentionName = _extentionName ?? doc.extentionName;
 				doc.birthdate = _birthdate ?? doc.birthdate;
 				doc.dateRegistered = _dateRegistered ?? doc.dateRegistered;
-				doc.img = _img ?? doc.img;
 
 				doc.save( err => {
 					if(err)	return res.status(503).json({ message: 'Server Error' })
 					
-					return res.status(200).json({message:'Saved successfully'})
+					image.mv( destination_path, async (err) => {
+					    if( err ){
+					    	return res.status( 503 );
+					    }
+					    else{
+					    	return res.status( 200 ).json({ path: `/images/${image_name}` });    
+					    }
+					});
 				});
 			}
 			else{

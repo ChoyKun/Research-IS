@@ -24,10 +24,6 @@ export default function FacultyEditProfile(props){
 
 	const {username} = useParams();
 
-	const [selectedImage, setSelectedImage] = useState(null);
-
-
-	
 
 	const state={
 		_username:null ,
@@ -38,8 +34,11 @@ export default function FacultyEditProfile(props){
 		_extentionName:null,
 		_birthdate:null,
 		_dateRegistered:null,
-		_img:null,
+		_img:'',
 	}
+
+	const [newImage, setNewImage] = useState(null);
+	
 
 	const [facultyData, setFacultyData] = useState([]);
 
@@ -75,14 +74,25 @@ export default function FacultyEditProfile(props){
 		}
 	}
 
-	const [data,dispatch] = useReducer(reducer, state);
+	const imageOnChange = (e)=>{
 
-	const handleChangePhoto = async (e) => {
-		const image = e.target.files[0];
-		const formData = new FormData();
+		const file = e.target.files[0]
+		var reader = new FileReader();
+  		var url = reader.readAsDataURL(file);
+		console.log(e.target.files[0]);
 
-		formData.append('MISImg', image );
+		reader.onloadend = function (e) {
+			setNewImage(reader.result)
+		}
+
+		console.log(url)
+
+
+
+		dispatch({type:'_img',data: e.target.files[0]})
 	}
+
+	const [data,dispatch] = useReducer(reducer, state);
 
 	const handler =()=>{
 		const send = window.confirm("Do you want to update your profile?");
@@ -116,6 +126,10 @@ export default function FacultyEditProfile(props){
 		})
 	},[]);
 
+	
+
+	console.log(state);
+
 
 	const getDateFrom = ( dateString ) => {
     	const date = new Date( dateString );
@@ -146,16 +160,13 @@ export default function FacultyEditProfile(props){
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
 				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black'}} className='d-flex justify-content-around'>
 					<div style={{height:'95%', width:'95%'}} className='d-flex justify-content-around flex-column'>
-						<div style={{height:'40%',width:'100%'}} className='d-flex justify-content-start'>
-							<div style={{height:'100%',width:'225px', border:'1px solid black'}}>
-								<img className="image-img loading" width="100%" height="100%"/>
+						<div style={{height:'50%',width:'100%'}} className='d-flex justify-content-start flex-column'>
+							<div style={{height:'90%',width:'225px', border:'1px solid black'}}>
+								<img className="image-img loading" width="100%" height="100%" src={ newImage }/>
 							</div>
-						</div>
-						<div style={{height:'8%',width:'20%'}} className='d-flex justify-content-start'>
-							{/*<Image username={username}/>*/}
+							<input type="file" accept="image/*" onChange={imageOnChange}/>
 						</div>
 						<div style={{height:'32%',width:'100%',color:'black'}} className='d-flex justify-content-around flex-column'>
-							{console.log(facultyData)}
 							{facultyData?.map?.(object=>(
 								<>
 									<div style={{width:'100%'}} className='d-flex justify-content-between flex-row'>

@@ -10,6 +10,7 @@
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
     "axios": "^0.21.1",
+    "image-upload-react": "^1.4.5",
     "js-cookie": "^3.0.1",
     "js-detect-incognito-private-browsing": "^1.0.5",
     "notistack": "^2.0.3",
