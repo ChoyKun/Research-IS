@@ -23,6 +23,8 @@ import SearcBar from '../components/contents/SearchBar';
 export default function FacultyEditProfile(props){
 
 	const {username} = useParams();
+	const formData = new FormData();
+	const [image, setImage] = useState(null);
 
 
 	const state={
@@ -85,11 +87,9 @@ export default function FacultyEditProfile(props){
 			setNewImage(reader.result)
 		}
 
-		console.log(url)
+		formData.append('MISimg', file );
 
-
-
-		dispatch({type:'_img',data: e.target.files[0]})
+		console.log(formData)
 	}
 
 	const [data,dispatch] = useReducer(reducer, state);
@@ -99,7 +99,18 @@ export default function FacultyEditProfile(props){
 		if(send == true){
 			axios.put(`http://localhost:7000/faculty/flist/editprofile/${username}`, data)
 			.then((res)=>{
-				alert(res.data.message);
+				if(newImage){
+					axios.put(`http://localhost:7000/faculty/upload-picture/${username}`, formData)
+					.then((res)=>{
+						alert(res.data.message);
+					})
+					.catch((err)=>{
+						alert(JSON.parse(err.request.response).message);
+					})
+				}
+				else{
+					alert(res.data.message);
+				}
 			})
 			.catch((err)=>{
 				alert(JSON.parse(err.request.response).message);
@@ -115,7 +126,6 @@ export default function FacultyEditProfile(props){
 		axios.get('http://localhost:7000/faculty/flist')
 		.then(res=>{
 			res.data.forEach( elem => {
-				console.log( elem.status );
 				if( elem.status === 'active' ){
 					setFacultyData((facultyData) => [...facultyData, elem]);
 				}
@@ -126,9 +136,16 @@ export default function FacultyEditProfile(props){
 		})
 	},[]);
 
+	useEffect(() =>{
+		axios.get(`http://localhost:7000/faculty/picture/${username}`)
+		.then( res => {
+			setImage( () => res.data.path );			
+		})
+		.catch( err => {
+			console.log( err );
+		});
+	}, []);
 	
-
-	console.log(state);
 
 
 	const getDateFrom = ( dateString ) => {
@@ -162,7 +179,7 @@ export default function FacultyEditProfile(props){
 					<div style={{height:'95%', width:'95%'}} className='d-flex justify-content-around flex-column'>
 						<div style={{height:'50%',width:'100%'}} className='d-flex justify-content-start flex-column'>
 							<div style={{height:'90%',width:'225px', border:'1px solid black'}}>
-								<img className="image-img loading" width="100%" height="100%" src={ newImage }/>
+								<img className="image-img loading" width="100%" height="100%" src={ newImage ?? image }/>
 							</div>
 							<input type="file" accept="image/*" onChange={imageOnChange}/>
 						</div>

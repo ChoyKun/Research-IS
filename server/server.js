@@ -710,6 +710,21 @@ app.get('/picture/:username', async (req, res, next) => {
 });
 // =====================================================================
 
+app.get('/faculty/picture/:username', async (req, res, next) => {
+	const reqUsername = req.params.username;
+
+	Faculty.findOne({username: reqUsername}, (err, doc) => {
+		if( err ) return res.sendStatus( 503 );
+
+		if( doc ){
+			doc.save( err => {
+			    if( err ) return res.sendStatus( 503 );
+
+				return res.status( 200 ).json({ path: doc.img });    
+			});
+		}
+	});
+})
 
 // =====================================================================
 // ====== FACULTY IMAGE UPLOAD NEW CODE =======
@@ -723,20 +738,7 @@ app.put('/upload-picture/:username', async (req, res, next) => {
 	const destination_path = path.join( images_path, image_name );
 
 	const updateImage = ( docu ) => {
-		docu.img = `/images/${image_name}`;
-
-		docu.save( err => {
-		    if( err ) return res.sendStatus( 503 );
-
-			image.mv( destination_path, async (err) => {
-			    if( err ){
-			    	return res.status( 503 );
-			    }
-			    else{
-			    	return res.status( 200 ).json({ path: `/images/${image_name}` });    
-			    }
-			});
-		});
+		
 	}
 
 	Faculty.findOne({username: reqUsername}, (err, doc) => {
@@ -749,7 +751,6 @@ app.put('/upload-picture/:username', async (req, res, next) => {
 			if( doc.img ){
 				fs.readdir( images_path, (err, files) => {
 					if( err ) {
-						console.log("here err 2")
 						return res.status( 503 );
 					}
 
@@ -1054,11 +1055,6 @@ app.put('/faculty/flist/changepassword/:username', async(req,res,next)=>{
 app.put('/faculty/flist/editprofile/:username', async (req,res,next)=>{
 	const username = req.params.username;
 
-	const image = req.files._img;
-	const image_name = `client-pic-${new Date().getMilliseconds()}.png`
-	const destination_path = path.join( images_path, image_name );
-	docu.img = `/images/${image_name}`;
-
 	const {
 		_username ,
 		_password,
@@ -1077,26 +1073,6 @@ app.put('/faculty/flist/editprofile/:username', async (req,res,next)=>{
 		if( doc ){
 			if( match(doc.password, _password) ){
 
-				if( doc.img ){
-					fs.readdir( images_path, (err, files) => {
-						if( err ) {
-							console.log("here err 2")
-							return res.status( 503 );
-						}
-
-						files.forEach( async (file) => {
-							if( doc.img === `/images/${file}` ){
-								fs.unlink( path.join( images_path, '/',file), (err) => {
-									if( err ) {
-										console.log("here err 3")
-										return res.status( 503 );
-									}
-								});
-							}
-						});
-					});
-				}
-
 				doc.username  = _username ?? doc.username;
 				doc.firstName = _firstName ?? doc.firstName;
 				doc.middleInitial = _middleInitial ?? doc.middleInitial;
@@ -1108,14 +1084,7 @@ app.put('/faculty/flist/editprofile/:username', async (req,res,next)=>{
 				doc.save( err => {
 					if(err)	return res.status(503).json({ message: 'Server Error' })
 					
-					image.mv( destination_path, async (err) => {
-					    if( err ){
-					    	return res.status( 503 );
-					    }
-					    else{
-					    	return res.status( 200 ).json({ path: `/images/${image_name}` });    
-					    }
-					});
+					return res.status( 200 ).json({ message: 'Saved successfully' });    
 				});
 			}
 			else{
@@ -1124,6 +1093,54 @@ app.put('/faculty/flist/editprofile/:username', async (req,res,next)=>{
 		}	
 	});
 });
+
+app.put('/faculty/upload-picture/:username', async (req, res, next) => {
+	const reqUsername = req.params.username;
+	const image = req.files.MISimg;
+
+	const image_name = `client-pic-${new Date().getMilliseconds()}.png`
+	const destination_path = path.join( images_path, image_name );
+
+	Faculty.findOne({username: reqUsername}, (err, doc) => {
+		if( err ) {
+			return res.sendStatus( 503 );
+		}
+
+		if( doc ){
+			if( doc.img ){
+				fs.readdir( images_path, (err, files) => {
+					if( err ) return res.status( 503 );
+
+					files.forEach( async (file) => {
+						if( doc.img === `/images/${file}` ){
+							fs.unlink( path.join( images_path, '/',file), (err) => {
+								if( err ) return res.status( 503 );
+
+								docu.img = `/images/${image_name}`;
+
+								docu.save( err => {
+								    if( err ) return res.sendStatus( 503 );
+
+									image.mv( destination_path, async (err) => {
+									    if( err ){
+									    	return res.status( 503 );
+									    }
+									    else{
+									    	return res.status( 200 ).json({ path: `/images/${image_name}` });    
+									    }
+									});
+								});
+							});
+						}
+					});
+				});
+			}
+			else{
+				updateImage( doc );
+			}
+		}
+	});
+})
 
 app.put('/faculty/flist/editstudent/:username/:studentNo',async (req,res,next)=>{
 	const studentNo = req.params.studentNo;

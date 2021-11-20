@@ -24,6 +24,7 @@ export default function FacultyProfile(props){
 	const {username} = useParams();
 	const [facultyData, setFacultyData] = useState([]);
 	const [name, setName] = useState(null);
+	const [image, setImage] = useState(null);
 
 	useEffect(()=>{
 		axios.get('http://localhost:7000/faculty/flist')
@@ -51,6 +52,16 @@ export default function FacultyProfile(props){
 		})	
 	}, [])
 
+	useEffect(() =>{
+		axios.get(`http://localhost:7000/faculty/picture/${username}`)
+		.then( res => {
+			setImage( () => res.data.path );			
+		})
+		.catch( err => {
+			console.log( err );
+		});
+	}, []);
+
 	return(
 		<>
 			<div style={{height:'7%', width:'100%', backgroundColor:'#385723', color:'white'}} className='d-flex justify-content-center align-items-center'>
@@ -66,7 +77,7 @@ export default function FacultyProfile(props){
 					<div style={{height:'95%', width:'95%'}} className='d-flex justify-content-around align-items-center flex-column'>
 						<div style={{height:'40%',width:'100%'}} className='d-flex justify-content-start'>
 							<div style={{height:'100%',width:'225px', border:'1px solid black'}}> 
-								
+								<img className="image-img loading" width="100%" height="100%" src={ image }/>
 							</div>
 						</div>
 						<div style={{height:'40%',width:'100%',color:'black'}} className='d-flex justify-content-center flex-column'>
