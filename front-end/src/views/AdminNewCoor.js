@@ -26,6 +26,8 @@ export default function AdminNewCoor(props){
 	const {username} = useParams();
 
 	const [redirect, setRedirect] = useState( null );
+	const [image, setImage] = useState(null);
+	const [imgFile, setImgFile] = useState(null);
 
 	const state ={
 		username:null ,
@@ -76,17 +78,46 @@ export default function AdminNewCoor(props){
 
 	const [data, dispatch] = useReducer(reducer,state)
 
+	const imageOnChange = (e)=>{
+
+		const file = e.target.files[0]
+		var reader = new FileReader();
+  		var url = reader.readAsDataURL(file);
+
+		reader.onloadend = function (e) {
+			setImage(reader.result)
+		}
+
+		setImgFile(e.target.files[0]);	
+	}
+
 	const handler = ()=>{
+
+		const formData = new FormData();
+
+		formData.append('AdminImg', imgFile );
+
 		const send = window.confirm("Registering new coordinator will disable the current coordinator, do you want to continue?");
 		if(send == true){
-			console.log({username})
-			axios.put(`http://localhost:7000/coordinator/clist/new-admin/${username}`)			
+			console.log(username)
+			axios.put(`http://localhost:7000/coordinator/clist/new-admin`)			
 			.then( async ()=>{
 				axios.post('http://localhost:7000/coordinator/clist/register', data)
 				.then((res)=>{
-					console.log('changed to inactive')
-					alert(res.data.message);
-					setRedirect( <Redirect to='/sign-in'/> );
+					if(image){
+						axios.put(`http://localhost:7000/clist/upload-picture`, formData)
+						.then((res)=>{
+							alert(res.data.message);
+							setRedirect( <Redirect to='/sign-in'/> );
+						})
+						.catch((err)=>{
+							alert(JSON.parse(err.request.response).message);
+						})
+					}
+					else{
+						alert(res.data.message);
+						setRedirect( <Redirect to='/sign-in'/> );
+					}		
 				})
 				.catch((err)=>{
 					if( err?.response?.data?.message ){
@@ -118,9 +149,9 @@ export default function AdminNewCoor(props){
 						<div style={{height:'90%',width:'90%'}} className="d-flex flex-row justify-content-center">
 							<div style={{height:'95%',width:'50%'}}>
 								<div style={{height:'150px',width:'170px',backgroundColor:'white', border:'1px solid black' }}>
-									
+									<img className="image-img loading" width="100%" height="100%" src={ image }/>
 								</div>
-								<Field title='Upload Photo' type="file" accepts="image/*" className='aRegUploadPhoto'/>
+								<input type="file" accept="image/*" onChange={imageOnChange}/>
 								<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
 									<label style={{fontSize:'18px'}}>Username:</label>
 									<Field className='uNametxt' reqOnChange={(e) => {dispatch({type: 'username', data: e.target.value});}}/>

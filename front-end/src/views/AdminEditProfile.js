@@ -22,6 +22,9 @@ import SearcBar from '../components/contents/SearchBar';
 export default function AdminEditProfile(props){
 
 	const {username} = useParams();
+	const [image, setImage] = useState(null);
+	const [imgFile, setImgFile] = useState(null);
+	const [newImage, setNewImage] = useState(null);
 
 	const state={
 		_username:null ,
@@ -71,25 +74,54 @@ export default function AdminEditProfile(props){
 
 	const [data,dispatch] = useReducer(reducer, state);
 
+	const imageOnChange = (e)=>{
+
+		const file = e.target.files[0]
+		var reader = new FileReader();
+  		var url = reader.readAsDataURL(file);
+
+		reader.onloadend = function (e) {
+			setNewImage(reader.result)
+		}
+
+		setImgFile(e.target.files[0]);	
+	}
+
 	const handler =()=>{
+
+		const formData = new FormData();
+
+		formData.append('AdminImg', imgFile );
+
 		const send = window.confirm("Do you want to update your profile?");
 		if(send == true){
 			axios.put(`http://localhost:7000/auth-admin/editprofile/${username}`, data)
 			.then((res)=>{
-				alert(res.data.message);
+				if(newImage){
+					axios.put(`http://localhost:7000/clist/upload-picture`, formData)
+					.then((res)=>{
+						alert(res.data.message);
+					})
+					.catch((err)=>{
+						alert(JSON.parse(err.request.response).message);
+					})
+				}
+				else{
+					alert(res.data.message);
+				}
 			})
 			.catch((err)=>{
-				alert( err.response.data.message );
+				alert(JSON.parse(err.request.response).message);
 			})
 			}
-			else{
+		else{
 			alert("Operation canceled")
 		}
 		
 	}
 
 	useEffect(()=>{
-		axios.get('http://localhost:7000/auth-admin/profile/')
+		axios.get('http://localhost:7000/auth-admin/data')
 		.then(res=>{
 			res.data.forEach( elem => {
 				console.log( elem.status );
@@ -102,6 +134,16 @@ export default function AdminEditProfile(props){
 			console.log(err)
 		})
 	},[]);
+
+	useEffect(() =>{
+		axios.get(`http://localhost:7000/clist/picture`)
+		.then( res => {
+			setImage( () => res.data.path );			
+		})
+		.catch( err => {
+			console.log( err );
+		});
+	}, []);
 
 	const getDateFrom = ( dateString ) => {
     	const date = new Date( dateString );
@@ -125,8 +167,11 @@ export default function AdminEditProfile(props){
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
 				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black'}} className='d-flex justify-content-around'>
 					<div style={{height:'95%', width:'95%'}} className='d-flex justify-content-around flex-column'>
-						<div style={{height:'40%',width:'100%'}} className='d-flex justify-content-start'>
-							<div style={{height:'100%',width:'225px', border:'1px solid black'}}> </div>
+						<div style={{height:'50%',width:'100%'}} className='d-flex justify-content-start flex-column'>
+							<div style={{height:'100%',width:'225px', border:'1px solid black'}}>
+								<img className="image-img loading" width="100%" height="100%" src={ newImage ?? image }/>
+							</div>
+							<input type="file" accept="image/*" onChange={imageOnChange}/>
 						</div>
 						<div style={{height:'35%',width:'100%',color:'black'}} className='d-flex justify-content-around flex-column'>
 							{adminData?.map?.(object=>(

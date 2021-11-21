@@ -52,9 +52,6 @@ const requestAccessToken = ( user ) => {
 
 const authentication = ( req, res, next ) => {
 	const authHeader = req.headers['authorization'];
-
-	console.log( req.url );
-	console.log( authHeader )
 	const token = authHeader && authHeader.split(' ')[ 1 ];
 
 	if( !token ) return res.sendStatus( 401 );
@@ -83,7 +80,6 @@ app.get('/filter-query/:course/:category/:yearSubmitted/:order/:year', async( re
 
 	const result = [];
 
-	console.log( course, category, yearSubmitted, order, year );
 	Research.find(
 		{ course: course, yearSubmitted: yearSubmitted }, 
 		null, 
@@ -121,7 +117,6 @@ app.get('/student-filter-query/:course/:section/:yearLevel/:order', async( req, 
 		order
 	} = req.params;
 
-	console.log( course, section, yearLevel, order );
 	const result = [];
 
 
@@ -139,7 +134,7 @@ app.get('/student-filter-query/:course/:section/:yearLevel/:order', async( req, 
 				docs.forEach( doc => {
 					return result.push( doc );
 				});
-				console.log(result);
+
 
 				return res.json({ result });
 			}
@@ -169,10 +164,8 @@ app.post('/sign-in', async(req,res,next)=>{
 
 		switch( _label ){
 			case 'Student':
-				console.log(_label)
 				Student.findOne({studentNo: _username, password:_password, status: 'active'}, (err, doc) => {
 					if( err ){
-						console.log( err );
 						return res.status( 401 ).json({ message: 'Server Error' });
 					}
 
@@ -185,7 +178,7 @@ app.post('/sign-in', async(req,res,next)=>{
 					if( !doc ){
 						Coordinator.findOne({username:_username, password:_password, status: 'active'},  (errs, docs) => {
 							if( errs ){
-								console.log( errs );
+
 								return res.status( 401 ).json({ message: 'Server Error' });
 							}
 
@@ -219,7 +212,7 @@ app.post('/sign-in', async(req,res,next)=>{
 			case 'MIS Officer':
 				Faculty.findOne({username:_username, password:_password, status: 'active'},  (err, doc) => {
 					if( err ){
-						console.log(err);
+
 						return res.status( 401 ).json({ message: 'Server Error' });
 					}
 
@@ -232,7 +225,6 @@ app.post('/sign-in', async(req,res,next)=>{
 					if( !doc ){
 						Coordinator.findOne({username:_username, password:_password, status: 'active'},  (errs, docs) => {
 							if( errs ){
-								console.log( errs );
 								return res.status( 401 ).json({ message: 'Server Error' });
 							}
 
@@ -286,7 +278,6 @@ app.get('/faculty/flist/:username', async(req, res, next)=>{
 			return res.status(400).json({message:'unknown user'})
 		}
 		if(doc){
-			console.log(doc);
 			return res.status(200).json({data:`${doc.firstName} ${doc.middleInitial} ${doc.lastName}`, message:'user logged-in'})
 		}
 	})
@@ -298,7 +289,6 @@ app.get('/student/slist', async (req, res, next) =>{
 		if( err ) res.sendStatus( 503 );
 
 
-		console.log('hereeee rlist');
 		return res.json( doc );
 	})
 })
@@ -308,7 +298,6 @@ app.post('/student/slist/login', async (req, res, next)=>{
 
 	Student.findOne({studentNo: _username, password: _password}, ( err, doc ) => {
 		if( err ){
-			console.log( err );
 			return res.status( 401 ).json({message: 'Unauthorized'});
 		}
 
@@ -322,13 +311,9 @@ app.post('/student/slist/login', async (req, res, next)=>{
 app.put('/student/slist/update', async(req,res,next)=>{
 	const editData = req.body;
 
-	// console.log(  );
-	console.log( editData );
-
 	editData.forEach(async (elem) => {
 		Student.findOneAndUpdate({_id: elem._id}, {status: elem.status}, null, ( err ) => {
 			if( err ) {
-				console.log( err );
 				return res.status( 503 ).json({ message: 'Server Error' });
 			}
 		})
@@ -341,7 +326,6 @@ app.put('/student/slist/changepassword/:studentNo', async(req,res,next)=>{
 	const studentNo = req.params.studentNo;
 
 	const data = await Student.findOne({studentNo: studentNo});
-	console.log( data );
 
 	const { password } = data;
 
@@ -353,7 +337,6 @@ app.put('/student/slist/changepassword/:studentNo', async(req,res,next)=>{
 		if(match(_newPassword, _verNewPassword)){
 			Student.findOneAndUpdate({studentNo: data.studentNo}, {password: _newPassword}, {useFindAndModify : false}, ( err ) => {
 				if( err ) {
-					console.log( err );
 					return res.status( 503 ).json({ message: 'Server Error' });
 				}
 
@@ -508,8 +491,6 @@ app.get('/student/slist/favlist/:username', async(req,res,next)=>{
 
 					if(doc){
 						favList.push(doc);
-
-						console.log( favList );
 					}
 
 					if( index === data.favorites.length - 1){
@@ -572,7 +553,6 @@ app.get('/student/slist/approved-list/:username', async(req,res,next)=>{
 						if(err) return res.status(503).json({message: 'Server Error' })
 
 						if(doc){
-							console.log(doc);
 
 							const {
 								_id,
@@ -624,7 +604,6 @@ app.get('/student/slist/approved-list/:username', async(req,res,next)=>{
 
 
 app.post('/student/slist/register', async (req, res , next) =>{
-	// console.log(req.body);
 	const studentData = req.body;
 
 	const newStudent = new Student(studentData);
@@ -659,7 +638,6 @@ app.post('/student/slist/register', async (req, res , next) =>{
 			else{
 				newStudent.save((err) => {
 					if ( err ){
-						console.log(err);
 					}
 
 					saveTokens( token, () => {
@@ -710,10 +688,10 @@ app.get('/picture/:username', async (req, res, next) => {
 });
 // =====================================================================
 
-app.get('/faculty/picture/:username', async (req, res, next) => {
-	const reqUsername = req.params.username;
+app.get('/faculty/picture', async (req, res, next) => {
 
-	Faculty.findOne({username: reqUsername}, (err, doc) => {
+
+	Faculty.findOne({status: 'active'}, (err, doc) => {
 		if( err ) return res.sendStatus( 503 );
 
 		if( doc ){
@@ -738,12 +716,26 @@ app.put('/upload-picture/:username', async (req, res, next) => {
 	const destination_path = path.join( images_path, image_name );
 
 	const updateImage = ( docu ) => {
+		docu.img = `/images/${image_name}`;
+
 		
+
+		docu.save( err => {
+		    if( err ) return res.sendStatus( 503 );
+
+			image.mv( destination_path, async (err) => {
+			    if( err ){
+			    	return res.status( 503 );
+			    }
+			    else{
+			    	return res.status( 200 ).json({ path: `/images/${image_name}` });    
+			    }
+			});
+		});
 	}
 
 	Faculty.findOne({username: reqUsername}, (err, doc) => {
 		if( err ) {
-			console.log("here err 1")
 			return res.sendStatus( 503 );
 		}
 
@@ -758,7 +750,6 @@ app.put('/upload-picture/:username', async (req, res, next) => {
 						if( doc.img === `/images/${file}` ){
 							fs.unlink( path.join( images_path, '/',file), (err) => {
 								if( err ) {
-									console.log("here err 3")
 									return res.status( 503 );
 								}
 
@@ -808,8 +799,6 @@ app.post('/upload-file/', async (req, res, next) => {
 	if( !req.files ) return res.status( 400 ).json({ message: 'No file found'});
 
 	const file = req.files.fileUpload;
-
-	console.log( file );
 	
 	const file_name = `${file.name}_${new Date().getMilliseconds()}.pdf`
 	const destination_path = path.join( pdfs_path, file_name );
@@ -857,14 +846,11 @@ app.get('/research/rlist', async (req, res, next) =>{
 	Research.find({}, (err, doc) => {
 		if( err ) res.sendStatus( 503 );
 
-
-		console.log('hereeee rlist');
 		return res.json( doc );
 	})
 });
 
 app.post('/research/rlist/upload', async (req, res , next) =>{
-	// console.log(req.body);
 	const researchData = req.body;
 
 	const newResearch = new Research(researchData);
@@ -881,13 +867,9 @@ app.post('/research/rlist/upload', async (req, res , next) =>{
 app.put('/research/rlist/update', async(req,res,next)=>{
 	const editData = req.body;
 
-	// console.log(  );
-	// console.log( editData );
-
 	editData.forEach(async (elem) => {
 		Research.findOneAndUpdate({_id: elem._id}, {status: elem.status}, null, ( err ) => {
 			if( err ) {
-				console.log( err );
 				return res.status( 503 ).json({ message: 'Server Error' });
 			}
 		})
@@ -906,7 +888,6 @@ app.get('/faculty/flist', async (req, res, next) =>{
 })
 
 app.post('/faculty/flist/register', async (req, res , next) =>{
-	// console.log(req.body);
 	const facultyData = req.body;
 
 	const newFaculty = new Faculty(facultyData);
@@ -940,7 +921,6 @@ app.post('/faculty/flist/register', async (req, res , next) =>{
 			else{
 				newFaculty.save((err) => {
 					if ( err ){
-						console.log(err);
 					}
 
 					saveTokens( token, () => {
@@ -965,10 +945,8 @@ app.put('/faculty/flist/new-officer', async(req,res,next)=>{
 
 	Faculty.findOne({status:'active'}, (err, docs) => {
 		if( err ) return res.status(503).json({message:'server error'})
-		// console.log(docs)
-		if( docs ){
-				
 
+		if( docs ){
 			docs.status = 'inactive';
 
 			docs.save( err => { // may message ako paps
@@ -981,9 +959,8 @@ app.put('/faculty/flist/new-officer', async(req,res,next)=>{
 })
 
 app.put('/faculty/flist/changeofficer/:username', async (req,res,next)=>{
-	// console.log(req.params.username);
 
-	// yung username ano yon? ung username ng current kahit ba hindi na need yon? Wait so yung current dapat yung magiging active? inactive meron na siya request sa taas
+
 
 	const prevCoor = req.params.username;
 
@@ -1021,7 +998,6 @@ app.put('/faculty/flist/changepassword/:username', async(req,res,next)=>{
 	const username = req.params.username;
 
 	const data = await Faculty.findOne({username: username});
-	console.log( data );
 
 
 
@@ -1032,7 +1008,6 @@ app.put('/faculty/flist/changepassword/:username', async(req,res,next)=>{
 		if(match(_newPassword, _verNewPassword)){
 			Faculty.findOneAndUpdate({username: data.username}, {password: _newPassword}, {useFindAndModify : false}, ( err ) => {
 				if( err ) {
-					console.log( err );
 					return res.status( 503 ).json({ message: 'Server Error' });
 				}
 
@@ -1094,14 +1069,31 @@ app.put('/faculty/flist/editprofile/:username', async (req,res,next)=>{
 	});
 });
 
-app.put('/faculty/upload-picture/:username', async (req, res, next) => {
-	const reqUsername = req.params.username;
+app.put('/faculty/upload-picture', async (req, res, next) => {
+
 	const image = req.files.MISimg;
 
 	const image_name = `client-pic-${new Date().getMilliseconds()}.png`
 	const destination_path = path.join( images_path, image_name );
 
-	Faculty.findOne({username: reqUsername}, (err, doc) => {
+	const updateImage = ( docu ) => {
+		docu.img = `/images/${image_name}`;
+
+		docu.save( err => {
+		    if( err ) return res.sendStatus( 503 );
+
+			image.mv( destination_path, async (err) => {
+			    if( err ){
+			    	return res.status( 503 );
+			    }
+			    else{
+			    	return res.status( 200 ).json({ path: `/images/${image_name}`,message: 'Saved successfully' });    
+			    }
+			});
+		});
+	}
+
+	Faculty.findOne({status: 'active'}, (err, doc) => {
 		if( err ) {
 			return res.sendStatus( 503 );
 		}
@@ -1115,21 +1107,8 @@ app.put('/faculty/upload-picture/:username', async (req, res, next) => {
 						if( doc.img === `/images/${file}` ){
 							fs.unlink( path.join( images_path, '/',file), (err) => {
 								if( err ) return res.status( 503 );
-
-								docu.img = `/images/${image_name}`;
-
-								docu.save( err => {
-								    if( err ) return res.sendStatus( 503 );
-
-									image.mv( destination_path, async (err) => {
-									    if( err ){
-									    	return res.status( 503 );
-									    }
-									    else{
-									    	return res.status( 200 ).json({ path: `/images/${image_name}` });    
-									    }
-									});
-								});
+								
+								updateImage( doc );
 							});
 						}
 					});
@@ -1148,7 +1127,6 @@ app.put('/faculty/flist/editstudent/:username/:studentNo',async (req,res,next)=>
 
 	const facultyData = Faculty.findOne({username: username})
 
-	// console.log( req.body );	
 	const {_password,_firstName, _middleInitial,_lastName, _extentionName, _birthdate,_course,_yearLevel,_section,_img } =req.body;
 	const { password } = await Faculty.findOne({username: username}).exec();
 
@@ -1158,8 +1136,7 @@ app.put('/faculty/flist/editstudent/:username/:studentNo',async (req,res,next)=>
 
 			
 		if( doc ){
-			// 
-			console.log(password, _password)
+
 			if( match(password, _password) ){
 		
 				doc.firstName = _firstName ?? doc.firstName;
@@ -1186,7 +1163,7 @@ app.put('/faculty/flist/editstudent/:username/:studentNo',async (req,res,next)=>
 
 
 // Admin
-app.get('/auth-admin/profile', async (req,res,next)=>{
+app.get('/auth-admin/data', async (req,res,next)=>{
 	const circularData = await Coordinator.find({});
 	const data = CircularJSON.stringify( circularData );
 
@@ -1194,8 +1171,8 @@ app.get('/auth-admin/profile', async (req,res,next)=>{
 	return res.status( 200 ).json( JSON.parse(data) );
 });
 
-app.get('/auth-admin/profile/:username', async(req, res, next)=>{
-	Coordinator.findOne({username: req.params.username}, (err, doc)=>{
+app.get('/auth-admin/profile', async(req, res, next)=>{
+	Coordinator.findOne({status:'active'}, (err, doc)=>{
 		if(err){
 			return res.status(400).json({message:'unknown user'})
 		}
@@ -1210,16 +1187,13 @@ app.put('/coordinator/clist/remove-approved/:studentNo', async (req,res,next)=>{
 
 	const removed = req.body;
 
-	console.log(removed)
 
 	Student.findOne({studentNo:studentNo}, (err,data)=>{
 		if(err) return res.status( 503 ).json({ message: 'Server Error' });
 
 		if(data){
-			console.log(data)
 			if(data.approved.includes(removed[0])){
 				const ind = data.approved.indexOf(removed);
-				console.log(ind)
 				data.approved.splice(ind,1);
 
 				data.save( err => {
@@ -1232,12 +1206,78 @@ app.put('/coordinator/clist/remove-approved/:studentNo', async (req,res,next)=>{
 	})
 })
 
+app.get('/clist/picture', async (req, res, next) => {
+
+
+	Coordinator.findOne({status: 'active'}, (err, doc) => {
+		if( err ) return res.sendStatus( 503 );
+
+		if( doc ){
+			doc.save( err => {
+			    if( err ) return res.sendStatus( 503 );
+
+				return res.status( 200 ).json({ path: doc.img });    
+			});
+		}
+	});
+})
+
+app.put('/clist/upload-picture', async (req, res, next) => {
+
+	const image = req.files.AdminImg;
+
+	const image_name = `client-pic-${new Date().getMilliseconds()}.png`
+	const destination_path = path.join( images_path, image_name );
+
+	const updateImage = ( docu ) => {
+		docu.img = `/images/${image_name}`;
+
+		docu.save( err => {
+		    if( err ) return res.sendStatus( 503 );
+
+			image.mv( destination_path, async (err) => {
+			    if( err ){
+			    	return res.status( 503 );
+			    }
+			    else{
+			    	return res.status( 200 ).json({ path: `/images/${image_name}`,message: 'welcome new coordinator please re log in' });    
+			    }
+			});
+		});
+	}
+
+	Coordinator.findOne({status: 'active'}, (err, doc) => {
+		if( err ) {
+			return res.sendStatus( 503 );
+		}
+
+		if( doc ){
+			if( doc.img ){
+				fs.readdir( images_path, (err, files) => {
+					if( err ) return res.status( 503 );
+
+					files.forEach( async (file) => {
+						if( doc.img === `/images/${file}` ){
+							fs.unlink( path.join( images_path, '/',file), (err) => {
+								if( err ) return res.status( 503 );
+								
+								updateImage( doc );
+							});
+						}
+					});
+				});
+			}
+			else{
+				updateImage( doc );
+			}
+		}
+	});
+})
+
 
 app.post('/coordinator/clist/register', async (req, res , next) =>{
-	// console.log(req.body);
 	const coorData = req.body;
 
-	console.log(coorData)
 	const newCoor = new Coordinator(coorData);
 
 	fs.readFile( token_path, (err, data) => {
@@ -1268,7 +1308,7 @@ app.post('/coordinator/clist/register', async (req, res , next) =>{
 			else{
 				newCoor.save((err) => {
 					if ( err ){
-						console.log(err);
+						return res.sendStatus(503);
 					}
 
 					saveTokens( token, () => {
@@ -1288,27 +1328,21 @@ app.post('/coordinator/clist/register', async (req, res , next) =>{
 	
 })
 
-app.put('/coordinator/clist/new-admin/:username', async (req,res,next)=>{
-	//const current = req.params.username
+app.put('/coordinator/clist/new-admin', async(req,res,next)=>{
 
-	Coordinator.find({}, (err, docs) => {
+	Coordinator.findOne({status:'active'}, (err, docs) => {
 		if( err ) return res.status(503).json({message:'server error'})
 
 		if( docs ){
-			console.log(docs)
-			docs.forEach( doc => {
-				if( doc.status == 'active' ){
-					console.log(doc.username)
-					doc.status = 'inactive';
+			docs.status = 'inactive';
 
-					doc.save( err => {
-						if(err) return res.status(400).json({message:'server error'})
-					});
-				}
-			});
-			return res.status(200).json({message:'welcome new coordinator please re log in'});
+			docs.save( err => { // may message ako paps
+				if(err) return res.status(400).json({message:'server error'})
+			}); //try mo daw pa
+
+			return res.status(200).json({message:'New active officer created, the previous officer is now deactivated'});
 		}
-	});	// Dahil siguro sa pagiging async nitong mga to wait
+	});
 })
 
 app.post('/auth-admin', async (req, res, next) => {
@@ -1316,7 +1350,6 @@ app.post('/auth-admin', async (req, res, next) => {
 
 	Coordinator.findOne({status: 'active'}, (err, doc) => {
 		if( err ){
-			console.log( err );
 			return res.status( 401 ).json({ message: 'Unauthorized' });
 		}
 
@@ -1339,10 +1372,6 @@ app.post('/auth-admin', async (req, res, next) => {
 });
 
 app.put('/coordinator/clist/changecoor/:username', async (req,res,next)=>{
-	console.log(req.params.username);
-
-	// yung username ano yon? ung username ng current kahit ba hindi na need yon? Wait so yung current dapat yung magiging active? inactive meron na siya request sa taas
-
 	const prevCoor = req.params.username;
 
 	const checkMatch = ( doc , username ) => {
@@ -1377,8 +1406,6 @@ app.put('/coordinator/clist/changecoor/:username', async (req,res,next)=>{
 
 app.put('/auth-admin/editprofile/:username', async(req,res,next)=>{
 	const username = req.params.username;
- 
-	console.log( username );
 
 	const {
 		_username ,
@@ -1392,11 +1419,9 @@ app.put('/auth-admin/editprofile/:username', async(req,res,next)=>{
 		_img,
 	} =req.body;
 
-	console.log(req.body)
 	Coordinator.findOne({username: username}, (err, doc) => {
 		if(err)	return res.status(503).json({ message: 'Server Error' })
 
-		console.log(doc);
 		if( doc ){
 			
 			if( match(doc.password, _password) ){
@@ -1429,25 +1454,18 @@ app.put('/auth-admin/changepassword/:username', async(req,res,next)=>{
 	const username = req.params.username;
 
 	const data = await Coordinator.findOne({username: username});
-	console.log( data );
 
 
 
 	const { _currPassword, _newPassword, _verPassword} = req.body;
 	const {password} = data;
 
-	console.log(req.body)
 
 	if(match(password, _currPassword)){
-		console.log(password)
-		console.log(_currPassword)
-		console.log(_newPassword)
-		console.log(_verPassword)
 		if(match(_newPassword, _verPassword)){
 			
 			Coordinator.findOneAndUpdate({username: username}, {password: _newPassword}, {useFindAndModify : false}, ( err ) => {
 				if( err ) {
-					console.log( err );
 					return res.status( 503 ).json({ message: 'Server Error' });
 				}
 
@@ -1613,8 +1631,6 @@ app.post('/check-research-state/:username/:id', async (req, res , next )=>{
 		if(err) return res.status(503).json({message:'Server Error'})
 
 		if(doc){
-			console.log(doc.approved)
-			console.log(rID)
 			if(doc.approved.map(elem => elem.id).includes(rID)){
 				return res.sendStatus(200)
 			}

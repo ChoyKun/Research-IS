@@ -23,6 +23,9 @@ import Select from '../components/fields/select';
 
 export default function AdminReg(props){
 
+	const [image, setImage] = useState(null);
+	const [imgFile, setImgFile] = useState(null);
+
 	const state ={
 		username:null ,
 		password:null,
@@ -62,32 +65,56 @@ export default function AdminReg(props){
 			case 'dateRegistered':
 				state.dateRegistered = action.data;
 				return state;
-			case 'img':
-				state.img = action.data;
-				return state;
 		}
 	}
 
 	const [data, dispatch] = useReducer(reducer,state)
 
+	const imageOnChange = (e)=>{
+
+		const file = e.target.files[0]
+		var reader = new FileReader();
+  		var url = reader.readAsDataURL(file);
+
+		reader.onloadend = function (e) {
+			setImage(reader.result)
+		}
+
+		setImgFile(e.target.files[0]);	
+	}
+
 	const handler = ()=>{
+
+		const formData = new FormData();
+
+		formData.append('MISimg', imgFile );
+
 		const send = window.confirm("Registering new MIS Officer will disable the current officer's account Are you sure you want to continue?");
 		if(send == true){
-			axios.post('http://localhost:7000/faculty/flist/register',data)
+			axios.put('http://localhost:7000/faculty/flist/new-officer')
 			.then((res)=>{
-				axios.put('http://localhost:7000/faculty/flist/new-officer')
+				axios.post('http://localhost:7000/faculty/flist/register',data)
 				.then((res)=>{
-					alert(res.data.message);
+					if(image){
+						axios.put(`http://localhost:7000/faculty/upload-picture`, formData)
+						.then((res)=>{
+							alert(res.data.message);
+						})
+						.catch((err)=>{
+							alert(JSON.parse(err.request.response).message);
+						})
+					}
+					else{
+						alert(res.data.message);
+					}
 				})
 				.catch((err)=>{
-					if( err?.response?.data?.message ){
-						alert( err.response.data.message );
-					}
+					alert(JSON.parse(err.request.response).message);
 				})
 			})
 			.catch((err)=>{
-			alert(err.response.data.message);
-		})
+				alert(JSON.parse(err.request.response).message);
+			})
 		}
 		else{
 			alert("Operation canceled")
@@ -104,10 +131,10 @@ export default function AdminReg(props){
 					<div style={{height:'95%', width:'95%', color:'black'}}>
 						<div style={{height:'90%',width:'90%'}} className="d-flex flex-row justify-content-center">
 							<div style={{height:'95%',width:'50%'}}>
-								<div style={{height:'150px',width:'170px',backgroundColor:'white', border:'1px solid black' }}>
-									
+								<div style={{height:'160px',width:'225px', border:'1px solid black'}}>
+									<img className="image-img loading" width="100%" height="100%" src={ image }/>
 								</div>
-								<Field title='Upload Photo' type="file" accepts="image/*" className='aRegUploadPhoto'/>
+								<input type="file" accept="image/*" onChange={imageOnChange}/>
 								<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
 									<label style={{fontSize:'18px'}}>Username:</label>
 									<Field className='uNametxt' reqOnChange={(e) => {dispatch({type: 'username', data: e.target.value});}}/>

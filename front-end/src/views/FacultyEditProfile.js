@@ -23,8 +23,8 @@ import SearcBar from '../components/contents/SearchBar';
 export default function FacultyEditProfile(props){
 
 	const {username} = useParams();
-	const formData = new FormData();
 	const [image, setImage] = useState(null);
+	const [imgFile, setImgFile] = useState(null);
 
 
 	const state={
@@ -81,26 +81,30 @@ export default function FacultyEditProfile(props){
 		const file = e.target.files[0]
 		var reader = new FileReader();
   		var url = reader.readAsDataURL(file);
-		console.log(e.target.files[0]);
 
 		reader.onloadend = function (e) {
 			setNewImage(reader.result)
 		}
 
-		formData.append('MISimg', file );
-
-		console.log(formData)
+		setImgFile(e.target.files[0]);	
 	}
+
+	console.log(imgFile);
 
 	const [data,dispatch] = useReducer(reducer, state);
 
 	const handler =()=>{
+
+		const formData = new FormData();
+
+		formData.append('MISimg', imgFile );
+
 		const send = window.confirm("Do you want to update your profile?");
 		if(send == true){
 			axios.put(`http://localhost:7000/faculty/flist/editprofile/${username}`, data)
 			.then((res)=>{
 				if(newImage){
-					axios.put(`http://localhost:7000/faculty/upload-picture/${username}`, formData)
+					axios.put(`http://localhost:7000/faculty/upload-picture`, formData)
 					.then((res)=>{
 						alert(res.data.message);
 					})
@@ -137,7 +141,7 @@ export default function FacultyEditProfile(props){
 	},[]);
 
 	useEffect(() =>{
-		axios.get(`http://localhost:7000/faculty/picture/${username}`)
+		axios.get(`http://localhost:7000/faculty/picture`)
 		.then( res => {
 			setImage( () => res.data.path );			
 		})

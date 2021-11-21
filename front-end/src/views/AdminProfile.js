@@ -24,9 +24,10 @@ export default function FacultyProfile(props){
 	const {username} = useParams();
 	const [adminData, setAdminData] = useState([]);
 	const [name, setName] = useState(null);
+	const [image, setImage] = useState(null);
 
 	useEffect(()=>{
-		axios.get('http://localhost:7000/auth-admin/profile')
+		axios.get('http://localhost:7000/auth-admin/data')
 		.then((res)=>{
 			res.data.forEach( elem => {
 				console.log( elem.status );
@@ -39,10 +40,9 @@ export default function FacultyProfile(props){
 			console.log(err)
 		})
 	},[])
-	console.log(username);
 	
 	useEffect(() => {
-		axios.get(`http://localhost:7000/auth-admin/profile/${username}`)
+		axios.get(`http://localhost:7000/auth-admin/profile`)
 		.then(res=>{
 			setName(res.data.data);
 		})
@@ -50,6 +50,15 @@ export default function FacultyProfile(props){
 			console.log(err);
 		})	
 	}, [])
+	useEffect(() =>{
+		axios.get(`http://localhost:7000/clist/picture`)
+		.then( res => {
+			setImage( () => res.data.path );			
+		})
+		.catch( err => {
+			console.log( err );
+		});
+	}, []);
 
 	return(
 		<>
@@ -60,7 +69,9 @@ export default function FacultyProfile(props){
 				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black'}} className='d-flex justify-content-around'>
 					<div style={{height:'95%', width:'95%'}} className='d-flex justify-content-around align-items-center flex-column'>
 						<div style={{height:'40%',width:'100%'}} className='d-flex justify-content-start'>
-							<div style={{height:'100%',width:'225px', border:'1px solid black'}}> </div>
+							<div style={{height:'100%',width:'225px', border:'1px solid black'}}> 
+								<img className="image-img loading" width="100%" height="100%" src={ image }/>
+							</div>
 						</div>
 						<div style={{height:'40%',width:'100%',color:'black'}} className='d-flex justify-content-center flex-column'>
 							{adminData?.map?.( object=>(

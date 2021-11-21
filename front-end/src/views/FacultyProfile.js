@@ -31,7 +31,7 @@ export default function FacultyProfile(props){
 		.then((res)=>{
 			res.data.forEach( elem => {
 				console.log( elem.status );
-				if( elem.username === `${username}` ){
+				if( elem.status === 'active' ){
 					setFacultyData((FacultyData) => [...FacultyData, elem]);
 				}
 			})
@@ -53,7 +53,7 @@ export default function FacultyProfile(props){
 	}, [])
 
 	useEffect(() =>{
-		axios.get(`http://localhost:7000/faculty/picture/${username}`)
+		axios.get(`http://localhost:7000/faculty/picture`)
 		.then( res => {
 			setImage( () => res.data.path );			
 		})

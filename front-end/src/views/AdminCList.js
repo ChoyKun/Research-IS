@@ -43,7 +43,7 @@ export default function AdminCList(props){
 	const [selected, selectedDispatch] = useReducer(reducer, {item: null, data: null});
 
 	useEffect(() => {
-		axios.get('http://localhost:7000/auth-admin/profile')
+		axios.get('http://localhost:7000/auth-admin/data')
 		.then( res => {
 			res.data.forEach( elem => {
 				console.log( elem.status );
@@ -76,7 +76,7 @@ export default function AdminCList(props){
 		const send = window.confirm("Changing the coordinator will deactivate your account, do you want to continue?");
 		if(send == true){
 			console.log({username})
-			axios.put(`http://localhost:7000/coordinator/clist/new-admin/${username}`) // set current admin to inactive to no?
+			axios.put(`http://localhost:7000/coordinator/clist/new-admin`) // set current admin to inactive to no?
 			.then( async () => {
 				axios.put(`http://localhost:7000/coordinator/clist/changecoor/${selected?.data?.username}`) // set selected admin to active?
 				.then((res)=>{
