@@ -18,7 +18,7 @@ export default function SListFilter(props){
 
 	const initState = {
 		course: 'BSIT',
-		section: '1',
+		section: 'null',
 		yearRegistered: new Date().getFullYear(),
 		yearLevel: '1-4',
 		order: 'A-Z'
@@ -29,7 +29,6 @@ export default function SListFilter(props){
 			case 'course':
 				state.course = action.data;
 				return state;
-
 			case 'section':
 				state.section = action.data;
 				return state;
@@ -62,7 +61,7 @@ export default function SListFilter(props){
 						</div>
 						<div style={{width:'20%', color:'black'}} className='d-flex flex-row justify-content-around'>
 							<label>Section: </label>
-							<Field className='aRegSection' placeHolder={'1'} reqOnChange={e => dispatch({type: 'section', data: e.target.value})}/>
+							<Field className='aRegSection' reqOnChange={e => dispatch({type: 'section', data: e.target.value})}/>
 						</div>
 						<div style={{width:'20%', color:'black'}}>
 							<Select className='sfilterAlphabetical' label='Sort from:' options={['1-4','4-1']} reqOnChange={e => dispatch({type: 'yearLevel', data: e.target.value})}/>

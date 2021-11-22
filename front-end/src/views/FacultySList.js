@@ -41,7 +41,6 @@ export default function FacultyRList(props){
 			setColorToSelected( state.item, true );
 			setColorToSelected( action.item );
 		}
-		console.log(action.data);
 		return {item: action.item, data: action.data};		
 	}
 
@@ -68,8 +67,7 @@ export default function FacultyRList(props){
 	useEffect(() => {
 		let result = [];
 
-		const handleSearch = async () => {
-			
+		const handleSearch = async () => {		
 			if( filter.sFilter ){
 				const { 
 					course,
@@ -78,12 +76,20 @@ export default function FacultyRList(props){
 					order
 				} = filter.sFilter;
 
-				// ?course=${course}&category=${category}&yearSubmitted=${yearSubmitted}&order=${order}&year=${year}
+				console.log(section);
 				axios.get(`http://localhost:7000/student-filter-query/${course}/${section}/${yearLevel}/${order}`)
 				.then( res => {
-					res.data.result.forEach( item => {
-						result.push(<Item key={item._id} object={item}/>);
-					});
+					if(section == 'null'){
+						res.data.result.forEach( item => {
+							result.push(<Item key={item._id} object={item} dispatch={selectedDispatch}/>);
+						});
+					}
+					else{
+						res.data.sectionResult.forEach( item => {
+							result.push(<Item key={item._id} object={item} dispatch={selectedDispatch}/>);
+						});
+					}
+					
 
 					setFilteredData([...result]);
 				})
@@ -91,7 +97,7 @@ export default function FacultyRList(props){
 			else if(!filter.sFilter){
 				studentData.forEach( item =>{
 					if( (item.firstName.toLowerCase().startsWith(search?.[0]?.toLowerCase?.() ?? '') || item.lastName.toLowerCase().startsWith(search?.[0]?.toLowerCase?.() ?? '')) && (item.firstName.toLowerCase().includes(search.toLowerCase()) || item.lastName.toLowerCase().includes(search.toLowerCase()))){
-						result.push( <Item key={item._id} object={item}/> );
+						result.push( <Item key={item._id} object={item} dispatch={selectedDispatch}/> );
 					}
 				});
 
@@ -175,15 +181,13 @@ export default function FacultyRList(props){
 }
 
 function Item(props){ //getData
-	// 
 	const item = useRef();
 
 	const handleClick = () => {
 		if( !item.current ) return;
 
 		props.dispatch({ item: item.current, data: props.object });
-
-
+		console.log(props.dispatch)
 	}
 	
 

@@ -118,10 +118,11 @@ app.get('/student-filter-query/:course/:section/:yearLevel/:order', async( req, 
 	} = req.params;
 
 	const result = [];
+	const sectionResult  = [];
 
 
 	Student.find(
-		{ course: course, section:section }, 
+		{ course: course}, 
 		null, 
 		{ sort: { 
 			lastName: order === 'A-Z' ? 1 : -1,
@@ -131,12 +132,25 @@ app.get('/student-filter-query/:course/:section/:yearLevel/:order', async( req, 
 			if( err ) return res.status( 503 ).json({ message:'Server Error' });
 
 			if( docs ){
+				console.log(section);
 				docs.forEach( doc => {
-					return result.push( doc );
+					if(doc.status == 'active'){
+						console.log(doc.status)
+						return result.push(doc);
+
+						if(doc.section == section){
+							console.log('section bitch')
+							return sectionResult.push( doc );
+						}
+					}
 				});
 
-
-				return res.json({ result });
+				if(section == 'null'){
+					return res.json({ result });
+				}
+				else{
+					return res.json({ sectionResult });
+				}
 			}
 			else{
 				return res.sendStatus( 403 );
@@ -632,7 +646,7 @@ app.post('/student/slist/register', async (req, res , next) =>{
 
 			token.push( refreshToken );
 
-			if( doc.length > 1 ){ 
+			if( doc.length > 0 ){ 
 				return res.status(400).json({message:'username already used'})
 			}
 			else{
@@ -644,7 +658,7 @@ app.post('/student/slist/register', async (req, res , next) =>{
 						return res.status( 200 ).json({
 							accessToken: accessToken,
 							refreshToken: refreshToken,
-							message: 'Welcome mr. coordinator'
+							message: 'Successfuly registered'
 						});
 					});
 				})
