@@ -1,6 +1,8 @@
-import React,{useState, useEffect, Suspense, useReducer, useRef} from 'react';
+import React,{useState, useEffect, Suspense, useReducer, useRef, useContext} from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from '../modules/config.js';
+import FilterContext from '../contexts/filter-context';
+
 
 
 //icons
@@ -23,11 +25,12 @@ import Checkbox from '../components/fields/checkbox';
 
 export default function AdminRList(props){
 	const {username} = useParams();
+	const filter = useContext( FilterContext );
 
 
 	const [studentData, setStudentData] = useState( [] );
 	const [filteredData, setFilteredData] = useState(null);
-	const [search, setSearch]= useState(null);
+	const [search, setSearch]= useState('');
 	const [sendInactive, setSendInactive] = useState(false);
 	const [inacAccum, setInacAccum]= useState([])
 
@@ -48,20 +51,50 @@ export default function AdminRList(props){
 	}, [])
 
 
-	useEffect(()=>{
-		setFilteredData(studentData?.map?.(object=>{
-			if(search){
-				for( let key of Object.keys(object)){
-					if(object[key]?.toLowerCase?.()?.startsWith(search?.charAt?.(0)?.toLowerCase?.())){
-						return <Item key={object._id} object={object} dispatch={selectedDispatch}/>
+	useEffect(() => {
+		let result = [];
+
+		const handleSearch = async () => {		
+			if( filter.sFilter ){
+				const { 
+					course,
+					section,	
+					yearLevel,
+					order
+				} = filter.sFilter;
+
+				console.log(section);
+				axios.get(`http://localhost:7000/student-filter-query/${course}/${section}/${yearLevel}/${order}`)
+				.then( res => {
+					if(section == 'null'){
+						res.data.result.forEach( item => {
+							result.push(<Item key={item._id} object={item} dispatch={selectedDispatch}/>);
+						});
 					}
-				}
+					else{
+						res.data.sectionResult.forEach( item => {
+							result.push(<Item key={item._id} object={item} dispatch={selectedDispatch}/>);
+						});
+					}
+					
+
+					setFilteredData([...result]);
+				})
 			}
-			else{
-				return <Item key={object._id} object={object} dispatch={selectedDispatch}/>
+			else if(!filter.sFilter){
+				studentData.forEach( item =>{
+					if( (item.firstName.toLowerCase().startsWith(search?.[0]?.toLowerCase?.() ?? '') || item.lastName.toLowerCase().startsWith(search?.[0]?.toLowerCase?.() ?? '')) && (item.firstName.toLowerCase().includes(search.toLowerCase()) || item.lastName.toLowerCase().includes(search.toLowerCase()))){
+						result.push( <Item key={item._id} object={item} dispatch={selectedDispatch}/> );
+					}
+				});
+
+				setFilteredData([...result]);
 			}
-		}))
-	},[search, studentData])
+		}
+
+		handleSearch();			
+
+	}, [search, studentData, filter.sFilter]);
 
 	const reducer = (state, action)=>{
 		if(!state.item){
@@ -90,11 +123,11 @@ export default function AdminRList(props){
 			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center flex-column">
 				<SearcBar location="/slist-filter" setSearch={setSearch} className='Search'/>
 				<div style={{height:'20%', width:'90%'}}className="d-flex flex-row justify-content-end flex-row">
-					<Link to ={`/admin-sapproved/${username}/${selected?.data?.studentNo}`}><Button style={{height: '30px',width:'100px'}} title='Approved Researches'/></Link>		
+					<Link to ={`/admin-sapproved/${username}/${selected?.data?.studentNo}`}><Button style={{height: '30px',width:'200px'}} title='Approved Researches'/></Link>		
 				</div>		
 			</div>
 			<div style={{width: '100%', height: '70%'}} className='d-flex justify-content-center align-items-center'>
-				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black', color:'black'}}>
+				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black', color:'black',overflowY:'auto',overflowX:'auto'}}>
 					<Suspense fallback={<Loading/>}>
 						<SlistHeader/>
 						{console.log(filteredData)}

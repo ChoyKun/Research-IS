@@ -1,6 +1,7 @@
-import React,{useState, useEffect, Suspense} from 'react';
+import React,{useState, useEffect, Suspense, useContext} from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from '../modules/config.js';
+import FilterContext from '../contexts/filter-context';
 
 //icons
 import scslogo from "../images/scs-final.png";
@@ -22,11 +23,12 @@ import Checkbox from '../components/fields/checkbox';
 
 export default function AdminRList(props){
 	const {username} = useParams();
+	const filter = useContext( FilterContext );
 
 
 	const [studentData, setStudentData] = useState( [] );
 	const [filteredData, setFilteredData] = useState(null);
-	const [search, setSearch]= useState(null);
+	const [search, setSearch]= useState('');
 	const [sendActive, setSendActive] = useState(false);
 	const [activeAccum, setActiveAccum]= useState([])
 
@@ -47,21 +49,50 @@ export default function AdminRList(props){
 	}, [])
 
 
-	useEffect(()=>{
-		setFilteredData(studentData?.map?.(object=>{
-			if(search){
-				for( let key of Object.keys(object)){
-					if(object[key]?.toLowerCase?.()?.startsWith(search?.charAt?.(0)?.toLowerCase?.())){
-						return <Item key={object._id}object={object}/>
+	useEffect(() => {
+		let result = [];
+
+		const handleSearch = async () => {		
+			if( filter.sFilter ){
+				const { 
+					course,
+					section,	
+					yearLevel,
+					order
+				} = filter.sFilter;
+
+				console.log(section);
+				axios.get(`http://localhost:7000/inactive-student-filter-query/${course}/${section}/${yearLevel}/${order}`)
+				.then( res => {
+					if(section == 'null'){
+						res.data.result.forEach( item => {
+							result.push(<Item key={item._id} object={item}/>);
+						});
 					}
-				}
+					else{
+						res.data.sectionResult.forEach( item => {
+							result.push(<Item key={item._id} object={item}/>);
+						});
+					}
+					
+
+					setFilteredData([...result]);
+				})
 			}
-			else{
-				console.log(Item)
-				return <Item key={object._id}object={object}/>
+			else if(!filter.sFilter){
+				studentData.forEach( item =>{
+					if( (item.firstName.toLowerCase().startsWith(search?.[0]?.toLowerCase?.() ?? '') || item.lastName.toLowerCase().startsWith(search?.[0]?.toLowerCase?.() ?? '')) && (item.firstName.toLowerCase().includes(search.toLowerCase()) || item.lastName.toLowerCase().includes(search.toLowerCase()))){
+						result.push( <Item key={item._id} object={item}/> );
+					}
+				});
+
+				setFilteredData([...result]);
 			}
-		}))
-	},[search, studentData])
+		}
+
+		handleSearch();			
+
+	}, [search, studentData, filter.sFilter]);
 
 	useEffect(()=>{
 		if( sendActive ){
@@ -115,13 +146,13 @@ export default function AdminRList(props){
 				<Link to={`/MIS-reg/${username}`}><Button style={{height:'50px',width:'200px'}} title='Register New Student'/></Link>			
 			</div>
 			<div style={{height:'13%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center flex-column">
-				<SearcBar location="/slist-filter" setSearch={setSearch}className='Search'/>
+				<SearcBar location="/slist-filter" setSearch={setSearch} className='Search'/>
 				<div style={{height:'20%', width:'90%'}}className="d-flex flex-row justify-content-start flex-row-reverse">
 					<Button style={{height: '30px',width:'100px'}} title='Activate' click={sender}/>		
 				</div>		
 			</div>
 			<div style={{width: '100%', height: '75%'}} className='d-flex justify-content-center align-items-center'>
-				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black', color:'black'}}>
+				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black', color:'black',overflowY:'auto',overflowX:'auto'}}>
 					<Suspense fallback={<Loading/>}>
 						<SlistHeader/>
 						{filteredData}

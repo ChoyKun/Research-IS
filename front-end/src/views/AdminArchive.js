@@ -1,6 +1,8 @@
-import React,{useState, useEffect, Suspense} from 'react';
+import React,{useState, useEffect, Suspense,useContext} from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from '../modules/config.js';
+import FilterContext from '../contexts/filter-context';
+
 
 
 //icons
@@ -24,6 +26,7 @@ import Checkbox from '../components/fields/checkbox';
 
 export default function AdminRList(props){
 	const {username} = useParams();
+	const filter = useContext( FilterContext );
 
 	const [archiveData, setArchiveData] = useState([]);
 	const [filteredData, setFilteredData] = useState([]);
@@ -46,20 +49,47 @@ export default function AdminRList(props){
 		})
 	},[])
 
-	useEffect(()=>{
-		setFilteredData(archiveData?.map?.(object =>{
-			if(search){
-					for( let key of Object.keys(object)){
-							if(object[key]?.toLowerCase?.()?.startsWith(search?.charAt?.(0)?.toLowerCase?.())){
-								return <Item key={object._id} object={object}/>
-							}
+	useEffect(() => {
+		let result = [];
+
+		const handleSearch = async () => {
+			
+			if( filter.sFilter ){
+				const { 
+					course,
+					category,
+					yearSubmitted,
+					order,
+					year
+				} = filter.sFilter;
+
+				// ?course=${course}&category=${category}&yearSubmitted=${yearSubmitted}&order=${order}&year=${year}
+				axios.get(`http://localhost:7000/filter-query/${course}/${category}/${yearSubmitted}/${order}/${year}`)
+				.then( res => {
+					res.data.result.forEach( item => {
+						result.push(<Item key={item._id} object={item}/>);
+					});
+
+					setFilteredData([...result]);
+				})
+			}
+			else if(!filter.sFilter){
+				archiveData.forEach( item =>{
+					if( item.title.toLowerCase().startsWith(search?.[0]?.toLowerCase?.() ?? '') && item.title.toLowerCase().includes(search.toLowerCase())){
+						result.push( <Item key={item._id} object={item}/> );
 					}
+				});
+
+				setFilteredData([...result]);
 			}
-			else{
-				return <Item key={object._id} object={object}/>
-			}
-		}))
-	}, [search, archiveData])
+
+
+
+		}
+
+		handleSearch();			
+
+	}, [search, archiveData, filter.sFilter]);
 	
 	useEffect(()=>{
 		if( sendPublic ){
@@ -150,8 +180,7 @@ function Item(props){
 			<div className="col-1 text-center">{props.object.course??'N/A'}</div>
 			<div className="col-4 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
 			<div className="col-2 text-center">{props.object.yearSubmitted}</div>
-			<Button className='col-1 text-center' style={{backgroundColor:'#385723', color:'white'}} title='View'/>
-			<Button className='col-1 text-center' style={{backgroundColor:'#385723', color:'white'}} title='Edit'/>
+			<Link to={`/research-full/${props.object._id}`}><Button className='col-1 text-center' style={{width:'90px',backgroundColor:'#385723', color:'white'}} title='View'/></Link>
 		</div>
 	);
 }

@@ -111,7 +111,7 @@ export default function AdminCList(props){
 				</div>		
 			</div>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
-				<div style={{height:'80%', width:'90%', backgroundColor:'white', border:'1px solid black',color:'black'}}>
+				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black',color:'black',overflowY:'auto',overflowX:'auto'}}>
 					<Suspense fallback={<Loading/>}>
 						<SlistHeader/>
 						{ filteredData }

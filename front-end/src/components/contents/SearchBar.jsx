@@ -17,13 +17,20 @@ export default function SearchBar( props ){
 		setFieldContent( e.target.value );
 	}
 
+	const removeFilter = async () =>{	
+        window.location.reload();
+	}
+
 	return(
 		<div style={{height:'10%', width:'100%'}} className="search-bar d-flex flex-row justify-content-around align-items-center">
 			<Button style={{height: '30px',width:'100px',backgroundColor:'#385723',color: 'white'}} click={sendRequest} title="Search"/>
 			<Field style={{width:'700px'}} className={props.className} reqOnChange={linkToButton} placeHolder={props.placeHolder}/>
 			<Link to={props.location}>
-				Add filter
+				<Button style={{height: '30px',width:'120px'}} title='Add Filter'/>
 			</Link>
+			<div className="d-flex flex-row justify-content-end flex-row">
+				<Button style={{height: '30px',width:'120px'}} title='Remove Filter' click={removeFilter}/>
+			</div>
 		</div>
 	);
 }

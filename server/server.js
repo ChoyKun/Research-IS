@@ -136,11 +136,59 @@ app.get('/student-filter-query/:course/:section/:yearLevel/:order', async( req, 
 				docs.forEach( doc => {
 					if(doc.status == 'active'){
 						console.log(doc.status)
-						return result.push(doc);
+						result.push(doc);
 
 						if(doc.section == section){
-							console.log('section bitch')
-							return sectionResult.push( doc );
+							sectionResult.push( doc );
+						}
+					}
+				});
+
+				if(section == 'null'){
+					return res.json({ result });
+				}
+				else{
+					return res.json({ sectionResult });
+				}
+			}
+			else{
+				return res.sendStatus( 403 );
+			}
+		}
+	);
+});
+
+app.get('/inactive-student-filter-query/:course/:section/:yearLevel/:order', async( req, res, next ) => {
+	const { 
+		course,
+		section,
+		yearLevel,
+		order
+	} = req.params;
+
+	const result = [];
+	const sectionResult  = [];
+
+
+	Student.find(
+		{ course: course}, 
+		null, 
+		{ sort: { 
+			lastName: order === 'A-Z' ? -1 : 1,
+			yearLevel: yearLevel === '4-1' ? 1 : -1
+		}},
+		( err, docs ) => {
+			if( err ) return res.status( 503 ).json({ message:'Server Error' });
+
+			if( docs ){
+				console.log(section);
+				docs.forEach( doc => {
+					if(doc.status == 'inactive'){
+						console.log(doc.status)
+						result.push(doc);
+
+						if(doc.section == section){
+							sectionResult.push( doc );
 						}
 					}
 				});

@@ -1,6 +1,8 @@
-import React,{useState, useEffect, Suspense} from 'react';
+import React,{useState, useEffect, Suspense,useContext} from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from '../modules/config.js';
+import FilterContext from '../contexts/filter-context';
+
 
 
 //icons
@@ -23,11 +25,12 @@ import Checkbox from '../components/fields/checkbox';
 
 export default function AdminRList(props){
 	const {username} = useParams();
+	const filter = useContext( FilterContext );
 
 
 	const [studentData, setStudentData] = useState( [] );
 	const [filteredData, setFilteredData] = useState(null);
-	const [search, setSearch]= useState(null);
+	const [search, setSearch]= useState('');
 
 	
 	useEffect(() => {
@@ -46,21 +49,50 @@ export default function AdminRList(props){
 	}, [])
 
 
-	useEffect(()=>{
-		setFilteredData(studentData?.map?.(object=>{
-			if(search){
-				for( let key of Object.keys(object)){
-					if(object[key]?.toLowerCase?.()?.startsWith(search?.charAt?.(0)?.toLowerCase?.())){
-						return <Item key={object._id} object={object}/>
+	useEffect(() => {
+		let result = [];
+
+		const handleSearch = async () => {		
+			if( filter.sFilter ){
+				const { 
+					course,
+					section,	
+					yearLevel,
+					order
+				} = filter.sFilter;
+
+				console.log(section);
+				axios.get(`http://localhost:7000/inactive-student-filter-query/${course}/${section}/${yearLevel}/${order}`)
+				.then( res => {
+					if(section == 'null'){
+						res.data.result.forEach( item => {
+							result.push(<Item key={item._id} object={item}/>);
+						});
 					}
-				}
+					else{
+						res.data.sectionResult.forEach( item => {
+							result.push(<Item key={item._id} object={item}/>);
+						});
+					}
+					
+
+					setFilteredData([...result]);
+				})
 			}
-			else{
-				console.log(Item)
-				return <Item key={object._id} object={object}/>
+			else if(!filter.sFilter){
+				studentData.forEach( item =>{
+					if( (item.firstName.toLowerCase().startsWith(search?.[0]?.toLowerCase?.() ?? '') || item.lastName.toLowerCase().startsWith(search?.[0]?.toLowerCase?.() ?? '')) && (item.firstName.toLowerCase().includes(search.toLowerCase()) || item.lastName.toLowerCase().includes(search.toLowerCase()))){
+						result.push( <Item key={item._id} object={item}/> );
+					}
+				});
+
+				setFilteredData([...result]);
 			}
-		}))
-	},[search, studentData])
+		}
+
+		handleSearch();			
+
+	}, [search, studentData, filter.sFilter]);
 
 
 	return(
@@ -76,7 +108,7 @@ export default function AdminRList(props){
 				<SearcBar location="/slist-filter" setSearch={setSearch}className='Search'/>		
 			</div>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
-				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black', color:'black'}}>
+				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black', color:'black',overflowY:'auto',overflowX:'auto'}}>
 					<Suspense fallback={<Loading/>}>
 						<SlistHeader/>
 						{console.log(filteredData)}
