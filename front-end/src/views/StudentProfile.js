@@ -58,11 +58,6 @@ export default function StudentProfile(props){
 						<div style={{height:'90%',width:'100%',color:'black'}} className='d-flex justify-content-center flex-column'>
 							{studentData?.map?.( object=>(
 								<div style={{height:'100%',width:'100%',color:'black'}} onClick={() => console.log('clicked')} key={studentData.indexOf(object)} className="d-flex flex-column justify-content-start">
-									<div style={{height:'40%',width:'100%'}} className='d-flex justify-content-start'>
-										<div style={{height:'100%',width:'225px', border:'1px solid black'}}> 
-											<img src={object.img}/>
-										</div>
-									</div>
 									<div style={{height:'10%',width:'50%'}} className='d-flex flex-row justify-content-start'>
 										<label style={{fontSize:'20px'}}>Name:</label>
 										<label style={{fontSize:'20px'}}>{name ?? 'Loading'}</label> 

@@ -6,10 +6,14 @@ import axios from '../modules/config.js';
 import scslogo from "../images/scs-final.png";
 import favorites from "../images/heart.png";
 import profile from "../images/profile.png";
+import profileMIS from "../images/profile-MIS.png";
+import profileStudent from "../images/profile-students.png";
 import lock from "../images/lock.png"
 import drawer from "../images/drawer.png"
+import rlist from "../images/rlist.png"
 
 import IconBtn from '../components/buttons/iconbtn';
+import Button from '../components/buttons/button';
 
 export default function Frame(props){
 	const [isMenuOpen, setIsMenuOpen] = useState( false );
@@ -73,28 +77,37 @@ function OpenedMenu( props ){
 			<div style={{backgroundColor:'#404040',width:'100%',height:"80%"}}className="side-panel d-flex flex-column justify-content-around align-items-center">
 				<img style={{height:'130px',width:'150px'}} src={scslogo}/>
 				<div style={{height:'3px',width:'250px',backgroundColor:'white'}} className='d-flex justify-content-center align-items-center'></div>
-				<Link to={`/MIS-profile/${username}`}>
-					<div className='d-flex justify-content-around align-items-center'>
-						<img style={{height:'50px',width:'50px'}} src={profile}/>
-						<h6 style={{fontSize:'23px'}}>Profile</h6>
+				<div style={{width:'90%'}} className='d-flex flex-row justify-content-around align-items-center'>
+					<div classname="d-flex justify-content-center align-items-center" style={{width:'20%'}}>
+						<img style={{height:'40px',width:'40px'}} src={profile}/>
 					</div>
-				</Link>
-				<Link to={`/MIS-changepass/${username}`}>
-					<div className='d-flex justify-content-around align-items-center'>
-						<img style={{height:'50px',width:'50px'}} src={lock}/>
-						<h6 style={{fontSize:'23px'}}>Change Password</h6>
+					<div classname="d-flex justify-content-center align-items-center" style={{width:'80%'}}>
+						<Link to={`/MIS-profile/${username}`}><Button style={{height:'40px' , width:'100%'}} title='Profile'/></Link>
 					</div>
-				</Link>
-				<Link to={`/admin-access/${username}`}>
-					<div className='d-flex justify-content-around align-items-center'>
-						<h6 style={{fontSize:'23px'}}>Archives</h6>
+				</div>
+				<div style={{width:'90%'}} className='d-flex flex-row justify-content-around align-items-center'>
+					<div classname="d-flex justify-content-center align-items-center" style={{width:'20%'}}>
+						<img style={{height:'40px',width:'40px'}} src={lock}/>
 					</div>
-				</Link>
-				<Link to="/sign-in">
-					<div className='d-flex justify-content-around align-items-center'>
-						<h6 style={{fontSize:'23px'}}>Log out</h6>
+					<div classname="d-flex justify-content-center align-items-center" style={{width:'80%'}}>
+						<Link to={`/MIS-changepass/${username}`}><Button style={{height:'40px' , width:'100%'}} title='Change Password'/></Link>
 					</div>
-				</Link>
+				</div>
+				<div style={{width:'90%'}} className='d-flex flex-row justify-content-around align-items-center'>
+					<div classname="d-flex justify-content-center align-items-center" style={{width:'20%'}}>
+						<img style={{height:'40px',width:'40px'}} src={rlist}/>
+					</div>
+					<div classname="d-flex justify-content-center align-items-center" style={{width:'80%'}}>
+						<Link to={`/admin-access/${username}`}><Button style={{height:'40px' , width:'100%'}} title='Archives'/></Link>
+					</div>
+				</div>
+				<div style={{width:'90%'}} className='d-flex flex-row justify-content-around align-items-center'>
+					<div classname="d-flex justify-content-center align-items-center" style={{width:'20%'}}>
+					</div>
+					<div classname="d-flex justify-content-center align-items-center" style={{width:'80%'}}>
+						<Link to={`/sign-in`}><Button style={{height:'40px' , width:'100%'}} title='Log-out'/></Link>
+					</div>
+				</div>
 			</div>
 		</div>
 	);
@@ -107,8 +120,9 @@ function ClosedMenu( props ){
 			<div style={{backgroundColor:'#404040',width:'100%',height:"50%"}}className="side-panel d-flex flex-column justify-content-around align-items-center">
 				<img style={{height:'60px',width:'70px'}} src={scslogo}/>
 				<div style={{height:'3px',width:'60px',backgroundColor:'white'}} className='d-flex justify-content-center align-items-center'></div>
-				<img style={{height:'50px',width:'50px'}} src={profile}/>
-				<img style={{height:'50px',width:'50px'}} src={lock}/>
+				<img style={{height:'40px',width:'40px'}} src={profile}/>
+				<img style={{height:'40px',width:'40px'}} src={lock}/>
+				<img style={{height:'40px',width:'40px'}} src={rlist}/>
 			</div>
 		</div>
 	);
