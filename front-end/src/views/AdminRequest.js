@@ -151,11 +151,6 @@ const Request = ( props ) => {
 
 
 	const approve = async () => {
-		axios.put(`http://localhost:7000/approved/change-file-state/${ props.id }`)
-		.catch( err => {
-			console.log( err );
-		});
-
 		setSendApproved( true );
 	}
 

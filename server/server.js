@@ -490,9 +490,14 @@ app.put('/student/slist/approved/:username/:date', async(req,res,next)=>{ //san 
 		if(err) return res.status( 503 ).json({ message: 'Server Error' });
 
 		if(data){
-			const ind = data.pending.indexOf(approved[0])
-			data.pending.splice(ind,1);
-			data.approved.push({ id: approved[0], dateApproved: date });
+			const pending = data.pending.filter( id => id !== approved[0] );
+			console.log( pending );
+			data.pending = pending;
+
+			console.log( approved[0] );
+			if( approved[0] ){
+				data.approved.push({ id: approved[0], dateApproved: date });
+			}
 
 			fs.readFile( req_view_path, (err, list) => {
 				if(err) return res.status( 503 ).json({ message: 'Server Error' });
@@ -569,29 +574,40 @@ app.get('/student/slist/favlist/:username', async(req,res,next)=>{
 app.get('/student/slist/pending-list/:username', async(req,res,next)=>{
 	const studentNo= req.params.username;
 
-	Student.findOne({studentNo: studentNo}, (err, data)=>{
+	const pendList = [];
+
+	Student.findOne({studentNo: studentNo}, async (err, data)=>{
 		if(err) return res.status( 503 ).json({ message: 'Server Error' });
 
 		if(data){
-			const pendList = [];
 
 			if(data.pending.length){
-				data.pending.forEach(async (_id, index) => {
-					await Research.findOne({_id: _id}, (err,doc)=>{
-						if(err) return res.status(503).json({message: 'Server Error' })
+				console.log(data.pending)
 
-						if(doc){
-							pendList.push(doc);
-						}
+				try{
+					const result = await Research.find().where('_id').in(data.pending);
 
-						if( index === data.pending.length - 1){
-							return res.status(200).json({data: pendList})
-						}
-						else{
-							return res.sendStatus(404);
-						}
-					})
-				})
+					console.log( result );
+					return res.json({ data: result });
+
+				}
+				catch( err ){
+					throw err;
+				}
+				// data.pending.forEach(async (_id, index) => {
+				// 	await Research.findOne({_id: _id}, (err,doc)=>{
+				// 		if(err) return res.status(503).json({message: 'Server Error' })
+
+				// 		if(doc){
+				// 			console.log(doc)
+				// 			pendList.push(doc);
+				// 		}
+
+				// 		return pendList;
+				// 	})
+				// })
+				// console.log(pendList)
+				// return res.status(200).json({data: pendList})
 			}
 			else{
 				return res.sendStatus(404);
@@ -603,55 +619,71 @@ app.get('/student/slist/pending-list/:username', async(req,res,next)=>{
 app.get('/student/slist/approved-list/:username', async(req,res,next)=>{
 	const studentNo= req.params.username;
 
-	Student.findOne({studentNo: studentNo}, (err, data)=>{
+	Student.findOne({studentNo: studentNo}, async(err, data)=>{
 		if(err) return res.status( 503 ).json({ message: 'Server Error' });
 
 		if(data){
 			const apprList = [];
 
 			if(data.approved.length){
-				data.approved.forEach(async (datum, index) => {
-					await Research.findOne({_id: datum.id}, (err,doc)=>{
-						if(err) return res.status(503).json({message: 'Server Error' })
+				try{
+					const result = await Research.find().where('_id').in( data.approved.map( elem => elem.id ) );
 
-						if(doc){
+					if( result.length ){
+						result.map( (rslt, index) => {
+							rslt._doc.dateApproved = data.approved.map( elem => elem.dateApproved )[ index ];
+							return rslt; 
+						});
+					}
 
-							const {
-								_id,
-								title,
-								course,
-								researchCategories,
-								yearSubmitted,
-								state,
-								favorites,
-								PDFFile,
-								lead
-							} = doc;
+					console.log( result );
+					return res.json({ data: result });
+				}
+				catch( err ) {
+					throw err;
+				}
+				// data.approved.forEach(async (datum, index) => {
+				// 	await Research.findOne({_id: datum.id}, (err,doc)=>{
+				// 		if(err) return res.status(503).json({message: 'Server Error' })
 
-							apprList.push({ 
-								_id, 
-								title, 
-								course,
-								researchCategories,
-								yearSubmitted,
-								state,
-								favorites,
-								PDFFile,
-								lead,
-								dateApproved: datum.dateApproved
-							});
+				// 		if(doc){
 
-						}
+				// 			const {
+				// 				_id,
+				// 				title,
+				// 				course,
+				// 				researchCategories,
+				// 				yearSubmitted,
+				// 				state,
+				// 				favorites,
+				// 				PDFFile,
+				// 				lead
+				// 			} = doc;
+
+				// 			apprList.push({ 
+				// 				_id, 
+				// 				title, 
+				// 				course,
+				// 				researchCategories,
+				// 				yearSubmitted,
+				// 				state,
+				// 				favorites,
+				// 				PDFFile,
+				// 				lead,
+				// 				dateApproved: datum.dateApproved
+				// 			});
+
+				// 		}
 
 
-						if( index === data.approved.length - 1){
-							return res.status(200).json({data: apprList})
-						}
-						else{
-							return res.sendStatus(404);
-						}	
-					})
-				})
+				// 		if( index === data.approved.length - 1){
+				// 			return res.status(200).json({data: apprList})
+				// 		}
+				// 		else{
+				// 			return res.sendStatus(404);
+				// 		}	
+				// 	})
+				// })
 			}
 			else{
 				return res.sendStatus(404);
@@ -1580,28 +1612,6 @@ app.get('/check-file/:id', async ( req, res, next ) => {
 		});
 
 		return res.end();
-	});
-});
-
-app.put('approved/change-file-state/:id', async ( req, res, next ) => {
-	const id = req.params.id;
-
-	fs.readFile( req_view_path, ( err, reqList ) => {
-		if( err ) return res.sendStatus( 503 );
-
-		const list = JSON.parse( reqList );
-
-		list.forEach( (item, index) => {
-			if( item.id === id ){
-				list[index].state = 'approved';
-			}
-		});
-
-		fs.writeFile( req_view_path, JSON.stringify(list, null, 4), err => {
-			if( err ) return res.sendStatus( 503 );
-
-			return res.sendStatus( 200 );
-		});
 	});
 });
 

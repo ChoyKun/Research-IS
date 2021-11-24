@@ -139,12 +139,7 @@ function Item(props){
 		const token = Cookies.get('token');
 
 		const checkFile = async () => {
-			axios.post(`http://localhost:7000/student/slist/disable/${username}/${props.object._id}`, null, {
-				headers: {
-					authorization: `Bearer ${token}`
-				},
-				timeout: 5
-			})
+			axios.post(`http://localhost:7000/student/slist/disable/${username}/${props.object._id}`)
 			.then((res)=>{
 				setDisabled(true)
 			})
@@ -231,6 +226,8 @@ function Item(props){
 		});
 
 		setSendPend(true);
+
+		window.location.reload();
 	}
 
 
