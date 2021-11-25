@@ -1,1 +1,18 @@
-[]
+[
+    {
+        "id": "6199fe795feba617043671db",
+        "studentID": "1801029",
+        "studentName": "John Shariff R Reyes",
+        "title": "Research 7",
+        "state": "pending",
+        "dateRequested": "2021-11-25"
+    },
+    {
+        "id": "61650757997a980a90bf859c",
+        "studentID": "1801031",
+        "studentName": "Mitch S Canciano",
+        "title": "Research 1",
+        "state": "pending",
+        "dateRequested": "2021-11-25"
+    }
+]

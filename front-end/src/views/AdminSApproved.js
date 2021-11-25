@@ -137,7 +137,6 @@ function Item(props){
 				setSendRemove( false );
 			})
 			.catch((err) =>{
-				console.log( err.response );
 				if(err?.response?.data?.message) alert(`${ err?.response?.data?.message}`) 
 			});
 		}
@@ -154,6 +153,7 @@ function Item(props){
 			<div className="col-1 text-center">{props.object.course??'N/A'}</div>
 			<div className="col-4 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
 			<div className="col-2 text-center">{props.object.yearSubmitted}</div>
+			<div className="col-2 text-center">{props.object.dateApproved}</div>
 			<Button click={sender} title='Remove' />
 		</div>
 	);
@@ -174,6 +174,12 @@ function RListHeader(props){
 			</div>
 			<div className='col-2 text-center'>
 				Year Submitted
+			</div>
+			<div className='col-2 text-center'>
+				Date Approved
+			</div>
+			<div className='col-1 text-center'>
+
 			</div>
 		</div>
 	);

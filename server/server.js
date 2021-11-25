@@ -17,7 +17,7 @@ const port = process.env.PORT || 7000;
 const dbUri = 'mongodb://localhost/Research-ISdb'
 
 
-// Models
+// Model
 const Student = require('./model/student');
 const Research = require('./model/research');
 const Faculty = require('./model/faculty');
@@ -81,7 +81,7 @@ app.get('/filter-query/:course/:category/:yearSubmitted/:order/:year', async( re
 	const result = [];
 
 	Research.find(
-		{ course: course, yearSubmitted: yearSubmitted }, 
+		{ course: course, yearSubmitted: yearSubmitted, status: 'public' }, 
 		null, 
 		{ sort: { 
 			title: order === 'A-Z' ? 1 : -1,
@@ -135,7 +135,6 @@ app.get('/student-filter-query/:course/:section/:yearLevel/:order', async( req, 
 				console.log(section);
 				docs.forEach( doc => {
 					if(doc.status == 'active'){
-						console.log(doc.status)
 						result.push(doc);
 
 						if(doc.section == section){
@@ -339,8 +338,12 @@ app.get('/faculty/flist/:username', async(req, res, next)=>{
 		if(err){
 			return res.status(400).json({message:'unknown user'})
 		}
+
 		if(doc){
 			return res.status(200).json({data:`${doc.firstName} ${doc.middleInitial} ${doc.lastName}`, message:'user logged-in'})
+		}
+		else{
+			return res.status(404).json({message:'not found'})
 		}
 	})
 })
@@ -1281,14 +1284,27 @@ app.put('/coordinator/clist/remove-approved/:studentNo', async (req,res,next)=>{
 
 	const removed = req.body;
 
+	function extractValue(arr, prop) {
+
+    // extract value from property
+	    let extractedValue = arr.map(item => item[prop]);
+
+	    return extractedValue;
+
+	}
+
 
 	Student.findOne({studentNo:studentNo}, (err,data)=>{
 		if(err) return res.status( 503 ).json({ message: 'Server Error' });
 
 		if(data){
-			if(data.approved.includes(removed[0])){
-				const ind = data.approved.indexOf(removed);
-				data.approved.splice(ind,1);
+			var dataArray = extractValue(data.approved, 'id');
+
+			console.log(dataArray.includes(removed[0]))	
+
+			if(dataArray.includes(removed[0])){
+				const approved = data.approved.filter(function(el) { return el.id != removed[0]; } );
+				data.approved = approved;
 
 				data.save( err => {
 					if(err) return res.status( 503 ).json({ message: 'Server Error' });
@@ -1296,6 +1312,9 @@ app.put('/coordinator/clist/remove-approved/:studentNo', async (req,res,next)=>{
 					return res.status(200).json({message: 'successfuly removed'})
 				})
 			}
+		}
+		else{
+			return res.status(503).json({message: 'server error'})
 		}
 	})
 })

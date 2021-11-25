@@ -79,7 +79,7 @@ export default function Login(props){
 					</div>
 					<div className="login-field d-flex flex-column align-items-center justify-content-between">
 						<Field className='username' placeHolder="Student no." reqOnChange={(e)=>{dispatch({type:'username',data: e.target.value})}}/>
-						<Field className='password' placeHolder="Password" reqOnChange={(e)=>{dispatch({type:'password',data: e.target.value})}}/>
+						<Field className='password' type="password" placeHolder="Password" reqOnChange={(e)=>{dispatch({type:'password',data: e.target.value})}}/>
 						<div style={{width:"80%"}}>
 							<Select className="login-select" label='Select Position:'options={['Student','MIS Officer']} reqOnChange={(e)=>{dispatch({type:'label',data: e.target.value})}}/>
 						</div>
