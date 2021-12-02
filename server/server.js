@@ -46,7 +46,7 @@ const token_path = path.join(__dirname, '/data/tokens.json');
 const req_view_path = path.join(__dirname, 'data/view-requests.json');
 
 const requestAccessToken = ( user ) => {
-	return jwt.sign( user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '24hr' }); // wait check ko
+	return jwt.sign( user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '24h' }); // wait check ko
 }
 
 
@@ -756,33 +756,33 @@ app.post('/student/slist/register', async (req, res , next) =>{
 //kasama toh? yes paps
 // =====================================================================
 // ============= GET PICTURE ================
-app.get('/picture/:username', async (req, res, next) => {
-	const reqUsername = req.params.username;
+// app.get('/picture/:username', async (req, res, next) => {
+// 	const reqUsername = req.params.username;
 
-	Coordinator.findOne({username: reqUsername}, (err, doc) => {
-		if( err ) return res.sendStatus( 503 );
+// 	Coordinator.findOne({username: reqUsername}, (err, doc) => {
+// 		if( err ) return res.sendStatus( 503 );
 
-		if( doc ){
-			doc.save( err => {
-			    if( err ) return res.sendStatus( 503 );
+// 		if( doc ){
+// 			doc.save( err => {
+// 			    if( err ) return res.sendStatus( 503 );
 
-				return res.status( 200 ).json({ path: doc.img });    
-			});
-		}
-	});
+// 				return res.status( 200 ).json({ path: doc.img });    
+// 			});
+// 		}
+// 	});
 
-	Faculty.findOne({username: reqUsername}, (err, doc) => {
-		if( err ) return res.sendStatus( 503 );
+// 	Faculty.findOne({username: reqUsername}, (err, doc) => {
+// 		if( err ) return res.sendStatus( 503 );
 
-		if( doc ){
-			doc.save( err => {
-			    if( err ) return res.sendStatus( 503 );
+// 		if( doc ){
+// 			doc.save( err => {
+// 			    if( err ) return res.sendStatus( 503 );
 
-				return res.status( 200 ).json({ path: doc.img });    
-			});
-		}
-	});
-});
+// 				return res.status( 200 ).json({ path: doc.img });    
+// 			});
+// 		}
+// 	});
+// });
 // =====================================================================
 
 app.get('/faculty/picture', async (req, res, next) => {

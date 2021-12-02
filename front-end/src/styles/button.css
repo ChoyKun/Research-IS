@@ -100,3 +100,18 @@
 .disabledButton{
 	background-color: #385723;
 	color: white}
+
+
+.sidebarOpen{
+	background-color: #404040;
+	width: 350px;
+	height: 100%;
+	transition: all 500ms linear;
+}
+
+.sidebarClose{
+	background-color: #404040;
+	width: 8%;
+	height: 100%;
+	transition: all 500ms linear;
+}

@@ -173,12 +173,20 @@ function Item(props){
 
 	return(
 		<div onClick={() => console.log('clicked')} className="d-flex bg-secondary flex-row justify-content-around" style={{border:'1px solid black'}}>
-			<div className="col-1 text-center"><Checkbox reqOnChange={handleOnChange}/></div>
+			<div className='col-1 text-center'>
+				<Checkbox reqOnChange={handleOnChange}/>
+			</div>
 			<div className="col-2 text-center">{props.object.title}</div>
-			<div className="col-1 text-center">{props.object.course??'N/A'}</div>
-			<div className="col-4 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
+			<div className="col-2 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
 			<div className="col-2 text-center">{props.object.yearSubmitted}</div>
-			<Link to={`/research-full/${props.object._id}`}><Button className='col-1 text-center' style={{width:'90px',backgroundColor:'#385723', color:'white'}} title='View'/></Link>
+			<div className="col-3 text-center">
+				<marquee width="60%" direction="left" height="100%">
+					{props.object.members === '[]' ? 'N/A' : (()=> JSON.parse(props.object.members).join(', '))()}
+				</marquee>
+			</div>
+			<div className="col-1 text-center">
+				<Link to={`/research-full/${props.object._id}`}><Button title='View' /></Link>
+			</div>
 		</div>
 	);
 }
@@ -200,17 +208,14 @@ function RListHeader(props){
 			<div className='col-2 text-center'>
 				Title
 			</div>
-			<div className='col-1 text-center'>
-				Course
-			</div>
-			<div className='col-4 text-center'>
+			<div className='col-2 text-center'>
 				ResearchCategories
 			</div>
 			<div className='col-2 text-center'>
 				Year Submitted
 			</div>
-			<div className='col-1 text-center'>
-				
+			<div className='col-3 text-center'>
+				Authors
 			</div>
 			<div className='col-1 text-center'>
 				

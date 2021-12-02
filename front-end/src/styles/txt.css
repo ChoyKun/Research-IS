@@ -1,3 +1,19 @@
+@font-face{
+	font-family: Dancing Script;
+	src:  url("../fonts/DancingScript-Regular.ttf");
+}
+@font-face{
+	font-family: Montserrat;
+	src:  url("../fonts/Montserrat-Medium.ttf");
+}
+
+.DSFont{
+	font-family: 'Dancing Script';
+}
+.MontFont{
+	font-family: 'Montserrat';
+}
+
 .txt{
 	width:80%;
 	height: 30px;

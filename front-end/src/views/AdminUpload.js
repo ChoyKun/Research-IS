@@ -29,6 +29,7 @@ export default function FacultyUpload(props){
 		course: 'BSIT',
 		researchCategories: [],
 		yearSubmitted: null,
+		members: [],
 		lead: null,
 		mem1: null,
 		mem2: null,
@@ -87,6 +88,13 @@ export default function FacultyUpload(props){
 		const send = window.confirm("Uploaded researches will not be editable do you want to continue");
 		if(send == true){
 			data.researchCategories = JSON.stringify( data.researchCategories );
+			console.log(data.members)
+			data.members.push(data.lead);
+			data.members.push(data.mem1);
+			data.members.push(data.mem2);
+			data.members.push(data.mem3);
+			data.members.push(data.mem4);
+			data.members = JSON.stringify( data.members );
 
 			axios.post('http://localhost:7000/research/rlist/upload',data)
 			.then((res) => {

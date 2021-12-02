@@ -91,18 +91,10 @@ export default function StudentRList(props){
 
 	console.log(filter.sFilter)
 
-	const removeFilter = async () =>{	
-        window.location.reload();
-	}
-
-
 	return(
 		<>
 			<div style={{height:'20%', width:'100% !important'}}className="d-flex flex-column justify-content-around align-items-center">
-				<SearcBar location='/rlist-filter' setSearch={setSearch} placeHolder={'Enter Title Here'}/>
-				<div style={{height:'20%', width:'90%'}}className="d-flex flex-row justify-content-end flex-row">
-					<Button style={{height: '30px',width:'150px'}} title='Remove Filter' click={removeFilter}/>
-				</div>			
+				<SearcBar location='/rlist-filter' setSearch={setSearch} placeHolder={'Enter Title Here'}/>		
 			</div>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
 				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black', color:'black',overflowY:'auto',overflowX:'auto'}}>
@@ -248,17 +240,12 @@ function Item(props){
 	return(
 		<div style={{height:'30px',width:'100%',border:'1px solid black'}} className="d-flex bg-secondary flex-row justify-content-around">
 			<div className="col-2 text-center">{props.object.title}</div>
-			<div className="col-1 text-center">{props.object.course??'N/A'}</div>
 			<div className="col-3 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
-			<div className="col-1 text-center">{props.object.yearSubmitted}</div>
-			<div className="col-1 text-center">
-				<select style={{width:'90px'}}>
-					<option>{props.object.lead}</option>
-					<option>{props.object.mem1}</option>
-					<option>{props.object.mem2}</option>
-					<option >{props.object.mem3}</option>
-					<option >{props.object.mem4 ?? null }</option>
-				</select>
+			<div className="col-2 text-center">{props.object.yearSubmitted}</div>
+			<div className="col-3 text-center">
+				<marquee width="60%" direction="left" height="100%">
+					{props.object.members === '[]' ? 'N/A' : (()=> JSON.parse(props.object.members).join(', '))()}
+				</marquee>
 			</div>
 			<div className="col-1 text-center">
 				<Link to={`${url}/${props.object._id}`}><Button title='View' /></Link>
@@ -272,12 +259,9 @@ function Item(props){
 
 function RListHeader(props){
 	return(
-		<div style={{height:'30px',width:'100%',border:'1px solid black', backgroundColor:'#4472c4'}} className='d-flex flex-row justify-content-around'>
+		<div style={{height:'30px',width:'100%',border:'1px solid black',color:"white", backgroundColor:'#385723'}} className='d-flex flex-row justify-content-around'>
 			<div className='col-2 text-center'>
 				Title
-			</div>
-			<div className='col-1 text-center'>
-				Course
 			</div>
 			<div className='col-3 text-center'>
 				ResearchCategories
@@ -285,15 +269,16 @@ function RListHeader(props){
 			<div className='col-2 text-center'>
 				Year Submitted
 			</div>
-			<div className='col-1 text-center'>
+			<div className='col-3 text-center'>
 				Authors
 			</div>
-			<div className='col-1 text-center'>
+			<div className="col-1 text-center">
 				
 			</div>
-			<div className='col-1 text-center'>
-
+			<div className="col-1 text-center">
+				
 			</div>
+			
 		</div>
 	);
 }
