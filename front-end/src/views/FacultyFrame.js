@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {Link, useParams} from 'react-router-dom';
 import axios from '../modules/config.js';
+import Cookies from 'js-cookie';
 
 //icons
 import scslogo from "../images/scs-final.png";
@@ -32,6 +33,10 @@ export default function Frame(props){
 	const reqOpenMenu = () => {
 		setIsMenuOpen( !isMenuOpen );
 	}
+
+	// React.useEffect(() => {
+	// 	props?.authenticate?.();
+	// }, []);
 
 	return(
 		<div style={{width: '100%', height: '100%', color:'white'}} className="main-container">
@@ -72,6 +77,19 @@ export default function Frame(props){
 function OpenedMenu( props ){
 	const { username } = useParams();
 	
+	const handleSignOut = async () => {
+		const token = Cookies.get('token');
+
+		axios.delete('http://localhost:7000/sign-out', { token })
+		.then(() => {
+			Cookies.remove('token');
+			Cookies.remove('rtoken');
+		})
+		.catch( err => {
+			throw err;
+		});
+	}
+
 	return(
 		<div style={{backgroundColor:'#404040',width: '40%',height:"100%"}}className="side-panel d-flex flex-column align-items-center">
 			<div style={{backgroundColor:'#404040',width:'100%',height:"80%"}}className="side-panel d-flex flex-column justify-content-around align-items-center">
@@ -105,7 +123,7 @@ function OpenedMenu( props ){
 					<div classname="d-flex justify-content-center align-items-center" style={{width:'20%'}}>
 					</div>
 					<div classname="d-flex justify-content-center align-items-center" style={{width:'80%'}}>
-						<Link to={`/sign-in`}><Button style={{height:'40px' , width:'100%'}} title='Log-out'/></Link>
+						<Link to={`/sign-in`}><Button click={handleSignOut} style={{height:'40px' , width:'100%'}} title='Log-out'/></Link>
 					</div>
 				</div>
 			</div>

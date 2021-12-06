@@ -57,7 +57,7 @@ const authentication = ( req, res, next ) => {
 	if( !token ) return res.sendStatus( 401 );
 
 	jwt.verify( token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-		if( err ) return res.sendStatus( 403 );
+		if( err ) return res.sendStatus( 401 );
 
 		req.user = user;
 		next();
@@ -66,7 +66,7 @@ const authentication = ( req, res, next ) => {
 //  paps palagyan ng "authentication" lahat ng requests except sa sign in reguster at refresh
 
 app.get('/verify-me', authentication, async(req, res, next) => {
-	return res.sendStatus( 200 );
+	return res.json({ user: req.user });
 });
 
 app.get('/filter-query/:course/:category/:yearSubmitted/:order/:year', async( req, res, next ) => {
@@ -223,61 +223,25 @@ app.post('/sign-in', async(req,res,next)=>{
 			});
 		}
 
-		switch( _label ){
-			case 'Student':
-				Student.findOne({studentNo: _username, password:_password, status: 'active'}, (err, doc) => {
-					if( err ){
-						return res.status( 401 ).json({ message: 'Server Error' });
-					}
+		Student.findOne({studentNo: _username, password:_password, status: 'active'}, (err, doc) => {
+			if( err ){
+				return res.status( 401 ).json({ message: 'Server Error' });
+			}
 
-					const user = { name : _username };
-					const accessToken = requestAccessToken( user );
-					const refreshToken = jwt.sign( user, process.env.REFRESH_TOKEN_SECRET );
+			const user = { name : _username, role: 'student' };
+			const accessToken = requestAccessToken( user );
+			const refreshToken = jwt.sign( user, process.env.REFRESH_TOKEN_SECRET );
 
-					token.push( refreshToken );
+			token.push( refreshToken );
 
-					if( !doc ){
-						Coordinator.findOne({username:_username, password:_password, status: 'active'},  (errs, docs) => {
-							if( errs ){
-
-								return res.status( 401 ).json({ message: 'Server Error' });
-							}
-
-							if( docs ){
-								saveTokens( token, () => {
-									return res.status( 200 ).json({
-										accessToken: accessToken,
-										refreshToken: refreshToken,
-										message: 'Welcome mr. coordinator'
-									});
-								});
-							}
-							else{
-								return res.status( 401 ).json({message: 'Unauthorized'});
-							}			
-						});
-					}
-
-					if( doc ){
-						saveTokens( token, () => {
-							return res.status( 200 ).json({
-								accessToken: accessToken,
-								refreshToken: refreshToken,
-								message: 'Loged in successfuly'});
-						});
-					}
-					
-						
-				});
-				break;
-			case 'MIS Officer':
+			if( !doc ){
 				Faculty.findOne({username:_username, password:_password, status: 'active'},  (err, doc) => {
 					if( err ){
 
 						return res.status( 401 ).json({ message: 'Server Error' });
 					}
 
-					const user = { name : _username };
+					const user = { name : _username, role: 'mis officer' };
 					const accessToken = requestAccessToken( user );
 					const refreshToken = jwt.sign( user, process.env.REFRESH_TOKEN_SECRET );
 
@@ -294,7 +258,8 @@ app.post('/sign-in', async(req,res,next)=>{
 									return res.status( 200 ).json({
 										accessToken: accessToken,
 										refreshToken: refreshToken,
-										message: 'Welcome mr. coordinator'});
+										message: 'Welcome mr. coordinator',
+										role: 'mis officer'});
 									});
 							}
 							else{
@@ -308,19 +273,138 @@ app.post('/sign-in', async(req,res,next)=>{
 							return res.status( 200 ).json({
 								accessToken: accessToken,
 								refreshToken: refreshToken,
-								message: 'Loged in successfuly'});
+								message: 'Loged in successfuly',
+								role: 'mis officer'});
 						});
 					}
 				});
-				break;
+			}
 
-			default:
-				return res.status( 401 ).json({message: 'Unauthorized 4'});
+			if( doc ){
+				saveTokens( token, () => {
+					return res.status( 200 ).json({
+						accessToken: accessToken,
+						refreshToken: refreshToken,
+						message: 'Loged in successfuly',
+						role: 'student'});
+				});
+			}
+		});
 
-		}
+		// switch( _label ){
+		// 	case 'Student':
+		// 		Student.findOne({studentNo: _username, password:_password, status: 'active'}, (err, doc) => {
+		// 			if( err ){
+		// 				return res.status( 401 ).json({ message: 'Server Error' });
+		// 			}
+
+		// 			const user = { name : _username, role: 'student' };
+		// 			const accessToken = requestAccessToken( user );
+		// 			const refreshToken = jwt.sign( user, process.env.REFRESH_TOKEN_SECRET );
+
+		// 			token.push( refreshToken );
+
+		// 			if( !doc ){
+		// 				Coordinator.findOne({username:_username, password:_password, status: 'active'},  (errs, docs) => {
+		// 					if( errs ){
+
+		// 						return res.status( 401 ).json({ message: 'Server Error' });
+		// 					}
+
+		// 					if( docs ){
+		// 						saveTokens( token, () => {
+		// 							return res.status( 200 ).json({
+		// 								accessToken: accessToken,
+		// 								refreshToken: refreshToken,
+		// 								message: 'Welcome mr. coordinator'
+		// 							});
+		// 						});
+		// 					}
+		// 					else{
+		// 						return res.status( 401 ).json({message: 'Unauthorized'});
+		// 					}			
+		// 				});
+		// 			}
+
+		// 			if( doc ){
+		// 				saveTokens( token, () => {
+		// 					return res.status( 200 ).json({
+		// 						accessToken: accessToken,
+		// 						refreshToken: refreshToken,
+		// 						message: 'Loged in successfuly'});
+		// 				});
+		// 			}
+					
+						
+		// 		});
+		// 		break;
+		// 	case 'MIS Officer':
+		// 		Faculty.findOne({username:_username, password:_password, status: 'active'},  (err, doc) => {
+		// 			if( err ){
+
+		// 				return res.status( 401 ).json({ message: 'Server Error' });
+		// 			}
+
+		// 			const user = { name : _username, role: 'mis officer' };
+		// 			const accessToken = requestAccessToken( user );
+		// 			const refreshToken = jwt.sign( user, process.env.REFRESH_TOKEN_SECRET );
+
+		// 			token.push( refreshToken );
+
+		// 			if( !doc ){
+		// 				Coordinator.findOne({username:_username, password:_password, status: 'active'},  (errs, docs) => {
+		// 					if( errs ){
+		// 						return res.status( 401 ).json({ message: 'Server Error' });
+		// 					}
+
+		// 					if( docs ){
+		// 						saveTokens( token, () => {
+		// 							return res.status( 200 ).json({
+		// 								accessToken: accessToken,
+		// 								refreshToken: refreshToken,
+		// 								message: 'Welcome mr. coordinator'});
+		// 							});
+		// 					}
+		// 					else{
+		// 						return res.status( 401 ).json({message: 'Unauthorized'});
+		// 					}		
+		// 				});
+		// 			}
+
+		// 			if( doc ){
+		// 				saveTokens( token, () => {
+		// 					return res.status( 200 ).json({
+		// 						accessToken: accessToken,
+		// 						refreshToken: refreshToken,
+		// 						message: 'Loged in successfuly'});
+		// 				});
+		// 			}
+		// 		});
+		// 		break;
+
+		// 	default:
+		// 		return res.status( 401 ).json({message: 'Unauthorized 4'});
+		// }
+
 	});
 })
 
+app.delete('/sign-out', async ( req, res ) => {
+  fs.readFile( token_path, (err, data) => {
+  	if( err ) return res.sendStatus( 503 );
+
+  	if( data ){
+  		data = JSON.parse( data );
+  		data = data.filter( datum => datum !== req.body.token );
+
+  		fs.writeFile( token_path, JSON.stringify( data, null, 4 ), err => {
+		  	if( err ) return res.sendStatus( 503 );
+
+		  	return res.sendStatus( 200 );
+  		});
+  	}
+  });
+});
 
 app.get('/student/slist/:studentNo', async(req, res, next)=>{
 	Student.findOne({studentNo: req.params.studentNo}, (err, doc)=>{
