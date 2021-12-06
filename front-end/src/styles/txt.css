@@ -9,9 +9,12 @@
 
 .DSFont{
 	font-family: 'Dancing Script';
+	text-align: center;
 }
 .MontFont{
 	font-family: 'Montserrat';
+	align-content: center;
+	justify-content: center;
 }
 
 .txt{
