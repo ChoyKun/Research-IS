@@ -12,11 +12,14 @@ export default function Select(props){
 	});
 
 	return(
-		<div className={props.className} style={{backgroundColor:'#E2F0D9',borderRadius:'20px',border:'2px solid #385723'}}>
+		<div className={`${props.className} d-flex flex-row`}>
 			<label>{props.label}</label>
-			<select style={{border:'none',borderRadius:'20px', outline:'none'}} onChange={props.reqOnChange}>
-				{options}
-			</select>
+			<div style={{width:`${props.width}`,backgroundColor:'#E2F0D9',borderRadius:'20px',border:'2px solid #385723'}}>
+				<select style={{border:'none',borderRadius:'20px', outline:'none'}} onChange={props.reqOnChange}>
+					{options}
+				</select>
+			</div>
+			
 		</div>
 	);
 }
