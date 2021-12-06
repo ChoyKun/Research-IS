@@ -122,51 +122,60 @@ function App() {
   const [requestedView, setRequetedView] = React.useState( null );
 
   const [sFilter, setSFilter] = React.useState( null );
-  
-  
-  React.useEffect(() => {
+
+  const authenticate = () => {
     const token = Cookies.get('token');
     const rtoken = Cookies.get('rtoken');
 
-    // axios.defaults.headers.common['Authorization'] = token; // d ba pwede iset sa global na lang? pano ba iset as global?
-    // Bali eto na yung global eh kaso ayaw gumana nasa loob siya ng function d ba? d ba kapag global sa labas nung function? tapos import na lang?
-    // Same shit ata eh pero ang pwede mong gawin eh ganto
+    if( token ){
+      // allow access
+      axios.get('http://localhost:7000/verify-me', {
+        headers: {
+          'authentication': `Bearer ${token}`
+        }
+      })
+      .then(req => {
+        const { role, name } = req.data.user;
 
-    const authenticate = () => {
-      if( token ){
-        // allow access
-        axios.get('http://localhost:7000/verify-me', {
-          headers: {
-            'authentication': `Bearer ${token}`
-          }
-        })
-        .then(() => { 
-          setRequetedView( <Redirect to={ pathname }/> );
-        })
-        .catch( err => {
-          if( rtoken && err?.response?.status && (err?.response?.status === 403 || err?.response?.status === 401) ){
-            axios.post('http://localhost:7000/refresh-token', { rtoken })
-            .then( res => {
-              Cookies.set('token', res.data.accessToken);
-              authenticate();
-            })
-            .catch( err => {
-              setRequetedView( <Redirect to="/sign-in"/> );
-            });
-          }
-      
-          // setRequetedView( <Redirect to="/sign-in"/>);
-        });
-      }
-      else{
-        // sign in 
-        setRequetedView(() => <Redirect to="/sign-in"/>);
-      }
+        console.log( role, name );
+        switch( role ){
+          case 'student':
+            setRequetedView( <Redirect to={`/student-rlist/${name}`}/> );
+            break;
+
+          case 'mis officer':
+            setRequetedView( <Redirect to={pathname}/> );
+            break;
+        }
+
+        // setRequetedView( <Redirect to={ pathname }/> );
+      })
+      .catch( err => {
+        if( rtoken && err?.response?.status && err?.response?.status === 401 ){
+          axios.post('http://localhost:7000/refresh-token', { rtoken })
+          .then( res => {
+            Cookies.set('token', res.data.accessToken);
+            authenticate();
+          })
+          .catch( err => {
+            setRequetedView( <Redirect to="/sign-in"/> );
+          });
+        }
+        else{
+          console.log('here')
+          setRequetedView( <Redirect to="/sign-in"/> );
+        }
+    
+        // setRequetedView( <Redirect to="/sign-in"/>);
+      });
     }
+    else{
+      // sign in 
+      setRequetedView(() => <Redirect to="/sign-in"/>);
+    }
+  }
 
-    authenticate();
-  }, []);
-
+  React.useEffect(() => authenticate(), []);
 
   return (
     <SnackbarProvider maxSnack={3}>
@@ -174,49 +183,49 @@ function App() {
         <FilterContext.Provider value={{setSFilter: setSFilter, sFilter: sFilter}}>
           <Switch>
             <Route path="/admin-profile/:username">
-              <AdminFrame>
+              <AdminFrame authenticate={authenticate}>
                 <AdminProfile />
               </AdminFrame>
             </Route>
 
             <Route path="/admin-access/:username">
-              <FacultyFrame>
+              <FacultyFrame authenticate={authenticate}>
                 <AdminAccess />
               </FacultyFrame>
             </Route>
 
             <Route path="/admin-archive/:username">
-              <AdminFrame>
+              <AdminFrame authenticate={authenticate}>
                 <AdminArchive />
               </AdminFrame>
             </Route>
 
             <Route path="/admin-edit-profile/:username">
-              <AdminFrame>
+              <AdminFrame authenticate={authenticate}>
                 <AdminEditProfile />
               </AdminFrame>
             </Route>
 
             <Route path="/admin-changepass/:username">
-              <AdminFrame>
+              <AdminFrame authenticate={authenticate}>
                 <AdminChangepass />
               </AdminFrame>
             </Route>
 
             <Route path="/admin-log-in/:username">
-              <FacultyFrame>
+              <FacultyFrame authenticate={authenticate}>
                 <AdminLogin />
               </FacultyFrame>
             </Route>
 
             <Route path="/admin-reg/:username">
-              <AdminFrame>
+              <AdminFrame authenticate={authenticate}>
                 <AdminReg />
               </AdminFrame>
             </Route>
 
             <Route path="/admin-request/:username">
-              <AdminFrame>
+              <AdminFrame authenticate={authenticate}>
 
                 <AdminRequest />
 
@@ -224,103 +233,103 @@ function App() {
             </Route>
 
             <Route path="/admin-new-coor">
-              <AdminFrame>
+              <AdminFrame authenticate={authenticate}>
                 <AdminNewCoor />
               </AdminFrame>
             </Route>
 
             <Route path="/admin-coor-list/:username">
-              <AdminFrame>
+              <AdminFrame authenticate={authenticate}>
                 <AdminCList />
               </AdminFrame>
             </Route>
 
             <Route path="/admin-current-officer/:username">
-              <AdminFrame>
+              <AdminFrame authenticate={authenticate}>
                 <AdminCO />
               </AdminFrame>
             </Route>
 
             <Route exact path="/admin-rlist/:username">
-              <AdminFrame>
+              <AdminFrame authenticate={authenticate}>
                 <AdminRlist />
               </AdminFrame>
             </Route>
 
             <Route exact path="/admin-slist/:username">
-              <AdminFrame>
+              <AdminFrame authenticate={authenticate}>
                 <AdminSList />
               </AdminFrame>
             </Route>
 
             <Route exact path="/admin-sapproved/:username/:studentNo">
-              <AdminFrame>
+              <AdminFrame authenticate={authenticate}>
                 <AdminSApproved />
               </AdminFrame>
             </Route>
 
             <Route exact path="/admin-inactive-slist/:username">
-              <AdminFrame>
+              <AdminFrame authenticate={authenticate}>
                 <AdminInactiveSList />
               </AdminFrame>
             </Route>
 
             <Route exact path="/admin-flist/:username">
-              <AdminFrame>
+              <AdminFrame authenticate={authenticate}>
                 <AdminFList />
               </AdminFrame>
             </Route>
 
             <Route path="/admin-upload/:username">
-              <AdminFrame>
+              <AdminFrame authenticate={authenticate}>
                 <AdminUpload />
               </AdminFrame>
             </Route>
 
             <Route path="/MIS-reg/:username">
-              <FacultyFrame>
+              <FacultyFrame authenticate={authenticate}>
                 <FacultyReg />
               </FacultyFrame>
             </Route>
 
             <Route path="/emergency-admin">
-              <FacultyFrame>
+              <FacultyFrame authenticate={authenticate}>
                 <EmergencyAdmin />
               </FacultyFrame>
             </Route>
 
             <Route path="/MIS-profile/:username">
-              <FacultyFrame>
+              <FacultyFrame authenticate={authenticate}>
                 <FacultyProfile />
               </FacultyFrame>
             </Route>
 
             <Route path="/MIS-edit-profile/:username">
-              <FacultyFrame>
+              <FacultyFrame authenticate={authenticate}>
                 <FacultyEditProfile />
               </FacultyFrame>
             </Route>
 
             <Route path="/MIS-edit-student/:username/:studentNo">
-              <FacultyFrame>
+              <FacultyFrame authenticate={authenticate}>
                 <FacultyEditStudent />
               </FacultyFrame>
             </Route>
 
             <Route path="/MIS-changepass/:username">
-              <FacultyFrame>
+              <FacultyFrame authenticate={authenticate}>
                 <FacultyChangepass />
               </FacultyFrame>
             </Route>
 
             <Route path="/MIS-slist/:username">
-              <FacultyFrame>
+              <FacultyFrame authenticate={authenticate}>
                 <FacultySList />
               </FacultyFrame>
             </Route>
 
              <Route path="/MIS-inactive-slist/:username">
-              <FacultyFrame>
+              <FacultyFrame authenticate={authenticate}>
                 <FacultyInactiveSList />
               </FacultyFrame>
             </Route>
@@ -330,62 +339,62 @@ function App() {
             </Route>
 
             <Route path="/m-rlist">
-              <MFrame>
+              <MFrame authenticate={authenticate}>
                 <MobileRList />
               </MFrame>
             </Route>
 
             <Route path="/m-rlistfilter">
-              <MFrame>
+              <MFrame authenticate={authenticate}>
                 <MobileRListFilter />
               </MFrame>
             </Route>
 
             <Route path="/m-changepass">
-              <MFrame>
+              <MFrame authenticate={authenticate}>
                 <MobileStudentChangePass />
               </MFrame>
             </Route>
 
             <Route path="/rlist-filter">
-              <EmptyFrame>
+              <EmptyFrame authenticate={authenticate}>
                 <RListFilter setSFilter={setSFilter}/>
               </EmptyFrame>
             </Route>
 
             <Route path="/slist-filter">
-              <EmptyFrame>
+              <EmptyFrame authenticate={authenticate}>
                 <SListFilter />
               </EmptyFrame>
             </Route>
 
             <Route path="/student-changepass/:username">
-              <SFrame>          
+              <SFrame authenticate={authenticate}>          
                 <StudentChangePass />
               </SFrame>
             </Route>
 
             <Route path="/student-rlist/:username">
               
-              <SFrame >
+              <SFrame authenticate={authenticate}>
                 <StudentRList />
               </SFrame>
             </Route>
 
             <Route path="/student-approved/:username">
-              <SFrame>
+              <SFrame authenticate={authenticate}>
                 <StudentApproved />
               </SFrame>
             </Route>
 
             <Route path="/student-pending/:username">
-              <SFrame>
+              <SFrame authenticate={authenticate}>
                 <StudentPending />
               </SFrame>
             </Route>
 
             <Route path="/student-profile/:username">
-              <SFrame>
+              <SFrame authenticate={authenticate}>
                 <StudentProfile />
               </SFrame>
             </Route>
