@@ -31,6 +31,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { green } from '@mui/material/colors';
 import LogoutIcon from '@mui/icons-material/Logout';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
 
 
 
@@ -61,25 +62,36 @@ export default function SFrame(props){
 	}
 
 	const list = () =>(
-		<div className="d-flex justify-content-center flex-column" style={{height:'100%',width:'300px',backgroundColor:'#404040'}}>
-			<List className="d-flex align-items-center flex-column" style={{height:'100%',width:'100%'}}>
+		<div className="d-flex justify-content-center flex-column" style={{height:'100%',width:'300px',backgroundColor:"#E2F0D9"}}>
+			<List className="d-flex align-items-center flex-column" style={{height:'100%',width:'100%',color:'black'}}>
 				<img style={{height:'130px',width:'150px'}} src={scslogo}/>
-				<Divider/>
-				<ListItem>
-					<ListItemButton className="d-flex justify-content-center align-items-center text-center" style={{color:'white'}}>
+				<Divider style={{height:'2px',width:'100%'}}/>
+				<ListItem style={{width:'80%',color:'black'}}>
+					<Link className="d-flex justify-content-between align-items-center text-center" to={`/student-profile/${username}`}>
+						<ListItemButton className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
+							<ListItemIcon sx={{color:green[500]}}>
+								<AccountBoxIcon/>
+							</ListItemIcon>
+							<p style={{fontSize:'18px', textAlign:'center',height:'12px',color:'black'}} className="MontFont">Profile</p>
+						</ListItemButton>
+					</Link>
+				</ListItem>
+				<Divider style={{height:'2px',width:'100%'}}/>
+				<ListItem style={{width:'80%',color:'black'}}>
+					<ListItemButton className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
 						<ListItemIcon sx={{color:green[500]}}>
-							<AccountBoxIcon/>
+							<BookmarkIcon/>
 						</ListItemIcon>
-						<p style={{fontSize:'20px', textAlign:'center',height:'12px'}} className="MontFont">Profile</p>
+						<p style={{fontSize:'18px', textAlign:'center',height:'12px',color:'black'}} className="MontFont">Activity Logs</p>
 					</ListItemButton>
 				</ListItem>
-				
-				<ListItem>
-					<ListItemButton onClick={handleSignOut} className="d-flex justify-content-center align-items-center text-center" style={{color:'white'}}>
+				<Divider style={{height:'2px',width:'100%'}}/>
+				<ListItem style={{width:'80%',color:'black'}}>
+					<ListItemButton onClick={handleSignOut} className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
 						<ListItemIcon sx={{color:green[500]}}>
 							<LogoutIcon/>
 						</ListItemIcon>
-						<p style={{fontSize:'20px', textAlign:'center',height:'12px'}} className="MontFont">Log out</p>
+						<p style={{fontSize:'18px', textAlign:'center',height:'12px',color:'black'}} className="MontFont">Log out</p>
 					</ListItemButton>
 				</ListItem>
 			</List>
@@ -121,7 +133,7 @@ export default function SFrame(props){
 		            	onClose={toggleDrawer(false)}
 		            >
 	            	{list()}
-	            </Drawer>
+	            	</Drawer>
 		            
 		          </IconButton>
 		          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
@@ -131,8 +143,7 @@ export default function SFrame(props){
 		      </AppBar>
 		    </Box>
 
-			<div style={{width: '100%', height: '91%'}} className="d-flex flex-row">
-				
+			<div style={{width: '100%', height: '90%'}} className="d-flex flex-row">	
 				<div style={{width:'100%', height:'100%', backgroundColor:'#e2f0d9'}}className="content-box d-flex flex-column">
 					{ props.children }
 				</div>	

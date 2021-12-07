@@ -109,6 +109,8 @@ app.get('/filter-query/:course/:category/:yearSubmitted/:order/:year', async( re
 	);
 });
 
+
+
 app.get('/student-filter-query/:course/:section/:yearLevel/:order', async( req, res, next ) => {
 	const { 
 		course,
@@ -290,102 +292,6 @@ app.post('/sign-in', async(req,res,next)=>{
 				});
 			}
 		});
-
-		// switch( _label ){
-		// 	case 'Student':
-		// 		Student.findOne({studentNo: _username, password:_password, status: 'active'}, (err, doc) => {
-		// 			if( err ){
-		// 				return res.status( 401 ).json({ message: 'Server Error' });
-		// 			}
-
-		// 			const user = { name : _username, role: 'student' };
-		// 			const accessToken = requestAccessToken( user );
-		// 			const refreshToken = jwt.sign( user, process.env.REFRESH_TOKEN_SECRET );
-
-		// 			token.push( refreshToken );
-
-		// 			if( !doc ){
-		// 				Coordinator.findOne({username:_username, password:_password, status: 'active'},  (errs, docs) => {
-		// 					if( errs ){
-
-		// 						return res.status( 401 ).json({ message: 'Server Error' });
-		// 					}
-
-		// 					if( docs ){
-		// 						saveTokens( token, () => {
-		// 							return res.status( 200 ).json({
-		// 								accessToken: accessToken,
-		// 								refreshToken: refreshToken,
-		// 								message: 'Welcome mr. coordinator'
-		// 							});
-		// 						});
-		// 					}
-		// 					else{
-		// 						return res.status( 401 ).json({message: 'Unauthorized'});
-		// 					}			
-		// 				});
-		// 			}
-
-		// 			if( doc ){
-		// 				saveTokens( token, () => {
-		// 					return res.status( 200 ).json({
-		// 						accessToken: accessToken,
-		// 						refreshToken: refreshToken,
-		// 						message: 'Loged in successfuly'});
-		// 				});
-		// 			}
-					
-						
-		// 		});
-		// 		break;
-		// 	case 'MIS Officer':
-		// 		Faculty.findOne({username:_username, password:_password, status: 'active'},  (err, doc) => {
-		// 			if( err ){
-
-		// 				return res.status( 401 ).json({ message: 'Server Error' });
-		// 			}
-
-		// 			const user = { name : _username, role: 'mis officer' };
-		// 			const accessToken = requestAccessToken( user );
-		// 			const refreshToken = jwt.sign( user, process.env.REFRESH_TOKEN_SECRET );
-
-		// 			token.push( refreshToken );
-
-		// 			if( !doc ){
-		// 				Coordinator.findOne({username:_username, password:_password, status: 'active'},  (errs, docs) => {
-		// 					if( errs ){
-		// 						return res.status( 401 ).json({ message: 'Server Error' });
-		// 					}
-
-		// 					if( docs ){
-		// 						saveTokens( token, () => {
-		// 							return res.status( 200 ).json({
-		// 								accessToken: accessToken,
-		// 								refreshToken: refreshToken,
-		// 								message: 'Welcome mr. coordinator'});
-		// 							});
-		// 					}
-		// 					else{
-		// 						return res.status( 401 ).json({message: 'Unauthorized'});
-		// 					}		
-		// 				});
-		// 			}
-
-		// 			if( doc ){
-		// 				saveTokens( token, () => {
-		// 					return res.status( 200 ).json({
-		// 						accessToken: accessToken,
-		// 						refreshToken: refreshToken,
-		// 						message: 'Loged in successfuly'});
-		// 				});
-		// 			}
-		// 		});
-		// 		break;
-
-		// 	default:
-		// 		return res.status( 401 ).json({message: 'Unauthorized 4'});
-		// }
-
 	});
 })
 
@@ -439,6 +345,22 @@ app.get('/student/slist', async (req, res, next) =>{
 
 
 		return res.json( doc );
+	})
+})
+
+app.get('/student/slist/r-count/:username', async (req, res, next) =>{
+	const username = req.params.username;
+
+
+	Student.findOne({studentNo:username}, (err,doc)=>{
+		if (err) return res.sendStatus(503);
+
+		if(doc){
+			pCount = doc.pending.length ?? 0;
+			aCount = doc.approved.length ?? 0;
+
+			return res.status(200).json({pCount: pCount, aCount:aCount});
+		}
 	})
 })
 

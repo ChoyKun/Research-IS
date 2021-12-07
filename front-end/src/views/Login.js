@@ -88,7 +88,7 @@ export default function Login(props){
 						<div style={{height:"40%"}}className="login-field d-flex flex-column align-items-center justify-content-around">
 							<Field className="text-center MontFont" style={{width:"270px"}} placeHolder="Student no." reqOnChange={(e)=>{dispatch({type:'username',data: e.target.value})}}/>
 							<Field className="text-center MontFont" style={{width:"270px"}} type="password" placeHolder="Password" reqOnChange={(e)=>{dispatch({type:'password',data: e.target.value})}}/>
-							<Button className="MontFont button" style={{height:"30px", width:"80%"}} title="Sign me in" click={handler}/>
+							<Button className="MontFont button" style={{height:"30px", width:"80%"}} title="Sign in" click={handler}/>
 						</div>
 					</div>
 					<div style={{width:"50%",height:"100%",backgroundColor:"#E2F0D9"}}className='login-logo d-flex flex-column align-items-center justify-content-center' >						
