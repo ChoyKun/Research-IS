@@ -11,6 +11,7 @@ const coordinatorSchema= new Schema({
 	birthdate:{type:Date},
 	dateRegistered:{type:Date, default:Date.now},
 	img: String,
+	activity: Array,
 	status: String
 })
 

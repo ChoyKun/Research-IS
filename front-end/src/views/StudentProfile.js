@@ -47,6 +47,8 @@ export default function StudentProfile(props){
 	const [pCount, setPCount] = useState(null);
 	const [aCount, setACount] = useState(null);
 	const [drawerState, setDrawerState] = useState(false);
+	const [actState, setActState] = useState(false);
+	const [activity, setActivity] = useState(null)
 
 	const state={
 		_currPassword: null,
@@ -78,7 +80,7 @@ export default function StudentProfile(props){
 				alert( res.data.message );
 			})
 			.catch((err)=>{
-				alert( err.response.data.message );
+				alert(JSON.parse(err.request.response).message)
 			})
 		}
 		else{
@@ -99,6 +101,50 @@ export default function StudentProfile(props){
 				<Button title='Save' click={handler} style={{fontSize:'18px',height:'40px', width:'100px'}}/>
 			</div>
 			
+		</div>
+	)
+
+	const clearLogs = () =>{
+		const send = window.confirm("Do you want to clear your logs?");
+		if(send == true){
+			axios.put(`http://localhost:7000/student/slist/clear-logs/${username}`)
+			.then(res=>{
+				alert(res.data.message)
+			})
+			.catch(err=>{
+				console.log(err);
+			})
+		}
+		else{
+			alert("Operation canceled")
+		}
+
+	}
+
+	const actLogs = () =>(
+		<div className='d-flex flex-column justify-content-center align-items-center' style={{width:'500px', height:'100%',backgroundColor:"#E2F0D9"}}>
+			<div style={{height:'90%', width:'90%'}}>
+				<p style={{fontSize:'36px'}}>Activity Logs</p>
+				<div className="d-flex justify-content-start align-items-start flex-column" style={{height:'80%', width:'100%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey",overflowY:'auto',overflowX:'auto'}}>
+					<div style={{height:'30px',width:'100%',border:'1px solid black', backgroundColor:'#385723',color:'white'}} className='d-flex flex-row justify-content-around'>
+						<div className='col-5 text-center'>
+							Activity
+						</div>
+						<div className='col-1 text-center'>
+							Date
+						</div>
+					</div>
+					{activity?.map?.(object =>(
+						<div className="d-flex flex-row justify-content-around" style={{height:'5%',width:'100%'}}>
+							<div className="col-7 text-center">{object.message}</div>
+							<div className="col-3 text-center">{object.date}</div>
+						</div>
+					))}
+				</div>
+				<div className='d-flex flex-row-reverse align-items-center ' style={{width:'90%', height:'10%'}}>
+					<Button click={clearLogs} style={{width:'100px', height:'40px', fontSize:'18px'}} title='Clear logs'/>
+				</div>
+			</div>
 		</div>
 	) 
 
@@ -140,10 +186,23 @@ export default function StudentProfile(props){
 		})
 	},[])
 
+	useEffect(()=>{
+		axios.get(`http://localhost:7000/student/slist/activity/${username}`)
+		.then(res=>{
+			setActivity(res.data.data)
+		})
+		.catch(err=>{
+			console.log(err);
+		})
+	},[])
+
 	const toggleDrawer = (open) => (event) => {
 		setDrawerState( open );
 	}
 
+	const toggleActDrawer = (open) => (event) => {
+		setActState( open );
+	}
 	return(
 		<>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
@@ -167,7 +226,7 @@ export default function StudentProfile(props){
 													<label style={{fontSize:'20px'}}>Birthday:</label>
 													<label style={{fontSize:'20px'}}>{(() => {
 																const date = new Date(object.birthdate);
-																return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
+																return `${date.getDate()+1}-${date.getMonth() + 1}-${date.getFullYear()}`
 															})()}
 													</label> 
 												</div>
@@ -191,7 +250,7 @@ export default function StudentProfile(props){
 													<label style={{fontSize:'20px'}}>Date Registered:</label>
 													<label style={{fontSize:'20px'}}> {(() => {
 																const date = new Date(object.dateRegistered);
-																return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
+																return `${date.getDate()+1}-${date.getMonth() + 1}-${date.getFullYear()}`
 															})()}
 													</label> 
 												</div>
@@ -217,7 +276,7 @@ export default function StudentProfile(props){
 							<div className='d-flex justify-content-center align-items-center flex-column' style={{width:'100%',height:'50%'}}> 
 								<div style={{height:'95%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey",color:'black'}}>
 									<div className="d-flex justify-content-center align-items-center flex-column" style={{height:'100%', width:'100%'}}>
-										<div className='d-flex justify-content-around align-items-start flex-column' style={{height:'80%', width:'80%'}}>
+										<div className='d-flex justify-content-around align-items-start flex-column' style={{height:'90%', width:'90%'}}>
 											<p style={{fontSize:'20px',textAlign:'left'}}>Number of Requested Research</p>
 											<Divider style={{height:'2px', width:'100%', color:'black'}}/>
 											<div className="d-flex flex-row justify-content-between" style={{width:'90%', height:'15%'}}>
@@ -244,8 +303,35 @@ export default function StudentProfile(props){
 								</div>
 							</div>
 							<div className='d-flex justify-content-center align-items-center flex-column' style={{width:'100%',height:'50%'}}> 
-								<div style={{height:'95%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}}>
-								
+								<div style={{height:'95%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey",color:'black'}}>
+										<div className="d-flex justify-content-center align-items-center flex-column" style={{height:'100%', width:'100%'}}>
+											<div className='d-flex justify-content-around align-items-start flex-column' style={{height:'90%', width:'90%'}}>
+												<p style={{fontSize:'20px',textAlign:'left',height:'5px'}}>Activity Logs</p>
+												<Divider style={{height:'2px', width:'100%', color:'black'}}/>
+												<div className='d-flex justify-content-start align-items-start' style={{height:'50%', width:'100%',overflowY:'auto',overflowX:'auto'}}>		
+													<div className="d-flex flex-column justify-content-between" style={{width:'100%', height:'25%'}}>
+														{activity?.map?.(object =>(
+															<div className='d-flex justify-content-between flex-row' style={{width:'100%',height:'15%'}}>
+																<div style={{width:'50%',height:'10%'}}>{object.message}</div>
+																<div style={{width:'20%',height:'10%'}}>{object.date}</div>
+															</div>
+														))}
+													</div>
+												</div>
+												<Divider style={{height:'2px', width:'100%', color:'black'}}/>
+												<div className="d-flex flex-row justify-content-end" style={{width:'90%', height:'15%'}}>
+													<Button style={{height:'30px',width:'100px'}} click={toggleActDrawer(true)} title='See All'/>
+													<Drawer
+														anchor={'right'}
+														open={actState}
+														onClose={toggleActDrawer(false)}
+													>
+														{actLogs()}
+													</Drawer>
+												</div>
+											</div>
+											
+										</div>
 								</div>
 							</div>
 						</div>

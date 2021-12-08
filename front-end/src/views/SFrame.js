@@ -54,7 +54,6 @@ export default function SFrame(props){
 		.then(() => {
 			Cookies.remove('token');
 			Cookies.remove('rtoken');
-			window.location.href = '/sign-in'
 		})
 		.catch( err => {
 			throw err;
@@ -87,12 +86,14 @@ export default function SFrame(props){
 				</ListItem>
 				<Divider style={{height:'2px',width:'100%'}}/>
 				<ListItem style={{width:'80%',color:'black'}}>
-					<ListItemButton onClick={handleSignOut} className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
-						<ListItemIcon sx={{color:green[500]}}>
-							<LogoutIcon/>
-						</ListItemIcon>
-						<p style={{fontSize:'18px', textAlign:'center',height:'12px',color:'black'}} className="MontFont">Log out</p>
-					</ListItemButton>
+					<Link to={`/sign-in`}>				
+						<ListItemButton onClick={handleSignOut} className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
+							<ListItemIcon sx={{color:green[500]}}>
+								<LogoutIcon/>
+							</ListItemIcon>
+							<p style={{fontSize:'18px', textAlign:'center',height:'12px',color:'black'}} className="MontFont">Log out</p>
+						</ListItemButton>
+					</Link>
 				</ListItem>
 			</List>
 		</div>

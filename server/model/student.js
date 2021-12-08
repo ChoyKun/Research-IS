@@ -18,6 +18,7 @@ const studentSchema = new Schema({
 	favorites: Array,
 	approved: Array,
 	pending: Array,
+	activity: Array,
 	status: String
 
 })

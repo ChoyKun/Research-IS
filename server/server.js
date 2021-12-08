@@ -212,6 +212,8 @@ app.get('/inactive-student-filter-query/:course/:section/:yearLevel/:order', asy
 app.post('/sign-in', async(req,res,next)=>{
 	const { _username, _password, _label } = req.body;
 
+	console.log(req.body)
+
 	fs.readFile( token_path, (err, data) => {
 		if( err ) return res.sendStatus( 503 );
 
@@ -237,6 +239,7 @@ app.post('/sign-in', async(req,res,next)=>{
 			token.push( refreshToken );
 
 			if( !doc ){
+				console.log(doc)
 				Faculty.findOne({username:_username, password:_password, status: 'active'},  (err, doc) => {
 					if( err ){
 
@@ -250,17 +253,19 @@ app.post('/sign-in', async(req,res,next)=>{
 					token.push( refreshToken );
 
 					if( !doc ){
+						console.log(doc)
 						Coordinator.findOne({username:_username, password:_password, status: 'active'},  (errs, docs) => {
 							if( errs ){
 								return res.status( 401 ).json({ message: 'Server Error' });
 							}
 
 							if( docs ){
+								console.log('admin');
 								saveTokens( token, () => {
 									return res.status( 200 ).json({
 										accessToken: accessToken,
 										refreshToken: refreshToken,
-										message: 'Welcome mr. coordinator',
+										message: 'Welcome mr/ms. coordinator',
 										role: 'mis officer'});
 									});
 							}
@@ -271,11 +276,12 @@ app.post('/sign-in', async(req,res,next)=>{
 					}
 
 					if( doc ){
+						console.log('faculty');
 						saveTokens( token, () => {
 							return res.status( 200 ).json({
 								accessToken: accessToken,
 								refreshToken: refreshToken,
-								message: 'Loged in successfuly',
+								message: 'Welcome mr/ms. officer',
 								role: 'mis officer'});
 						});
 					}
@@ -283,11 +289,12 @@ app.post('/sign-in', async(req,res,next)=>{
 			}
 
 			if( doc ){
+				console.log('student');
 				saveTokens( token, () => {
 					return res.status( 200 ).json({
 						accessToken: accessToken,
 						refreshToken: refreshToken,
-						message: 'Loged in successfuly',
+						message: 'Logged in successfuly',
 						role: 'student'});
 				});
 			}
@@ -393,35 +400,65 @@ app.put('/student/slist/update', async(req,res,next)=>{
 	return res.status( 200 ).json({message: 'Updated successfully'});
 })
 
-app.put('/student/slist/changepassword/:studentNo', async(req,res,next)=>{
+app.put('/student/slist/clear-logs/:username', async(req,res,next)=>{
+	const studentNo = req.params.username;
+
+	Student.findOne({studentNo: studentNo}, (err, doc)=>{
+		if(err) return res.sendStatus(503);
+
+		if(doc){
+			if(doc.activity.length){
+				doc.activity.splice(0,doc.activity.length);
+
+				doc.save( err=>{
+					if(err) return res.status(503).json({message:'server error'});
+
+					return res.status(200).json({message:'cleared your logs'});
+				})
+			}	
+			else{
+				return res.sendStatus(404)
+			}
+		}
+	})
+})
+
+app.put('/student/slist/changepassword/:studentNo/', async(req,res,next)=>{
 	const studentNo = req.params.studentNo;
 
-	const data = await Student.findOne({studentNo: studentNo});
 
-	const { password } = data;
+	const today = new Date();
+	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 
 
 
 	const { _currPassword, _newPassword, _verNewPassword} = req.body;
 
-	if(match(password, _currPassword)){
-		if(match(_newPassword, _verNewPassword)){
-			Student.findOneAndUpdate({studentNo: data.studentNo}, {password: _newPassword}, {useFindAndModify : false}, ( err ) => {
-				if( err ) {
-					return res.status( 503 ).json({ message: 'Server Error' });
-				}
+	if(match(_newPassword, _verNewPassword)){
+		Student.findOne({studentNo: studentNo, password: _currPassword}, ( err,doc ) => {
+			if( err ) {
+				return res.status( 503 ).json({ message: 'Server Error' });
+			}
 
-				return res.status( 200 ).json({ message: 'Changed successfully' });
+			if(doc){
+				doc.password = _newPassword;
 
-			})
-		}
-		else{
-			return res.status(400).json({ message: 'Password does not match' })
-		}
+				doc.activity.push({message:'You changed your password', date: date})
+				doc.save( err => {
+					if(err)	return res.status(503).json({ message: 'Server Error' })
+					
+					return res.status( 200 ).json({ message: 'Saved successfully' });    
+				});
+
+				
+			}
+
+		})
 	}
 	else{
-		return res.status(400).json({ message: 'Password is incorrect' })
+		return res.status(400).json({ message: 'Password does not match' })
 	}
+	
 
 		
 })
@@ -580,6 +617,29 @@ app.get('/student/slist/favlist/:username', async(req,res,next)=>{
 	})
 })
 
+app.get('/student/slist/activity/:username', async(req,res,next)=>{
+	studentNo = req.params.username
+
+	const activity = []
+
+	Student.findOne({studentNo: studentNo}, (err,doc)=>{
+		if(err) return res.status(503).json({message: 'Server Error' })
+
+		if(doc){
+			if(doc.activity.length){
+				doc.activity.forEach( async (act) =>{
+					activity.unshift(act);
+				})
+
+				return res.status(200).json({data:activity})
+			}
+			else{
+				return res.sendStatus(404)
+			}
+		}
+	})
+})
+
 app.get('/student/slist/pending-list/:username', async(req,res,next)=>{
 	const studentNo= req.params.username;
 
@@ -603,20 +663,6 @@ app.get('/student/slist/pending-list/:username', async(req,res,next)=>{
 				catch( err ){
 					throw err;
 				}
-				// data.pending.forEach(async (_id, index) => {
-				// 	await Research.findOne({_id: _id}, (err,doc)=>{
-				// 		if(err) return res.status(503).json({message: 'Server Error' })
-
-				// 		if(doc){
-				// 			console.log(doc)
-				// 			pendList.push(doc);
-				// 		}
-
-				// 		return pendList;
-				// 	})
-				// })
-				// console.log(pendList)
-				// return res.status(200).json({data: pendList})
 			}
 			else{
 				return res.sendStatus(404);
@@ -651,48 +697,6 @@ app.get('/student/slist/approved-list/:username', async(req,res,next)=>{
 				catch( err ) {
 					throw err;
 				}
-				// data.approved.forEach(async (datum, index) => {
-				// 	await Research.findOne({_id: datum.id}, (err,doc)=>{
-				// 		if(err) return res.status(503).json({message: 'Server Error' })
-
-				// 		if(doc){
-
-				// 			const {
-				// 				_id,
-				// 				title,
-				// 				course,
-				// 				researchCategories,
-				// 				yearSubmitted,
-				// 				state,
-				// 				favorites,
-				// 				PDFFile,
-				// 				lead
-				// 			} = doc;
-
-				// 			apprList.push({ 
-				// 				_id, 
-				// 				title, 
-				// 				course,
-				// 				researchCategories,
-				// 				yearSubmitted,
-				// 				state,
-				// 				favorites,
-				// 				PDFFile,
-				// 				lead,
-				// 				dateApproved: datum.dateApproved
-				// 			});
-
-				// 		}
-
-
-				// 		if( index === data.approved.length - 1){
-				// 			return res.status(200).json({data: apprList})
-				// 		}
-				// 		else{
-				// 			return res.sendStatus(404);
-				// 		}	
-				// 	})
-				// })
 			}
 			else{
 				return res.sendStatus(404);
