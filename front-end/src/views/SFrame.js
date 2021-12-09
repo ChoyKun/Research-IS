@@ -31,7 +31,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { green } from '@mui/material/colors';
 import LogoutIcon from '@mui/icons-material/Logout';
-import BookmarkIcon from '@mui/icons-material/Bookmark';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 
 
 
@@ -66,6 +66,17 @@ export default function SFrame(props){
 				<img style={{height:'130px',width:'150px'}} src={scslogo}/>
 				<Divider style={{height:'2px',width:'100%'}}/>
 				<ListItem style={{width:'80%',color:'black'}}>
+					<Link className="d-flex justify-content-between align-items-center text-center" to={`/student-dashboard/${username}`}>
+						<ListItemButton className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
+							<ListItemIcon sx={{color:green[500]}}>
+								<DashboardIcon/>
+							</ListItemIcon>
+							<p style={{fontSize:'18px', textAlign:'center',height:'12px',color:'black'}} className="MontFont">Dashboard</p>
+						</ListItemButton>
+					</Link>
+				</ListItem>
+				<Divider style={{height:'2px',width:'100%'}}/>
+				<ListItem style={{width:'80%',color:'black'}}>
 					<Link className="d-flex justify-content-between align-items-center text-center" to={`/student-profile/${username}`}>
 						<ListItemButton className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
 							<ListItemIcon sx={{color:green[500]}}>
@@ -74,15 +85,6 @@ export default function SFrame(props){
 							<p style={{fontSize:'18px', textAlign:'center',height:'12px',color:'black'}} className="MontFont">Profile</p>
 						</ListItemButton>
 					</Link>
-				</ListItem>
-				<Divider style={{height:'2px',width:'100%'}}/>
-				<ListItem style={{width:'80%',color:'black'}}>
-					<ListItemButton className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
-						<ListItemIcon sx={{color:green[500]}}>
-							<BookmarkIcon/>
-						</ListItemIcon>
-						<p style={{fontSize:'18px', textAlign:'center',height:'12px',color:'black'}} className="MontFont">Activity Logs</p>
-					</ListItemButton>
 				</ListItem>
 				<Divider style={{height:'2px',width:'100%'}}/>
 				<ListItem style={{width:'80%',color:'black'}}>

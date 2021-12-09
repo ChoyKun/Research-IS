@@ -101,7 +101,7 @@ export default function Login(props){
 			if(res.status == 200 ){
 				if(res.data.role == 'student'){
 					console.log("student")
-					setTimeout(()=>{setRedirect( <Redirect to={`/student-rlist/${data._username}`}/> );},2000);	
+					setTimeout(()=>{setRedirect( <Redirect to={`/student-dashboard/${data._username}`}/> );},2000);	
 				}
 				else if(res.data.role == 'mis officer'){
 					console.log("Officer")

@@ -1,8 +1,6 @@
 import React,{useState, useEffect, Suspense} from 'react';
 import { Link, useParams} from 'react-router-dom';
 import axios from '../modules/config.js';
-//import { useSnackbar } from 'notistack';
-
 
 //style
 import '../styles/button.css'
@@ -24,7 +22,6 @@ export default function AdminRequest( props ){
 	const [filteredData, setFilteredData] = useState([]);
 	const [search, setSearch] = useState('');
 
-	// const { enqueueSnackbar } = useSnackbar();
 
 	useEffect(()=>{
 		axios.get(`http://localhost:7000/student/slist/pending-list/${username}`)
@@ -50,7 +47,6 @@ export default function AdminRequest( props ){
 			else{
 				return <Item key={object._id} object={object}/>
 			}
-			//enqueueSnackbar(`Your request for ${props.object.title} has been approved`, { variant: 'success' });
 		}))
 	}, [search, pending])
 

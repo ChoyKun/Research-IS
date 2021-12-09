@@ -37,6 +37,7 @@ import MobileStudentChangePass from './views/MobileStudentChangePass.js';
 import RListFilter from './views/RListFilter.js';
 import SListFilter from './views/SListFilter.js';
 import StudentChangePass from './views/StudentChangePass.js';
+import StudentDashboard from './views/StudentDashboard.js';
 import StudentRList from './views/StudentRList.js';
 import StudentProfile from './views/StudentProfile.js';
 import StudentPending from './views/StudentPending.js';
@@ -97,6 +98,7 @@ const views = [
   '/student-changepass',
   '/student-copyright',
   '/student-rlist',
+  '/student-dashboard',
   '/student-approved',
   '/student-pending',
   '/student-profile',
@@ -140,7 +142,7 @@ function App() {
         console.log( role, name );
         switch( role ){
           case 'student':
-            setRequetedView( <Redirect to={`/student-rlist/${name}`}/> );
+            setRequetedView( <Redirect to={`/student-dashboard/${name}`}/> );
             break;
 
           case 'mis officer':
@@ -375,9 +377,14 @@ function App() {
             </Route>
 
             <Route path="/student-rlist/:username">
-              
               <SFrame authenticate={authenticate}>
                 <StudentRList />
+              </SFrame>
+            </Route>
+
+             <Route path="/student-dashboard/:username">
+              <SFrame authenticate={authenticate}>
+                <StudentDashboard />
               </SFrame>
             </Route>
 
