@@ -243,7 +243,7 @@ function Item(props){
 			<div className="col-3 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
 			<div className="col-2 text-center">{props.object.yearSubmitted}</div>
 			<div className="col-3 text-center">
-				<marquee width="60%" direction="left" height="100%">
+				<marquee width="60%" direction="left" height="100%" behavior="scroll" onmouseover="this.setAttribute('scrollamount',0,0);">
 					{props.object.members === '[]' ? 'N/A' : (()=> JSON.parse(props.object.members).join(', '))()}
 				</marquee>
 			</div>

@@ -957,6 +957,87 @@ app.get('/research/rlist', async (req, res, next) =>{
 	})
 });
 
+app.get('/research/rlist/course-count', async (req, res, next) =>{
+
+	var BSIT = 0;
+	var BSCS = 0; 
+
+	Research.find({}, (err, doc) => {
+		if( err ) res.sendStatus( 503 );
+
+		if(doc){
+			doc.forEach((docs)=>{
+				console.log(docs.course)
+				if(docs.course === 'BSIT'){
+						BSIT = BSIT + 1;
+				}
+
+				if(docs.course === 'BSCS'){
+						BSCS = BSCS + 1;
+				}
+
+			})
+
+			return res.json({
+				BSIT:BSIT,
+				BSCS:BSCS,
+			})
+		}
+	})
+});
+
+app.get('/research/rlist/category-count', async (req, res, next) =>{
+	var hardware = 0;
+	var software = 0; 
+	var webSys = 0;
+	var gameDev = 0;
+	var AR = 0;
+	var mobileApp = 0;
+
+	Research.find({}, (err, doc) => {
+		if( err ) res.sendStatus( 503 );
+
+		if(doc){
+			doc.forEach((docs)=>{
+				JSON.parse(docs.researchCategories).forEach((categ)=>{
+					if(categ === 'Hardware'){
+						hardware = hardware + 1;
+					}
+
+					if(categ === 'Software'){
+						software = software + 1;
+					}
+
+					if(categ === 'Web System'){
+						webSys = webSys + 1;
+					}
+
+					if(categ === 'Game Dev'){
+						gameDev = gameDev + 1;
+					}
+
+					if(categ === 'Augmented Reality'){
+						AR = AR + 1;
+					}
+
+					if(categ === 'Mobile App'){
+						mobileApp = mobileApp + 1;
+					}
+				})
+			})
+
+			return res.json({
+				hardware:hardware,
+				software:software,
+				webSys:webSys,
+				gameDev:gameDev,
+				AR:AR,
+				mobileApp:mobileApp
+			})
+		}
+	})
+});
+
 app.post('/research/rlist/upload', async (req, res , next) =>{
 	const researchData = req.body;
 
