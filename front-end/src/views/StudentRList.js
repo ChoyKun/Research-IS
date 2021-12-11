@@ -14,9 +14,12 @@ import FilterContext from '../contexts/filter-context';
 // components
 import Button from '../components/buttons/button';
 import Field from '../components/fields/txtfield';
-import SearcBar from '../components/contents/SearchBar';
+import Search from '../components/contents/Search';
 import Checkbox from '../components/fields/checkbox';
 import Select from '../components/fields/select';
+import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
+import { green } from '@mui/material/colors';
+
 
 
 export default function StudentRList(props){
@@ -93,15 +96,25 @@ export default function StudentRList(props){
 
 	return(
 		<>
-			<div style={{height:'20%', width:'100% !important'}}className="d-flex flex-column justify-content-around align-items-center">
-				<SearcBar location='/rlist-filter' setSearch={setSearch} placeHolder={'Enter Title Here'}/>		
-			</div>
-			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
-				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black', color:'black',overflowY:'auto',overflowX:'auto'}}>
-					<Suspense fallback={<Loading/>}>
-						<RListHeader/>
-						{ filteredData }
-					</Suspense>
+			<Search location='/rlist-filter' setSearch={setSearch} placeHolder={'Enter Title Here'}/>
+			<div style={{width: '100%', height: '90%'}} className='d-flex justify-content-center align-items-center'>
+				<div className="d-flex justify-content-center align-items-center" style={{height:'90%', width:'95%', backgroundColor:'white', border:'1px solid black', color:'black',overflowY:'auto',overflowX:'auto'}}>
+					<div className="d-flex flex-column justify-content-center align-items-center" style={{height:'98%', width:'97%'}}>
+						<div className="d-flex justify-content-center align-items-center flex-column" style={{height:'100%', width:'100%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}}>
+							<div className="d-flex flex-row justify-content-between align-items-center" style={{height:'15%', width:'95%'}}>
+								<div className="d-flex flex-row align-items-center justify-content-center">
+									<LocalLibraryIcon sx={{color:green[500],height:'40px',width:'40px'}}/>
+									<p style={{fontSize:'30px', textAlign:'center',height:'24px'}}>Available Researches</p>
+								</div>						
+							</div>
+							<div className="d-flex flex-column" style={{height:'80%', width:'95%',border:'1px solid black'}}>
+								<RListHeader/>
+								<div className="d-flex flex-column" style={{height:'100%', width:'100%',backgroundColor:'#70AD47',overflowY:'auto',overflowX:'auto'}}>
+									{filteredData}						
+								</div>					
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</>
@@ -238,7 +251,7 @@ function Item(props){
 
 	
 	return(
-		<div style={{height:'30px',width:'100%',border:'1px solid black'}} className="d-flex bg-secondary flex-row justify-content-around">
+		<div style={{height:'30px',width:'100%',backgroundColor:'#E2F0D9',border:'1px solid black',borderRadius:'10px'}} className="d-flex flex-row justify-content-around">
 			<div className="col-2 text-center">{props.object.title}</div>
 			<div className="col-3 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
 			<div className="col-2 text-center">{props.object.yearSubmitted}</div>

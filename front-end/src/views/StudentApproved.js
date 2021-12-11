@@ -64,7 +64,9 @@ export default function AdminRequest( props ){
 							</div>
 							<div className="d-flex flex-column" style={{height:'80%', width:'95%',border:'1px solid black',overflowY:'auto',overflowX:'auto'}}>
 								<RListHeader/>
-								{filteredData}							
+								<div className="d-flex flex-column" style={{height:'100%', width:'100%',overflowY:'auto',overflowX:'auto'}}>
+									{filteredData}						
+								</div>							
 							</div>
 						</div>
 					</div>
