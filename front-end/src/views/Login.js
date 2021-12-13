@@ -167,7 +167,7 @@ export default function Login(props){
 					<div style={{width:"50%",height:"100%",backgroundColor:"#E2F0D9"}}className='login-logo d-flex flex-column align-items-center justify-content-center' >						
 						<h1 style={{fontFamily: "Garamond, serif",fontWeight: "bold",fontSize:"40px",textAlign:"center",color:"black"}}>SCS Research Information System</h1>
 						<img style={{height:"170px",width:"170px"}} src={researchimg}/>
-						<p style={{fontFamily: "Dancing Script",fontStyle: "italic",fontSize:"25px",textAlign:"center",color:"black"}}> You're quick stop on research papers from SCS department</p>
+						<p style={{fontFamily: "Dancing Script",fontStyle: "italic",fontSize:"25px",textAlign:"center",color:"black"}}> Your quick stop for research papers from SCS department</p>
 						<div style={{width:"60%"}}className="d-flex flex-row justify-content-between align-items-center">
 							<div style={{width:"30px"}} className="d-flex flex-row justify-content-center align-items-center">
 								<img style={{height:"30px"}}src={rlist}/>

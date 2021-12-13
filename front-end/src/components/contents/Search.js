@@ -17,9 +17,31 @@ import SearchIcon from '@mui/icons-material/Search';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
 import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import Divider from '@mui/material/Divider';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemButton from '@mui/material/ListItemButton';
+import Popover from '@mui/material/Popover';
+
+
 
 export default function SearchBar( props ){
 	const [fieldContent, setFieldContent] = useState(null);
+	const [anchorEl, setAnchorEl] = useState(null)
+
+	const handleClick = (event)=>{
+		setAnchorEl(event.currentTarget);
+	}
+
+	const handleClose = () =>{
+		setAnchorEl(null)
+	}
+
+	const open = Boolean(anchorEl);
+	const id = open ? 'simple-popover' : undefined;
+	
 
 	const sendRequest = (e) => {
 		props.setSearch(fieldContent);
@@ -33,8 +55,10 @@ export default function SearchBar( props ){
         window.location.reload();
 	}
 
+
+
 	return(
-		<div style={{ width:'100%'}} className="search-bar d-flex flex-row justify-content-start align-item-center">
+		<div style={{width:'100%'}} className="search-bar d-flex flex-row justify-content-start align-item-center">
 			<Box sx={{ flexGrow: 1 }}>
 		      <AppBar position="static" style={{height:"40px",backgroundColor:'#70AD47'}}>
 		        <Toolbar style={{minHeight:"40px"}}>
@@ -46,9 +70,9 @@ export default function SearchBar( props ){
 						aria-label="menu"
 						sx={{ mr: 2 }}
 						>
-		           	 		<SearchIcon style={{height: '30px',width:'30px'}} onClick={sendRequest}/>
-		           	 	</IconButton>
-						<Field style={{fontSize:'18px',height:'30px',width:'300px',borderRadius:'10px'}} className={props.className} reqOnChange={linkToButton} placeHolder={props.placeHolder}/>
+			       	 		<SearchIcon style={{height: '30px',width:'30px'}} onClick={sendRequest}/>
+			       	 	</IconButton>
+						<Field style={{fontSize:'18px',height:'30px',width:'300px',borderRadius:'10px'}} className={props.className} reqOnChange={linkToButton} placeHolder={props.placeHolder}/>						
 		          	</Typography>
 
 			        <IconButton
@@ -58,7 +82,23 @@ export default function SearchBar( props ){
 					aria-label="menu"
 					sx={{ mr: 2 }}
 					>
-	           	 		<FilterAltIcon style={{height: '30px',width:'30px'}} />
+	           	 		<FilterAltIcon onClick={handleClick} style={{height: '30px',width:'30px'}} />
+	           	 		<Popover
+	           	 		id={id}
+	           	 		open={open}
+	           	 		anchorEl={anchorEl}
+	           	 		onClose={handleClose}
+	           	 		anchorOrigin={{
+	           	 			vertical: 'bottom',
+	           	 			horizontal:'right',
+	           	 		}}
+	           	 		transformOrigin={{
+	           	 			vertical:'top',
+	           	 			horizontal:'right',
+	           	 		}}
+	           	 		>
+			            	{props.list}
+	           	 		</Popover>
 	           	 	</IconButton>
 
 			        <IconButton
@@ -68,7 +108,7 @@ export default function SearchBar( props ){
 					aria-label="menu"
 					sx={{ mr: 2 }}
 					>
-	           	 		<FilterAltOffIcon style={{height: '30px',width:'30px'}} />
+	           	 		<FilterAltOffIcon onclick={props.rmvfilter} style={{height: '30px',width:'30px'}} />
 	           	 	</IconButton>
 		        </Toolbar>
 		      </AppBar>

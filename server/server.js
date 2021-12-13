@@ -81,7 +81,7 @@ app.get('/filter-query/:course/:category/:yearSubmitted/:order/:year', async( re
 	const result = [];
 
 	Research.find(
-		{ course: course, yearSubmitted: yearSubmitted, status: 'public' }, 
+		{ course: course, status: 'public' }, 
 		null, 
 		{ sort: { 
 			title: order === 'A-Z' ? 1 : -1,
@@ -91,14 +91,29 @@ app.get('/filter-query/:course/:category/:yearSubmitted/:order/:year', async( re
 			if( err ) return res.status( 503 ).json({ message:'Server Error' });
 
 			if( docs ){
-				docs.forEach( doc => {
-					JSON.parse( doc.researchCategories )
-					.forEach( categ => {
-						if( category.includes( categ ) ){
-							return result.push( doc );
-						}
+				if(yearSubmitted == 'null'){
+					docs.forEach( doc => {
+						JSON.parse( doc.researchCategories )
+						.forEach( categ => {
+							if( category.includes( categ ) ){
+								return result.push( doc );
+							}
+						});
 					});
-				});
+				}
+				else{
+					if(docs.yearSubmitted == yearSubmitted){
+						docs.forEach( doc => {
+							JSON.parse( doc.researchCategories )
+							.forEach( categ => {
+								if( category.includes( categ ) ){
+									return result.push( doc );
+								}
+							});
+						});
+					}
+				}
+				
 
 				return res.json({ result });
 			}
@@ -967,7 +982,6 @@ app.get('/research/rlist/course-count', async (req, res, next) =>{
 
 		if(doc){
 			doc.forEach((docs)=>{
-				console.log(docs.course)
 				if(docs.course === 'BSIT'){
 						BSIT = BSIT + 1;
 				}
