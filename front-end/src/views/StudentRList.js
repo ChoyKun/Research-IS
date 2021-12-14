@@ -269,6 +269,17 @@ function Item(props){
 		setOpen( open );
 	}
 	
+	useEffect(() => {
+		const token = Cookies.get('token');
+
+		axios.post(`http://localhost:7000/check-research-state/${username}/${props.object._id}`)
+		.then((res)=>{
+			setUrl(`/research-full`)
+		})
+		.catch((err)=>{
+			setUrl(`/research-abstract`)
+		})
+	}, [])
 
 	const list = ()=>(
 		<div className="d-flex justify-content-center flex-column" style={{height:'100%',width:'500px',backgroundColor:"#E2F0D9"}}>
@@ -307,7 +318,7 @@ function Item(props){
 					</div>
 				</div>
 				<div className="d-flex flex-row-reverse justify-content-start" style={{width:'100%'}}>
-					<Link to={`/${url}/${props.object._id}`}><Button title="View Document" style={{height:'40px'}}/></Link>
+					<Link to={`/research-full/${props.object._id}`}><Button title="View Document" style={{height:'40px'}}/></Link>
 				</div>
 			</div>
 		</div>
@@ -409,17 +420,7 @@ function Item(props){
 	}
 
 
-	useEffect(() => {
-		const token = Cookies.get('token');
-
-		axios.post(`http://localhost:7000/check-research-state/${username}/${props.object._id}`)
-		.then((res)=>{
-			setUrl(`/research-full`)
-		})
-		.catch((err)=>{
-			setUrl(`/research-abstract`)
-		})
-	}, [])
+	
 
 
 	
