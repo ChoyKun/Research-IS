@@ -293,6 +293,21 @@ function Item(props){
 						<p style={{fontSize:'20px'}}>Year Submitted:</p>
 						<p style={{fontSize:'20px'}}>{props.object.yearSubmitted}</p>
 					</div>
+					<div className="d-flex flex-column justify-content-start" style={{width:'100%'}}>
+						<p style={{fontSize:'20px'}}>Authors:</p>
+						<div className="d-flex flex-column justify-content-center align-items-center" style={{width:'100%'}}>
+							<div className="d-flex flex-column justify-content-center align-items-start" style={{width:'80%'}}>
+								<p style={{fontSize:'20px'}}>{props.object.lead}</p>
+								<p style={{fontSize:'20px'}}>{props.object.mem1}</p>
+								<p style={{fontSize:'20px'}}>{props.object.mem2}</p>
+								<p style={{fontSize:'20px'}}>{props.object.mem3}</p>
+								<p style={{fontSize:'20px'}}>{props.object.me4 ?? '---'}</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div className="d-flex flex-row-reverse justify-content-start" style={{width:'100%'}}>
+					<Link to={`/${url}/${props.object._id}`}><Button title="View Document" style={{height:'40px'}}/></Link>
 				</div>
 			</div>
 		</div>

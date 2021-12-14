@@ -8,6 +8,11 @@ const researchSchema = new Schema({
 	researchCategories: String,
 	yearSubmitted: {type: String, required: true},
 	members: String,
+	lead: String,
+	mem1: String,
+	mem2: String,
+	mem3: String,
+	mem4: String,
 	PDFFile: String,
 	status: String,
 	favorites: String
