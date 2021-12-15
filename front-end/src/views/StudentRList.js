@@ -39,6 +39,8 @@ import ListItemButton from '@mui/material/ListItemButton';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import PreviewIcon from '@mui/icons-material/Preview';
 import SendIcon from '@mui/icons-material/Send';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
 
 
 
@@ -264,9 +266,24 @@ function Item(props){
 	const [name, setName] = useState(null);
 	const [disabled, setDisabled] = useState(false);
 	const [open, setOpen] = useState(false);
+	const [alertMes, setAlertMes] = useState(null);
+	const [snackOpen, setSnackOpen] =useState(false);
 
 	const toggleDrawer = (open) => (event) => {
 		setOpen( open );
+	}
+
+	const handleSnack = () =>{
+		setSnackOpen(true);
+	}
+
+	const handleSnackClose = (evernt , reason) =>{
+		if(reason === 'clickaway') {
+			return;
+		}
+
+		setSnackOpen(false);
+		setAlertMes(null);
 	}
 	
 	useEffect(() => {
@@ -375,7 +392,7 @@ function Item(props){
 		const token = Cookies.get('token')
 
 		if( pending ){
-			axios.put(`http://localhost:7000/student/slist/pending/${username}`, pending,{
+			axios.put(`http://localhost:7000/student/slist/pending/${username}/${props.object.title}`, pending,{
 			headers: {
 				authorization: `Bearer ${token}`
 			}
@@ -407,7 +424,7 @@ function Item(props){
 			dateRequested: date
 		};
 
-		alert(`Pending to accept viewing of "${data.title}" research by admin.\nIf approved then view button will turn into green`);
+		setAlertMes(`You requested "${data.title}" for full content viewing,\nApproval of admin is required for full content.\nThank you for your patience`);
 
 		axios.post('http://localhost:7000/request-view', {data})
 		.catch( err => {
@@ -416,7 +433,7 @@ function Item(props){
 
 		setSendPend(true);
 
-		window.location.reload();
+		handleSnack();
 	}
 
 
@@ -426,6 +443,11 @@ function Item(props){
 	
 	return(
 		<div style={{height:'30px',width:'100%',backgroundColor:'#E2F0D9',border:'1px solid black',borderRadius:'10px'}} className="d-flex flex-row justify-content-around">
+			<Snackbar anchorOrigin={{vertical:"top", horizontal:"center"}} open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+				<Alert variant='filled' severity='info' sx={{width:'500px'}}>
+					{alertMes}
+				</Alert>				
+			</Snackbar>
 			<div className="col-3 text-center">{props.object.title}</div>
 			<div className="col-3 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
 			<div className="col-2 text-center">{props.object.yearSubmitted}</div>			

@@ -35,6 +35,8 @@ export default function AdminReg(props){
 		extentionName:null,
 		birthdate:null,
 		dateRegistered:null,
+		contactNo:null,
+		emailAdd:null,
 		img:null,
 		status:'active'
 	}
@@ -64,6 +66,12 @@ export default function AdminReg(props){
 				return state;
 			case 'dateRegistered':
 				state.dateRegistered = action.data;
+				return state;
+			case 'contactNo':
+				state.contactNo = action.data;
+				return state;
+			case 'emailAdd':
+				state.emailAdd = action.data;
 				return state;
 		}
 	}
@@ -171,6 +179,14 @@ export default function AdminReg(props){
 								<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
 									<label>Date Registered:</label>
 									<Field type='date' placeHolder='Enter Date Here' reqOnChange={(e) => {dispatch({type: 'dateRegistered', data: e.target.value});}}/>
+								</div>
+								<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
+									<label style={{fontSize:'18px'}}>Contact No.:</label>
+									<Field className='fName' reqOnChange={(e) => {dispatch({type: 'contachNo', data: e.target.value});}}/>
+								</div>
+								<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
+									<label style={{fontSize:'18px'}}>Email Address:</label>
+									<Field className='fName' reqOnChange={(e) => {dispatch({type: 'emailAdd', data: e.target.value});}}/>
 								</div>
 								<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
 									<Button title='Cancel' style={{height:'30px',width:'130px'}} click={()=>window.history.back()}/>

@@ -282,7 +282,7 @@ export default function StudentProfile(props){
 	}
 
 	const actLogs = () =>(
-		<div className='d-flex flex-column justify-content-center align-items-center' style={{width:'500px', height:'100%',backgroundColor:"#E2F0D9"}}>
+		<div className='d-flex flex-column justify-content-center align-items-center' style={{width:'700px', height:'100%',backgroundColor:"#E2F0D9"}}>
 			<Snackbar anchorOrigin={{vertical:"top", horizontal:"center"}} open={logsSnackOpen} autoHideDuration={2000} onClose={handleLogsSnackClose}>
 				<Alert variant='filled' severity={logsAlertStatus == 403 ? "error" : "success"} sx={{width:'500px'}}>
 					{logsAlertMes}
@@ -491,11 +491,11 @@ export default function StudentProfile(props){
 												<p style={{fontSize:'20px',textAlign:'left',height:'5px'}}>Activity Logs</p>
 												<Divider style={{height:'2px', width:'100%', color:'black'}}/>
 												<div className='d-flex justify-content-start align-items-start' style={{height:'50%', width:'100%',overflowY:'auto',overflowX:'auto'}}>		
-													<div className="d-flex flex-column justify-content-between" style={{width:'100%', height:'25%'}}>
+													<div className="d-flex flex-column justify-content-between" style={{width:'100%', height:'40%'}}>
 														{activity?.map?.(object =>(
-															<div className='d-flex justify-content-between flex-row' style={{width:'100%',height:'15%'}}>
-																<div style={{width:'50%',height:'10%'}}>{object.message}</div>
-																<div style={{width:'20%',height:'10%'}}>{object.date}</div>
+															<div className='d-flex justify-content-between flex-row' style={{width:'100%',height:'40%'}}>
+																<div style={{width:'70%',height:'40%'}}>{object.message}</div>
+																<div style={{width:'20%',height:'40%'}}>{object.date}</div>
 															</div>
 														))}
 													</div>

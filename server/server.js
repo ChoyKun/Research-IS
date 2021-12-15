@@ -225,7 +225,7 @@ app.get('/inactive-student-filter-query/:course/:section/:yearLevel/:order', asy
 
 //Login
 app.post('/sign-in', async(req,res,next)=>{
-	const { _username, _password, _label } = req.body;
+	const { _username, _password } = req.body;
 
 	console.log(req.body)
 
@@ -359,6 +359,8 @@ app.get('/faculty/flist/:username', async(req, res, next)=>{
 		}
 	})
 })
+
+
 
 // Student List
 app.get('/student/slist', async (req, res, next) =>{
@@ -498,12 +500,17 @@ app.put('/student/slist/favorites/:username', async(req,res,next)=>{ //san mo to
 	})
 })
 
-app.put('/student/slist/pending/:username', async(req,res,next)=>{ //san mo to tinatwag? StudentRlist
+app.put('/student/slist/pending/:username/:title', async(req,res,next)=>{ //san mo to tinatwag? StudentRlist
 	const studentNo = req.params.username;
+	const title = req.params.title;
+	console.log(title)
 
 	const pending = req.body;
 
 	if( !pending.length ) return res.end();
+
+	const today = new Date();
+	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 
 	Student.findOne({studentNo:studentNo}, (err,data)=>{
 		if(err) return res.status( 503 ).json({ message: 'Server Error' });
@@ -514,6 +521,8 @@ app.put('/student/slist/pending/:username', async(req,res,next)=>{ //san mo to t
 			}
 
 			data.pending.push( pending[0]  );
+			data.activity.push({message:`You requested ${title} for full content viewing ` , date:date})
+
 			data.save( err => {
 				if( err ) return res.status( 503 ).json({  message: 'Server error' });
 
@@ -977,7 +986,7 @@ app.get('/research/rlist/course-count', async (req, res, next) =>{
 	var BSIT = 0;
 	var BSCS = 0; 
 
-	Research.find({}, (err, doc) => {
+	Research.find({status:'public'}, (err, doc) => {
 		if( err ) res.sendStatus( 503 );
 
 		if(doc){
@@ -1008,7 +1017,7 @@ app.get('/research/rlist/category-count', async (req, res, next) =>{
 	var AR = 0;
 	var mobileApp = 0;
 
-	Research.find({}, (err, doc) => {
+	Research.find({status:'public'}, (err, doc) => {
 		if( err ) res.sendStatus( 503 );
 
 		if(doc){
@@ -1089,6 +1098,52 @@ app.get('/faculty/flist', async (req, res, next) =>{
 	return res.status( 200 ).json( JSON.parse(data) );
 })
 
+app.put('/faculty/flist/clear-logs/:username', async(req,res,next)=>{
+	const studentNo = req.params.username;
+
+	Faculty.findOne({status: 'active'}, (err, doc)=>{
+		if(err) return res.sendStatus(503);
+
+		if(doc){
+			if(doc.activity.length){
+				doc.activity.splice(0,doc.activity.length);
+
+				doc.save( err=>{
+					if(err) return res.status(503).json({message:'server error'});
+
+					return res.status(200).json({message:'cleared your logs'});
+				})
+			}	
+			else{
+				return res.sendStatus(404)
+			}
+		}
+	})
+})
+
+app.get('/faculty/flist/activity/:username', async(req,res,next)=>{
+	username = req.params.username
+
+	const activity = []
+
+	Faculty.findOne({status:'active'}, (err,doc)=>{
+		if(err) return res.status(503).json({message: 'Server Error' })
+
+		if(doc){
+			if(doc.activity.length){
+				doc.activity.forEach( async (act) =>{
+					activity.unshift(act);
+				})
+
+				return res.status(200).json({data:activity})
+			}
+			else{
+				return res.sendStatus(404)
+			}
+		}
+	})
+})
+
 app.post('/faculty/flist/register', async (req, res , next) =>{
 	const facultyData = req.body;
 
@@ -1130,7 +1185,7 @@ app.post('/faculty/flist/register', async (req, res , next) =>{
 						return res.status( 200 ).json({
 						accessToken: accessToken,
 						refreshToken: refreshToken,
-						message: 'Welcome mr. coordinator'});
+						message: 'New officer added, previous officer is now inactive'});
 					});
 				})
 
@@ -1147,6 +1202,10 @@ app.put('/faculty/flist/new-officer', async(req,res,next)=>{
 
 	Faculty.findOne({status:'active'}, (err, docs) => {
 		if( err ) return res.status(503).json({message:'server error'})
+
+		if(!docs){
+			return res.status(200).json({message:'New active officer created,no previous officer is found'});
+		}
 
 		if( docs ){
 			docs.status = 'inactive';
@@ -1199,30 +1258,37 @@ app.put('/faculty/flist/changeofficer/:username', async (req,res,next)=>{
 app.put('/faculty/flist/changepassword/:username', async(req,res,next)=>{
 	const username = req.params.username;
 
-	const data = await Faculty.findOne({username: username});
+
+	const today = new Date();
+	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 
 
 
 	const { _currPassword, _newPassword, _verNewPassword} = req.body;
-	const { password } = data;
 
-	if(match(password, _currPassword)){
-		if(match(_newPassword, _verNewPassword)){
-			Faculty.findOneAndUpdate({username: data.username}, {password: _newPassword}, {useFindAndModify : false}, ( err ) => {
-				if( err ) {
-					return res.status( 503 ).json({ message: 'Server Error' });
-				}
+	if(match(_newPassword, _verNewPassword)){
+		Faculty.findOne({username: username, password: _currPassword}, ( err,doc ) => {
+			if( err ) {
+				return res.status( 503 ).json({ message: 'Server Error' });
+			}
 
-				return res.status( 200 ).json({ message: 'Changed successfully' });
+			if(doc){
+				doc.password = _newPassword;
 
-			})
-		}
-		else{
-			return res.status(400).json({ message: 'Password is incorrect' })
-		}
+				doc.activity.push({message:'You changed your password', date: date})
+				doc.save( err => {
+					if(err)	return res.status(503).json({ message: 'Server Error' })
+					
+					return res.status( 200 ).json({ message: 'Saved successfully' });    
+				});
+
+				
+			}
+
+		})
 	}
 	else{
-		return res.status(400).json({ message: 'Password is incorrect' })
+		return res.status(400).json({ message: 'Password does not match' })
 	}
 
 		
@@ -1231,6 +1297,10 @@ app.put('/faculty/flist/changepassword/:username', async(req,res,next)=>{
 
 app.put('/faculty/flist/editprofile/:username', async (req,res,next)=>{
 	const username = req.params.username;
+
+	const today = new Date();
+	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+
 
 	const {
 		_username ,
@@ -1249,6 +1319,8 @@ app.put('/faculty/flist/editprofile/:username', async (req,res,next)=>{
 			
 		if( doc ){
 			if( match(doc.password, _password) ){
+
+				doc.activity.push({message:'You updated your profile details', date: date})
 
 				doc.username  = _username ?? doc.username;
 				doc.firstName = _firstName ?? doc.firstName;
@@ -1321,6 +1393,29 @@ app.put('/faculty/upload-picture', async (req, res, next) => {
 			}
 		}
 	});
+})
+
+app.get('/faculty/flist/activity/:username', async(req,res,next)=>{
+	username = req.params.username
+
+	const activity = []
+
+	Faculty.findOne({username: username}, (err,doc)=>{
+		if(err) return res.status(503).json({message: 'Server Error' })
+
+		if(doc){
+			if(doc.activity.length){
+				doc.activity.forEach( async (act) =>{
+					activity.unshift(act);
+				})
+
+				return res.status(200).json({data:activity})
+			}
+			else{
+				return res.sendStatus(404)
+			}
+		}
+	})
 })
 
 app.put('/faculty/flist/editstudent/:username/:studentNo',async (req,res,next)=>{

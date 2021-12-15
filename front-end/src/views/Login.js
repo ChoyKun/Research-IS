@@ -46,7 +46,6 @@ export default function Login(props){
 	const state={
 		_username: null,
 		_password:null,
-		_label: 'Student'
 	}
 
 	const handleSnack = () =>{
