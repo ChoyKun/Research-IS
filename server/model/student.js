@@ -10,6 +10,7 @@ const studentSchema = new Schema({
 	lastName:String,
 	extentionName:String,
 	birthdate:{type: Date},
+	sex: String,
 	course:String,
 	yearLevel:String,
 	section:String,

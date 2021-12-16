@@ -36,6 +36,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import IconButton from '@mui/material/IconButton';
+import WcIcon from '@mui/icons-material/Wc'
 
 
 
@@ -385,6 +386,7 @@ export default function StudentProfile(props){
 	const toggleActDrawer = (open) => (event) => {
 		setActState( open );
 	}
+
 	return(
 		<>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>

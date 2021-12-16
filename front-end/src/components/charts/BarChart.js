@@ -52,6 +52,11 @@ export default function BarChart(props){
 			width={props.width}
 			options={{
 				maintainAspectRatio: false,
+				scale: {
+					ticks:{
+						precision: 0
+					}
+				}
 			}}
 		/>
 	)

@@ -65,7 +65,7 @@ export default function SFrame(props){
 			<List className="d-flex align-items-center flex-column" style={{height:'100%',width:'100%',color:'black'}}>
 				<img style={{height:'130px',width:'150px'}} src={scslogo}/>
 				<Divider style={{height:'2px',width:'100%'}}/>
-				<ListItem style={{width:'80%',color:'black'}}>
+				<ListItem style={{width:'100%',color:'black'}}>
 					<Link className="d-flex justify-content-between align-items-center text-center" to={`/student-dashboard/${username}`}>
 						<ListItemButton className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
 							<ListItemIcon sx={{color:green[500]}}>
@@ -76,7 +76,7 @@ export default function SFrame(props){
 					</Link>
 				</ListItem>
 				<Divider style={{height:'2px',width:'100%'}}/>
-				<ListItem style={{width:'80%',color:'black'}}>
+				<ListItem style={{width:'100%',color:'black'}}>
 					<Link className="d-flex justify-content-between align-items-center text-center" to={`/student-profile/${username}`}>
 						<ListItemButton className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
 							<ListItemIcon sx={{color:green[500]}}>
@@ -87,7 +87,7 @@ export default function SFrame(props){
 					</Link>
 				</ListItem>
 				<Divider style={{height:'2px',width:'100%'}}/>
-				<ListItem style={{width:'80%',color:'black'}}>
+				<ListItem style={{width:'100%',color:'black'}}>
 					<Link to={`/sign-in`}>				
 						<ListItemButton onClick={handleSignOut} className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
 							<ListItemIcon sx={{color:green[500]}}>

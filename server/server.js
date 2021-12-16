@@ -274,6 +274,10 @@ app.post('/sign-in', async(req,res,next)=>{
 								return res.status( 401 ).json({ message: 'Server Error' });
 							}
 
+							const user = { name : _username, role: 'admin' };
+							const accessToken = requestAccessToken( user );
+							const refreshToken = jwt.sign( user, process.env.REFRESH_TOKEN_SECRET );
+
 							if( docs ){
 								console.log('admin');
 								saveTokens( token, () => {
@@ -281,7 +285,7 @@ app.post('/sign-in', async(req,res,next)=>{
 										accessToken: accessToken,
 										refreshToken: refreshToken,
 										message: 'Welcome mr/ms. coordinator',
-										role: 'mis officer'});
+										role: 'admin'});
 									});
 							}
 							else{
@@ -345,6 +349,8 @@ app.get('/student/slist/:studentNo', async(req, res, next)=>{
 	})
 })
 
+
+
 app.get('/faculty/flist/:username', async(req, res, next)=>{
 	Faculty.findOne({status: 'active'}, (err, doc)=>{
 		if(err){
@@ -367,10 +373,112 @@ app.get('/student/slist', async (req, res, next) =>{
 	Student.find({}, (err, doc) => {
 		if( err ) res.sendStatus( 503 );
 
+		console.log('bitch')
+
 
 		return res.json( doc );
 	})
 })
+
+app.get('/student/sex-count', async (req, res, next) =>{
+
+	var Male = 0;
+	var Female = 0;
+
+	Student.find({}, (err, doc) => {
+		if( err ) res.sendStatus( 503 );
+
+		if(doc){
+			doc.forEach((docs)=>{
+				if(docs.sex == 'Male'){
+					Male=Male+1;
+				}
+
+				if(docs.sex == 'Male'){
+					Female=Female+1;
+				}
+			})
+
+			return res.status(200).json({
+				Male:Male,
+				Female: Female
+			})
+		}
+
+
+	})
+})
+
+app.get('/student/course-count', async (req, res, next) =>{
+
+	var BSIT = 0;
+	var BSCS = 0;
+
+	Student.find({}, (err, doc) => {
+		if( err ) res.sendStatus( 503 );
+
+		if(doc){
+			doc.forEach((docs)=>{
+				if(docs.course == 'BSIT'){
+					BSIT=BSIT+1;
+				}
+
+				if(docs.course == 'BSCS'){
+					BSCS=BSCS+1;
+				}
+			})
+
+			return res.status(200).json({
+				BSIT:BSIT,
+				BSCS: BSCS
+			})
+		}
+
+
+	})
+})
+
+app.get('/student/year-count', async (req, res, next) =>{
+
+	var first = 0;
+	var second = 0;
+	var third = 0;
+	var fourth = 0;
+
+	Student.find({}, (err, doc) => {
+		if( err ) res.sendStatus( 503 );
+
+		if(doc){
+			doc.forEach((docs)=>{
+				if(docs.yearLevel == '1'){
+					first=first+1;
+				}
+
+				if(docs.yearLevel == '2'){
+					second=second+1;
+				}
+
+				if(docs.yearLevel == '3'){
+					third=third+1;
+				}
+
+				if(docs.yearLevel == '4'){
+					fourth=fourth+1;
+				}
+			})
+
+			return res.status(200).json({
+				first:first,
+				second:second,
+				third:third,
+				fourth:fourth
+			})
+		}
+
+
+	})
+})
+
 
 app.get('/student/slist/r-count/:username', async (req, res, next) =>{
 	const username = req.params.username;

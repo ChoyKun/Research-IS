@@ -28,6 +28,7 @@ import FacultyEditProfile from './views/FacultyEditProfile.js';
 import FacultyEditStudent from './views/FacultyEditStudent.js';
 import FacultyChangepass from './views/FacultyChangepass.js';
 import FacultySList from './views/FacultySList.js';
+import FacultyDashboard from './views/FacultyDashboard.js';
 import FacultyInactiveSList from './views/FacultyInactiveSList.js';
 import Login from './views/Login.js';
 import EmergencyAdmin from './views/EmergencyAdmin.js';
@@ -89,6 +90,7 @@ const views = [
   '/MIS-changepass',
   '/MIS-slist',
   '/MIS-inactive-slist',
+  '/MIS-dashboard',
   '/m-rlist',
   '/m-rlistfilter',
   '/m-changepass',
@@ -146,6 +148,10 @@ function App() {
             break;
 
           case 'mis officer':
+            setRequetedView( <Redirect to={`/MIS-dashboard/${name}`}/> );
+            break;
+            
+          case 'admin':
             setRequetedView( <Redirect to={pathname}/> );
             break;
         }
@@ -327,6 +333,12 @@ function App() {
             <Route path="/MIS-slist/:username">
               <FacultyFrame authenticate={authenticate}>
                 <FacultySList />
+              </FacultyFrame>
+            </Route>
+
+            <Route path="/MIS-dashboard/:username">
+              <FacultyFrame authenticate={authenticate}>
+                <FacultyDashboard />
               </FacultyFrame>
             </Route>
 

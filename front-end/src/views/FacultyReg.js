@@ -37,6 +37,7 @@ export default function FacultyReg(props){
 		section: null,
 		dateRegistered: null,
 		img: null,
+		sex:'Male',
 		favorites: [],
 		status:'active'
 	}
@@ -71,6 +72,10 @@ export default function FacultyReg(props){
 
 			case 'birthdate':
 				state.birthdate = action.data;
+				return state;
+
+			case 'sex':
+				state.sex = action.data;
 				return state;
 
 			case 'course':
@@ -170,6 +175,9 @@ export default function FacultyReg(props){
 								</div>
 								<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
 									<Select className='aRegYear' label='Year Level' options={['1','2','3','4']} reqOnChange={(e)=>{dispatch({type:'yearLevel',data: e.target.value})}}/>
+								</div>
+								<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
+									<Select className='aRegYear' label='Sex' options={['Male','Female']} reqOnChange={(e)=>{dispatch({type:'sex',data: e.target.value})}}/>
 								</div>
 								<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
 									<label>Section:</label>

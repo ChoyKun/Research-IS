@@ -32,6 +32,7 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { green } from '@mui/material/colors';
 import LogoutIcon from '@mui/icons-material/Logout';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 
 
 
@@ -65,8 +66,8 @@ export default function SFrame(props){
 			<List className="d-flex align-items-center flex-column" style={{height:'100%',width:'100%',color:'black'}}>
 				<img style={{height:'130px',width:'150px'}} src={scslogo}/>
 				<Divider style={{height:'2px',width:'100%'}}/>
-				<ListItem style={{width:'80%',color:'black'}}>
-					<Link className="d-flex justify-content-between align-items-center text-center" to={`/student-dashboard/${username}`}>
+				<ListItem style={{width:'100%',color:'black'}}>
+					<Link className="d-flex justify-content-between align-items-center text-center" to={`/MIS-dashboard/${username}`}>
 						<ListItemButton className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
 							<ListItemIcon sx={{color:green[500]}}>
 								<DashboardIcon/>
@@ -76,7 +77,7 @@ export default function SFrame(props){
 					</Link>
 				</ListItem>
 				<Divider style={{height:'2px',width:'100%'}}/>
-				<ListItem style={{width:'80%',color:'black'}}>
+				<ListItem style={{width:'100%',color:'black'}}>
 					<Link className="d-flex justify-content-between align-items-center text-center" to={`/MIS-profile/${username}`}>
 						<ListItemButton className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
 							<ListItemIcon sx={{color:green[500]}}>
@@ -87,7 +88,18 @@ export default function SFrame(props){
 					</Link>
 				</ListItem>
 				<Divider style={{height:'2px',width:'100%'}}/>
-				<ListItem style={{width:'80%',color:'black'}}>
+				<ListItem style={{width:'100%',color:'black'}}>
+					<Link className="d-flex justify-content-between align-items-center text-center" to={`/admin-log-in/${username}`}>
+						<ListItemButton className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
+							<ListItemIcon sx={{color:green[500]}}>
+								<SupervisorAccountIcon/>
+							</ListItemIcon>
+							<p style={{fontSize:'18px', textAlign:'center',height:'12px',color:'black'}} className="MontFont">Login as Admin</p>
+						</ListItemButton>
+					</Link>
+				</ListItem>
+				<Divider style={{height:'2px',width:'100%'}}/>
+				<ListItem style={{width:'100%',color:'black'}}>
 					<Link to={`/sign-in`}>				
 						<ListItemButton onClick={handleSignOut} className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
 							<ListItemIcon sx={{color:green[500]}}>
