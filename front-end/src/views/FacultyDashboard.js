@@ -19,8 +19,7 @@ import Checkbox from '../components/fields/checkbox';
 import Select from '../components/fields/select';
 import BarChart from '../components/charts/BarChart';
 import PieChart from '../components/charts/PieChart';
-import SchoolIcon from '@mui/icons-material/School';
-import WcIcon from '@mui/icons-material/Wc';
+
 
 
 //mui components
@@ -29,6 +28,8 @@ import { green } from '@mui/material/colors';
 import Divider from '@mui/material/Divider';
 import CategoryIcon from '@mui/icons-material/Category'
 import NumbersIcon from '@mui/icons-material/Numbers'
+import SchoolIcon from '@mui/icons-material/School';
+import WcIcon from '@mui/icons-material/Wc';
 
 
 export default function StudentDashboard(props){
@@ -182,7 +183,7 @@ export default function StudentDashboard(props){
 									</div>
 									<Divider style={{height:'2px', width:'100%', color:'black'}}/>
 									<div className='d-flex flex-column justify-content-center align-items-center' style={{width:'100%', height:'80%'}}>
-										<div className='d-flex flex-column justify-content-start align-items-center' style={{width:'95%', height:'90%',border:'1px solid black', borderRadius:'10px',overflowY:'auto',overflowX:'auto'}}>
+										<div className='d-flex flex-column justify-content-start align-items-center' style={{width:'95%', height:'90%',border:'1px solid black',backgroundColor:'#70AD47', borderRadius:'10px',overflowY:'auto',overflowX:'auto'}}>
 											<div className="d-flex flex-row justify-content-around align-items-center" style={{height:'25px',width:'100%',border:'1px solid black', backgroundColor:'#385723',color:'white'}}>
 												<div className='col-2 text-left'>First Name</div>
 												<div className='col-1 text-left'>M.I</div>
@@ -191,7 +192,7 @@ export default function StudentDashboard(props){
 											</div>
 											<div className="d-flex flex-column justify-content-start align-items-center" style={{height:'95%',width:'100%',overflowY:'auto',overflowX:'auto'}}>
 												{studentData?.map?.(object =>(
-													<div className='d-flex flex-row justify-content-around align-items-center' style={{fontSize:'18px',width:'100%',border:'1px solid gray',borderRadius:'10px'}}>
+													<div className='d-flex flex-row justify-content-around align-items-center' style={{fontSize:'18px',width:'100%',border:'1px solid gray',backgroundColor:'#E2F0D9',borderRadius:'10px'}}>
 														<div className='col-2 text-left'>{object.firstName}</div>
 														<div className='col-1 text-left'>{object.middleInitial}</div>
 														<div className='col-2 text-left'>{object.lastName}</div>
@@ -205,10 +206,10 @@ export default function StudentDashboard(props){
 							</div>
 							<div className='d-flex justify-content-center align-items-center flex-column' style={{height:'95%', width:'20%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}}>
 								<div className="d-flex flex-row justify-content-center" style={{height:'25%',width:'100%'}}>
-									<Link to={`/MIS-slist/${username}`}><Button style={{width:'230px',height:'40px'}} title="Activate Student's Account"/></Link>
+									<Link to={`/MIS-slist/${username}`}><Button style={{width:'230px',height:'40px'}} title="Activated Account"/></Link>
 								</div>
 								<div className="d-flex flex-row justify-content-center" style={{height:'25%',width:'100%'}}>
-									<Link to={`/MIS-inactive-slist/${username}`}><Button style={{width:'230px',height:'40px'}} title="Deactivte Student's Account"/></Link>
+									<Link to={`/MIS-inactive-slist/${username}`}><Button style={{width:'230px',height:'40px'}} title="Deactivated Account"/></Link>
 								</div>
 								<div className="d-flex flex-row justify-content-center" style={{height:'25%',width:'100%'}}>
 									<Link to={`/MIS-reg/${username}`}><Button style={{width:'230px',height:'40px'}} title="Register New Student"/></Link>

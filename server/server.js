@@ -126,10 +126,11 @@ app.get('/filter-query/:course/:category/:yearSubmitted/:order/:year', async( re
 
 
 
-app.get('/student-filter-query/:course/:section/:yearLevel/:order', async( req, res, next ) => {
+app.get('/student-filter-query/:course/:section/:yearLevel/:order/:sex', async( req, res, next ) => {
 	const { 
 		course,
 		section,
+		sex,
 		yearLevel,
 		order
 	} = req.params;
@@ -139,7 +140,7 @@ app.get('/student-filter-query/:course/:section/:yearLevel/:order', async( req, 
 
 
 	Student.find(
-		{ course: course}, 
+		{ course: course,sex:sex}, 
 		null, 
 		{ sort: { 
 			lastName: order === 'A-Z' ? 1 : -1,
@@ -394,7 +395,7 @@ app.get('/student/sex-count', async (req, res, next) =>{
 					Male=Male+1;
 				}
 
-				if(docs.sex == 'Male'){
+				if(docs.sex == 'Female'){
 					Female=Female+1;
 				}
 			})

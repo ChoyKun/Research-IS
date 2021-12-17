@@ -19,10 +19,40 @@ import SearcBar from '../components/contents/SearchBar';
 import Select from '../components/fields/select';
 import Image from '../components/fields/image';
 
+//mui component
+import { green } from '@mui/material/colors';
+import Divider from '@mui/material/Divider';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
 
 
 export default function FacultyReg(props){
 	const {username} = useParams();
+	const [snackOpen, setSnackOpen] = useState(false)
+	const [alertMes, setAlertMes] = useState(null)
+	const [alertStatus, setAlertStatus] = useState(null)
+	const [dialogOpen, setDialogOpen] = useState(false);
+
+	const handleDialog = () =>{
+		setDialogOpen(true)
+	}
+
+	const handleDialogClose = () => {
+	    setDialogOpen(false);
+	};
+
+	const handleSnackClose = () =>{
+		setSnackOpen(false);
+		setAlertMes(null);
+		setAlertStatus(null);
+	}
 
 	const state = {
 		studentNo : null,
@@ -106,92 +136,119 @@ export default function FacultyReg(props){
 	const [data, dispatch] = useReducer(reducer, state)
 
 	const handler = ()=>{
-		const send = window.confirm("If you register this record you can not edit it again, do you want to proceed?");
-		if(send == true){
-			axios.post('http://localhost:7000/student/slist/register', data)
-			.then((res)=>{
-				alert(res.data.message);
-			})
-			.catch((err)=>{
-					if( err?.response?.data?.message ){
-						alert( err.response.data.message );
-					}
-				})
+		setDialogOpen(false);
+		setSnackOpen(true);
+		axios.post('http://localhost:7000/student/slist/register', data)
+		.then((res)=>{
+			setAlertMes(res.data.message);
+			setAlertStatus(200)
+		})
+		.catch((err)=>{
+			if( err?.response?.data?.message ){
+				setAlertMes( err.response.data.message );
+				setAlertStatus(403)
 			}
-		else{
-			alert("Operation canceled")
-		}
-		
+		})	
+	}
+
+	const cancelOp =() =>{
+		setDialogOpen(false);
+		setSnackOpen(true);
+		setAlertMes("Operation canceled")
+		setAlertStatus(403)
 	}
 
 
 	return(
 		<>
-			<div style={{height:'7%', width:'100%', backgroundColor:'#385723', color:'white'}} className='d-flex justify-content-center align-items-center'>
-				<h2>Register New Student</h2>				
-			</div>
-			<div style={{height:'10%', width:'100%'}}className="d-flex flex-row justify-content-around align-items-center">
-				<Link to={`/MIS-slist/${username}`}><Button style={{height:'50px',width:'200px'}} title='Active Students'/></Link>
-				<Link to={`/MIS-inactive-slist/${username}`}><Button style={{height:'50px',width:'200px'}} title='Inactive Students'/></Link>
-				<Link to={`/MIS-reg/${username}`}><Button style={{height:'50px',width:'200px'}} title='Register New Student'/></Link>					
-			</div>
-			<div style={{width: '100%', height: '85%'}} className='d-flex justify-content-center align-items-center'>
+			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
 				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black'}} className='d-flex justify-content-center align-items-center'>
-					<div style={{height:'95%',width:'95%', color:'black'}}>
-						<div style={{height:'90%',width:'90%'}} className="d-flex flex-row justify-content-center">
-							<div style={{height:'95%',width:'50%'}}>
-								<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
-									<label style={{fontSize:'18px'}}>Student ID:</label>
-									<Field className='uNametxt' reqOnChange={(e) => {dispatch({type: 'studentNo', data: e.target.value});}}/>
-								</div>
-								<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
-									<label style={{fontSize:'18px'}}>Password:</label>
-									<Field className='Passwordtxt' reqOnChange={(e) => {dispatch({type: 'password', data: e.target.value});}}/>
-								</div>
-								<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
-									<label style={{fontSize:'18px'}}>First Name:</label>
-									<Field className='fName'reqOnChange={(e) => {dispatch({type: 'firstName', data: e.target.value});}}/>
-								</div>
-								<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
-									<label style={{fontSize:'18px'}}>Middle Initial:</label>
-									<Field className='fName' reqOnChange={(e) => {dispatch({type: 'middleInitial', data: e.target.value});}}/>
-								</div>
-								<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
-									<label style={{fontSize:'18px'}}>Last Name:</label>
-									<Field className='fName' reqOnChange={(e) => {dispatch({type: 'lastName', data: e.target.value});}}/>
-								</div>
-								<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
-									<label style={{fontSize:'18px'}}>Name Extention:</label>
-									<Field className='fName' reqOnChange={(e) => {dispatch({type: 'extentionName', data: e.target.value});}}/>
-								</div>
+					<Snackbar anchorOrigin={{vertical:"top", horizontal:"center"}} open={snackOpen} autoHideDuration={2000} onClose={handleSnackClose}>
+						<Alert variant='filled' severity={alertStatus == 403 ? "error" : "success"} sx={{width:'500px'}}>
+							{alertMes}
+						</Alert>				
+					</Snackbar>
+					<div style={{height:'95%',width:'95%', color:'black',border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}}>
+						<div className="d-flex flex-column justify-content-center align-items-center" style={{height:'90%',width:'100%'}}>
+							<div className="d-flex justify-content-start align-items-center" style={{width:'90%',height:'20%'}}>
+								<HowToRegIcon sx={{color:green[500],height:'40px',width:'40px'}}/>
+								<p style={{fontSize:'30px', textAlign:'center',height:'24px'}}>Register New Student</p>
 							</div>
-							<div style={{height:'100%',width:'50%'}}>
-								<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
-									<label style={{fontSize:'18px'}}>Birth Date</label>
-									<Field type='date' placeHolder='Enter Date Here' reqOnChange={(e) => {dispatch({type: 'birthdate', data: e.target.value});}}/>
+							<Divider style={{height:'2px', width:'100%', color:'black'}}/>
+							<div style={{height:'90%',width:'90%'}} className="d-flex flex-row justify-content-center">
+								<div style={{height:'95%',width:'50%'}}>
+									<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
+										<label style={{fontSize:'18px'}}>Student ID:</label>
+										<Field className='uNametxt' reqOnChange={(e) => {dispatch({type: 'studentNo', data: e.target.value});}}/>
+									</div>
+									<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
+										<label style={{fontSize:'18px'}}>Password:</label>
+										<Field className='Passwordtxt' reqOnChange={(e) => {dispatch({type: 'password', data: e.target.value});}}/>
+									</div>
+									<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
+										<label style={{fontSize:'18px'}}>First Name:</label>
+										<Field className='fName'reqOnChange={(e) => {dispatch({type: 'firstName', data: e.target.value});}}/>
+									</div>
+									<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
+										<label style={{fontSize:'18px'}}>Middle Initial:</label>
+										<Field className='fName' reqOnChange={(e) => {dispatch({type: 'middleInitial', data: e.target.value});}}/>
+									</div>
+									<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
+										<label style={{fontSize:'18px'}}>Last Name:</label>
+										<Field className='fName' reqOnChange={(e) => {dispatch({type: 'lastName', data: e.target.value});}}/>
+									</div>
+									<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
+										<label style={{fontSize:'18px'}}>Name Extention:</label>
+										<Field className='fName' reqOnChange={(e) => {dispatch({type: 'extentionName', data: e.target.value});}}/>
+									</div>
 								</div>
-								<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
-									<Select className='aRegCourse' label='Select Course:' options={['BSIT','BSCS']} reqOnChange={(e)=>{dispatch({type:'course',data: e.target.value})}}/>
-								</div>
-								<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
-									<Select className='aRegYear' label='Year Level' options={['1','2','3','4']} reqOnChange={(e)=>{dispatch({type:'yearLevel',data: e.target.value})}}/>
-								</div>
-								<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
-									<Select className='aRegYear' label='Sex' options={['Male','Female']} reqOnChange={(e)=>{dispatch({type:'sex',data: e.target.value})}}/>
-								</div>
-								<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
-									<label>Section:</label>
-									<Field className='fName' reqOnChange={(e) => {dispatch({type: 'section', data: e.target.value});}}/>
-								</div>
-								<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
-									<label>Date Registered:</label>
-									<Field type='date' placeHolder='Enter Date Here' reqOnChange={(e) => {dispatch({type: 'dateRegistered', data: e.target.value});}}/>
-								</div>
-								<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
-									<Button title='Register' style={{height:'35px', width:'130px'}} click={handler}/>
-								</div>
-							</div>						
+								<div style={{height:'100%',width:'50%'}}>
+									<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
+										<label style={{fontSize:'18px'}}>Birth Date</label>
+										<Field type='date' placeHolder='Enter Date Here' reqOnChange={(e) => {dispatch({type: 'birthdate', data: e.target.value});}}/>
+									</div>
+									<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
+										<Select className='aRegCourse' label='Select Course: ' options={['BSIT','BSCS']} reqOnChange={(e)=>{dispatch({type:'course',data: e.target.value})}}/>
+									</div>
+									<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
+										<Select className='aRegYear' label='Year Level: ' options={['1','2','3','4']} reqOnChange={(e)=>{dispatch({type:'yearLevel',data: e.target.value})}}/>
+									</div>
+									<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
+										<Select className='aRegYear' label='Sex: ' options={['Male','Female']} reqOnChange={(e)=>{dispatch({type:'sex',data: e.target.value})}}/>
+									</div>
+									<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
+										<label>Section:</label>
+										<Field className='fName' reqOnChange={(e) => {dispatch({type: 'section', data: e.target.value});}}/>
+									</div>
+									<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
+										<label>Date Registered:</label>
+										<Field type='date' placeHolder='Enter Date Here' reqOnChange={(e) => {dispatch({type: 'dateRegistered', data: e.target.value});}}/>
+									</div>
+									<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
+										<Button title='Register' style={{height:'35px', width:'130px'}} click={handleDialog}/>
+										<Dialog
+											open={dialogOpen}
+									        onClose={handleDialogClose}
+									        aria-labelledby="alert-dialog-title"
+									        aria-describedby="alert-dialog-description"
+										>
+											<DialogTitle>
+												{"Register New Student"}
+											</DialogTitle>
+											<DialogContent>
+												You won't be able to edit some details in the record, do you wish to proceed?
+											</DialogContent>
+											<DialogActions>
+												<Button title='Cancel' click={cancelOp}/>
+												<Button title='Yes' click={handler}/>
+											</DialogActions>
+										</Dialog>
+									</div>
+								</div>						
+							</div>
 						</div>
+						
+						
 					</div>
 				</div>
 			</div>
