@@ -49,8 +49,7 @@ export default function AdminLogin(props){
 		.then((res)=>{
 			alert(res.data.message);
 			if(res.status == 200 ){
-	
-				setRedirect( <Redirect to={`/admin-archive/${data._username}`}/> );
+				setRedirect( <Redirect to={`/admin-dashboard/${data._username}`}/> );
 			}
 			
 		})

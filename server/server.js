@@ -410,6 +410,66 @@ app.get('/student/sex-count', async (req, res, next) =>{
 	})
 })
 
+app.get('/rlist/archive-count', async (req, res, next) =>{
+
+	var Public = 0;
+	var Archive = 0;
+
+	Research.find({}, (err, doc) => {
+		if( err ) res.sendStatus( 503 );
+
+		if(doc){
+			console.log(doc.status)
+			doc.forEach((docs)=>{
+				if(docs.status== 'public'){
+					Public=Public+1;
+				}
+
+				if(docs.status == 'archive'){
+					Archive=Archive+1;
+				}
+			})
+
+			return res.status(200).json({
+				Public:Public,
+				Archive: Archive
+			})
+		}
+
+
+	})
+})
+
+app.get('/slist/status-count', async (req, res, next) =>{
+
+	var Active = 0;
+	var Inactive = 0;
+
+	Student.find({}, (err, doc) => {
+		if( err ) res.sendStatus( 503 );
+
+		if(doc){
+			console.log(doc.status)
+			doc.forEach((docs)=>{
+				if(docs.status== 'active'){
+					Active=Active+1;
+				}
+
+				if(docs.status == 'inactive'){
+					Inactive=Inactive+1;
+				}
+			})
+
+			return res.status(200).json({
+				Active:Active,
+				Inactive: Inactive
+			})
+		}
+
+
+	})
+})
+
 app.get('/student/course-count', async (req, res, next) =>{
 
 	var BSIT = 0;

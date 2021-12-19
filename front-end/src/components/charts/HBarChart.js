@@ -57,6 +57,7 @@ export default function BarChart(props){
 						precision: 0
 					}
 				},
+				indexAxis: 'y'
 			}}
 		/>
 	)

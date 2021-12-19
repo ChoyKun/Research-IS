@@ -21,6 +21,7 @@ import AdminFList from './views/AdminFList.js';
 import AdminUpload from './views/AdminUpload.js';
 import AdminCO from './views/AdminCO.js';
 import AdminCList from './views/AdminCList.js';
+import AdminDashboard from './views/AdminDashboard.js';
 import AdminNewCoor from './views/AdminNewCoor.js';
 import FacultyReg from './views/FacultyReg.js';
 import FacultyProfile from './views/FacultyProfile.js';
@@ -73,6 +74,7 @@ const views = [
   '/admin-profile',
   '/admin-edit-profile',
   '/admin-reg',
+  '/admin-dashboard',
   '/emergency-admin',
   '/admin-current-officer',
   '/admin-rlist',
@@ -217,6 +219,12 @@ function App() {
             <Route path="/admin-changepass/:username">
               <AdminFrame authenticate={authenticate}>
                 <AdminChangepass />
+              </AdminFrame>
+            </Route>
+
+             <Route path="/admin-dashboard/:username">
+              <AdminFrame authenticate={authenticate}>
+                <AdminDashboard />
               </AdminFrame>
             </Route>
 
