@@ -38,6 +38,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import IconButton from '@mui/material/IconButton';
 import ContactMailIcon from '@mui/icons-material/ContactMail';
 import ContactPhoneIcon from '@mui/icons-material/ContactPhone';
+import Avatar from '@mui/material/Avatar';
 
 
 
@@ -603,6 +604,16 @@ export default function StudentProfile(props){
 		})
 	},[])
 
+	useEffect(() =>{
+		axios.get(`http://localhost:7000/clist/picture`)
+		.then( res => {
+			setImage( () => res.data.path );			
+		})
+		.catch( err => {
+			console.log( err );
+		});
+	}, []);
+
 	const toggleDrawer = (open) => (event) => {
 		setDrawerState( open );
 	}
@@ -623,7 +634,7 @@ export default function StudentProfile(props){
 							<div className='d-flex justify-content-center align-items-center flex-column' style={{height:'95%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}}>
 								<div className="d-flex justify-content-center align-items-center" style={{height:'100%', width:'100%'}}>
 									<div className='d-flex justify-content-around align-items-center flex-column' style={{height:'90%', width:'90%'}}>
-										<img src={scslogo}/>
+										<Avatar style={{height:'100px',width:'100px'}} src={image}/>
 										<Divider style={{height:'2px', width:'100%', color:'black'}}/>
 										{facultyData?.map?.(object=>(
 											<div className="d-flex align-items-center justify-content-center flex-column" style={{width:'100%',height:'60%',color:'black'}}>
