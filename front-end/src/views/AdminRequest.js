@@ -11,6 +11,16 @@ import Button from '../components/buttons/button';
 import Field from '../components/fields/txtfield';
 import SearcBar from '../components/contents/SearchBar';
 
+//mui component
+import { green } from '@mui/material/colors';
+import EmailIcon from '@mui/icons-material/Email'
+import Divider from '@mui/material/Divider';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp'
+import ThumbDownIcon from '@mui/icons-material/ThumbDown'
+import IconButton from '@mui/material/IconButton';
+
+
+
 
 export default function AdminRequest( props ){
 	const {username} = useParams();
@@ -50,26 +60,24 @@ export default function AdminRequest( props ){
 
 	return(
 		<>
-			<div style={{height:'8%', width:'100%', backgroundColor:'#595959', color:'white'}} className='d-flex justify-content-center align-items-center'>
-				<h2>Student's Requests</h2>				
-			</div>
-			<div style={{height:'10%', width:'100% !important'}}className="d-flex flex-row justify-content-around align-items-center">
-				<Link to={`/admin-rlist/${username}`}><Button style={{height:'50px',width:'200px'}} title='Public Research'/></Link>
-				<Link to={`/admin-archive/${username}`}><Button style={{height:'50px',width:'200px'}} title='Archived'/></Link>
-				<Link to={`/admin-upload/${username}`}><Button style={{height:'50px',width:'200px'}} title='Upload new Research'/></Link>
-				<Link to={`/admin-request/${username}`}><Button style={{height:'50px',width:'200px'}} title='Research Requests'/></Link>					
-			</div>
-			<div className="d-flex flex-row-reverse">
-				<Button title="Clear Request" click={clear}/>
-			</div>
 			<div style={{width: '100%', height: '100%'}} className='d-flex flex-column justify-content-center align-items-center'>
-				<Header/>
-				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black', overflowY: 'auto'}} className='d-flex flex-column justify-content-start align-items-center'>
-
-					{
-						requests?.map?.( req => <Request setRequests={setRequests} key={req.id} {...req}/>)
-					}
-
+				
+				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black', overflowY: 'auto'}} className='d-flex flex-column justify-content-center align-items-center'>
+					<div className="d-flex justify-content-around align-items-center flex-column" style={{height:'95%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey",overflowY:'auto',overflowX:'auto'}}>
+						<div className="d-flex flex-row align-items-center justify-content-start" style={{height:'5%',width:'90%'}}>
+							<EmailIcon sx={{color:green[500],height:'40px',width:'40px'}}/>
+							<p style={{fontSize:'30px', textAlign:'center',height:'24px',color:'black'}}>Requests for Full Viewing</p>
+						</div>
+						<Divider style={{height:'2px', width:'100%', color:'black'}}/>
+						<div style={{height:'80%', width:'95%', backgroundColor:'#70AD47', border:'1px solid black', overflowY: 'auto'}} className='d-flex flex-column justify-content-start align-items-center'>
+							<Header/>
+							<div className="d-flex flex-column" style={{height:'100%', width:'100%',backgroundColor:'#70AD47',overflowY:'auto',overflowX:'auto'}}>									
+								{
+									requests?.map?.( req => <Request setRequests={setRequests} key={req.id} {...req}/>)
+								}
+							</div>	
+						</div>
+					</div>
 				</div>
 			</div>
 		</>
@@ -81,11 +89,11 @@ const Header = ( props ) => {
 	return(
 		<div 
 			style={{
-				width: '90%', 
+				width: '100%', 
 				height: '35px', 
 				border: '1px solid black',
-				backgroundColor: 'rgba(255, 255, 25, 0.3)',
-				color: 'rgba(0, 0, 0, 0.7)'
+				backgroundColor: '#385723',
+				color: 'white'
 			}}
 
 			className="d-flex flex-row justify-content-around align-items-center"
@@ -94,8 +102,8 @@ const Header = ( props ) => {
 			<div className="col-2 text-center"><p className="p-0 m-0"> Student Name </p></div>
 			<div className="col-3 text-center"><p className="p-0 m-0"> Title </p></div>
 			<div className="col-2 text-center"><p className="p-0 m-0"> Date Requested </p></div>
-			<div className="col-1 text-center"><label htmlFor="approveAll">Approve all </label><input type="checkbox" name="approveAll"/></div>
-			<div className="col-1 text-center"><label htmlFor="approveAll">Decline all </label><input type="checkbox" name="approveAll"/></div>
+			<div className="col-1 text-center">Approve</div>
+			<div className="col-1 text-center">Decline</div>
 		</div>
 	);
 }
@@ -169,15 +177,38 @@ const Request = ( props ) => {
 				width: '100%', 
 				height: '30px', 
 				color: 'black',
-				backgroundColor: 'rgba(0, 0, 0, 0.4)'
+				backgroundColor: '#E2F0D9',
+				border:'1px solid black',
+				borderRadius:'10px'
 			}} 
-			className="d-flex mb-1 flex-row justify-content-around align-items-center"
+			className="d-flex flex-row justify-content-around align-items-center"
 		>
 			<div className="col-1 text-center"><p className="p-0 m-0"> { props.studentID } </p></div>
 			<div className="col-2 text-center"><p className="p-0 m-0"> { props.studentName } </p></div>
 			<div className="col-3 text-center"><p className="p-0 m-0"> { props.title } </p></div>
 			<div className="col-2 text-center"><p className="p-0 m-0"> { props.dateRequested } </p></div>
-			<div className="col-1 text-center"><Button click={approve} title="Approve"/></div>
+			<div className="col-1 text-center">
+				<IconButton
+				size="large"
+				edge="end"
+				color={"inherit"}
+				aria-label="menu"
+				sx={{ mr: 2,color:green[500] }}
+				>
+           	 		<ThumbUpIcon style={{height: '25px',width:'25px'}} onClick={approve}/>
+           	 	</IconButton>
+			</div>
+			<div className="col-1 text-center">
+				<IconButton
+				size="large"
+				edge="end"
+				color={"inherit"}
+				aria-label="menu"
+				sx={{ mr: 2,color:green[500] }}
+				>
+           	 		<ThumbDownIcon style={{height: '25px',width:'25px'}}/>
+           	 	</IconButton>
+			</div>
 			{/*<div className="col-1 text-center"><Button click={decline} title="Decline"/></div>*/}
 		</div>
 	);

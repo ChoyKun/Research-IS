@@ -495,8 +495,8 @@ export default function StudentProfile(props){
 												<div className='d-flex justify-content-start align-items-start' style={{height:'50%', width:'100%',overflowY:'auto',overflowX:'auto'}}>		
 													<div className="d-flex flex-column justify-content-between" style={{width:'100%', height:'40%'}}>
 														{activity?.map?.(object =>(
-															<div className='d-flex justify-content-between flex-row' style={{width:'100%',height:'40%'}}>
-																<div style={{width:'70%',height:'40%'}}>{object.message}</div>
+															<div className='d-flex justify-content-between flex-row' style={{width:'100%',height:'50%'}}>
+																<div style={{textOverflow:'elipsis',overflow:'hidden',whiteSpace:'nowrap',width:'70%',height:'100%'}}>{object.message}</div>
 																<div style={{width:'20%',height:'40%'}}>{object.date}</div>
 															</div>
 														))}

@@ -457,7 +457,7 @@ function Item(props){
 				edge="end"
 				color="inherit"
 				aria-label="menu"
-				sx={{ mr: 2 }}
+				sx={{ color:green[500],mr: 2 }}
 				>
            	 		<PreviewIcon style={{height: '25px',width:'25px'}} onClick={toggleDrawer(true)}/>
            	 	</IconButton>
@@ -477,7 +477,7 @@ function Item(props){
 					edge="end"
 					color="inherit"
 					aria-label="menu"
-					sx={{ mr: 2 }}
+					sx={{ color:green[500],mr: 2 }}
 					>
 	           	 		<SendIcon style={{height: '25px',width:'25px'}} onClick={requestForView}/>
 	           	 	</IconButton>
