@@ -31,25 +31,32 @@ export default function Test() {
     pdfjs.GlobalWorkerOptions.workerSrc = 
     `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
     const [numPages, setNumPages] = useState(null);
-    const [pageNumber, setPageNumber] = useState(2);
+    const [pageNumber, setPageNumber] = useState(3);
   
     function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);
-    setPageNumber(1);
+    setPageNumber(3);
   }
   return (
     <>
-    <div className="d-flex main justify-content-center align-item-center">
+    <div style={{height:'100%', width:'100%',backgroundColor:'#385723',fontSize:'100px'}} className="d-flex main justify-content-center align-item-center">
       {researchData?.map?.(object =>(
-        <div style={{height:'90%', width:'100%',backgroundColor:'gray',fontSize:'100px'}} className="d-flex justify-content-center align-items-center overflow-auto">
-          <Document
-            className='noselect'
-            file={object.PDFFile}
-            onLoadSuccess={onDocumentLoadSuccess}
-            protectContent = {true}
-            >
-            <Page pageNumber={pageNumber} />
-          </Document>
+        <div style={{height:'100%', width:'100%',backgroundColor:'white',fontSize:'100px'}} className="d-flex justify-content-center align-items-center overflow-auto flex-column">
+          <div className="d-flex flex-column align-items-center justify-content-around" style={{height:'95%',width:'50%',border:'1px solid black',backgroundColor:'#e2f0d9'}}>          
+              <div className="d-flex justify-content-center align-items-center" style={{width:'400px',height:'80%'}}> 
+                <Document
+                  className="noselect"
+                  file={object.PDFFile}
+                  onLoadSuccess={onDocumentLoadSuccess}
+
+                >
+                  <Page
+                    height='700'
+                    pageNumber={pageNumber}
+                  />
+                </Document>
+              </div>
+          </div>
         </div>
        ))}
       

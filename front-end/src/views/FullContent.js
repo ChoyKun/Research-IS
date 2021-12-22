@@ -4,6 +4,7 @@ import { Link, useParams, Redirect} from 'react-router-dom';
 import axios from '../modules/config.js';
 
 import "../styles/txt.css"
+import Button from '../components/buttons/button'
 
 
 export default function Test() {
@@ -11,6 +12,7 @@ export default function Test() {
 	const {id} =useParams();
 
   	const [researchData, setResearchData] = useState([]);
+
 
 	useEffect(()=>{
 	  axios.get('http://localhost:7000/research/rlist')
@@ -57,47 +59,77 @@ export default function Test() {
 
 	return (
 		<>
-		<div className="d-flex main justify-content-center align-item-center flex-row	">
-		{researchData?.map?.(object =>(
-	        <div style={{height:'90%', width:'100%',backgroundColor:'gray',fontSize:'100px'}} className="d-flex justify-content-center align-items-center overflow-auto flex-column">
-				<div className="d-flex flex-row">
-					<div style={{fontSize:'20px'}} className="pagec">
-					Page {pageNumber || (numPages ? 1 : '--')} of {numPages || '--'}
+		<div style={{height:'100%', width:'100%',backgroundColor:'#385723',fontSize:'100px'}} className="d-flex main justify-content-center align-item-center flex-row	">
+			{researchData?.map?.(object =>(
+		        <div style={{height:'100%', width:'100%',backgroundColor:'white',fontSize:'100px'}} className="d-flex justify-content-center align-items-center overflow-auto flex-column">
+					<div className="d-flex flex-column align-items-center justify-content-around" style={{height:'95%',width:'50%',border:'1px solid black',backgroundColor:'#e2f0d9'}}>					
+						<div className="d-flex justify-content-center align-items-center" style={{width:'400px',height:'80%'}}>	
+							<Document
+								className="noselect"
+								file={object.PDFFile}
+								onLoadSuccess={onDocumentLoadSuccess}
+
+							>
+								<Page
+									height='600'
+									pageNumber={pageNumber}
+								/>
+							</Document>
+						</div>
+						<div className="d-flex flex-row justify-content-center align-items-center" style={{width:'400px',height:'10%'}}>	
+							<Button
+							style={{height:'40px',width:'120px',fontSize:'20px',color:'black'}}
+							type="button"
+							disabled={pageNumber <= 1}
+							click={previousPage}
+							title='Previous'
+							>
+
+							</Button>
+							<div style={{fontSize:'20px'}} className="pagec">
+								Page {pageNumber || (numPages ? 1 : '--')} of {numPages || '--'}
+							</div>
+							<Button
+							style={{height:'40px',width:'120px',fontSize:'20px',color:'black'}}
+							type="button"
+							disabled={pageNumber >= numPages}
+							click={nextPage}
+							title='Next'
+							>
+
+							</Button>
+						</div>
 					</div>
-					<div className="buttonc">
-					<button
-					style={{height:'70px',width:'150px',fontSize:'20px'}}
-					type="button"
-					disabled={pageNumber <= 1}
-					onClick={previousPage}
-					className="Pre"
-						
-					>
-					Previous
-					</button>
-					<Document
-						className="noselect"
-						file={object.PDFFile}
-						onLoadSuccess={onDocumentLoadSuccess}
-						protectContent = {true}
-					>
-						<Page 
-							pageNumber={pageNumber}
-						/>
-					</Document>
-					<button
-					style={{height:'70px',width:'150px',fontSize:'20px'}}
-					type="button"
-					disabled={pageNumber >= numPages}
-					onClick={nextPage}
-					>
-					Next
-					</button>
-					</div>
-				</div>
-			        </div>
-	       ))}
+		        </div>
+	   		))}
 		</div>
 		</>
 	);
 }
+
+{/*
+						<button
+						style={{height:'70px',width:'150px',fontSize:'20px'}}
+						type="button"
+						disabled={pageNumber >= numPages}
+						onClick={nextPage}
+						>
+						Next
+						</button>	
+
+<button
+						style={{height:'70px',width:'150px',fontSize:'20px'}}
+						type="button"
+						disabled={pageNumber <= 1}
+						onClick={previousPage}
+						className="Pre"
+							
+						>
+						Previous
+						</button>
+
+<div style={{fontSize:'20px'}} className="pagec">
+						Page {pageNumber || (numPages ? 1 : '--')} of {numPages || '--'}
+					</div>
+
+*/}

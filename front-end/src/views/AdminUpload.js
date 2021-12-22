@@ -232,10 +232,10 @@ export default function FacultyUpload(props){
 									        aria-describedby="alert-dialog-description"
 										>
 											<DialogTitle>
-												{"Register New Officer"}
+												{"Upload New Research"}
 											</DialogTitle>
 											<DialogContent>
-												The previous officer's account will be deactivated, do you wish to proceed?
+												You can't edit the information after uploading the file, do you want to continue?
 											</DialogContent>
 											<DialogActions>
 												<Button title='Cancel' click={cancelOp}/>
