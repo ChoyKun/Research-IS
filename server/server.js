@@ -621,22 +621,25 @@ app.put('/student/slist/changepassword/:studentNo/', async(req,res,next)=>{
 	const { _currPassword, _newPassword, _verNewPassword} = req.body;
 
 	if(match(_newPassword, _verNewPassword)){
-		Student.findOne({studentNo: studentNo, password: _currPassword}, ( err,doc ) => {
+		Student.findOne({studentNo: studentNo}, ( err,doc ) => {
 			if( err ) {
 				return res.status( 503 ).json({ message: 'Server Error' });
 			}
 
 			if(doc){
-				doc.password = _newPassword;
+				if(doc.password == _currPassword){
+					doc.password = _newPassword;
 
-				doc.activity.push({message:'You changed your password', date: date})
-				doc.save( err => {
-					if(err)	return res.status(503).json({ message: 'Server Error' })
-					
-					return res.status( 200 ).json({ message: 'Saved successfully' });    
-				});
-
-				
+					doc.activity.push({message:'You changed your password', date: date})
+					doc.save( err => {
+						if(err)	return res.status(503).json({ message: 'Server Error' })
+						
+						return res.status( 200 ).json({ message: 'Saved successfully' });    
+					});
+				}
+				else{
+					return res.status( 403 ).json({ message: 'Incorrect password' });
+				}				
 			}
 
 		})
@@ -1442,16 +1445,19 @@ app.put('/faculty/flist/changepassword/:username', async(req,res,next)=>{
 			}
 
 			if(doc){
-				doc.password = _newPassword;
+				if(doc.password == _currPassword){
+					doc.password = _newPassword;
 
-				doc.activity.push({message:'You changed your password', date: date})
-				doc.save( err => {
-					if(err)	return res.status(503).json({ message: 'Server Error' })
-					
-					return res.status( 200 ).json({ message: 'Saved successfully' });    
-				});
-
-				
+					doc.activity.push({message:'You changed your password', date: date})
+					doc.save( err => {
+						if(err)	return res.status(503).json({ message: 'Server Error' })
+						
+						return res.status( 200 ).json({ message: 'Saved successfully' });    
+					});
+				}
+				else{
+					return res.status( 403 ).json({ message: 'Incorrect password' }); 
+				}			
 			}
 
 		})
@@ -1943,25 +1949,34 @@ app.put('/auth-admin/changepassword/:username', async(req,res,next)=>{
 	const {password} = data;
 
 
-	if(match(password, _currPassword)){
-		if(match(_newPassword, _verPassword)){
-			
-			Coordinator.findOneAndUpdate({username: username}, {password: _newPassword}, {useFindAndModify : false}, ( err ) => {
-				if( err ) {
-					return res.status( 503 ).json({ message: 'Server Error' });
+	if(match(_newPassword, _verNewPassword)){
+		Coordinator.findOne({username: username}, ( err,doc ) => {
+			if( err ) {
+				return res.status( 503 ).json({ message: 'Server Error' });
+			}
+
+			if(doc){
+				if(doc.password == _currPassword){
+					doc.password = _newPassword;
+
+					doc.activity.push({message:'You changed your password', date: date})
+					doc.save( err => {
+						if(err)	return res.status(503).json({ message: 'Server Error' })
+						
+						return res.status( 200 ).json({ message: 'Saved successfully' });    
+					});
 				}
+				else{
+					return res.status( 403 ).json({ message: 'Incorrect password' });
+				}				
+			}
 
-				return res.status( 200 ).json({ message: 'Changed successfully' });
-
-			})
-		}
-		else{
-			return res.status(400).json({ message: 'Password is incorrect' })
-		}
+		})
 	}
 	else{
-		return res.status(400).json({ message: 'Password is incorrect' })
+		return res.status(400).json({ message: 'Password does not match' })
 	}
+
 });
 
 
