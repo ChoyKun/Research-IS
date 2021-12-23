@@ -579,7 +579,7 @@ export default function StudentProfile(props){
 	},[])
 
 	useEffect(() =>{
-		axios.get(`http://localhost:7000/clist/picture`)
+		axios.get(`http://localhost:7000/faculty/picture`)
 		.then( res => {
 			setImage( () => res.data.path );			
 		})

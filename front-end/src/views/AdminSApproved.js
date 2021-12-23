@@ -378,32 +378,34 @@ function Item(props){
 			<div className="col-4 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
 			<div className="col-2 text-center">{props.object.yearSubmitted}</div>
 			<div className="col-2 text-center">{props.object.dateApproved}</div>
-			<IconButton
-				size="small"
-				edge="end"
-				color="inherit"
-				aria-label="menu"
-				sx={{ color:green[500],mr: 2 }}
+			<div className="col-1 text-center">	
+				<IconButton
+					size="small"
+					edge="end"
+					color="inherit"
+					aria-label="menu"
+					sx={{ color:green[500],mr: 2 }}
+					>
+	           	 		<RemoveCircleIcon style={{height: '25px',width:'25px'}} onClick={handleDialog}/>
+	           	 	</IconButton>
+				<Dialog
+					open={dialogOpen}
+			        onClose={handleDialogClose}
+			        aria-labelledby="alert-dialog-title"
+			        aria-describedby="alert-dialog-description"
 				>
-           	 		<RemoveCircleIcon style={{height: '25px',width:'25px'}} onClick={handleDialog}/>
-           	 	</IconButton>
-			<Dialog
-				open={dialogOpen}
-		        onClose={handleDialogClose}
-		        aria-labelledby="alert-dialog-title"
-		        aria-describedby="alert-dialog-description"
-			>
-				<DialogTitle>
-					{"Remove Permission"}
-				</DialogTitle>
-				<DialogContent>
-					Do you want to remove {name}'s permission to view {props.object.title}?
-				</DialogContent>
-				<DialogActions>
-					<Button title='Cancel' click={cancelOp}/>
-					<Button title='Yes' click={sender}/>
-				</DialogActions>
-			</Dialog>
+					<DialogTitle>
+						{"Remove Permission"}
+					</DialogTitle>
+					<DialogContent>
+						Do you want to remove {name}'s permission to view {props.object.title}?
+					</DialogContent>
+					<DialogActions>
+						<Button title='Cancel' click={cancelOp}/>
+						<Button title='Yes' click={sender}/>
+					</DialogActions>
+				</Dialog>
+			</div>
 		</div>
 	);
 }
