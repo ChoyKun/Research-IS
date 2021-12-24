@@ -46,6 +46,7 @@ export default function SFrame(props){
 	const [isMenuOpen, setIsMenuOpen] = useState( false );
 	const { username } = useParams();
 	const [name, setName] = useState(null);
+	
 
 	const handleSignOut = async () => {
 		const token = Cookies.get('token');
@@ -59,6 +60,7 @@ export default function SFrame(props){
 			throw err;
 		});
 	}
+	
 
 	const list = () =>(
 		<div className="d-flex justify-content-center flex-column" style={{height:'100%',width:'300px',backgroundColor:"#E2F0D9"}}>

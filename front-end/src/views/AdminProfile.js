@@ -98,6 +98,8 @@ export default function StudentProfile(props){
 		_extentionName:null,
 		_birthdate:null,
 		_dateRegistered:null,
+		_contactNo:null,
+		_emailAdd:null,
 		_img:'',
 	}
 
@@ -199,10 +201,10 @@ export default function StudentProfile(props){
 				state._dateRegistered = action.data;
 				return state;
 			case '_contactNo':
-				state._dateRegistered = action.data;
+				state._contactNo = action.data;
 				return state;
 			case '_emailAdd':
-				state._dateRegistered = action.data;
+				state._emailAdd = action.data;
 				return state;
 			case '_img':
 				state._img = action.data;
@@ -355,7 +357,7 @@ export default function StudentProfile(props){
 
 		formData.append('MISimg', imgFile );
 
-		axios.put(`http://localhost:7000/faculty/flist/editprofile/${username}`, data)
+		axios.put(`http://localhost:7000/auth-admin/editprofile/${username}`, data)
 		.then((res)=>{
 			if(newImage){
 				axios.put(`http://localhost:7000/faculty/upload-picture`, formData)

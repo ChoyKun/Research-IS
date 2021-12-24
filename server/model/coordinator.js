@@ -10,6 +10,8 @@ const coordinatorSchema= new Schema({
 	extentionName:String,
 	birthdate:{type:Date},
 	dateRegistered:{type:Date, default:Date.now},
+	contactNo:String,
+	emailAdd:String,
 	img: String,
 	activity: Array,
 	status: String

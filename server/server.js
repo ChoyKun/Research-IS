@@ -1803,7 +1803,7 @@ app.post('/coordinator/clist/register', async (req, res , next) =>{
 						return res.status( 200 ).json({
 						accessToken: accessToken,
 						refreshToken: refreshToken,
-						message: 'Welcome mr. coordinator'
+						message: 'New coordinator successfuly registerd, now signing out'
 						});
 					});
 				})
@@ -1903,6 +1903,8 @@ app.put('/auth-admin/editprofile/:username', async(req,res,next)=>{
 		_lastName,
 		_extentionName,
 		_birthdate,
+		_emailAdd,
+		_contactNo,
 		_dateRegistered,
 		_img,
 	} =req.body;
@@ -1921,6 +1923,8 @@ app.put('/auth-admin/editprofile/:username', async(req,res,next)=>{
 				doc.lastName = _lastName ?? doc.lastName;
 				doc.extentionName = _extentionName ?? doc.extentionName;
 				doc.birthdate = _birthdate ?? doc.birthdate;
+				doc.contactNo = _contactNo ?? doc.contactNo;
+				doc.emailAdd = _emailAdd ?? doc.emailAdd;
 				doc.dateRegistered = _dateRegistered ?? doc.dateRegistered;
 				doc.img = _img ?? doc.img;
 

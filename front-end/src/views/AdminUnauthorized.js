@@ -88,11 +88,6 @@ export default function AdminLogin(props){
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
 				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black'}} className='d-flex justify-content-center align-items-center'>
 					<div style={{height:'95%', width:'95%', background:'linear-gradient( to bottom, #a1c7f6, #ffffff)', border:'1px solid black',color:'black'}} className='d-flex justify-content-center align-items-center'>
-						<Snackbar anchorOrigin={{vertical:"top", horizontal:"center"}} open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-							<Alert variant='filled' severity={alertStatus == 403 ? "error" : "success"} sx={{width:'500px'}}>
-								{alertMes}
-							</Alert>				
-						</Snackbar>
 						<div style={{height:'100%',width:'100%'}} className='d-flex flex-column'>
 							<div style={{height:'50%',width:'100%'}} className="p-3 d-flex justify-content-around align-items-center flex-column">
 								<img src={lock} style={{height:"150px"}}/>
@@ -100,10 +95,7 @@ export default function AdminLogin(props){
 							</div>
 							<div style={{height:'100%',width:'100%'}} className="d-flex flex-column justify-content-around">
 								<div style={{height:'70%',width:'100%'}} className="login-field d-flex flex-column align-items-center justify-content-around flex-column">
-									<Field className='txt' placeHolder="username" reqOnChange={(e)=>{dispatch({type:'username',data:e.target.value})}}/>
-									<Field className='txt' type="password" placeHolder="password" reqOnChange={(e)=>{dispatch({type:'password',data:e.target.value})}}/>
-									<Button style={{height:'30px',width:'600px'}} title="Sign me in" click={handler}/>
-									<Link to='/admin-access'><Button style={{height:'30px',width:'600px'}} title="Go Back" /></Link>
+									<p style={{fontSize:'20px'}}>Sorry! You are not authorized to have access to log in as Admin</p>	
 								</div>
 							</div>
 						</div>

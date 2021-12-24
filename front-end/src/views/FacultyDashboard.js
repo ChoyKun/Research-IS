@@ -46,6 +46,7 @@ export default function StudentDashboard(props){
 	const [fourth, setFourth] = useState(null);
 	const [courseTotal, setCourseTotal] = useState(null);
 	const [sexTotal, setSexTotal] = useState(null);
+	
 
 
 	useEffect(()=>{
