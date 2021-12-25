@@ -7,7 +7,7 @@ import axios from '../modules/config.js';
 import scslogo from "../images/scs-final.png";
 import favorites from "../images/heart.png";
 import profile from "../images/profile.png";
-import lock from "../images/lock.png";
+import lock from "../images/lock1.png";
 
 
 
@@ -86,8 +86,8 @@ export default function AdminLogin(props){
 	return(
 		<>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
-				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black'}} className='d-flex justify-content-center align-items-center'>
-					<div style={{height:'95%', width:'95%', background:'linear-gradient( to bottom, #a1c7f6, #ffffff)', border:'1px solid black',color:'black'}} className='d-flex justify-content-center align-items-center'>
+				<div style={{height:'95%', width:'95%', backgroundColor:'white', border:'1px solid black'}} className='d-flex justify-content-center align-items-center'>
+					<div style={{height:'95%', width:'95%', background:'linear-gradient( to bottom, #548235,#e2f0d9)', border:'1px solid black',color:'black',borderRadius:'10px'}} className='d-flex justify-content-center align-items-center'>
 						<div style={{height:'100%',width:'100%'}} className='d-flex flex-column'>
 							<div style={{height:'50%',width:'100%'}} className="p-3 d-flex justify-content-around align-items-center flex-column">
 								<img src={lock} style={{height:"150px"}}/>
@@ -95,7 +95,8 @@ export default function AdminLogin(props){
 							</div>
 							<div style={{height:'100%',width:'100%'}} className="d-flex flex-column justify-content-around">
 								<div style={{height:'70%',width:'100%'}} className="login-field d-flex flex-column align-items-center justify-content-around flex-column">
-									<p style={{fontSize:'20px'}}>Sorry! You are not authorized to have access to log in as Admin</p>	
+									<p style={{fontSize:'36px',height:'20%'}}>Sorry!</p>
+									<p style={{fontSize:'20px',height:'40%'}}>You are not authorized to have access to log in as Admin</p>	
 								</div>
 							</div>
 						</div>

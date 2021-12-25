@@ -7,7 +7,7 @@ import axios from '../modules/config.js';
 import scslogo from "../images/scs-final.png";
 import favorites from "../images/heart.png";
 import profile from "../images/profile.png";
-import lock from "../images/lock.png";
+import lock from "../images/lock1.png";
 
 
 
@@ -22,6 +22,12 @@ import SearcBar from '../components/contents/SearchBar';
 //mui components
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+
 
 
 export default function AdminLogin(props){
@@ -30,6 +36,11 @@ export default function AdminLogin(props){
 	const [snackOpen, setSnackOpen] =useState(false);
 	const [alertMes, setAlertMes] = useState(null);
 	const [alertStatus, setAlertStatus] = useState(null);
+	const [showPassword, setShowPassword] = useState(false);
+
+	const handleClickShowPassword = () => setShowPassword(!showPassword)
+	const handleMouseDownPassword = () => setShowPassword(!showPassword)
+
 
 	const handleSnack = () =>{
 		setSnackOpen(true);
@@ -86,8 +97,8 @@ export default function AdminLogin(props){
 	return(
 		<>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
-				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black'}} className='d-flex justify-content-center align-items-center'>
-					<div style={{height:'95%', width:'95%', background:'linear-gradient( to bottom, #a1c7f6, #ffffff)', border:'1px solid black',color:'black'}} className='d-flex justify-content-center align-items-center'>
+				<div style={{height:'95%', width:'95%', backgroundColor:'white', border:'1px solid black'}} className='d-flex justify-content-center align-items-center'>
+					<div style={{height:'95%', width:'95%', background:'linear-gradient( to bottom, #548235,#e2f0d9)', border:'1px solid black',color:'black',borderRadius:'10px'}} className='d-flex justify-content-center align-items-center'>
 						<Snackbar anchorOrigin={{vertical:"top", horizontal:"center"}} open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose}>
 							<Alert variant='filled' severity={alertStatus == 403 ? "error" : "success"} sx={{width:'500px'}}>
 								{alertMes}
@@ -100,8 +111,30 @@ export default function AdminLogin(props){
 							</div>
 							<div style={{height:'100%',width:'100%'}} className="d-flex flex-column justify-content-around">
 								<div style={{height:'70%',width:'100%'}} className="login-field d-flex flex-column align-items-center justify-content-around flex-column">
-									<Field className='txt' placeHolder="username" reqOnChange={(e)=>{dispatch({type:'username',data:e.target.value})}}/>
-									<Field className='txt' type="password" placeHolder="password" reqOnChange={(e)=>{dispatch({type:'password',data:e.target.value})}}/>
+									<TextField required id='outlined-required' variant='filled' className="text-center MontFont" style={{backgroundColor:'white',width:"500px"}} label="Student no." onChange={(e)=>{dispatch({type:'username',data: e.target.value})}}/>
+									<TextField
+										variant='filled'
+										required id='outlined-required' 
+										className="text-center MontFont" 
+										style={{backgroundColor:'white',width:"500px"}} 
+										type={showPassword ? "text" : "password"} 
+										label="Password" 
+										onChange={(e)=>{dispatch({type:'password',data: e.target.value})}}
+										InputProps={{
+											endAdornment:(
+												<InputAdornment position="end">
+													<IconButton
+														aria-label="toggle password visibility"
+														onClick ={handleClickShowPassword}
+														onMouseDown={handleMouseDownPassword}
+													>
+														{showPassword ? <Visibility/> : <VisibilityOff/>}
+													</IconButton>
+														
+												</InputAdornment>
+											)
+										}}
+									/>
 									<Button style={{height:'30px',width:'600px'}} title="Sign me in" click={handler}/>
 									<Link to='/admin-access'><Button style={{height:'30px',width:'600px'}} title="Go Back" /></Link>
 								</div>
