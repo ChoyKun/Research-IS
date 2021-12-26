@@ -151,9 +151,9 @@ export default function StudentDashboard(props){
 												<div className='col-6 text-left'>Title</div>
 												<div className='col-2 text-left'>Year</div>
 											</div>
-											<div className="d-flex flex-column justify-content-start" style={{height:'95%',width:'100%',overflowY:'auto',overflowX:'auto'}}>
+											<div className="d-flex flex-column justify-content-start" style={{height:'95%',width:'100%',overflowY:'auto',overflowX:'auto',backgroundColor:'#70AD47'}}>
 												{researchData?.map?.(object =>(
-													<div className='d-flex flex-row justify-content-around' style={{fontSize:'18px',border:'1px solid gray',borderRadius:'10px'}}>
+													<div className='d-flex flex-row justify-content-around' style={{fontSize:'18px',border:'1px solid gray',borderRadius:'10px',backgroundColor:'#E2F0D9'}}>
 														<div className='col-6 text-left'>{object.title}</div>
 														<div className='col-2 text-left'>{object.yearSubmitted}</div>
 													</div>

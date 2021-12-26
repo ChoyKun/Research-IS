@@ -52,6 +52,7 @@ export default function StudentRList(props){
 	const [researchData, setResearchData] = useState([]);
 	const [filteredData, setFilteredData] = useState([]);
 	const [search, setSearch] = useState( '' );
+
 	
 
 	const initState = {
@@ -268,6 +269,12 @@ function Item(props){
 	const [open, setOpen] = useState(false);
 	const [alertMes, setAlertMes] = useState(null);
 	const [snackOpen, setSnackOpen] =useState(false);
+	const [redirect, setRedirect] = useState(null);
+
+	const pdfPage = () =>{
+		setRedirect(`${url}/${props.object._id}`)
+	}
+
 
 	const toggleDrawer = (open) => (event) => {
 		setOpen( open );
@@ -335,7 +342,7 @@ function Item(props){
 					</div>
 				</div>
 				<div className="d-flex flex-row-reverse justify-content-start" style={{width:'100%'}}>
-					<Link to={`/research-full/${props.object._id}`}><Button title="View Document" style={{height:'40px'}}/></Link>
+					<Link to={`/research-abstract/${props.object._id}`}><Button title="View Document" style={{height:'40px'}}/></Link>
 				</div>
 			</div>
 		</div>
@@ -468,7 +475,6 @@ function Item(props){
 	            >
             	{list()}
             	</Drawer>
-				{/*<Button style={{width:'90px'}} click={requestForView} disabled={disabled} className={`col-1 text-center`} title='Request'/>*/}
 			</div>
 			<div className="d-flex justify-content-center align-items-center text-center">
 				<IconButton

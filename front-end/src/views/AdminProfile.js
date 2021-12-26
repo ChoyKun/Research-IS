@@ -360,7 +360,7 @@ export default function StudentProfile(props){
 		axios.put(`http://localhost:7000/auth-admin/editprofile/${username}`, data)
 		.then((res)=>{
 			if(newImage){
-				axios.put(`http://localhost:7000/faculty/upload-picture`, formData)
+				axios.put(`http://localhost:7000/clist/upload-picture`, formData)
 				.then((res)=>{
 					setProfileAlertMes(res.data.message);
 					setProfileAlertStatus('good');
@@ -591,7 +591,7 @@ export default function StudentProfile(props){
 	}, []);
 
 	useEffect(()=>{
-		axios.get(`http://localhost:7000/faculty/flist/activity/${username}`)
+		axios.get(`http://localhost:7000/coordinator/clist/activity/${username}`)
 		.then(res=>{
 			setActivity(res.data.data)
 		})

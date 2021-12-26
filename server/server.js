@@ -575,12 +575,28 @@ app.post('/student/slist/login', async (req, res, next)=>{
 app.put('/student/slist/update', async(req,res,next)=>{
 	const editData = req.body;
 
-	editData.forEach(async (elem) => {
-		Student.findOneAndUpdate({_id: elem._id}, {status: elem.status}, null, ( err ) => {
-			if( err ) {
-				return res.status( 503 ).json({ message: 'Server Error' });
-			}
-		})
+
+	Faculty.findOne({status:'active'},(err,doc)=>{
+		if(err) return res.status( 503 ).json({ message: 'Server Error' });
+
+		if(doc){
+
+			const today = new Date();
+			var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+
+			editData.forEach(async (elem) => {
+				Student.findOneAndUpdate({_id: elem._id}, {status: elem.status}, null, ( err ) => {
+					if( err ) {
+						return res.status( 503 ).json({ message: 'Server Error' });
+					}
+				})
+
+				doc.activity.push({message:`You updated ${elem.studentNo}'s status to ${elem.status}`, date: date})
+				doc.save( err=>{
+					if(err) return res.status(503).json({message:'server error'});
+				})
+			})
+		}
 	})
 
 	return res.status( 200 ).json({message: 'Updated successfully'});
@@ -588,6 +604,8 @@ app.put('/student/slist/update', async(req,res,next)=>{
 
 app.put('/student/slist/clear-logs/:username', async(req,res,next)=>{
 	const studentNo = req.params.username;
+	const today = new Date();
+	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 
 	Student.findOne({studentNo: studentNo}, (err, doc)=>{
 		if(err) return res.sendStatus(503);
@@ -595,6 +613,7 @@ app.put('/student/slist/clear-logs/:username', async(req,res,next)=>{
 		if(doc){
 			if(doc.activity.length){
 				doc.activity.splice(0,doc.activity.length);
+				doc.activity.push({message:'You cleared your logs', date: date})
 
 				doc.save( err=>{
 					if(err) return res.status(503).json({message:'server error'});
@@ -713,7 +732,9 @@ app.post('/student/slist/disable/:username/:id',async(req,res,next)=>{
 		if(err) return res.status( 503 ).json({ message: 'Server Error' });
 
 		if( data ){
-			if( data.approved.includes( rID ) || data.pending.includes( rID ) ){
+			const id = data.approved.map( elem => elem.id )
+			console.log(id)
+			if( id.includes(rID) || data.pending.includes( rID ) ){
 				return res.status( 200 ).json({ message: 'button is diabled' });		
 			}
 		}
@@ -815,6 +836,9 @@ app.get('/student/slist/favlist/:username', async(req,res,next)=>{
 
 app.get('/student/slist/activity/:username', async(req,res,next)=>{
 	studentNo = req.params.username
+	const today = new Date();
+	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+
 
 	const activity = []
 
@@ -883,11 +907,11 @@ app.get('/student/slist/approved-list/:username', async(req,res,next)=>{
 					if( result.length ){
 						result.map( (rslt, index) => {
 							rslt._doc.dateApproved = data.approved.map( elem => elem.dateApproved )[ index ];
+							console.log(data.approved.map( elem => elem._id )[index])
 							return rslt; 
 						});
 					}
 
-					console.log( result );
 					return res.json({ data: result });
 				}
 				catch( err ) {
@@ -1249,14 +1273,30 @@ app.post('/research/rlist/upload', async (req, res , next) =>{
 
 app.put('/research/rlist/update', async(req,res,next)=>{
 	const editData = req.body;
+	const today = new Date();
+	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 
-	editData.forEach(async (elem) => {
-		Research.findOneAndUpdate({_id: elem._id}, {status: elem.status}, null, ( err ) => {
-			if( err ) {
-				return res.status( 503 ).json({ message: 'Server Error' });
-			}
-		})
+
+	Coordinator.findOne({status:'active'},(err,doc)=>{
+		if(err) return res.status( 503 ).json({ message: 'Server Error' });
+
+		if(doc){
+			editData.forEach(async (elem) => {
+				Research.findOneAndUpdate({_id: elem._id}, {status: elem.status}, null, ( err ) => {
+					if( err ) {
+						return res.status( 503 ).json({ message: 'Server Error' });
+					}
+				})
+
+				doc.activity.push({message:`You updated ${elem.title}'s status to ${elem.status}`, date: date})
+				doc.save( err=>{
+					if(err) return res.status(503).json({message:'server error'});
+				})
+			})
+		}
 	})
+
+	
 
 	return res.status( 200 ).json({message: 'Updated successfully'});
 })
@@ -1279,6 +1319,7 @@ app.put('/faculty/flist/clear-logs/:username', async(req,res,next)=>{
 		if(doc){
 			if(doc.activity.length){
 				doc.activity.splice(0,doc.activity.length);
+				doc.activity.push({message:'You cleared your logs', date: date})
 
 				doc.save( err=>{
 					if(err) return res.status(503).json({message:'server error'});
@@ -1694,6 +1735,34 @@ app.put('/coordinator/clist/remove-approved/:studentNo', async (req,res,next)=>{
 	})
 })
 
+app.put('/coordinator/clist/clear-logs/:username', async(req,res,next)=>{
+	const username = req.params.username;
+
+	const today = new Date();
+	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+
+
+	Coordinator.findOne({username: username}, (err, doc)=>{
+		if(err) return res.sendStatus(503);
+
+		if(doc){
+			if(doc.activity.length){
+				doc.activity.splice(0,doc.activity.length);
+				doc.activity.push({message:'You cleared your logs', date: date})
+
+				doc.save( err=>{
+					if(err) return res.status(503).json({message:'server error'});
+
+					return res.status(200).json({message:'cleared your logs'});
+				})
+			}	
+			else{
+				return res.sendStatus(404)
+			}
+		}
+	})
+})
+
 app.get('/clist/picture', async (req, res, next) => {
 
 
@@ -1711,6 +1780,9 @@ app.get('/clist/picture', async (req, res, next) => {
 })
 
 app.put('/clist/upload-picture', async (req, res, next) => {
+	const today = new Date();
+	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+
 
 	const image = req.files.AdminImg;
 
@@ -1719,6 +1791,7 @@ app.put('/clist/upload-picture', async (req, res, next) => {
 
 	const updateImage = ( docu ) => {
 		docu.img = `/images/${image_name}`;
+		docu.activity.push({message:'You changed your password', date: date})
 
 		docu.save( err => {
 		    if( err ) return res.sendStatus( 503 );
@@ -1895,6 +1968,10 @@ app.put('/coordinator/clist/changecoor/:username', async (req,res,next)=>{
 app.put('/auth-admin/editprofile/:username', async(req,res,next)=>{
 	const username = req.params.username;
 
+	const today = new Date();
+	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+
+
 	const {
 		_username ,
 		_password,
@@ -1928,7 +2005,7 @@ app.put('/auth-admin/editprofile/:username', async(req,res,next)=>{
 				doc.dateRegistered = _dateRegistered ?? doc.dateRegistered;
 				doc.img = _img ?? doc.img;
 
-
+				doc.activity.push({message:'You updated your profile', date: date})
 				doc.save( err => {
 					if(err)	return res.status(503).json({ message: 'Server Error' })
 					
@@ -1942,10 +2019,37 @@ app.put('/auth-admin/editprofile/:username', async(req,res,next)=>{
 	});
 })
 
+app.get('/coordinator/clist/activity/:username', async(req,res,next)=>{
+	username = req.params.username
+
+	const activity = []
+
+	Coordinator.findOne({username: username}, (err,doc)=>{
+		if(err) return res.status(503).json({message: 'Server Error' })
+
+		if(doc){
+			if(doc.activity.length){
+				doc.activity.forEach( async (act) =>{
+					activity.unshift(act);
+				})
+
+				return res.status(200).json({data:activity})
+			}
+			else{
+				return res.sendStatus(404)
+			}
+		}
+	})
+})
+
 app.put('/auth-admin/changepassword/:username', async(req,res,next)=>{
 	const username = req.params.username;
 
 	const data = await Coordinator.findOne({username: username});
+
+	const today = new Date();
+	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+
 
 
 
