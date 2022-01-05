@@ -114,6 +114,7 @@ const Request = ( props ) => {
 	const {username} = useParams();
 
 	const [approved, setApproved] = useState([])
+	const [approvedTitle, setApprovedTitle] = useState([])
 	const [declined, setDeclined] = useState([])
 	const [sendApproved, setSendApproved] = useState(false);
 	const [sendDeclined, setSendDeclined] = useState(false);
@@ -126,12 +127,13 @@ const Request = ( props ) => {
 	useEffect(()=>{
 		if( sendApproved ){
 			setApproved((approved) => [...approved, props.id]);
+			setApprovedTitle((approvedTitle) => [...approvedTitle, props.title]);
 		}
 	}, [sendApproved]);
 
 	useEffect(() => {
 		if( approved ){
-			axios.put(`http://localhost:7000/student/slist/approved/${props.studentID}/${date}`, approved) 
+			axios.put(`http://localhost:7000/student/slist/approved/${props.studentID}/${date}/${[...approvedTitle]}`, approved) 
 			.then( res => {
 				console.log( res.data.message );
 				setSendApproved( false );

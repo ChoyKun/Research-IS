@@ -47,10 +47,14 @@ export default function SFrame(props){
 	const [isMenuOpen, setIsMenuOpen] = useState( false );
 	const { username } = useParams();
 	const [name, setName] = useState(null);
-	const [adminPage, setAdminPage] = useState(null)
+	const [adminPage, setAdminPage] = useState('')
+
+	const token = Cookies.get('token');
+    const rtoken = Cookies.get('rtoken');
 
 	const handleSignOut = async () => {
 		const token = Cookies.get('token');
+		console.log(token)
 
 		axios.delete('http://localhost:7000/sign-out', { token })
 		.then(() => {
@@ -62,8 +66,7 @@ export default function SFrame(props){
 		});
 	}
 
-	const token = Cookies.get('token');
-    const rtoken = Cookies.get('rtoken');
+	
 
     useEffect(()=>{
     	axios.get('http://localhost:7000/verify-me', {

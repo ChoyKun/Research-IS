@@ -242,9 +242,9 @@ function App() {
             </Route>
 
             <Route path="/admin-unauthorized/:username">
-              <AdminFrame authenticate={authenticate}>
+              <FacultyFrame authenticate={authenticate}>
                 <AdminUnauthorized />
-              </AdminFrame>
+              </FacultyFrame>
             </Route>
 
             <Route path="/admin-request/:username">

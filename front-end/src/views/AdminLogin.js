@@ -90,7 +90,8 @@ export default function AdminLogin(props){
 			
 		})
 		.catch((err)=>{
-			alert(JSON.parse(err.request.response).message);
+			setAlertMes(JSON.parse(err.request.response).message);
+			setAlertStatus(403);
 		})
 	}
 
@@ -111,7 +112,7 @@ export default function AdminLogin(props){
 							</div>
 							<div style={{height:'100%',width:'100%'}} className="d-flex flex-column justify-content-around">
 								<div style={{height:'70%',width:'100%'}} className="login-field d-flex flex-column align-items-center justify-content-around flex-column">
-									<TextField required id='outlined-required' variant='filled' className="text-center MontFont" style={{backgroundColor:'white',width:"500px"}} label="Student no." onChange={(e)=>{dispatch({type:'username',data: e.target.value})}}/>
+									<TextField required id='outlined-required' variant='filled' className="text-center MontFont" style={{backgroundColor:'white',width:"500px"}} label="Username" onChange={(e)=>{dispatch({type:'username',data: e.target.value})}}/>
 									<TextField
 										variant='filled'
 										required id='outlined-required' 
@@ -135,7 +136,7 @@ export default function AdminLogin(props){
 											)
 										}}
 									/>
-									<Button style={{height:'30px',width:'600px'}} title="Sign me in" click={handler}/>
+									<Button style={{height:'30px',width:'600px'}} title="Sign in" click={handler}/>
 									<Link to='/admin-access'><Button style={{height:'30px',width:'600px'}} title="Go Back" /></Link>
 								</div>
 							</div>

@@ -89,7 +89,7 @@ export default function StudentProfile(props){
 	const state={
 		_currPassword: null,
 		_newPassword: null,
-		_verNewPassword:null,
+		_verPassword:null,
 		_username:null ,
 		_password:null,
 		_firstName:null,
@@ -173,8 +173,8 @@ export default function StudentProfile(props){
 			case '_newPassword':
 				state._newPassword=action.data;
 				return state;
-			case '_verNewPassword':
-				state._verNewPassword=action.data;
+			case '_verPassword':
+				state._verPassword=action.data;
 				return state;
 			case '_username':
 				state._username = action.data;
@@ -230,7 +230,7 @@ export default function StudentProfile(props){
 	const passwordHandler = ()=>{
 		setPasswordDialogOpen(false);
 		setPasswordSnackOpen(true);
-		axios.put(`http://localhost:7000/faculty/flist/changepassword/${username}`,data)
+		axios.put(`http://localhost:7000/auth-admin/changepassword/${username}`,data)
 		.then((res)=>{
 			setPasswordAlertMes(res.data.message);
 			setPasswordAlertStatus('good');
@@ -308,7 +308,7 @@ export default function StudentProfile(props){
 					type={showVerPassword ? "text" : "password"}
 					label='Confirm new password' 
 					variant='filled' 
-					onChange={(e)=>{dispatch({type:'_verNewPassword', data: e.target.value})}}
+					onChange={(e)=>{dispatch({type:'_verPassword', data: e.target.value})}}
 					InputProps={{
 						endAdornment:(
 							<InputAdornment position="end">
@@ -494,7 +494,7 @@ export default function StudentProfile(props){
 	const clearLogs = () =>{
 		setLogsDialogOpen(false);
 		setLogsSnackOpen(true);
-		axios.put(`http://localhost:7000/faculty/flist/clear-logs/${username}`)
+		axios.put(`http://localhost:7000/coordinator/clist/clear-logs/${username}`)
 		.then(res=>{
 			setLogsAlertMes(res.data.message);
 			setLogsAlertStatus('good');
@@ -524,7 +524,7 @@ export default function StudentProfile(props){
 				<p style={{fontSize:'36px'}}>Activity Logs</p>
 				<div className="d-flex justify-content-start align-items-start flex-column" style={{height:'80%', width:'100%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey",overflowY:'auto',overflowX:'auto'}}>
 					<div style={{height:'30px',width:'100%',border:'1px solid black', backgroundColor:'#385723',color:'white'}} className='d-flex flex-row justify-content-around'>
-						<div className='col-5 text-center'>
+						<div className='col-7 text-center'>
 							Activity
 						</div>
 						<div className='col-1 text-center'>
@@ -533,10 +533,30 @@ export default function StudentProfile(props){
 					</div>
 					{activity?.map?.(object =>(
 						<div className="d-flex flex-row justify-content-around" style={{height:'5%',width:'100%'}}>
-							<div className="col-7 text-center">{object.message}</div>
+							<div className="col-9 text-center">{object.message}</div>
 							<div className="col-3 text-center">{object.date}</div>
 						</div>
 					))}
+				</div>
+				<div className='d-flex flex-row-reverse align-items-center ' style={{width:'100%', height:'10%'}}>
+					<Button click={handleLogsDialog} style={{width:'100px', height:'40px', fontSize:'18px'}} title='Clear logs'/>
+					<Dialog
+						open={logsDialogOpen}
+				        onClose={handleLogsDialogClose}
+				        aria-labelledby="alert-dialog-title"
+				        aria-describedby="alert-dialog-description"
+					>
+						<DialogTitle>
+							{"Clear Logs"}
+						</DialogTitle>
+						<DialogContent>
+							Do you want to clear all your activity?
+						</DialogContent>
+						<DialogActions>
+							<Button title='Cancel' click={cancelLogs}/>
+							<Button title='Yes' click={clearLogs}/>
+						</DialogActions>
+					</Dialog>
 				</div>
 			</div>
 		</div>
@@ -695,7 +715,7 @@ export default function StudentProfile(props){
 												<p style={{fontSize:'28px',textAlign:'left',height:'5px'}}>Activity Logs</p>
 												<Divider style={{height:'2px', width:'100%', color:'black'}}/>
 												<div className='d-flex justify-content-start align-items-start' style={{height:'60%', width:'100%',overflowY:'auto',overflowX:'auto'}}>		
-													<div className="d-flex flex-column justify-content-between" style={{width:'100%', height:'25%'}}>
+													<div className="d-flex flex-column justify-content-start" style={{width:'100%', height:'100%',overflowY:'auto',overflowX:'auto'}}>
 														{activity?.map?.(object =>(
 															<div className='d-flex justify-content-between flex-row' style={{width:'100%',height:'20%'}}>
 																<div style={{width:'70%',height:'20%'}}>{object.message}</div>

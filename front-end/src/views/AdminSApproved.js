@@ -56,8 +56,6 @@ export default function RListFilter(props){
 	const [researchData, setResearchData] = useState([]);
 	const [filteredData, setFilteredData] = useState( [] );
 	const [search, setSearch] = useState( '' );
-	const [remove, setRemove] = useState([])
-	const [sendRemove, setSendRemove] = useState(false);
 	const [name, setName] = useState(null);
 
 	const initState = {
@@ -130,45 +128,6 @@ export default function RListFilter(props){
 		handleSearch();			
 
 	}, [search, researchData, filter.sFilter]);
-
-	useEffect(()=>{
-		if( sendRemove ){
-			const newActiveElems = []
-			researchData.forEach((elem) => {
-				if(elem.status === 'inactive') {
-					setRemove((remove) => [...remove, elem])
-				}
-				else{
-					newActiveElems.push( elem );
-				}
-				
-			});
-			setResearchData(() => [...newActiveElems])		
-		}
-
-	}, [sendRemove])
-
-	useEffect(() => {
-		if( remove.length ){
-			axios.put(`http://localhost:7000/coordinator/clist/remove-approved/${studentNo}`, remove) 
-			.then( res => {
-				console.log( res.data.message );
-				setSendRemove( false );
-			})
-			.catch((err)=>{console.log(err)});
-		}
-	}, [remove])
-
-	const sender = () =>{
-
-		const send = window.confirm("Do you wish to remove permission from this student?");
-		if(send == true){
-			setSendRemove( true )
-		}
-		else{
-			alert("Operation canceled")
-		}
-	}
 
 	const reducer = (state, action) => {
 		switch( action.type ){
@@ -291,6 +250,7 @@ function Item(props){
 	const {username, studentNo} = useParams();
 
 	const [remove, setRemove] = useState([])
+	const [removeTitle, setRemoveTitle] = useState([])
 	const [sendRemove, setSendRemove] = useState(false);
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [alertMes, setAlertMes] = useState(null);
@@ -332,12 +292,13 @@ function Item(props){
 	useEffect(()=>{
 		if( sendRemove ){
 			setRemove((remove) => [...remove, props.object._id]);
+			setRemoveTitle((removeTitle) => [...removeTitle, props.object.title]);
 		}
 	}, [sendRemove]);
 
 	useEffect(() => {
 		if( remove ){
-			axios.put(`http://localhost:7000/coordinator/clist/remove-approved/${studentNo}`, remove) 
+			axios.put(`http://localhost:7000/coordinator/clist/remove-approved/${studentNo}/${[...removeTitle]}`, remove) 
 			.then( res => {
 				setAlertMes( res.data.message );
 				setAlertStatus(200)
