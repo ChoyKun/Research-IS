@@ -18,6 +18,13 @@ import Divider from '@mui/material/Divider';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp'
 import ThumbDownIcon from '@mui/icons-material/ThumbDown'
 import IconButton from '@mui/material/IconButton';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
 
 
 
@@ -118,6 +125,32 @@ const Request = ( props ) => {
 	const [declined, setDeclined] = useState([])
 	const [sendApproved, setSendApproved] = useState(false);
 	const [sendDeclined, setSendDeclined] = useState(false);
+	const [dialogOpen, setDialogOpen] = useState(false);
+	const [alertMes, setAlertMes] = useState(null);
+	const [alertStatus, setAlertStatus] = useState(null);
+	const [snackOpen, setSnackOpen] =useState(false);
+
+	const handleSnack = () =>{
+		setSnackOpen(true);
+	}
+
+	const handleSnackClose = (evernt , reason) =>{
+		if(reason === 'clickaway') {
+			return;
+		}
+
+		setSnackOpen(false);
+		setAlertMes(null);
+	}
+
+	
+	const handleDialog = () =>{
+		setDialogOpen(true)
+	}
+
+	const handleDialogClose = () =>{
+		setDialogOpen(false)
+	}
 
 	const today = new Date();
 
@@ -135,7 +168,8 @@ const Request = ( props ) => {
 		if( approved ){
 			axios.put(`http://localhost:7000/student/slist/approved/${props.studentID}/${date}/${[...approvedTitle]}`, approved) 
 			.then( res => {
-				console.log( res.data.message );
+				setAlertMes( res.data.message );
+				setAlertStatus('good')
 				setSendApproved( false );
 			})
 			.catch((err)=>{console.log(err)});
@@ -161,7 +195,16 @@ const Request = ( props ) => {
 
 
 	const approve = async () => {
+		setDialogOpen(false);
+		setSnackOpen(true);
 		setSendApproved( true );
+	}
+
+	const cancelOp =() =>{
+		setDialogOpen(false);
+		setSnackOpen(true);
+		setAlertMes("Operation canceled")
+		setAlertStatus(403)
 	}
 
 	// const decline = async () => {
@@ -185,6 +228,11 @@ const Request = ( props ) => {
 			}} 
 			className="d-flex flex-row justify-content-around align-items-center"
 		>
+			<Snackbar anchorOrigin={{vertical:"top", horizontal:"center"}} open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+				<Alert variant='filled' severity={alertStatus == 403 ? "error" : "success"} sx={{width:'500px'}}>
+					{alertMes}
+				</Alert>				
+			</Snackbar>
 			<div className="col-1 text-center"><p className="p-0 m-0"> { props.studentID } </p></div>
 			<div className="col-2 text-center"><p className="p-0 m-0"> { props.studentName } </p></div>
 			<div className="col-3 text-center"><p className="p-0 m-0"> { props.title } </p></div>
@@ -197,8 +245,25 @@ const Request = ( props ) => {
 				aria-label="menu"
 				sx={{ mr: 2,color:green[500] }}
 				>
-           	 		<ThumbUpIcon style={{height: '25px',width:'25px'}} onClick={approve}/>
+           	 		<ThumbUpIcon style={{height: '25px',width:'25px'}} onClick={handleDialog}/>
            	 	</IconButton>
+           	 	<Dialog
+					open={dialogOpen}
+			        onClose={handleDialogClose}
+			        aria-labelledby="alert-dialog-title"
+			        aria-describedby="alert-dialog-description"
+				>
+					<DialogTitle>
+						{"Approve Research Request"}
+					</DialogTitle>
+					<DialogContent>
+						Do you want to approve {props.studentName}'s request to view {props.title}?
+					</DialogContent>
+					<DialogActions>
+						<Button title='Cancel' click={cancelOp}/>
+						<Button title='Yes' click={approve}/>
+					</DialogActions>
+				</Dialog>
 			</div>
 			<div className="col-1 text-center">
 				<IconButton

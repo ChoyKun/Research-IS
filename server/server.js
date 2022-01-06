@@ -1006,14 +1006,14 @@ app.post('/student/slist/register', async (req, res , next) =>{
 							});
 						})
 
-						
+						docs.activity.push({message:`You registered ${studentData.studentNo} as a new student`, date: date})
+						docs.save( err => {
+							if(err)	return res.status(503).json({ message: 'Server Error' })
+						});
 					}		
 				})
 
-				docs.activity.push({message:`You registered ${studentData.studentNo} as a new student`, date: date})
-				docs.save( err => {
-					if(err)	return res.status(503).json({ message: 'Server Error' })
-				});	
+				
 			}
 		})
 
@@ -1297,15 +1297,32 @@ app.get('/research/rlist/category-count', async (req, res, next) =>{
 
 app.post('/research/rlist/upload', async (req, res , next) =>{
 	const researchData = req.body;
-
+	const today = new Date();
+	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 	const newResearch = new Research(researchData);
-	newResearch.save((err) => {
-		if ( err ){
-			return res.status( 503 ).json({ message: 'Server Error' });
+
+	Coordinator.findOne({status:'active'}, (err,doc)=>{
+		if(err) return res.status( 503 ).json({ message: 'Server Error' });
+
+		if(doc){
+			newResearch.save((err) => {
+				if ( err ){
+					return res.status( 503 ).json({ message: 'Server Error' });
+				}
+			})
+
+			doc.activity.push({message:`You uploaded a research titled ${researchData.title}`, date: date})
+			doc.save( err=>{
+				if(err) return res.status(503).json({message:'server error'});
+
+				return res.status( 200 ).json({message: 'Uploaded successfully'});
+			})
 		}
 	})
 
-	return res.status( 200 ).json({message: 'Uploaded successfully'});
+	
+
+	
 })
 
 
@@ -1401,6 +1418,8 @@ app.get('/faculty/flist/activity/:username', async(req,res,next)=>{
 
 app.post('/faculty/flist/register', async (req, res , next) =>{
 	const facultyData = req.body;
+	const today = new Date();
+	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 
 	const newFaculty = new Faculty(facultyData);
 
@@ -1416,38 +1435,50 @@ app.post('/faculty/flist/register', async (req, res , next) =>{
 				if( cb ) cb();
 			});
 		}
-
-
-		Faculty.find({ username: facultyData.username}, (err, doc) => {
+		Coordinator.findOne({status:'active'}, (err,docs)=>{
 			if(err) return res.status( 503 ).json({ message: 'Server Error' });
 
-			const user = { name : facultyData.username };
-			const accessToken = requestAccessToken( user );
-			const refreshToken = jwt.sign( user, process.env.REFRESH_TOKEN_SECRET );
+			if(docs){
 
-			token.push( refreshToken );
+				Faculty.find({ username: facultyData.username}, (err, doc) => {
+					if(err) return res.status( 503 ).json({ message: 'Server Error' });
 
-			if( doc.length > 0 ){ // san yung part na nagaadd ka?
-				return res.status(400).json({message:'username already used'})
-			}
-			else{
-				newFaculty.save((err) => {
-					if ( err ){
+					const user = { name : facultyData.username };
+					const accessToken = requestAccessToken( user );
+					const refreshToken = jwt.sign( user, process.env.REFRESH_TOKEN_SECRET );
+
+					token.push( refreshToken );
+
+					if( doc.length > 0 ){ // san yung part na nagaadd ka?
+						return res.status(400).json({message:'username already used'})
 					}
+					else{
+						newFaculty.save((err) => {
+							if ( err ){
+							}
 
-					saveTokens( token, () => {
+							saveTokens( token, () => {
+							
+								return res.status( 200 ).json({
+								accessToken: accessToken,
+								refreshToken: refreshToken,
+								message: 'New officer added, previous officer is now inactive'});
+							});
+						})
+
+						docs.activity.push({message:`You registered ${facultyData.username} as the new MIS officer`, date: date})
+						docs.save( err => {
+							if(err)	return res.status(503).json({ message: 'Server Error' })
+						});
+					}
 					
-						return res.status( 200 ).json({
-						accessToken: accessToken,
-						refreshToken: refreshToken,
-						message: 'New officer added, previous officer is now inactive'});
-					});
 				})
 
-				
+					
 			}
-			
 		})
+
+		
 	})
 
 	
@@ -1475,6 +1506,8 @@ app.put('/faculty/flist/new-officer', async(req,res,next)=>{
 })
 
 app.put('/faculty/flist/changeofficer/:username', async (req,res,next)=>{
+	const today = new Date();
+	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 
 
 
@@ -1492,22 +1525,35 @@ app.put('/faculty/flist/changeofficer/:username', async (req,res,next)=>{
 	}
 
 	const success = () => res.status(200).json({message:'Current officer changed'});
-	// try mo
-	Faculty.find({}, (err, doc) => {
+	
+	Coordinator.findOne({status:'active'}, (err,docs)=>{
 		if(err)	return res.status(503).json({ message: 'Server Error' })
 
-		//  // try ulit paps
-		if( doc.length ){
-			doc.forEach(doc=>{
-				checkMatch( doc, prevCoor );
-			}); // try paps
-			success();
+		if(docs){
+			Faculty.find({}, (err, doc) => {
+				if(err)	return res.status(503).json({ message: 'Server Error' })
+
+				//  // try ulit paps
+				if( doc.length ){
+					doc.forEach(doc=>{
+						checkMatch( doc, prevCoor );
+					}); // try paps
+					success();
+				}
+				else{
+					checkMatch( doc, prevCoor );
+					success();
+				}
+			});
+
+			docs.activity.push({message:`You set ${prevCoor} as the MIS officer`, date: date})
+			docs.save( err => {
+				if(err)	return res.status(503).json({ message: 'Server Error' })
+			});
 		}
-		else{
-			checkMatch( doc, prevCoor );
-			success();
-		}
-	});
+	})
+
+	
 });
 
 app.put('/faculty/flist/changepassword/:username', async(req,res,next)=>{
