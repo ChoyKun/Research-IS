@@ -587,6 +587,9 @@ app.put('/student/slist/update', async(req,res,next)=>{
 })
 
 app.put('/student/slist/clear-logs/:username', async(req,res,next)=>{
+	const today = new Date();
+	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+	
 	const studentNo = req.params.username;
 
 	Student.findOne({studentNo: studentNo}, (err, doc)=>{
@@ -595,6 +598,7 @@ app.put('/student/slist/clear-logs/:username', async(req,res,next)=>{
 		if(doc){
 			if(doc.activity.length){
 				doc.activity.splice(0,doc.activity.length);
+				doc.activity.push({message:'You cleared your logs', date: date})
 
 				doc.save( err=>{
 					if(err) return res.status(503).json({message:'server error'});
