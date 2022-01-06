@@ -10,6 +10,7 @@ import AdminChangepass from './views/AdminChangepass.js';
 import AdminArchive from './views/AdminArchive.js';
 import AdminLogin from './views/AdminLogin.js';
 import AdminReg from './views/AdminReg.js';
+import AdminUnauthorized from './views/AdminUnauthorized.js';
 import AdminRequest from './views/AdminRequest.js';
 import AdminProfile from './views/AdminProfile.js';
 import AdminEditProfile from './views/AdminEditProfile.js';
@@ -78,6 +79,7 @@ const views = [
   '/emergency-admin',
   '/admin-current-officer',
   '/admin-rlist',
+  '/admin-unauthorized',
   '/admin-slist',
   '/admin-sapproved',
   '/admin-inactive-slist',
@@ -134,7 +136,6 @@ function App() {
     const rtoken = Cookies.get('rtoken');
 
     if( token ){
-      // allow access
       axios.get('http://localhost:7000/verify-me', {
         headers: {
           'authentication': `Bearer ${token}`
@@ -238,6 +239,12 @@ function App() {
               <AdminFrame authenticate={authenticate}>
                 <AdminReg />
               </AdminFrame>
+            </Route>
+
+            <Route path="/admin-unauthorized/:username">
+              <FacultyFrame authenticate={authenticate}>
+                <AdminUnauthorized />
+              </FacultyFrame>
             </Route>
 
             <Route path="/admin-request/:username">

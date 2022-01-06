@@ -96,6 +96,8 @@ export default function StudentProfile(props){
 		_extentionName:null,
 		_birthdate:null,
 		_dateRegistered:null,
+		_contactNo:null,
+		_emailAdd:null,
 		_img:'',
 	}
 
@@ -197,10 +199,10 @@ export default function StudentProfile(props){
 				state._dateRegistered = action.data;
 				return state;
 			case '_contactNo':
-				state._dateRegistered = action.data;
+				state._contactNo = action.data;
 				return state;
 			case '_emailAdd':
-				state._dateRegistered = action.data;
+				state._emailAdd = action.data;
 				return state;
 			case '_img':
 				state._img = action.data;
@@ -226,6 +228,7 @@ export default function StudentProfile(props){
 	const passwordHandler = ()=>{
 		setPasswordDialogOpen(false);
 		setPasswordSnackOpen(true);
+
 		axios.put(`http://localhost:7000/faculty/flist/changepassword/${username}`,data)
 		.then((res)=>{
 			setPasswordAlertMes(res.data.message);
@@ -234,8 +237,13 @@ export default function StudentProfile(props){
 		.catch((err)=>{
 			setPasswordAlertMes(JSON.parse(err.request.response).message)
 			setPasswordAlertStatus(403)
+			
 		})
 	}
+
+
+	console.log(passwordAlertMes)
+	console.log(passwordAlertStatus)
 
 	const cancelPassword =() =>{
 		setPasswordDialogOpen(false);
@@ -362,7 +370,8 @@ export default function StudentProfile(props){
 					setProfileAlertStatus('good');
 				})
 				.catch((err)=>{
-					alert(JSON.parse(err.request.response).message);
+					setProfileAlertMes(JSON.parse(err.request.response).message);
+					setProfileAlertStatus(403);
 				})
 			}
 			else{
@@ -371,7 +380,8 @@ export default function StudentProfile(props){
 			}
 		})
 		.catch((err)=>{
-			alert(JSON.parse(err.request.response).message);
+			setProfileAlertMes(JSON.parse(err.request.response).message);
+			setProfileAlertStatus(403);
 		})
 		
 	}
@@ -705,7 +715,7 @@ export default function StudentProfile(props){
 												<p style={{fontSize:'28px',textAlign:'left',height:'5px'}}>Activity Logs</p>
 												<Divider style={{height:'2px', width:'100%', color:'black'}}/>
 												<div className='d-flex justify-content-start align-items-start' style={{height:'60%', width:'100%',overflowY:'auto',overflowX:'auto'}}>		
-													<div className="d-flex flex-column justify-content-between" style={{width:'100%', height:'25%'}}>
+													<div className="d-flex flex-column justify-content-between" style={{width:'100%', height:'100%',overflowY:'auto',overflowX:'auto'}}>
 														{activity?.map?.(object =>(
 															<div className='d-flex justify-content-between flex-row' style={{width:'100%',height:'20%'}}>
 																<div style={{width:'70%',height:'20%'}}>{object.message}</div>

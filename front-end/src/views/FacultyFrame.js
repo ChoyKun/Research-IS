@@ -47,9 +47,14 @@ export default function SFrame(props){
 	const [isMenuOpen, setIsMenuOpen] = useState( false );
 	const { username } = useParams();
 	const [name, setName] = useState(null);
+	const [adminPage, setAdminPage] = useState('')
+
+	const token = Cookies.get('token');
+    const rtoken = Cookies.get('rtoken');
 
 	const handleSignOut = async () => {
 		const token = Cookies.get('token');
+		console.log(token)
 
 		axios.delete('http://localhost:7000/sign-out', { token })
 		.then(() => {
@@ -60,6 +65,31 @@ export default function SFrame(props){
 			throw err;
 		});
 	}
+
+	
+
+    useEffect(()=>{
+    	axios.get('http://localhost:7000/verify-me', {
+			headers: {
+				'authentication': `Bearer ${token}`
+			}
+	    })
+	    .then(req=>{
+	    	const { role, name } = req.data.user;
+	    	console.log(role)
+	    	console.log(name)
+
+	    	switch( role ){
+				case 'mis officer':
+					setAdminPage( `/admin-unauthorized/${username}`);
+					break;
+
+				case 'admin':
+					setAdminPage( `/admin-log-in/${username}` );
+					break;
+        	}
+	    })
+    },[])
 
 	const list = () =>(
 		<div className="d-flex justify-content-center flex-column" style={{height:'100%',width:'300px',backgroundColor:"#E2F0D9"}}>
@@ -89,7 +119,7 @@ export default function SFrame(props){
 				</ListItem>
 				<Divider style={{height:'2px',width:'100%'}}/>
 				<ListItem style={{width:'100%',color:'black'}}>
-					<Link className="d-flex justify-content-between align-items-center text-center" to={`/admin-log-in/${username}`}>
+					<Link className="d-flex justify-content-between align-items-center text-center" to={adminPage}>
 						<ListItemButton className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
 							<ListItemIcon sx={{color:green[500]}}>
 								<SupervisorAccountIcon/>

@@ -319,24 +319,7 @@ export default function StudentRList(props){
 									<p style={{fontSize:'30px', textAlign:'center',height:'24px'}}>Deactivated Student's Account</p>
 								</div>
 								<div style={{width:'20%'}}className="d-flex flex-row align-items-center justify-content-end">
-									<Button style={{height: '30px',width:'100px'}} title='Activate' click={handleDialog}/>
-									<Dialog
-										open={dialogOpen}
-								        onClose={handleDialogClose}
-								        aria-labelledby="alert-dialog-title"
-								        aria-describedby="alert-dialog-description"
-									>
-										<DialogTitle>
-											{"Deactivate Account/s"}
-										</DialogTitle>
-										<DialogContent>
-											Do you want to update the list and activate selected accounts?
-										</DialogContent>
-										<DialogActions>
-											<Button title='Cancel' click={cancelOp}/>
-											<Button title='Yes' click={sender}/>
-										</DialogActions>
-									</Dialog>
+									<Link to={`/admin-slist/${username}`}><Button style={{height: '30px',width:'100px'}} title='Activated'/></Link>
 								</div>							
 							</div>
 							<div className="d-flex flex-column" style={{height:'80%', width:'95%',border:'1px solid black'}}>
@@ -393,8 +376,6 @@ function Item(props){
 	
 	return(
 		<div onClick={handleClick} ref={item} style={{height:'30px',width:'100%',border:'1px solid black',borderRadius:'10px'}} className="d-flex bg-light flex-row justify-content-around">
-			
-			<div className="col-1 text-center"><Checkbox reqOnChange={handleOnChange}/></div>
 			<div className="col-1 text-center">{props.object.studentNo}</div>
 			<div className="col-1 text-center">{props.object.password}</div>
 			<div className="col-1 text-center">{props.object.lastName}</div>
@@ -422,7 +403,6 @@ function Item(props){
 function RListHeader(props){
 	return(
 		<div style={{height:'30px',width:'100%',border:'1px solid black',color:"white", backgroundColor:'#385723'}} className='d-flex flex-row justify-content-around'>
-			<div className="col-1 text-center"></div>
 			<div className='col-1 text-center'>
 				StudentNo
 			</div>

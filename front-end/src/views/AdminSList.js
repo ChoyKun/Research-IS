@@ -353,24 +353,7 @@ export default function StudentRList(props){
 									<p style={{fontSize:'30px', textAlign:'center',height:'24px'}}>Activated Student's Account</p>
 								</div>
 								<div style={{width:'20%'}}className="d-flex flex-row align-items-center justify-content-between">
-									<Button style={{height: '30px',width:'100px'}} title='Deactivate' click={handleDialog}/>
-									<Dialog
-										open={dialogOpen}
-								        onClose={handleDialogClose}
-								        aria-labelledby="alert-dialog-title"
-								        aria-describedby="alert-dialog-description"
-									>
-										<DialogTitle>
-											{"Deactivate Account/s"}
-										</DialogTitle>
-										<DialogContent>
-											Do you want to update the list and deactivate selected accounts?
-										</DialogContent>
-										<DialogActions>
-											<Button title='Cancel' click={cancelOp}/>
-											<Button title='Yes' click={sender}/>
-										</DialogActions>
-									</Dialog>
+									<Link to={`/admin-inactive-slist/${username}`}><Button style={{height: '30px',width:'100px'}} title='Deactivated'/></Link>
 									<Link to={`/admin-sapproved/${username}/${selected?.data?.studentNo}`}><Button style={{height: '30px',width:'100px'}} title='Researches'/></Link>
 								</div>							
 							</div>

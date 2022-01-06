@@ -133,8 +133,9 @@ function Item(props){
 		<div className="d-flex flex-row justify-content-around" style={{height:'30px',width:'100%',backgroundColor:'#E2F0D9',border:'1px solid black',borderRadius:'10px'}}>
 			<div className="col-3 text-center">{props.object.title}</div>
 			<div className="col-3 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
-			<div className="col-2 text-center">{props.object.yearSubmitted}</div>			
-			<div className="d-flex justify-content-center align-items-center text-center">
+			<div className="col-2 text-center">{props.object.yearSubmitted}</div>
+			<div className="col-2 text-center">{props.object.dateApproved}</div>				
+			<div className="col-1 d-flex justify-content-center align-items-center text-center">
 				<IconButton
 				size="large"
 				edge="end"
@@ -169,14 +170,11 @@ function Loading(props){
 function RListHeader(props){
 	return(
 		<div style={{height:'30px',width:'100%',border:'1px solid black', backgroundColor:'#385723',color:'white'}} className='d-flex flex-row justify-content-around'>
-			<div className='col-2 text-center'>
+			<div className='col-3 text-center'>
 				Title
 			</div>
 			<div className='col-3 text-center'>
 				ResearchCategories
-			</div>
-			<div className='col-2 text-center'>
-				Authors
 			</div>
 			<div className='col-2 text-center'>
 				Year Submitted
@@ -185,7 +183,7 @@ function RListHeader(props){
 				Date Approved
 			</div>
 			<div className='col-1 text-center'>
-
+				View
 			</div>
 		</div>
 	);
