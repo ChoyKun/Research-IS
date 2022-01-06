@@ -20,6 +20,8 @@ import SearcBar from '../components/contents/SearchBar';
 import Select from '../components/fields/select';
 import Checkbox from '../components/fields/checkbox';
 
+
+
 //mui Components
 import { green } from '@mui/material/colors';
 import Divider from '@mui/material/Divider';
@@ -83,7 +85,7 @@ export default function FacultyUpload(props){
 				state.course = action.data;
 				return state;
 			case 'researchCategories':
-				if(action.data){
+				if( action.data && !state.researchCategories.includes( action.name ) ){
 					state.researchCategories.push(action.name);
 				}
 				else{
@@ -224,7 +226,7 @@ export default function FacultyUpload(props){
 										</div>
 									</div>
 									<div style={{height:'10%',width:'200px'}} className='d-flex flex-column'>
-										<Button click={handleDialog} style={{height:'30px',width:'130px'}} title='Upload'/>
+										<Button click={() => handleDialog()} style={{height:'30px',width:'130px'}} title='Upload'/>
 										<Dialog
 											open={dialogOpen}
 									        onClose={handleDialogClose}

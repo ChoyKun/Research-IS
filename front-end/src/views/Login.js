@@ -121,8 +121,6 @@ export default function Login(props){
 		})
 	}
 
-	console.log(alertStatus)
-	console.log(alertMes)
 
 
 

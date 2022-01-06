@@ -609,8 +609,7 @@ app.put('/student/slist/clear-logs/:username', async(req,res,next)=>{
 	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 	
 	const studentNo = req.params.username;
-	const today = new Date();
-	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+
 
 	Student.findOne({studentNo: studentNo}, (err, doc)=>{
 		if(err) return res.sendStatus(503);
@@ -1310,6 +1309,7 @@ app.post('/research/rlist/upload', async (req, res , next) =>{
 		if(doc){
 			newResearch.save((err) => {
 				if ( err ){
+					console.log(err)
 					return res.status( 503 ).json({ message: 'Server Error' });
 				}
 			})
@@ -1322,7 +1322,7 @@ app.post('/research/rlist/upload', async (req, res , next) =>{
 			})
 		}
 	})
-
+	
 	
 
 	
