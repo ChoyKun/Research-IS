@@ -82,10 +82,18 @@ export default function SFrame(props){
 	    	switch( role ){
 				case 'mis officer':
 					setAdminPage( `/admin-unauthorized/${username}`);
+					axios.get(`http://localhost:7000/faculty/flist/${username}`)
+					.then(res=>{
+						setName(res.data.data);
+					})
+					.catch(err=>{
+						console.log(err);
+					});
 					break;
 
 				case 'admin':
 					setAdminPage( `/admin-log-in/${username}` );
+					setName('Coordinator');
 					break;
         	}
 	    })
@@ -146,13 +154,7 @@ export default function SFrame(props){
 
 
 	useEffect(() => {
-		axios.get(`http://localhost:7000/faculty/flist/${username}`)
-		.then(res=>{
-			setName(res.data.data);
-		})
-		.catch(err=>{
-			console.log(err);
-		});
+		
 	}, [])
 
 	const toggleDrawer = (open) => (event) => {

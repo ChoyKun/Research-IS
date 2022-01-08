@@ -715,7 +715,7 @@ export default function StudentProfile(props){
 												<p style={{fontSize:'28px',textAlign:'left',height:'5px'}}>Activity Logs</p>
 												<Divider style={{height:'2px', width:'100%', color:'black'}}/>
 												<div className='d-flex justify-content-start align-items-start' style={{height:'60%', width:'100%',overflowY:'auto',overflowX:'auto'}}>		
-													<div className="d-flex flex-column justify-content-between" style={{width:'100%', height:'100%',overflowY:'auto',overflowX:'auto'}}>
+													<div className="d-flex flex-column justify-content-start" style={{width:'100%', height:'100%',overflowY:'auto',overflowX:'auto'}}>
 														{activity?.map?.(object =>(
 															<div className='d-flex justify-content-between flex-row' style={{width:'100%',height:'20%'}}>
 																<div style={{width:'70%',height:'20%'}}>{object.message}</div>

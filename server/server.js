@@ -1627,7 +1627,9 @@ app.put('/faculty/flist/editprofile/:username', async (req,res,next)=>{
 
 			
 		if( doc ){
-			if( match(doc.password, _password) ){
+			console.log(doc.password)
+			console.log(_password)
+			if( doc.password == _password ){
 
 				doc.activity.push({message:'You updated your profile details', date: date})
 
@@ -1737,16 +1739,18 @@ app.put('/faculty/flist/editstudent/:username/:studentNo',async (req,res,next)=>
 	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 
 
-	const facultyData = Faculty.findOne({username: username})
 
 	const {_password,_firstName, _middleInitial,_lastName, _extentionName, _birthdate,_course,_yearLevel,_section,_img } =req.body;
-	const { password } = await Faculty.findOne({username: username}).exec();
 
-	Faculty.findOne({username: username}, (err,docs)=>{
+	Faculty.findOne({status:'active'}, (err,docs)=>{
 		if (err) return res.status(503).json({ message: 'Server Error' })
 
 		if (docs){
-			if(docs.password = _password){
+			console.log(docs)
+			console.log(_password)
+			console.log(docs.password)
+			if(docs.password == _password){
+
 				Student.findOne({studentNo: studentNo}, (err, doc) => {
 					if(err)	return res.status(503).json({ message: 'Server Error' })
 

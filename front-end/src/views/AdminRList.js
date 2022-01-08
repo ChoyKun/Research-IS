@@ -553,9 +553,9 @@ function Item(props){
 				</Alert>				
 			</Snackbar>
 			<div className="col-1 text-center"><Checkbox reqOnChange={handleOnChange}/></div>
-			<div className="col-3 text-center">{props.object.title}</div>
-			<div className="col-3 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
-			<div className="col-2 text-center">{props.object.yearSubmitted}</div>			
+			<div className="col-4 text-center">{props.object.title}</div>
+			<div className="col-4 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
+			<div className="col-1 text-center">{props.object.yearSubmitted}</div>			
 			<div className="col-1 d-flex justify-content-center align-items-center text-center">
 				<IconButton
 				size="large"
@@ -581,21 +581,23 @@ function Item(props){
 
 function RListHeader(props){
 	return(
-		<div style={{height:'30px',width:'100%',border:'1px solid black',color:"white", backgroundColor:'#385723'}} className='d-flex flex-row justify-content-around'>
-			<div className="col-1 text-center">
-				
-			</div>
-			<div className='col-3 text-center'>
-				Title
-			</div>
-			<div className='col-3 text-center'>
-				ResearchCategories
-			</div>
-			<div className='col-2 text-center'>
-				Year Submitted
-			</div>
-			<div className="col-1 text-center">
-				View Details
+		<div style={{height:'30px',width:'100%',border:'1px solid black',color:"white", backgroundColor:'#385723'}} className='d-flex flex-row justify-content-start'>
+			<div style={{height:'100%',width:'100%'}} className='d-flex flex-row justify-content-around'>
+				<div className="col-1 text-center">
+					
+				</div>
+				<div className='col-4 text-center'>
+					Title
+				</div>
+				<div className='col-4 text-center'>
+					ResearchCategories
+				</div>
+				<div className='col-1 text-center'>
+					Year Submitted
+				</div>
+				<div className="col-1 text-center">
+					View Details
+				</div>
 			</div>
 		</div>
 	);
