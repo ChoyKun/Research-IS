@@ -458,7 +458,7 @@ function Item(props){
 			<div className="col-3 text-center">{props.object.title}</div>
 			<div className="col-3 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
 			<div className="col-2 text-center">{props.object.yearSubmitted}</div>			
-			<div className="d-flex justify-content-center align-items-center text-center">
+			<div className="col-1 d-flex justify-content-center align-items-center text-center">
 				<IconButton
 				size="large"
 				edge="end"
@@ -476,7 +476,7 @@ function Item(props){
             	{list()}
             	</Drawer>
 			</div>
-			<div className="d-flex justify-content-center align-items-center text-center">
+			<div className="col-1 d-flex justify-content-center align-items-center text-center">
 				<IconButton
 					size="large"
 					disabled={disabled}

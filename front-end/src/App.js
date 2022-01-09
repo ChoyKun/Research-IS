@@ -147,11 +147,11 @@ function App() {
         console.log( role, name );
         switch( role ){
           case 'student':
-            setRequetedView( <Redirect to={`/student-dashboard/${name}`}/> );
+            setRequetedView( <Redirect to={pathname}/> );
             break;
 
           case 'mis officer':
-            setRequetedView( <Redirect to={`/MIS-dashboard/${name}`}/> );
+            setRequetedView( <Redirect to={pathname}/> );
             break;
             
           case 'admin':

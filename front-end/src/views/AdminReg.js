@@ -130,6 +130,9 @@ export default function FacultyReg(props){
 		const formData = new FormData();
 
 		formData.append('MISimg', imgFile );
+		for (var p of formData){
+			console.log(p);
+		}
 
 		axios.put('http://localhost:7000/faculty/flist/new-officer')
 		.then((res)=>{
@@ -137,14 +140,13 @@ export default function FacultyReg(props){
 			.then((res)=>{
 				if(image){
 					axios.put(`http://localhost:7000/faculty/upload-picture`, formData)
-					.then((res)=>{
-						setAlertMes(res.data.message);
-						setAlertStatus(200)
-					})
 					.catch((err)=>{
 						setAlertMes(JSON.parse(err.request.response).message);
 						setAlertStatus(403)
 					})
+
+					setAlertMes(res.data.message);		
+					setAlertStatus(200)
 				}
 				else{
 					setAlertMes(res.data.message);		

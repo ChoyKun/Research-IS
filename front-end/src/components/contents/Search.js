@@ -108,7 +108,7 @@ export default function SearchBar( props ){
 					aria-label="menu"
 					sx={{ mr: 2 }}
 					>
-	           	 		<FilterAltOffIcon onclick={props.rmvfilter} style={{height: '30px',width:'30px'}} />
+	           	 		<FilterAltOffIcon onClick={removeFilter} style={{height: '30px',width:'30px'}} />
 	           	 	</IconButton>
 		        </Toolbar>
 		      </AppBar>

@@ -31,7 +31,7 @@ export default function Test() {
     pdfjs.GlobalWorkerOptions.workerSrc = 
     `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
     const [numPages, setNumPages] = useState(null);
-    const [pageNumber, setPageNumber] = useState(3);
+    const [pageNumber, setPageNumber] = useState(5);
   
     function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);

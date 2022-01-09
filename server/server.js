@@ -330,8 +330,6 @@ app.delete('/sign-out', async ( req, res ) => {
 
   	if( data ){
   		data = JSON.parse( data );
-  		console.log(data)
-  		console.log(req.body.token);
   		data = data.filter( datum => datum !== req.body.token );
 
   		fs.writeFile( token_path, JSON.stringify( data, null, 4 ), err => {
@@ -1920,10 +1918,12 @@ app.put('/clist/upload-picture', async (req, res, next) => {
 	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 
 
-	const image = req.files.AdminImg;
+	const image = req.files.MISimg;
 
 	const image_name = `client-pic-${new Date().getMilliseconds()}.png`
 	const destination_path = path.join( images_path, image_name );
+
+	console.log(image)
 
 	const updateImage = ( docu ) => {
 		docu.img = `/images/${image_name}`;
@@ -1937,7 +1937,7 @@ app.put('/clist/upload-picture', async (req, res, next) => {
 			    	return res.status( 503 );
 			    }
 			    else{
-			    	return res.status( 200 ).json({ path: `/images/${image_name}`,message: 'welcome new coordinator please re log in' });    
+			    	return res.status( 200 ).json({ path: `/images/${image_name}`,message: 'Profile picture updated' });    
 			    }
 			});
 		});
