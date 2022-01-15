@@ -19,6 +19,8 @@ import Checkbox from '../components/fields/checkbox';
 import Select from '../components/fields/select';
 import BarChart from '../components/charts/BarChart';
 import PieChart from '../components/charts/PieChart';
+import HBarChart from '../components/charts/HBarChart';
+
 
 
 //mui components
@@ -115,8 +117,11 @@ export default function StudentDashboard(props){
 										<p style={{fontSize:'25px', textAlign:'center',height:'24px'}}>Total Available Researches</p>
 									</div>
 									<Divider style={{height:'2px', width:'100%', color:'black'}}/>
-									<div className='d-flex flex-row justify-content-center align-items-center'style={{width:'60%',height:'80%'}}>	
-										<div className='d-flex flex-column'style={{width:'40%',height:'100%'}}>
+									<div className='d-flex flex-row justify-content-center align-items-center'style={{width:'95%',height:'80%'}}>	
+										<div className='d-flex flex-row'style={{width:'80%',height:'100%'}}>
+											<HBarChart width='20' height='5' label={['BSIT','BSCS']} data={[bsit,bscs]} color={['#4CAF50','#548235']} setLabel={'System Categories'}/>
+										</div>
+										<div className='d-flex flex-column justify-content-around'style={{width:'20%',height:'60%'}}>
 											<div className='d-flex flex-row justify-content-around align-items-center'style={{width:'100%',height:'20%'}}>
 												<p style={{fontSize:'20px', textAlign:'center',height:'20px'}}>BSIT :</p>
 												<p style={{fontSize:'20px', textAlign:'center',height:'20px'}}>{bsit}</p>
@@ -130,9 +135,7 @@ export default function StudentDashboard(props){
 												<p style={{fontSize:'20px', textAlign:'center',height:'20px'}}>{bsit + bscs}</p>
 											</div>
 										</div>
-										<div className='d-flex flex-row'style={{width:'60%',height:'100%'}}>
-											<PieChart width='20' height='5' label={['BSIT','BSCS']} data={[bsit,bscs]} color={['#4CAF50','#548235']} setLabel={'System Categories'}/>
-										</div>
+										
 									</div>
 								</div>
 							</div>
@@ -151,7 +154,7 @@ export default function StudentDashboard(props){
 												<div className='col-6 text-left'>Title</div>
 												<div className='col-2 text-left'>Year</div>
 											</div>
-											<div className="d-flex flex-column justify-content-start" style={{height:'95%',width:'100%',overflowY:'auto',overflowX:'auto',backgroundColor:'#70AD47'}}>
+											<div className="d-flex flex-column justify-content-start" style={{height:'95%',width:'100%',overflowY:'overlay',overflowX:'overlay',backgroundColor:'#70AD47'}}>
 												{researchData?.map?.(object =>(
 													<div className='d-flex flex-row justify-content-around' style={{fontSize:'18px',border:'1px solid gray',borderRadius:'10px',backgroundColor:'#E2F0D9'}}>
 														<div className='col-6 text-left'>{object.title}</div>

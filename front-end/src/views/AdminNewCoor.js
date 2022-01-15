@@ -270,7 +270,7 @@ export default function FacultyReg(props){
 									        aria-describedby="alert-dialog-description"
 										>
 											<DialogTitle>
-												{"Register New Officer"}
+												{"Register New Coordinator"}
 											</DialogTitle>
 											<DialogContent>
 												The previous coordinator's account will be deactivated you will be forced to log out, do you wish to proceed?

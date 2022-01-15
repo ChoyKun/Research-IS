@@ -126,37 +126,49 @@ app.get('/filter-query/:course/:category/:yearSubmitted/:order/:year', async( re
 
 
 
-app.get('/student-filter-query/:course/:section/:yearLevel/:order/:sex', async( req, res, next ) => {
+app.get('/student-filter-query/:course/:section/:yearLevel/:order/:sex/:year', async( req, res, next ) => {
 	const { 
 		course,
 		section,
 		sex,
 		yearLevel,
-		order
+		order,
+		year
 	} = req.params;
 
 	const result = [];
 	const sectionResult  = [];
 
+	console.log(yearLevel);
 
 	Student.find(
-		{ course: course,sex:sex}, 
+		{ course: course, sex:sex}, 
 		null, 
 		{ sort: { 
 			lastName: order === 'A-Z' ? 1 : -1,
-			yearLevel: yearLevel === '1-4' ? 1 : -1
+			year: yearLevel === '1-4' ? 1 : -1
 		}},
 		( err, docs ) => {
 			if( err ) return res.status( 503 ).json({ message:'Server Error' });
 
 			if( docs ){
-				console.log(section);
 				docs.forEach( doc => {
 					if(doc.status == 'active'){
-						result.push(doc);
+						if( yearLevel =='all' ){
+							result.push(doc);
+						}
+						else{
+							if(doc.yearLevel == yearLevel){
+								result.push(doc);
+							}	
+						}
+
+						console.log(doc.yearLevel)
 
 						if(doc.section == section){
-							sectionResult.push( doc );
+							if(doc.yearLevel == yearLevel){
+								sectionResult.push( doc );
+							}
 						}
 					}
 				});
@@ -175,12 +187,14 @@ app.get('/student-filter-query/:course/:section/:yearLevel/:order/:sex', async( 
 	);
 });
 
-app.get('/inactive-student-filter-query/:course/:section/:yearLevel/:order', async( req, res, next ) => {
+app.get('/inactive-student-filter-query/:course/:section/:yearLevel/:order/:sex/:year', async( req, res, next ) => {
 	const { 
 		course,
 		section,
+		sex,
 		yearLevel,
-		order
+		order,
+		year
 	} = req.params;
 
 	const result = [];
@@ -201,11 +215,21 @@ app.get('/inactive-student-filter-query/:course/:section/:yearLevel/:order', asy
 				console.log(section);
 				docs.forEach( doc => {
 					if(doc.status == 'inactive'){
-						console.log(doc.status)
-						result.push(doc);
+						if( yearLevel =='all' ){
+							result.push(doc);
+						}
+						else{
+							if(doc.yearLevel == yearLevel){
+								result.push(doc);
+							}	
+						}
+
+						console.log(doc.yearLevel)
 
 						if(doc.section == section){
-							sectionResult.push( doc );
+							if(doc.yearLevel == yearLevel){
+								sectionResult.push( doc );
+							}
 						}
 					}
 				});

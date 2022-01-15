@@ -37,7 +37,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import IconButton from '@mui/material/IconButton';
 import WcIcon from '@mui/icons-material/Wc'
-
+import LockIcon from '@mui/icons-material/Lock';
 
 
 //styles
@@ -159,104 +159,114 @@ export default function StudentProfile(props){
 	}
 
 	const changePass = () =>(
-		<div className='d-flex flex-column justify-content-center align-items-center' style={{width:'100%', height:'50%',backgroundColor:"#E2F0D9"}}>
-			<Snackbar anchorOrigin={{vertical:"top", horizontal:"center"}} open={passwordSnackOpen} autoHideDuration={2000} onClose={handlePasswordSnackClose}>
-				<Alert variant='filled' severity={passwordAlertStatus == 403 ? "error" : "success"} sx={{width:'500px'}}>
-					{passwordAlertMes}
-				</Alert>				
-			</Snackbar>
-			<p style={{fontSize:'25px'}}>Change Password</p>
-			<p style={{fontSize:'18px'}}>Only MIS officers are allowed to edit your personal information, you can only update your password</p>
-			<div  style={{width:'80%', height:'100px'}}className='d-flex flex-row justify-content-between align-items-center' >
-				<TextField 
-					style={{width:'300px',height:'50px'}} 
-					id="filled-password-input" 
-					type={showCurrPassword ? "text" : "password"} 
-					label='Current password' 
-					variant='filled' 
-					onChange={(e)=>{dispatch({type:'_currPassword', data: e.target.value})}}
-					InputProps={{
-						endAdornment:(
-							<InputAdornment position="end">
-								<IconButton
-									aria-label="toggle password visibility"
-									onClick ={handleClickShowCurrPassword}
-									onMouseDown={handleMouseDownCurrPassword}
-								>
-									{showCurrPassword ? <Visibility/> : <VisibilityOff/>}
-								</IconButton>
-									
-							</InputAdornment>
-						)
-					}}
-				/>
-				<TextField 
-					style={{width:'300px',height:'50px'}} 
-					id="filled-password-input" 
-					type={showNewPassword ? "text" : "password"}  
-					label='New password' 
-					variant='filled'
-					onChange={(e)=>{dispatch({type:'_newPassword', data: e.target.value})}}
-					InputProps={{
-						endAdornment:(
-							<InputAdornment position="end">
-								<IconButton
-									aria-label="toggle password visibility"
-									onClick ={handleClickShowNewPassword}
-									onMouseDown={handleMouseDownNewPassword}
-								>
-									{showNewPassword ? <Visibility/> : <VisibilityOff/>}
-								</IconButton>
-									
-							</InputAdornment>
-						)
-					}}
-				/>
+		<div className='d-flex flex-column justify-content-center align-items-center' style={{width:'100%', height:'350px',backgroundColor:"#E2F0D9"}}>
+			<div className='d-flex flex-column justify-content-center align-items-center' style={{width:'90%', height:'90%',backgroundColor:"white",border:'1px solid black',borderRadius:'10px'}}>
+				<div className='d-flex flex-column justify-content-center align-items-center' style={{width:'100%', height:'100%'}}>
+					<Snackbar anchorOrigin={{vertical:"top", horizontal:"center"}} open={passwordSnackOpen} autoHideDuration={2000} onClose={handlePasswordSnackClose}>
+						<Alert variant='filled' severity={passwordAlertStatus == 403 ? "error" : "success"} sx={{width:'500px'}}>
+							{passwordAlertMes}
+						</Alert>				
+					</Snackbar>
+					<div  style={{width:'90%', height:'80px'}}className='d-flex flex-column justify-content-center align-items-start' >
+						<div  style={{height:'100px'}}className='d-flex flex-row justify-content-center align-items-center' >
+							<LockIcon sx={{color:green[500],height:'40px',width:'40px'}}/>
+							<p style={{fontSize:'30px', textAlign:'center',height:'24px'}}>Change Password</p>
+						</div>					
+					</div>
+					<Divider style={{height:'2px', width:'95%', color:'black'}}/>
+					<p style={{fontSize:'18px'}}>Only MIS officers are allowed to edit your information, you can only update your password</p>
+					<div  style={{width:'80%', height:'200px'}}className='d-flex flex-row justify-content-between align-items-center' >
+						<TextField 
+							style={{width:'300px',height:'50px'}} 
+							id="filled-password-input" 
+							type={showCurrPassword ? "text" : "password"} 
+							label='Current password' 
+							variant='filled' 
+							onChange={(e)=>{dispatch({type:'_currPassword', data: e.target.value})}}
+							InputProps={{
+								endAdornment:(
+									<InputAdornment position="end">
+										<IconButton
+											aria-label="toggle password visibility"
+											onClick ={handleClickShowCurrPassword}
+											onMouseDown={handleMouseDownCurrPassword}
+										>
+											{showCurrPassword ? <Visibility/> : <VisibilityOff/>}
+										</IconButton>
+											
+									</InputAdornment>
+								)
+							}}
+						/>
+						<TextField 
+							style={{width:'300px',height:'50px'}} 
+							id="filled-password-input" 
+							type={showNewPassword ? "text" : "password"}  
+							label='New password' 
+							variant='filled'
+							onChange={(e)=>{dispatch({type:'_newPassword', data: e.target.value})}}
+							InputProps={{
+								endAdornment:(
+									<InputAdornment position="end">
+										<IconButton
+											aria-label="toggle password visibility"
+											onClick ={handleClickShowNewPassword}
+											onMouseDown={handleMouseDownNewPassword}
+										>
+											{showNewPassword ? <Visibility/> : <VisibilityOff/>}
+										</IconButton>
+											
+									</InputAdornment>
+								)
+							}}
+						/>
 
-				<TextField 
-					style={{width:'300px',height:'50px'}} 
-					id="filled-password-input" 
-					type={showVerPassword ? "text" : "password"}
-					label='Confirm new password' 
-					variant='filled' 
-					onChange={(e)=>{dispatch({type:'_verNewPassword', data: e.target.value})}}
-					InputProps={{
-						endAdornment:(
-							<InputAdornment position="end">
-								<IconButton
-									aria-label="toggle password visibility"
-									onClick ={handleClickShowVerPassword}
-									onMouseDown={handleMouseDownVerPassword}
-								>
-									{showVerPassword ? <Visibility/> : <VisibilityOff/>}
-								</IconButton>
-									
-							</InputAdornment>
-						)
-					}}
-				/>
+						<TextField 
+							style={{width:'300px',height:'50px'}} 
+							id="filled-password-input" 
+							type={showVerPassword ? "text" : "password"}
+							label='Confirm new password' 
+							variant='filled' 
+							onChange={(e)=>{dispatch({type:'_verNewPassword', data: e.target.value})}}
+							InputProps={{
+								endAdornment:(
+									<InputAdornment position="end">
+										<IconButton
+											aria-label="toggle password visibility"
+											onClick ={handleClickShowVerPassword}
+											onMouseDown={handleMouseDownVerPassword}
+										>
+											{showVerPassword ? <Visibility/> : <VisibilityOff/>}
+										</IconButton>
+											
+									</InputAdornment>
+								)
+							}}
+						/>
+					</div>
+					<Divider style={{height:'2px', width:'95%', color:'black'}}/>
+					<div  style={{width:'80%', height:'100px'}}className='d-flex flex-row-reverse justify-content-between align-items-center' >
+						<Button title='Save' click={handlePasswordDialog} style={{fontSize:'18px',height:'40px', width:'100px'}}/>
+						<Dialog
+							open={passwordDialogOpen}
+					        onClose={handlePasswordDialogClose}
+					        aria-labelledby="alert-dialog-title"
+					        aria-describedby="alert-dialog-description"
+						>
+							<DialogTitle>
+								{"Change Password"}
+							</DialogTitle>
+							<DialogContent>
+								Do you want to update your password?
+							</DialogContent>
+							<DialogActions>
+								<Button title='Cancel' click={cancelPassword}/>
+								<Button title='Yes' click={handler}/>
+							</DialogActions>
+						</Dialog>
+					</div>
+				</div>
 			</div>
-			<div  style={{width:'80%', height:'100px'}}className='d-flex flex-row-reverse justify-content-between align-items-center' >
-				<Button title='Save' click={handlePasswordDialog} style={{fontSize:'18px',height:'40px', width:'100px'}}/>
-				<Dialog
-					open={passwordDialogOpen}
-			        onClose={handlePasswordDialogClose}
-			        aria-labelledby="alert-dialog-title"
-			        aria-describedby="alert-dialog-description"
-				>
-					<DialogTitle>
-						{"Change Password"}
-					</DialogTitle>
-					<DialogContent>
-						Do you want to update your password?
-					</DialogContent>
-					<DialogActions>
-						<Button title='Cancel' click={cancelPassword}/>
-						<Button title='Yes' click={handler}/>
-					</DialogActions>
-				</Dialog>
-			</div>
-			
 		</div>
 	)
 
@@ -293,7 +303,7 @@ export default function StudentProfile(props){
 				<p style={{fontSize:'36px'}}>Activity Logs</p>
 				<div className="d-flex justify-content-start align-items-start flex-column" style={{height:'80%', width:'100%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey",overflowY:'auto',overflowX:'auto'}}>
 					<div style={{height:'30px',width:'100%',border:'1px solid black', backgroundColor:'#385723',color:'white'}} className='d-flex flex-row justify-content-around'>
-						<div className='col-5 text-center'>
+						<div className='col-7 text-center'>
 							Activity
 						</div>
 						<div className='col-1 text-center'>
@@ -301,8 +311,8 @@ export default function StudentProfile(props){
 						</div>
 					</div>
 					{activity?.map?.(object =>(
-						<div className="d-flex flex-row justify-content-around" style={{height:'5%',width:'100%'}}>
-							<div className="col-7 text-center">{object.message}</div>
+						<div className="d-flex flex-row justify-content-around" style={{height:'10%',width:'100%',overflowY:'overlay'}}>
+							<div className="col-9 text-center">{object.message}</div>
 							<div className="col-3 text-center">{object.date}</div>
 						</div>
 					))}

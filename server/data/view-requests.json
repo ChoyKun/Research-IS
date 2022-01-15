@@ -1,1 +1,34 @@
-[]
+[
+    {
+        "id": "61da838b2bf9272b2432531d",
+        "studentID": "1801027",
+        "studentName": "Bryan M Tranca",
+        "title": "Fire Detection Device",
+        "state": "pending",
+        "dateRequested": "2022-1-15"
+    },
+    {
+        "id": "61da84942bf9272b24325322",
+        "studentID": "1801027",
+        "studentName": "Bryan M Tranca",
+        "title": "Complaint Management System",
+        "state": "pending",
+        "dateRequested": "2022-1-15"
+    },
+    {
+        "id": "61da85982bf9272b24325349",
+        "studentID": "1801027",
+        "studentName": "Bryan M Tranca",
+        "title": "Online Student Portal for Tagayatay National Highschool",
+        "state": "pending",
+        "dateRequested": "2022-1-15"
+    },
+    {
+        "id": "61daaadc5bd72000f0f6d840",
+        "studentID": "1801027",
+        "studentName": "Bryan M Tranca",
+        "title": "Research Information System",
+        "state": "pending",
+        "dateRequested": "2022-1-15"
+    }
+]

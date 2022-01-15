@@ -99,63 +99,61 @@ export default function SFrame(props){
 	    })
     },[])
 
-	const list = () =>(
-		<div className="d-flex justify-content-center flex-column" style={{height:'100%',width:'300px',backgroundColor:"#E2F0D9"}}>
-			<List className="d-flex align-items-center flex-column" style={{height:'100%',width:'100%',color:'black'}}>
-				<img style={{height:'130px',width:'150px'}} src={scslogo}/>
-				<Divider style={{height:'2px',width:'100%'}}/>
-				<ListItem style={{width:'100%',color:'black'}}>
-					<Link className="d-flex justify-content-between align-items-center text-center" to={`/MIS-dashboard/${username}`}>
-						<ListItemButton className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
-							<ListItemIcon sx={{color:green[500]}}>
-								<DashboardIcon/>
-							</ListItemIcon>
-							<p style={{fontSize:'18px', textAlign:'center',height:'12px',color:'black'}} className="MontFont">Dashboard</p>
-						</ListItemButton>
-					</Link>
-				</ListItem>
-				<Divider style={{height:'2px',width:'100%'}}/>
-				<ListItem style={{width:'100%',color:'black'}}>
-					<Link className="d-flex justify-content-between align-items-center text-center" to={`/MIS-profile/${username}`}>
-						<ListItemButton className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
-							<ListItemIcon sx={{color:green[500]}}>
-								<AccountBoxIcon/>
-							</ListItemIcon>
-							<p style={{fontSize:'18px', textAlign:'center',height:'12px',color:'black'}} className="MontFont">Profile</p>
-						</ListItemButton>
-					</Link>
-				</ListItem>
-				<Divider style={{height:'2px',width:'100%'}}/>
-				<ListItem style={{width:'100%',color:'black'}}>
-					<Link className="d-flex justify-content-between align-items-center text-center" to={adminPage}>
-						<ListItemButton className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
-							<ListItemIcon sx={{color:green[500]}}>
-								<SupervisorAccountIcon/>
-							</ListItemIcon>
-							<p style={{fontSize:'18px', textAlign:'center',height:'12px',color:'black'}} className="MontFont">Login as Admin</p>
-						</ListItemButton>
-					</Link>
-				</ListItem>
-				<Divider style={{height:'2px',width:'100%'}}/>
-				<ListItem style={{width:'100%',color:'black'}}>
-					<Link to={`/sign-in`}>				
-						<ListItemButton onClick={handleSignOut} className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
-							<ListItemIcon sx={{color:green[500]}}>
-								<LogoutIcon/>
-							</ListItemIcon>
-							<p style={{fontSize:'18px', textAlign:'center',height:'12px',color:'black'}} className="MontFont">Log out</p>
-						</ListItemButton>
-					</Link>
-				</ListItem>
-			</List>
+    const list = () =>(
+		<div className="d-flex justify-content-center align-items-center flex-column" style={{height:'100%',width:'300px',backgroundColor:"#385723"}}>
+			<img style={{height:'130px',width:'150px'}} src={scslogo}/>
+			<Divider style={{height:'10px',width:'100%',backgroundColor:"#385723"}}/>
+			<div className="d-flex justify-content-center flex-column" style={{height:'80%',width:'90%',backgroundColor:"#E2F0D9",borderRadius:'10px'}}>
+				<div className="d-flex justify-content-center flex-column" style={{height:'100%',width:'100%'}}>
+					<List className="d-flex align-items-center flex-column" style={{height:'100%',width:'100%',color:'black'}}>
+			 			<ListItem style={{width:'100%',color:'black'}}>
+			 				<Link className="d-flex justify-content-between align-items-center text-center" to={`/MIS-dashboard/${username}`}>
+			 					<ListItemButton className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
+			 						<ListItemIcon sx={{color:green[500]}}>
+			 							<DashboardIcon/>
+			 						</ListItemIcon>
+			 						<p style={{fontSize:'18px', textAlign:'center',height:'12px',color:'black'}} className="MontFont">Dashboard</p>
+			 					</ListItemButton>
+			 				</Link>
+			 			</ListItem>
+			 			<Divider style={{height:'2px',width:'100%'}}/>
+			 			<ListItem style={{width:'100%',color:'black'}}>
+			 				<Link className="d-flex justify-content-between align-items-center text-center" to={`/MIS-profile/${username}`}>
+			 					<ListItemButton className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
+			 						<ListItemIcon sx={{color:green[500]}}>
+			 							<AccountBoxIcon/>
+			 						</ListItemIcon>
+			 						<p style={{fontSize:'18px', textAlign:'center',height:'12px',color:'black'}} className="MontFont">Profile</p>
+			 					</ListItemButton>
+			 				</Link>
+			 			</ListItem>
+			 			<Divider style={{height:'2px',width:'100%'}}/>
+			 			<ListItem style={{width:'100%',color:'black'}}>
+			 				<Link className="d-flex justify-content-between align-items-center text-center" to={adminPage}>
+			 					<ListItemButton className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
+			 						<ListItemIcon sx={{color:green[500]}}>
+			 							<SupervisorAccountIcon/>
+			 						</ListItemIcon>
+			 						<p style={{fontSize:'18px', textAlign:'center',height:'12px',color:'black'}} className="MontFont">Login as Admin</p>
+			 					</ListItemButton>
+			 				</Link>
+			 			</ListItem>
+			 			<Divider style={{height:'2px',width:'100%'}}/>
+			 			<ListItem style={{width:'100%',color:'black'}}>
+			 				<Link to={`/sign-in`}>				
+			 					<ListItemButton onClick={handleSignOut} className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
+			 						<ListItemIcon sx={{color:green[500]}}>
+			 							<LogoutIcon/>
+			 						</ListItemIcon>
+			 						<p style={{fontSize:'18px', textAlign:'center',height:'12px',color:'black'}} className="MontFont">Log out</p>
+			 					</ListItemButton>
+			 				</Link>
+			 			</ListItem>
+			 		</List>
+		 		</div>
+			</div>
 		</div>
-		
 	)
-
-
-	useEffect(() => {
-		
-	}, [])
 
 	const toggleDrawer = (open) => (event) => {
 		setIsMenuOpen( open );

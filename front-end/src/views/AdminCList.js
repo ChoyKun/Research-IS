@@ -351,7 +351,7 @@ export default function StudentRList(props){
 							<div className="d-flex flex-row justify-content-between align-items-center" style={{height:'15%', width:'95%'}}>
 								<div className="d-flex flex-row align-items-center justify-content-center">
 									<AccountCircleIcon sx={{color:green[500],height:'40px',width:'40px'}}/>
-									<p style={{fontSize:'30px', textAlign:'center',height:'24px'}}>Deactivated Officer's Account</p>
+									<p style={{fontSize:'30px', textAlign:'center',height:'24px'}}>Deactivated Coordinator's Account</p>
 								</div>
 								<div style={{width:'10%'}}className="d-flex flex-row align-items-center justify-content-between">
 									<Button style={{height: '30px',width:'100px'}} title='Activate' click={handleDialog}/>
@@ -362,7 +362,7 @@ export default function StudentRList(props){
 								        aria-describedby="alert-dialog-description"
 									>
 										<DialogTitle>
-											{"Change Current Officer"}
+											{"Change Current Coordinator"}
 										</DialogTitle>
 										<DialogContent>
 											The previous coordinator's account will be deactivated you will be forced to log out, do you wish to proceed?
@@ -376,7 +376,7 @@ export default function StudentRList(props){
 							</div>
 							<div className="d-flex flex-column" style={{height:'80%', width:'95%',border:'1px solid black'}}>
 								<RListHeader/>
-								<div className="d-flex flex-column" style={{height:'100%', width:'100%',backgroundColor:'#70AD47',overflowY:'auto',overflowX:'auto'}}>
+								<div className="d-flex flex-column" style={{height:'100%', width:'100%',backgroundColor:'#70AD47',overflowY:'overlay',overflowX:'overlay'}}>
 									{filteredData}						
 								</div>					
 							</div>
@@ -483,7 +483,7 @@ function RListHeader(props){
 				Email
 			</div>
 			<div className='col-1 text-center'>
-				Day Registered
+				Date Registered
 			</div>
 		</div>
 	);

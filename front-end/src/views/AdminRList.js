@@ -137,9 +137,7 @@ export default function StudentRList(props){
 
 
 	const rFilter = () =>(
-		<div className="d-flex justify-content-center flex-column" style={{height:'400px',width:'500px',backgroundColor:"#E2F0D9"}}>
-			<div className="d-flex justify-content-center align-items-center" style={{height:'95%',width:'100%'}}>
-				<div style={{height:'100%',width:'95%',border:'1px solid black',backgroundColor:'white',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}} className='d-flex justify-content-center flex-column'>
+		<div style={{height:'400px',width:'500px',border:'1px solid black',backgroundColor:'white',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}} className='d-flex justify-content-center flex-column'>
 					<h3 style={{width:'95%',color:'black'}}>Filters:</h3>
 					<Divider style={{height:'2px', width:'100%', color:'black'}}/>
 					<div className='d-flex flex-row' style={{width:'100%',height:'70%'}}>
@@ -165,13 +163,15 @@ export default function StudentRList(props){
 						</div>
 						<div className='d-flex flex-column justify-content-start align-items-start' style={{height:'100%',width:'50%'}}>
 							<p>Research Categories</p>
-							<div style={{height:'80%',width:'95%',border:'1px solid black',backgroundColor:'white',borderRadius:'15px'}} className='d-flex justify-content-around flex-column'>
-								<Checkbox cLabel='Hardware' value="Hardware" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
-								<Checkbox cLabel='Software' value="Software" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
-								<Checkbox cLabel='Web System' value="Web System" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
-								<Checkbox cLabel='Game Dev' value="Game Dev" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
-								<Checkbox cLabel='Augmented Reality'value="Augmented Reality" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
-								<Checkbox cLabel='Mobile App' value="Mobile App" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
+							<div style={{height:'80%',width:'95%',border:'1px solid black',backgroundColor:'white',borderRadius:'15px'}} className='d-flex justify-content-around align-items-center flex-column'>
+								<div style={{height:'100%',width:'95%'}} className='d-flex justify-content-around align-items-start flex-column'>
+									<Checkbox cLabel='Hardware' value="Hardware" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
+									<Checkbox cLabel='Software' value="Software" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
+									<Checkbox cLabel='Web System' value="Web System" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
+									<Checkbox cLabel='Game Dev' value="Game Dev" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
+									<Checkbox cLabel='Augmented Reality'value="Augmented Reality" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
+									<Checkbox cLabel='Mobile App' value="Mobile App" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -181,8 +181,6 @@ export default function StudentRList(props){
 						}}/>
 					</div>
 				</div>
-			</div>
-		</div>
 	)
 
 	// const removeFilter = () =>{
@@ -341,7 +339,7 @@ export default function StudentRList(props){
 							</div>
 							<div className="d-flex flex-column" style={{height:'80%', width:'95%',border:'1px solid black'}}>
 								<RListHeader/>
-								<div className="d-flex flex-column" style={{height:'100%', width:'100%',backgroundColor:'#70AD47',overflowY:'auto',overflowX:'auto'}}>
+								<div className="d-flex flex-column" style={{height:'100%', width:'100%',backgroundColor:'#70AD47',overflowY:'overlay',overflowX:'overlay'}}>
 									{filteredData}						
 								</div>					
 							</div>

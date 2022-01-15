@@ -135,8 +135,19 @@ export default function RListFilter(props){
 				state.course = action.data;
 				return state;
 
-			case 'section':
-				state.section = action.data;
+			case 'category':
+				if( state.category.length ){
+					if( state.category.includes( action.data ) ){
+						state.category = state.category.filter( elem => elem !== action.data );
+					}
+					else{
+						state.category.push( action.data );						
+					}
+				}
+				else{
+					state.category.push( action.data );						
+				}
+
 				return state;
 
 			case 'yearSubmitted':
@@ -159,29 +170,17 @@ export default function RListFilter(props){
 	const [state, dispatch] = useReducer(reducer, initState);
 
 	const rFilter = () =>(
-		<div className="d-flex justify-content-center flex-column" style={{height:'400px',width:'300px',backgroundColor:"#E2F0D9"}}>
-			<div className="d-flex justify-content-center align-items-center" style={{height:'95%',width:'100%'}}>
-				<div className="d-flex justify-content-center align-items-center" style={{height:'100%',width:'95%',border:'1px solid black',backgroundColor:'white',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}} className='d-flex justify-content-center flex-column'>
+		<div style={{height:'400px',width:'500px',border:'1px solid black',backgroundColor:'white',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}} className='d-flex justify-content-center flex-column'>
 					<h3 style={{width:'95%',color:'black'}}>Filters:</h3>
 					<Divider style={{height:'2px', width:'100%', color:'black'}}/>
 					<div className='d-flex flex-row' style={{width:'100%',height:'70%'}}>
-						<div className='d-flex flex-column justify-content-center align-items-center' style={{height:'100%',width:'100%'}}>
+						<div className='d-flex flex-column justify-content-center align-items-center' style={{height:'100%',width:'50%'}}>
 							<div className='d-flex flex-column justify-content-around align-items-start' style={{height:'100%',width:'80%'}}>
 								<Select 
 									className='sfilterCourse' 
 									label='Course:' 
 									options={['BSIT','BSCS']}
 									reqOnChange={e => dispatch({type: 'course', data: e.target.value})}
-								/>
-								<div style={{ height:'40px',width:'500px', color:'black'}} className='d-flex flex-row'>
-									<label>Section: </label>
-									<Field style={{ height:'25px',width:'50px', color:'black'}} reqOnChange={e => dispatch({type: 'section', data: e.target.value})}/>
-								</div>
-								<Select 
-									className='sfilterCourse' 
-									label='Sex:' 
-									options={['Male','Female']}
-									reqOnChange={e => dispatch({type: 'sex', data: e.target.value})}
 								/>
 								<div style={{ height:'40px',width:'100px', color:'black'}} className='d-flex flex-row'>
 									<label style={{height:'40px',width:'300px'}}>Year: </label>
@@ -195,6 +194,19 @@ export default function RListFilter(props){
 								</div>
 							</div>
 						</div>
+						<div className='d-flex flex-column justify-content-start align-items-start' style={{height:'100%',width:'50%'}}>
+							<p>Research Categories</p>
+							<div style={{height:'80%',width:'95%',border:'1px solid black',backgroundColor:'white',borderRadius:'15px'}} className='d-flex justify-content-around align-items-center flex-column'>
+								<div style={{height:'100%',width:'95%'}} className='d-flex justify-content-around align-items-start flex-column'>
+									<Checkbox cLabel='Hardware' value="Hardware" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
+									<Checkbox cLabel='Software' value="Software" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
+									<Checkbox cLabel='Web System' value="Web System" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
+									<Checkbox cLabel='Game Dev' value="Game Dev" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
+									<Checkbox cLabel='Augmented Reality'value="Augmented Reality" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
+									<Checkbox cLabel='Mobile App' value="Mobile App" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
+								</div>
+							</div>
+						</div>
 					</div>
 					<div className='d-flex flex-row-reverse  align-items-start' style={{height:'5%',width:'95%'}}>					
 						<Button style={{width:'100px',height:'30px'}} title='Filter' click={() => {
@@ -202,8 +214,6 @@ export default function RListFilter(props){
 						}}/>
 					</div>
 				</div>
-			</div>
-		</div>
 	)
 
 	
@@ -224,7 +234,7 @@ export default function RListFilter(props){
 							</div>
 							<div className="d-flex flex-column" style={{height:'80%', width:'95%',border:'1px solid black'}}>
 								<RListHeader/>
-								<div className="d-flex flex-column" style={{height:'100%', width:'100%',backgroundColor:'#70AD47',overflowY:'auto',overflowX:'auto'}}>
+								<div className="d-flex flex-column" style={{height:'100%', width:'100%',backgroundColor:'#70AD47',overflowY:'overlay',overflowX:'overlay'}}>
 									{filteredData}						
 								</div>					
 							</div>

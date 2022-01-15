@@ -120,9 +120,10 @@ export default function StudentRList(props){
 
 	const initState = {
 		course: 'BSIT',
-		category: [],
-		yearSubmitted: 'null',
+		section:'null',
+		yearLevel: 'all',
 		order: 'A-Z',
+		sex:'Male',
 		year: 'Newest'
 	}
 
@@ -156,14 +157,16 @@ export default function StudentRList(props){
 				state.section = action.data;
 				return state;
 
-			case 'yearSubmitted':
-				state.yearSubmitted = action.data;
+			case 'yearLevel':
+				state.yearLevel = action.data;
 				return state;
 
 			case 'order':
 				state.order = action.data;
 				return state;
-
+			case 'sex':
+				state.sex = action.data;
+				return state;
 			case 'year':
 				state.year = action.data;
 				return state;
@@ -176,9 +179,7 @@ export default function StudentRList(props){
 	const [state, dispatch] = useReducer(reducer, initState);
 
 	const rFilter = () =>(
-		<div className="d-flex justify-content-center flex-column" style={{height:'400px',width:'300px',backgroundColor:"#E2F0D9"}}>
-			<div className="d-flex justify-content-center align-items-center" style={{height:'95%',width:'100%'}}>
-				<div className="d-flex justify-content-center align-items-center" style={{height:'100%',width:'95%',border:'1px solid black',backgroundColor:'white',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}} className='d-flex justify-content-center flex-column'>
+		<div className="d-flex justify-content-center align-items-center" style={{height:'400px',width:'300px',border:'1px solid black',backgroundColor:'white',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}} className='d-flex justify-content-center flex-column'>
 					<h3 style={{width:'95%',color:'black'}}>Filters:</h3>
 					<Divider style={{height:'2px', width:'100%', color:'black'}}/>
 					<div className='d-flex flex-row' style={{width:'100%',height:'70%'}}>
@@ -201,8 +202,7 @@ export default function StudentRList(props){
 									reqOnChange={e => dispatch({type: 'sex', data: e.target.value})}
 								/>
 								<div style={{ height:'40px',width:'100px', color:'black'}} className='d-flex flex-row'>
-									<label style={{height:'40px',width:'300px'}}>Year: </label>
-									<Field style={{ height:'25px',width:'100px', color:'black'}} type="number" placeHolder='ex. 2001' reqOnChange={e => dispatch({type: 'yearSubmitted', data: e.target.value})}/>
+									<Select className='aRegYear' label='Year: ' options={['all','1','2','3','4']} reqOnChange={(e)=>{dispatch({type:'yearLevel',data: e.target.value})}}/>
 								</div>
 								<div style={{width:'100%', color:'black'}}>
 									<Select width='55px' className='sfilterAlphabetical' label='Sort from:' options={['A-Z','Z-A']}reqOnChange={e => dispatch({type: 'order', data: e.target.value})}/>
@@ -219,8 +219,6 @@ export default function StudentRList(props){
 						}}/>
 					</div>
 				</div>
-			</div>
-		</div>
 	)
 
 
@@ -252,11 +250,12 @@ export default function StudentRList(props){
 					section,
 					sex,	
 					yearLevel,
-					order
+					order,
+					year
 				} = filter.sFilter;
 
 				console.log(section);
-				axios.get(`http://localhost:7000/student-filter-query/${course}/${section}/${yearLevel}/${order}/${sex}`)
+				axios.get(`http://localhost:7000/student-filter-query/${course}/${section}/${yearLevel}/${order}/${sex}/${year}`)
 				.then( res => {
 					if(section == 'null'){
 						res.data.result.forEach( item => {
@@ -359,7 +358,7 @@ export default function StudentRList(props){
 							</div>
 							<div className="d-flex flex-column" style={{height:'80%', width:'95%',border:'1px solid black'}}>
 								<RListHeader/>
-								<div className="d-flex flex-column" style={{height:'100%', width:'100%',backgroundColor:'#70AD47',overflowY:'auto',overflowX:'auto'}}>
+								<div className="d-flex flex-column" style={{height:'100%', width:'100%',backgroundColor:'#70AD47',overflowY:'overlay',overflowX:'overlay'}}>
 									{filteredData}						
 								</div>					
 							</div>

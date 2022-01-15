@@ -105,9 +105,7 @@ export default function StudentRList(props){
 
 
 	const rFilter = () =>(
-		<div className="d-flex justify-content-center flex-column" style={{height:'400px',width:'500px',backgroundColor:"#E2F0D9"}}>
-			<div className="d-flex justify-content-center align-items-center" style={{height:'95%',width:'100%'}}>
-				<div style={{height:'100%',width:'95%',border:'1px solid black',backgroundColor:'white',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}} className='d-flex justify-content-center flex-column'>
+		<div style={{height:'400px',width:'500px',border:'1px solid black',backgroundColor:'white',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}} className='d-flex justify-content-center flex-column'>
 					<h3 style={{width:'95%',color:'black'}}>Filters:</h3>
 					<Divider style={{height:'2px', width:'100%', color:'black'}}/>
 					<div className='d-flex flex-row' style={{width:'100%',height:'70%'}}>
@@ -133,13 +131,15 @@ export default function StudentRList(props){
 						</div>
 						<div className='d-flex flex-column justify-content-start align-items-start' style={{height:'100%',width:'50%'}}>
 							<p>Research Categories</p>
-							<div style={{height:'80%',width:'95%',border:'1px solid black',backgroundColor:'white',borderRadius:'15px'}} className='d-flex justify-content-around flex-column'>
-								<Checkbox cLabel='Hardware' value="Hardware" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
-								<Checkbox cLabel='Software' value="Software" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
-								<Checkbox cLabel='Web System' value="Web System" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
-								<Checkbox cLabel='Game Dev' value="Game Dev" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
-								<Checkbox cLabel='Augmented Reality'value="Augmented Reality" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
-								<Checkbox cLabel='Mobile App' value="Mobile App" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
+							<div style={{height:'80%',width:'95%',border:'1px solid black',backgroundColor:'white',borderRadius:'15px'}} className='d-flex justify-content-around align-items-center flex-column'>
+								<div style={{height:'100%',width:'95%'}} className='d-flex justify-content-around align-items-start flex-column'>
+									<Checkbox cLabel='Hardware' value="Hardware" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
+									<Checkbox cLabel='Software' value="Software" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
+									<Checkbox cLabel='Web System' value="Web System" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
+									<Checkbox cLabel='Game Dev' value="Game Dev" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
+									<Checkbox cLabel='Augmented Reality'value="Augmented Reality" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
+									<Checkbox cLabel='Mobile App' value="Mobile App" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -149,14 +149,7 @@ export default function StudentRList(props){
 						}}/>
 					</div>
 				</div>
-			</div>
-		</div>
 	)
-
-	// const removeFilter = () =>{
-	// 	filter.setSFilter( initState );
-		
-	// }
 
 
 	useEffect(()=>{
@@ -176,6 +169,7 @@ export default function StudentRList(props){
 		}
 		getResearchList();
 	},[]);
+
 
 	useEffect(() => {
 		let result = [];
@@ -222,6 +216,8 @@ export default function StudentRList(props){
 
 	console.log(filter.sFilter)
 
+
+
 	return(
 		<>
 			<Search setSearch={setSearch} list={rFilter()} placeHolder='Enter Research Title' />			
@@ -235,9 +231,9 @@ export default function StudentRList(props){
 									<p style={{fontSize:'30px', textAlign:'center',height:'24px'}}>Available Researches</p>
 								</div>						
 							</div>
-							<div className="d-flex flex-column" style={{height:'80%', width:'95%',border:'1px solid black'}}>
+							<div className="d-flex flex-column" style={{height:'80%', width:'95%',border:'1px solid black',overflowY:'auto',overflowX:'auto'}}>
 								<RListHeader/>
-								<div className="d-flex flex-column" style={{height:'100%', width:'100%',backgroundColor:'#70AD47',overflowY:'auto',overflowX:'auto'}}>
+								<div className="d-flex flex-column" style={{height:'100%', width:'100%',backgroundColor:'#70AD47',overflowY:'overlay',overflowX:'overlay'}}>
 									{filteredData}						
 								</div>					
 							</div>
@@ -248,7 +244,6 @@ export default function StudentRList(props){
 		</>
 	);
 }
-
 
 function Loading(props){
 	return(
@@ -347,6 +342,7 @@ function Item(props){
 			</div>
 		</div>
 	)
+
 
 	useEffect(()=>{
 		const token = Cookies.get('token');
@@ -449,45 +445,47 @@ function Item(props){
 
 	
 	return(
-		<div style={{height:'30px',width:'100%',backgroundColor:'#E2F0D9',border:'1px solid black',borderRadius:'10px'}} className="d-flex flex-row justify-content-around">
-			<Snackbar anchorOrigin={{vertical:"top", horizontal:"center"}} open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-				<Alert variant='filled' severity='info' sx={{width:'500px'}}>
-					{alertMes}
-				</Alert>				
-			</Snackbar>
-			<div className="col-3 text-center">{props.object.title}</div>
-			<div className="col-3 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
-			<div className="col-2 text-center">{props.object.yearSubmitted}</div>			
-			<div className="col-1 d-flex justify-content-center align-items-center text-center">
-				<IconButton
-				size="large"
-				edge="end"
-				color="inherit"
-				aria-label="menu"
-				sx={{ color:green[500],mr: 2 }}
-				>
-           	 		<PreviewIcon style={{height: '25px',width:'25px'}} onClick={toggleDrawer(true)}/>
-           	 	</IconButton>
-           	 	<Drawer
-	            	anchor={'right'}
-	            	open={open}
-	            	onClose={toggleDrawer(false)}
-	            >
-            	{list()}
-            	</Drawer>
-			</div>
-			<div className="col-1 d-flex justify-content-center align-items-center text-center">
-				<IconButton
+		<div style={{height:'30px',width:'100%',backgroundColor:'#E2F0D9',border:'1px solid black',borderRadius:'10px'}} className="d-flex flex-row justify-content-start">
+			<div style={{height:'100%',width:'98%'}} className="d-flex flex-row justify-content-around">
+				<Snackbar anchorOrigin={{vertical:"top", horizontal:"center"}} open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+					<Alert variant='filled' severity='info' sx={{width:'500px'}}>
+						{alertMes}
+					</Alert>				
+				</Snackbar>
+				<div className="col-4 text-center">{props.object.title}</div>
+				<div className="col-4 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
+				<div className="col-1 text-center">{props.object.yearSubmitted}</div>			
+				<div className="col-1 d-flex justify-content-center align-items-center text-center">
+					<IconButton
 					size="large"
-					disabled={disabled}
 					edge="end"
 					color="inherit"
 					aria-label="menu"
-					sx={{ color:green[500],mr: 2 }}
+					sx={{ color:'#385723',mr: 2 }}
 					>
-	           	 		<SendIcon style={{height: '25px',width:'25px'}} onClick={requestForView}/>
+	           	 		<PreviewIcon style={{height: '25px',width:'25px'}} onClick={toggleDrawer(true)}/>
 	           	 	</IconButton>
-				{/*<Button style={{width:'90px'}} click={requestForView} disabled={disabled} className={`col-1 text-center`} title='Request'/>*/}
+	           	 	<Drawer
+		            	anchor={'right'}
+		            	open={open}
+		            	onClose={toggleDrawer(false)}
+		            >
+	            	{list()}
+	            	</Drawer>
+				</div>
+				<div className="col-1 d-flex justify-content-center align-items-center text-center">
+					<IconButton
+						size="large"
+						disabled={disabled}
+						edge="end"
+						color="inherit"
+						aria-label="menu"
+						sx={{ color:'#385723',mr: 2 }}
+						>
+		           	 		<SendIcon style={{height: '25px',width:'25px'}} onClick={requestForView}/>
+		           	 	</IconButton>
+					{/*<Button style={{width:'90px'}} click={requestForView} disabled={disabled} className={`col-1 text-center`} title='Request'/>*/}
+				</div>
 			</div>
 		</div>
 	);
@@ -495,23 +493,24 @@ function Item(props){
 
 function RListHeader(props){
 	return(
-		<div style={{height:'30px',width:'100%',border:'1px solid black',color:"white", backgroundColor:'#385723'}} className='d-flex flex-row justify-content-around'>
-			<div className='col-3 text-center'>
-				Title
+		<div style={{height:'30px',width:'100%',border:'1px solid black',color:"white", backgroundColor:'#385723'}} className='d-flex flex-row justify-content-start'>
+			<div style={{height:'100%',width:'98%'}} className='d-flex flex-row justify-content-around'>
+				<div className='col-4 text-center'>
+					Title
+				</div>
+				<div className='col-4 text-center'>
+					ResearchCategories
+				</div>
+				<div className='col-1 text-center'>
+					Year
+				</div>
+				<div className="col-1 text-center">
+					View Details
+				</div>
+				<div className="col-1 text-center">
+					Request
+				</div>
 			</div>
-			<div className='col-3 text-center'>
-				ResearchCategories
-			</div>
-			<div className='col-2 text-center'>
-				Year Submitted
-			</div>
-			<div className="col-1 text-center">
-				View Details
-			</div>
-			<div className="col-1 text-center">
-				Request
-			</div>
-			
 		</div>
 	);
 }
