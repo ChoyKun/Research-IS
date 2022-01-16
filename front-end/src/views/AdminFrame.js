@@ -90,7 +90,7 @@ export default function SFrame(props){
 				 				</ListItemButton>
 				 			</Link>
 				 		</ListItem>
-				 		<Divider style={{height:'2px',width:'100%'}}/>
+				 		<Divider style={{height:'60%',width:'100%',backgroundColor:"#E2F0D9"}}/>
 				 		<ListItem style={{width:'100%',color:'black'}}>
 				 			<Link to={`/sign-in`}>				
 				 				<ListItemButton onClick={handleSignOut} className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>

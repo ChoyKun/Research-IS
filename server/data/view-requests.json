@@ -30,5 +30,85 @@
         "title": "Research Information System",
         "state": "pending",
         "dateRequested": "2022-1-15"
+    },
+    {
+        "id": "61b1ecd5069c2001e8f29ca6",
+        "studentID": "1801025",
+        "studentName": "Mitch S Canciano",
+        "title": "Research 1",
+        "state": "pending",
+        "dateRequested": "2022-1-16"
+    },
+    {
+        "id": "61b1ed62069c2001e8f29caf",
+        "studentID": "1801025",
+        "studentName": "Mitch S Canciano",
+        "title": "Research 4",
+        "state": "pending",
+        "dateRequested": "2022-1-16"
+    },
+    {
+        "id": "61b1ede9069c2001e8f29cb9",
+        "studentID": "1801025",
+        "studentName": "Mitch S Canciano",
+        "title": "Research 7",
+        "state": "pending",
+        "dateRequested": "2022-1-16"
+    },
+    {
+        "id": "61b1ee19069c2001e8f29cc0",
+        "studentID": "1801025",
+        "studentName": "Mitch S Canciano",
+        "title": "Research 9",
+        "state": "pending",
+        "dateRequested": "2022-1-16"
+    },
+    {
+        "id": "61b1eeea069c2001e8f29ccf",
+        "studentID": "1801025",
+        "studentName": "Mitch S Canciano",
+        "title": "Research 14",
+        "state": "pending",
+        "dateRequested": "2022-1-16"
+    },
+    {
+        "id": "61b1eec9069c2001e8f29ccc",
+        "studentID": "1801025",
+        "studentName": "Mitch S Canciano",
+        "title": "Research 13",
+        "state": "pending",
+        "dateRequested": "2022-1-16"
+    },
+    {
+        "id": "61b7ec0ba8c4031c68e9a160",
+        "studentID": "1801025",
+        "studentName": "Mitch S Canciano",
+        "title": "Research 17",
+        "state": "pending",
+        "dateRequested": "2022-1-16"
+    },
+    {
+        "id": "61b7ed79a8c4031c68e9a16b",
+        "studentID": "1801025",
+        "studentName": "Mitch S Canciano",
+        "title": "Research 18",
+        "state": "pending",
+        "dateRequested": "2022-1-16"
+    },
+    {
+        "id": "61d78f5017c9422594bac2af",
+        "studentID": "1801025",
+        "studentName": "Mitch S Canciano",
+        "title": "Research IS",
+        "state": "pending",
+        "dateRequested": "2022-1-16"
+    },
+    {
+        "id": "61d7902b17c9422594bac326",
+        "studentID": "1801025",
+        "studentName": "Mitch S Canciano",
+        "title": "CCT Virtual Map",
+        "state": "pending",
+        "dateRequested": "2022-1-16"
     }
 ]

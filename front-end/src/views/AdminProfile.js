@@ -534,22 +534,24 @@ export default function StudentProfile(props){
 			<div style={{height:'90%', width:'90%'}}>
 				<p style={{fontSize:'36px'}}>Activity Logs</p>
 				<div className="d-flex justify-content-start align-items-start flex-column" style={{height:'80%', width:'100%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey",overflowY:'auto',overflowX:'auto'}}>
-					<div style={{height:'30px',width:'100%',border:'1px solid black', backgroundColor:'#385723',color:'white'}} className='d-flex flex-row justify-content-around'>
-						<div className='col-9 text-center'>
+					<div style={{height:'5%',width:'100%',border:'1px solid black', backgroundColor:'#385723',color:'white'}} className='d-flex flex-row justify-content-around'>
+						<div className='col-7 text-center'>
 							Activity
 						</div>
 						<div className='col-1 text-center'>
 							Date
 						</div>
 					</div>
-					{activity?.map?.(object =>(
-						<div className="d-flex flex-row justify-content-around" style={{height:'8%',width:'100%'}}>
-							<div className="col-10 text-center">{object.message}</div>
-							<div className="col-2 text-center">{object.date}</div>
-						</div>
-					))}
+					<div style={{height:'95%',width:'100%',overflowY:'overlay' }} className='d-flex flex-column justify-content-start'>	
+						{activity?.map?.(object =>(
+							<div className="d-flex flex-row justify-content-around" style={{height:'10%',width:'100%'}}>
+								<div className="col-9 text-center">{object.message}</div>
+								<div className="col-3 text-center">{object.date}</div>
+							</div>
+						))}
+					</div>
 				</div>
-				<div className='d-flex flex-row-reverse align-items-center ' style={{width:'100%', height:'10%'}}>
+				<div className='d-flex flex-row-reverse align-items-center ' style={{width:'90%', height:'10%'}}>
 					<Button click={handleLogsDialog} style={{width:'100px', height:'40px', fontSize:'18px'}} title='Clear logs'/>
 					<Dialog
 						open={logsDialogOpen}
@@ -571,7 +573,7 @@ export default function StudentProfile(props){
 				</div>
 			</div>
 		</div>
-	)
+	) 
 
 	
 
