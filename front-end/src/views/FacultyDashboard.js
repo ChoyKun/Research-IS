@@ -191,7 +191,7 @@ export default function StudentDashboard(props){
 												<div className='col-2 text-left'>Last Name</div>
 												<div className='col-2 text-left'>Year</div>
 											</div>
-											<div className="d-flex flex-column justify-content-start align-items-center" style={{height:'95%',width:'100%',overflowY:'auto',overflowX:'auto'}}>
+											<div className="d-flex flex-column justify-content-start align-items-center" style={{height:'95%',width:'100%',overflowY:'overlay',overflowX:'overlay'}}>
 												{studentData?.map?.(object =>(
 													<div className='d-flex flex-row justify-content-around align-items-center' style={{fontSize:'18px',width:'100%',border:'1px solid gray',backgroundColor:'#E2F0D9',borderRadius:'10px'}}>
 														<div className='col-2 text-left'>{object.firstName}</div>

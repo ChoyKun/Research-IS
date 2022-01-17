@@ -310,9 +310,9 @@ export default function StudentProfile(props){
 							Date
 						</div>
 					</div>
-					<div style={{height:'95%',width:'100%',overflowY:'overlay' }} className='d-flex flex-column justify-content-start'>	
+					<div style={{height:'95%',width:'100%',overflowY:'overlay' }} className='d-flex flex-column align-items-start justify-content-start'>	
 						{activity?.map?.(object =>(
-							<div className="d-flex flex-row justify-content-around" style={{height:'10%',width:'100%'}}>
+							<div className="d-flex flex-row justify-content-around" style={{height:'8%',width:'100%'}}>
 								<div className="col-9 text-center">{object.message}</div>
 								<div className="col-3 text-center">{object.date}</div>
 							</div>

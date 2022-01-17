@@ -103,7 +103,7 @@ export default function SFrame(props){
 		<div className="d-flex justify-content-center align-items-center flex-column" style={{height:'100%',width:'300px',backgroundColor:"#385723"}}>
 			<img style={{height:'130px',width:'150px'}} src={scslogo}/>
 			<Divider style={{height:'10px',width:'100%',backgroundColor:"#385723"}}/>
-			<div className="d-flex justify-content-center flex-column" style={{height:'80%',width:'90%',backgroundColor:"#E2F0D9",borderRadius:'10px'}}>
+			<div className="d-flex justify-content-center flex-column" style={{height:'70%',width:'90%',backgroundColor:"#E2F0D9",borderRadius:'10px'}}>
 				<div className="d-flex justify-content-center flex-column" style={{height:'100%',width:'100%'}}>
 					<List className="d-flex align-items-center flex-column" style={{height:'100%',width:'100%',color:'black'}}>
 			 			<ListItem style={{width:'100%',color:'black'}}>
@@ -138,7 +138,7 @@ export default function SFrame(props){
 			 					</ListItemButton>
 			 				</Link>
 			 			</ListItem>
-			 			<Divider style={{height:'60%',width:'100%',backgroundColor:"#E2F0D9"}}/>
+			 			<Divider style={{height:'47%',width:'100%',backgroundColor:"#E2F0D9"}}/>
 			 			<ListItem style={{width:'100%',color:'black'}}>
 			 				<Link to={`/sign-in`}>				
 			 					<ListItemButton onClick={handleSignOut} className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>

@@ -41,7 +41,7 @@ import ContactPhoneIcon from '@mui/icons-material/ContactPhone';
 import Avatar from '@mui/material/Avatar';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import LockIcon from '@mui/icons-material/Lock';
-
+import EditIcon from '@mui/icons-material/Edit';
 
 
 
@@ -407,95 +407,112 @@ export default function StudentProfile(props){
 					{profileAlertMes}
 				</Alert>				
 			</Snackbar>
-			<div className="d-flex justify-content-between align-items-center flex-column" style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey",overflowY:'auto',overflowX:'auto'}}>	
-				<p style={{fontSize:'36px'}}>Edit Profile Details</p>
-				<Divider style={{height:'2px', width:'100%', color:'black'}}/>
-				<div style={{height:'40%',width:'90%'}} className='d-flex justify-content-start flex-column'>
-					<div style={{height:'185px',width:'200px', border:'1px solid black'}}>
-						<img className="image-img loading" width="200px" height="185px" src={ newImage ?? image }/>
+			<div className="d-flex justify-content-between align-items-start flex-column" style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey",overflowY:'auto',overflowX:'auto'}}>	
+				<div className='d-flex flex-column justify-content-center align-items-center' style={{width:'100%', height:'100%'}}>
+					<div  style={{width:'90%', height:'80px'}}className='d-flex flex-column justify-content-center align-items-start' >
+						<div  style={{height:'100px'}}className='d-flex flex-row justify-content-center align-items-center' >
+							<EditIcon sx={{color:green[500],height:'40px',width:'40px'}}/>
+							<p style={{fontSize:'30px', textAlign:'center',height:'24px'}}>Edit Profile Details</p>
+						</div>					
 					</div>
-					<input type="file" accept="image/*" onChange={imageOnChange}/>
-				</div>
-				<div style={{height:'32%',width:'90%',color:'black'}} className='d-flex justify-content-around flex-column'>
-					{adminData?.map?.(object=>(
-						<>
-							<div style={{width:'90%'}} className='d-flex justify-content-between align-items-center flex-row'>
-								<div style={{width:'90%'}} className='d-flex justify-content-between flex-column'>
-									<div style={{width:'300px'}} className='d-flex justify-content-between'>
-										<label style={{fontSize:'20px'}}>First Name:</label>
-										<Field style={{width:'150px'}} placeHolder={object.firstName} reqOnChange={(e)=>{dispatch({type:'_firstName',data: e.target.value})}}/>
-									</div>
-									<div style={{width:'300px'}} className='d-flex justify-content-between'>
-										<label style={{fontSize:'20px'}}>Middle Initial:</label>
-										<Field style={{width:'150px'}} placeHolder={object.middleInitial} reqOnChange={(e)=>{dispatch({type:'_middleInitial',data: e.target.value})}}/>
-									</div>
-									<div style={{width:'300px'}} className='d-flex justify-content-between'>
-										<label style={{fontSize:'20px'}}>Last Name:</label>
-										<Field style={{width:'150px'}} placeHolder={object.lastName} reqOnChange={(e)=>{dispatch({type:'_lastName',data: e.target.value})}}/>
-									</div>
-									<div style={{width:'300px'}} className='d-flex justify-content-between'>
-										<label style={{fontSize:'20px'}}>Extention Name:</label>
-										<Field style={{width:'150px'}} placeHolder={object.extentionName} reqOnChange={(e)=>{dispatch({type:'_extentionName',data: e.target.value})}}/>
-									</div>
-									<div style={{width:'300px'}} className='d-flex justify-content-between'>
-										<label style={{fontSize:'20px'}}>Username:</label>
-										<Field style={{width:'150px'}} placeHolder={object.username} reqOnChange={(e)=>{dispatch({type:'_username',data: e.target.value})}}/>
-									</div>			
-								</div>
-								<div style={{width:'90%'}} className='d-flex justify-content-between flex-column'>	
-										<div style={{width:'300px'}} className='d-flex justify-content-between'>
-											<label style={{fontSize:'20px'}}>Contact No:</label>
-											<Field style={{width:'180px'}} placeHolder={object.contactNo} reqOnChange={(e)=>{dispatch({type:'_contactNo',data: e.target.value})}}/>
-										</div>
-										<div style={{width:'300px'}} className='d-flex flex-column justify-content-between'>
-											<label style={{fontSize:'20px'}}>Email Address:</label>
-											<Field style={{width:'200px'}} placeHolder={object.emailAdd} reqOnChange={(e)=>{dispatch({type:'_emailAdd',data: e.target.value})}}/>
-										</div>	
-										
-										<div style={{width:'300px'}} className='d-flex justify-content-between'>
-											<label style={{fontSize:'20px'}}>Birthday:</label>
-											<label style={{fontSize:'20px'}}>{(() => {
-												const date = new Date(object.birthdate);
-												return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
-											})()}</label>
+					<Divider style={{height:'2px', width:'100%', color:'black'}}/>
+					<div style={{height:'90%',width:'90%',color:'black'}} className='d-flex justify-content-center align-items-center flex-row'>
+						{adminData?.map?.(object=>(
+							<div style={{height:'100%',width:'100%'}}>	
+								<div style={{height:'100%',width:'100%'}} className='d-flex justify-content-between align-items-center flex-row'>
+									<div style={{height:'100%',width:'90%'}} className='d-flex justify-content-around flex-column'>
+										<div style={{height:'40%',width:'90%'}} className='d-flex justify-content-start flex-column'>
+											<div style={{height:'170px',width:'180px', border:'1px solid black'}}>
+												<img className="image-img loading" width="178px" height="168px" src={ newImage ?? image }/>
+												<input type="file" accept="image/*" onChange={imageOnChange}/>
+											</div>
 										</div>
 										<div style={{width:'300px'}} className='d-flex justify-content-between'>
-											<label style={{fontSize:'20px'}}>Reg. Date:</label>
-											<label style={{fontSize:'20px'}}>{(() => {
-												const date = new Date(object.dateRegistered);
-												return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
-											})()}</label>
+											<label style={{fontSize:'20px'}}>First Name:</label>
+											<Field style={{width:'150px'}} placeHolder={object.firstName} reqOnChange={(e)=>{dispatch({type:'_firstName',data: e.target.value})}}/>
 										</div>
+										<div style={{width:'300px'}} className='d-flex justify-content-between'>
+											<label style={{fontSize:'20px'}}>Middle Initial:</label>
+											<Field style={{width:'150px'}} placeHolder={object.middleInitial} reqOnChange={(e)=>{dispatch({type:'_middleInitial',data: e.target.value})}}/>
+										</div>
+										<div style={{width:'300px'}} className='d-flex justify-content-between'>
+											<label style={{fontSize:'20px'}}>Last Name:</label>
+											<Field style={{width:'150px'}} placeHolder={object.lastName} reqOnChange={(e)=>{dispatch({type:'_lastName',data: e.target.value})}}/>
+										</div>
+										<div style={{width:'300px'}} className='d-flex justify-content-between'>
+											<label style={{fontSize:'20px'}}>Extention Name:</label>
+											<Field style={{width:'150px'}} placeHolder={object.extentionName} reqOnChange={(e)=>{dispatch({type:'_extentionName',data: e.target.value})}}/>
+										</div>		
 									</div>
-							</div>							
-						</>
-					))}
-				</div>
-				<div style={{height:'10%',width:'100%'}} className='d-flex justify-content-end flex-row align-items-center'>
-					<div style={{height:'100%',width:'30%'}} className='d-flex justify-content-around'>
-						<Field style={{width:'200px',height:'30px'}} placeHolder='password' reqOnChange={(e)=>{dispatch({type:'_password',data: e.target.value})}}/>
+									<div style={{height:'100%',width:'90%'}} className='d-flex justify-content-around flex-column'>	
+											<div style={{width:'300px'}} className='d-flex justify-content-between flex-column'>
+												<label style={{fontSize:'20px'}}>Username:</label>
+												<div style={{width:'90%'}} className="d-flex justify-content-center align-items-center">
+													<Field style={{width:'200px'}} placeHolder={object.username} reqOnChange={(e)=>{dispatch({type:'_username',data: e.target.value})}}/>
+												</div>
+											</div>	
+											<div style={{width:'300px'}} className='d-flex justify-content-between flex-column'>
+												<label style={{fontSize:'20px'}}>Contact No:</label>
+												<div style={{width:'90%'}} className="d-flex justify-content-center align-items-center">
+													<Field style={{width:'200px'}} placeHolder={object.contactNo} reqOnChange={(e)=>{dispatch({type:'_contactNo',data: e.target.value})}}/>
+												</div>
+											</div>	
+											<div style={{width:'300px'}} className='d-flex flex-column justify-content-between flex-column'>
+												<label style={{fontSize:'20px'}}>Email Address:</label>
+												<div style={{height:'100%',width:'90%'}} className="d-flex justify-content-center align-items-center">
+													<Field style={{width:'200px'}} placeHolder={object.emailAdd} reqOnChange={(e)=>{dispatch({type:'_emailAdd',data: e.target.value})}}/>
+												</div>	
+											</div>					
+											<div style={{width:'300px'}} className='d-flex justify-content-between flex-column'>
+												<label style={{fontSize:'20px'}}>Birthday:</label>
+												<div style={{width:'90%'}} className="d-flex justify-content-center align-items-center">
+													<label style={{fontSize:'20px'}}>{(() => {
+														const date = new Date(object.birthdate);
+														return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
+													})()}</label>
+												</div>	
+											</div>
+											<div style={{width:'300px'}} className='d-flex justify-content-between flex-column'>
+												<label style={{fontSize:'20px'}}>Reg. Date:</label>
+												<div style={{width:'90%'}} className="d-flex justify-content-center align-items-center">
+													<label style={{fontSize:'20px'}}>{(() => {
+														const date = new Date(object.dateRegistered);
+														return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
+													})()}</label>
+												</div>	
+											</div>
+										</div>
+								</div>							
+							</div>
+						))}
 					</div>
-					<div style={{height:'100%',width:'40%'}} className='d-flex justify-content-around '>
-						<Button style={{height:'30px',width:'150px'}} title='Save Changes' click={handleProfileDialog}/>
-						<Dialog
-							open={profileDialogOpen}
-					        onClose={handleProfileDialogClose}
-					        aria-labelledby="alert-dialog-title"
-					        aria-describedby="alert-dialog-description"
-						>
-							<DialogTitle>
-								{"Edit Profile Details"}
-							</DialogTitle>
-							<DialogContent>
-								Do you want to update your profile details?
-							</DialogContent>
-							<DialogActions>
-								<Button title='Cancel' click={cancelProfile}/>
-								<Button title='Yes' click={profileHandler}/>
-							</DialogActions>
-						</Dialog>
+					<div style={{height:'10%',width:'100%'}} className='d-flex justify-content-end flex-row align-items-center'>
+						<div style={{height:'100%',width:'30%'}} className='d-flex justify-content-end'>
+							<Field style={{width:'200px',height:'30px'}} placeHolder='password' reqOnChange={(e)=>{dispatch({type:'_password',data: e.target.value})}}/>
+						</div>
+						<div style={{height:'100%',width:'25%'}} className='d-flex justify-content-around '>
+							<Button style={{height:'30px',width:'150px'}} title='Save Changes' click={handleProfileDialog}/>
+							<Dialog
+								open={profileDialogOpen}
+						        onClose={handleProfileDialogClose}
+						        aria-labelledby="alert-dialog-title"
+						        aria-describedby="alert-dialog-description"
+							>
+								<DialogTitle>
+									{"Edit Profile Details"}
+								</DialogTitle>
+								<DialogContent>
+									Do you want to update your profile details?
+								</DialogContent>
+								<DialogActions>
+									<Button title='Cancel' click={cancelProfile}/>
+									<Button title='Yes' click={profileHandler}/>
+								</DialogActions>
+							</Dialog>
+						</div>
 					</div>
 				</div>
+
 			</div>
 		</div>
 	)
