@@ -12,10 +12,10 @@ export default function Select(props){
 	});
 
 	return(
-		<div className={`${props.className} d-flex flex-row`}>
+		<div style={{width: `${props.Width}`}} className={`${props.className} d-flex align-items-center justify-content-center flex-row`}>
 			<label>{props.label}</label>
-			<div style={{width:`${props.width}`,backgroundColor:'#E2F0D9',borderRadius:'20px',border:'2px solid #385723'}}>
-				<select style={{border:'none',borderRadius:'20px', outline:'none'}} onChange={props.reqOnChange}>
+			<div className="d-flex justify-content-center align-items-center" style={{width:`${props.width}`,backgroundColor:'#E2F0D9',borderRadius:'20px',border:'2px solid #385723'}}>
+				<select style={{width:'100%',border:'none',borderRadius:'20px', outline:'none'}} onChange={props.reqOnChange}>
 					{options}
 				</select>
 			</div>

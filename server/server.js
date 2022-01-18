@@ -985,6 +985,8 @@ app.post('/student/slist/register', async (req, res , next) =>{
 	const today = new Date();
 	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 
+	console.log(studentData.dateRegistered)
+
 	fs.readFile( token_path, (err, data) => {
 		if( err ) return res.sendStatus( 503 );
 

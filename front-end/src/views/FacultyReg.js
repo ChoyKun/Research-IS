@@ -40,6 +40,9 @@ export default function FacultyReg(props){
 	const [alertStatus, setAlertStatus] = useState(null)
 	const [dialogOpen, setDialogOpen] = useState(false);
 
+	const today = new Date();
+	var dateToday = (today.getMonth()+1)+'-'+today.getDate()+'-'+today.getFullYear();
+
 	const handleDialog = () =>{
 		setDialogOpen(true)
 	}
@@ -65,7 +68,7 @@ export default function FacultyReg(props){
 		course: 'BSIT',
 		yearLevel: '1',
 		section: null,
-		dateRegistered: null,
+		dateRegistered: dateToday,
 		img: null,
 		sex:'Male',
 		favorites: [],
@@ -118,10 +121,6 @@ export default function FacultyReg(props){
 
 			case 'section':
 				state.section = action.data;
-				return state;
-
-			case 'dateRegistered':
-				state.dateRegistered = action.data;
 				return state;
 
 			case 'img':
@@ -208,13 +207,13 @@ export default function FacultyReg(props){
 										<Field type='date' placeHolder='Enter Date Here' reqOnChange={(e) => {dispatch({type: 'birthdate', data: e.target.value});}}/>
 									</div>
 									<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
-										<Select className='aRegCourse' label='Select Course: ' options={['BSIT','BSCS']} reqOnChange={(e)=>{dispatch({type:'course',data: e.target.value})}}/>
+										<Select className='aRegCourse justify-content-between' Width='100%' width='170px' label='Select Course: ' options={['BSIT','BSCS']} reqOnChange={(e)=>{dispatch({type:'course',data: e.target.value})}}/>
 									</div>
 									<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
-										<Select className='aRegYear' label='Year Level: ' options={['1','2','3','4']} reqOnChange={(e)=>{dispatch({type:'yearLevel',data: e.target.value})}}/>
+										<Select className='aRegYear justify-content-between' Width='100%' width='170px' label='Year Level: ' options={['1','2','3','4']} reqOnChange={(e)=>{dispatch({type:'yearLevel',data: e.target.value})}}/>
 									</div>
 									<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
-										<Select className='aRegYear' label='Sex: ' options={['Male','Female']} reqOnChange={(e)=>{dispatch({type:'sex',data: e.target.value})}}/>
+										<Select className='aRegYear justify-content-between' Width='100%' width='170px' label='Sex: ' options={['Male','Female']} reqOnChange={(e)=>{dispatch({type:'sex',data: e.target.value})}}/>
 									</div>
 									<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
 										<label>Section:</label>
@@ -222,7 +221,7 @@ export default function FacultyReg(props){
 									</div>
 									<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
 										<label>Date Registered:</label>
-										<Field type='date' placeHolder='Enter Date Here' reqOnChange={(e) => {dispatch({type: 'dateRegistered', data: e.target.value});}}/>
+										<label>{dateToday}</label>
 									</div>
 									<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
 										<Button title='Register' style={{height:'35px', width:'130px'}} click={handleDialog}/>
@@ -246,9 +245,7 @@ export default function FacultyReg(props){
 									</div>
 								</div>						
 							</div>
-						</div>
-						
-						
+						</div>	
 					</div>
 				</div>
 			</div>

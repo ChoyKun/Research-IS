@@ -44,6 +44,8 @@ export default function FacultyReg(props){
 	const [imgFile, setImgFile] = useState(null);
 	const [redirect, setRedirect] = useState( null );
 
+	const today = new Date();
+	var dateToday = (today.getMonth()+1)+'-'+today.getDate()+'-'+today.getFullYear();
 
 	const handleDialog = () =>{
 		setDialogOpen(true)
@@ -67,7 +69,7 @@ export default function FacultyReg(props){
 		lastName:null,
 		extentionName:null,
 		birthdate:null,
-		dateRegistered:null,
+		dateRegistered: dateToday,
 		contactNo:null,
 		emailAdd:null,
 		img:null,
@@ -97,9 +99,6 @@ export default function FacultyReg(props){
 				return state;
 			case 'birthdate':
 				state.birthdate = action.data;
-				return state;
-			case 'dateRegistered':
-				state.dateRegistered = action.data;
 				return state;
 			case 'contactNo':
 				state.contactNo = action.data;
@@ -247,11 +246,7 @@ export default function FacultyReg(props){
 									<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
 										<label style={{fontSize:'18px'}}>Birth Date</label>
 										<Field type='date' placeHolder='Enter Date Here' reqOnChange={(e) => {dispatch({type: 'birthdate', data: e.target.value});}}/>
-									</div>
-									<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
-										<label>Date Registered:</label>
-										<Field type='date' placeHolder='Enter Date Here' reqOnChange={(e) => {dispatch({type: 'dateRegistered', data: e.target.value});}}/>
-									</div>
+									</div>		
 									<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
 										<label style={{fontSize:'18px'}}>Contact No.:</label>
 										<Field className='fName' reqOnChange={(e) => {dispatch({type: 'contactNo', data: e.target.value});}}/>
@@ -259,6 +254,10 @@ export default function FacultyReg(props){
 									<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
 										<label style={{fontSize:'18px'}}>Email Address:</label>
 										<Field className='fName' reqOnChange={(e) => {dispatch({type: 'emailAdd', data: e.target.value});}}/>
+									</div>
+									<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
+										<label>Date Registered:</label>
+										<label>{dateToday}</label>
 									</div>
 									<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
 										<Button title='Cancel' style={{height:'35px', width:'130px'}} click={()=>window.history.back()}/>
