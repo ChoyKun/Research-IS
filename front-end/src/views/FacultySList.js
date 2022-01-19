@@ -4,7 +4,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 import "../styles/button.css";
-
+import '../styles/txt.css';
 
 //icons
 import scslogo from "../images/scs-final.png";
@@ -47,6 +47,10 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import Popover from '@mui/material/Popover';
+import LockResetIcon from '@mui/icons-material/LockReset';
+
+
 
 
 
@@ -241,14 +245,14 @@ export default function StudentRList(props){
 						</div>
 						<div style={{height:'100%',width:'40%'}} className='d-flex justify-content-around flex-column'>	
 							<div style={{height:'20%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
-								<Select style={{fontSize:'20px'}} className='aRegCourse' label='Select Course:' options={['BSIT','BSCS']} selected={selected?.data?.course} reqOnChange={(e)=>{editDispatch({type:'_course',data: e.target.value})}}/>
+								<Select style={{fontSize:'20px'}} fontSize="20px" Width='100%' width="150px"className='aRegCourse justify-content-between' label='Select Course:' options={['BSIT','BSCS']} selected={selected?.data?.course} reqOnChange={(e)=>{editDispatch({type:'_course',data: e.target.value})}}/>
 							</div>
 							<div style={{height:'20%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
-								<Select style={{fontSize:'20px'}} className='aRegYear' label='Year Level' options={['1','2','3','4']} selected={selected?.data?.yearLevel} reqOnChange={(e)=>{editDispatch({type:'_yearLevel',data: e.target.value})}}/>
+								<Select style={{fontSize:'20px'}} fontSize="20px" Width='100%' width="150px"className='aRegYear justify-content-between' label='Year Level' options={['1','2','3','4']} selected={selected?.data?.yearLevel} reqOnChange={(e)=>{editDispatch({type:'_yearLevel',data: e.target.value})}}/>
 							</div>
 							<div style={{height:'20%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
 								<label style={{fontSize:'20px'}}>Section:</label>
-								<Field style={{fontSize:'20px'}} className='fname' placeHolder={selected?.data?.section} reqOnChange={(e)=>{editDispatch({type:'_section',data: e.target.value})}}/>
+								<Field style={{fontSize:'20px', width:'150px'}} className='fname' placeHolder={selected?.data?.section} reqOnChange={(e)=>{editDispatch({type:'_section',data: e.target.value})}}/>
 							</div>
 							<div style={{height:'20%',width:'300px'}} className='d-flex justify-content-between align-items-center'>
 								<label style={{fontSize:'20px'}}>Birthday:</label>
@@ -297,46 +301,46 @@ export default function StudentRList(props){
 	)
 
 	const rFilter = () =>(
-		<div className="d-flex justify-content-center align-items-center" style={{height:'400px',width:'300px',border:'1px solid black',backgroundColor:'white',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}} className='d-flex justify-content-center flex-column'>
-					<h3 style={{width:'95%',color:'black'}}>Filters:</h3>
-					<Divider style={{height:'2px', width:'100%', color:'black'}}/>
-					<div className='d-flex flex-row' style={{width:'100%',height:'70%'}}>
-						<div className='d-flex flex-column justify-content-center align-items-center' style={{height:'100%',width:'100%'}}>
-							<div className='d-flex flex-column justify-content-around align-items-start' style={{height:'100%',width:'80%'}}>
-								<Select 
-									className='sfilterCourse' 
-									label='Course:' 
-									options={['BSIT','BSCS']}
-									reqOnChange={e => dispatch({type: 'course', data: e.target.value})}
-								/>
-								<div style={{ height:'40px',width:'500px', color:'black'}} className='d-flex flex-row'>
-									<label>Section: </label>
-									<Field style={{ height:'25px',width:'50px', color:'black'}} reqOnChange={e => dispatch({type: 'section', data: e.target.value})}/>
-								</div>
-								<Select 
-									className='sfilterCourse' 
-									label='Sex:' 
-									options={['Male','Female']}
-									reqOnChange={e => dispatch({type: 'sex', data: e.target.value})}
-								/>
-								<div style={{ height:'40px',width:'100px', color:'black'}} className='d-flex flex-row'>
-									<Select className='aRegYear' label='Year: ' options={['all','1','2','3','4']} reqOnChange={(e)=>{dispatch({type:'yearLevel',data: e.target.value})}}/>
-								</div>
-								<div style={{width:'100%', color:'black'}}>
-									<Select width='55px' className='sfilterAlphabetical' label='Sort from:' options={['A-Z','Z-A']}reqOnChange={e => dispatch({type: 'order', data: e.target.value})}/>
-								</div>
-								<div style={{width:'100%', color:'black'}}>
-									<Select width='80px' className='sfilterYear' label='Sort by year:' options={['Newest','Oldest']} reqOnChange={e => dispatch({type: 'year', data: e.target.value})}/>
-								</div>
-							</div>
+		<div className="d-flex justify-content-center align-items-center" style={{height:'400px',width:'300px',border:'1px solid black',backgroundColor:'white',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}}>
+			<h3 style={{width:'95%',color:'black'}}>Filters:</h3>
+			<Divider style={{height:'2px', width:'100%', color:'black'}}/>
+			<div className='d-flex flex-row' style={{width:'100%',height:'70%'}}>
+				<div className='d-flex flex-column justify-content-center align-items-center' style={{height:'100%',width:'100%'}}>
+					<div className='d-flex flex-column justify-content-around align-items-start' style={{height:'100%',width:'80%'}}>
+						<Select 
+							className='sfilterCourse' 
+							label='Course:' 
+							options={['BSIT','BSCS']}
+							reqOnChange={e => dispatch({type: 'course', data: e.target.value})}
+						/>
+						<div style={{ height:'40px',width:'500px', color:'black'}} className='d-flex flex-row'>
+							<label>Section: </label>
+							<Field style={{ height:'25px',width:'50px', color:'black'}} reqOnChange={e => dispatch({type: 'section', data: e.target.value})}/>
+						</div>
+						<Select 
+							className='sfilterCourse' 
+							label='Sex:' 
+							options={['Male','Female']}
+							reqOnChange={e => dispatch({type: 'sex', data: e.target.value})}
+						/>
+						<div style={{ height:'40px',width:'100px', color:'black'}} className='d-flex flex-row'>
+							<Select className='aRegYear' label='Year: ' options={['all','1','2','3','4']} reqOnChange={(e)=>{dispatch({type:'yearLevel',data: e.target.value})}}/>
+						</div>
+						<div style={{width:'100%', color:'black'}}>
+							<Select width='55px' className='sfilterAlphabetical' label='Sort from:' options={['A-Z','Z-A']}reqOnChange={e => dispatch({type: 'order', data: e.target.value})}/>
+						</div>
+						<div style={{width:'100%', color:'black'}}>
+							<Select width='80px' className='sfilterYear' label='Sort by year:' options={['Newest','Oldest']} reqOnChange={e => dispatch({type: 'year', data: e.target.value})}/>
 						</div>
 					</div>
-					<div className='d-flex flex-row-reverse  align-items-start' style={{height:'5%',width:'95%'}}>					
-						<Button style={{width:'100px',height:'30px'}} title='Filter' click={() => {
-							filter.setSFilter( state );
-						}}/>
-					</div>
 				</div>
+			</div>
+			<div className='d-flex flex-row-reverse  align-items-start' style={{height:'5%',width:'95%'}}>					
+				<Button style={{width:'100px',height:'30px'}} title='Filter' click={() => {
+					filter.setSFilter( state );
+				}}/>
+			</div>
+		</div>
 	)
 
 
@@ -543,6 +547,28 @@ function Item(props){
 	const [name, setName] = useState(null);
 
 	const [open, setOpen] = useState(false);
+	const [dialogOpen, setDialogOpen] = useState(false);
+	const [alertMes, setAlertMes] = useState(null);
+	const [alertStatus, setAlertStatus] = useState(null);
+	const [snackOpen, setSnackOpen] =useState(false);
+
+	const handleDialog = () =>{
+		setDialogOpen(true)
+	}
+
+	const handleDialogClose = () =>{
+		setDialogOpen(false)
+	}
+
+	const handleSnackClose = (evernt , reason) =>{
+		if(reason === 'clickaway') {
+			return;
+		}
+
+		setSnackOpen(false);
+		setAlertMes(null);
+	}
+	
 
 	const toggleDrawer = (open) => (event) => {
 		setOpen( open );
@@ -562,19 +588,43 @@ function Item(props){
 		props.object.status = e.target.checked ? 'inactive' : 'active';
 
 	}
+
 	
+	const cancelOp =() =>{
+		setDialogOpen(false);
+		setSnackOpen(true);
+		setAlertMes("Operation canceled")
+		setAlertStatus(403)
+	}
+
+	const resetPassword=()=>{
+		setDialogOpen(false);
+		setSnackOpen(true);
+		
+		axios.put(`http://localhost:7000/faculty/flist/resetpass/${props.object.studentNo}`)
+		.then((res)=>{
+			setAlertMes(res.data.message);
+			setAlertStatus('good');
+		})
+		.catch((err)=>{
+			setAlertMes(JSON.parse(err.request.response).message)
+			setAlertStatus(403)
+		})
+		
+	}
 
 
 	
 	return(
-		<div onClick={handleClick} ref={item} style={{height:'30px',width:'100%',border:'1px solid black',borderRadius:'10px'}} className="d-flex bg-light flex-row justify-content-around">
-			
+		<div onClick={handleClick} ref={item} style={{height:'30px',width:'100%',border:'1px solid black',borderRadius:'10px'}} className="d-flex notSelected flex-row justify-content-around">
+			<Snackbar anchorOrigin={{vertical:"top", horizontal:"center"}} open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+				<Alert variant='filled' severity={alertStatus == 403 ? "error" : "success"} sx={{width:'500px'}}>
+					{alertMes}
+				</Alert>				
+			</Snackbar>
 			<div className="col-1 text-center"><Checkbox reqOnChange={handleOnChange}/></div>
-			<div className="col-1 text-center">{props.object.studentNo}</div>
 			<div className="col-1 text-center">{props.object.password}</div>
-			<div className="col-1 text-center">{props.object.lastName}</div>
-			<div className="col-1 text-center">{props.object.firstName}</div>
-			<div className="col-1 text-center">{props.object.middleInitial}</div>
+			<div className="col-2 text-center">{`${props.object.lastName}, ${props.object.firstName}, ${props.object.middleInitial} ${props.object.extentionName ?? ''}`}</div>
 			<div className="col-1 text-center">{props.object.sex}</div>
 			<div className="col-1 text-center">{(() => {
 											const date = new Date(props.object.birthdate);
@@ -589,7 +639,34 @@ function Item(props){
 											return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
 									})()}
 			</div>
-			
+			<div className="col-1 d-flex justify-content-center align-items-center text-center">
+				<IconButton
+					size="large"
+					edge="end"
+					color="inherit"
+					aria-label="menu"
+					sx={{ color:'#385723',mr: 2 }}
+					>
+	           	 		<LockResetIcon onClick={handleDialog} style={{height: '25px',width:'25px'}} />
+	           	 		<Dialog
+							open={dialogOpen}
+					        onClose={handleDialogClose}
+					        aria-labelledby="alert-dialog-title"
+					        aria-describedby="alert-dialog-description"
+						>
+							<DialogTitle>
+								{"Reset password"}
+							</DialogTitle>
+							<DialogContent>
+								{`Do you want to reset ${props.object.firstName} ${props.object.middleInitial} ${props.object.lastName} ${props.object.extentionName ?? ''}'s password to ${props.object.lastName}123 ?`}
+							</DialogContent>
+							<DialogActions>
+								<Button title='Cancel' click={cancelOp}/>
+								<Button title='Yes' click={resetPassword}/>
+							</DialogActions>
+						</Dialog>
+	           	 	</IconButton>
+			</div>
 		</div>
 	);
 }
@@ -601,17 +678,8 @@ function RListHeader(props){
 			<div className='col-1 text-center'>
 				StudentNo
 			</div>
-			<div className='col-1 text-center'>
-				Password
-			</div>
-			<div className='col-1 text-center'>
-				Last Name
-			</div>
-			<div className='col-1 text-center'>
-				First Name.
-			</div>
-			<div className='col-1 text-center'>
-				Middle In.
+			<div className='col-2 text-center'>
+				Student Name
 			</div>
 			<div className='col-1 text-center'>
 				Sex
@@ -631,6 +699,9 @@ function RListHeader(props){
 			<div className='col-1 text-center'>
 				Reg. Date
 			</div>
+			<div className='col-1 text-center'>
+				Reset Password
+			</div>
 			
 		</div>
 	);
@@ -644,10 +715,10 @@ const setColorToSelected = (item, reverse = false) => {
 
 	if( !reverse ){
 		console.log( item.classList );
-		list.replace('bg-light', 'bg-success');
+		list.replace('notSelected', 'selected');
 	}
 	else{
-		list.replace('bg-success', 'bg-light');
+		list.replace('selected', 'notSelected');
 	}
 	
 

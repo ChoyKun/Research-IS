@@ -450,13 +450,7 @@ export default function StudentProfile(props){
 											<Field style={{width:'150px'}} placeHolder={object.extentionName} reqOnChange={(e)=>{dispatch({type:'_extentionName',data: e.target.value})}}/>
 										</div>		
 									</div>
-									<div style={{height:'100%',width:'90%'}} className='d-flex justify-content-around flex-column'>	
-											<div style={{width:'300px'}} className='d-flex justify-content-between flex-column'>
-												<label style={{fontSize:'20px'}}>Username:</label>
-												<div style={{width:'90%'}} className="d-flex justify-content-center align-items-center">
-													<Field style={{width:'200px'}} placeHolder={object.username} reqOnChange={(e)=>{dispatch({type:'_username',data: e.target.value})}}/>
-												</div>
-											</div>	
+									<div style={{height:'100%',width:'90%'}} className='d-flex justify-content-around flex-column'>		
 											<div style={{width:'300px'}} className='d-flex justify-content-between flex-column'>
 												<label style={{fontSize:'20px'}}>Contact No:</label>
 												<div style={{width:'90%'}} className="d-flex justify-content-center align-items-center">
@@ -604,8 +598,8 @@ export default function StudentProfile(props){
 		axios.get('http://localhost:7000/faculty/flist')
 		.then((res)=>{
 			res.data.forEach( elem => {
-				console.log( elem.status );
-				if( elem.status === "active" ){
+				console.log( elem.username );
+				if( elem.username === username ){
 					setFacultyData((facultyData) => [...facultyData, elem]);
 				}
 			})

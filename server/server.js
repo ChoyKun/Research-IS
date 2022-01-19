@@ -44,6 +44,7 @@ const images_path = path.join(__dirname, '../front-end/public/images');
 const pdfs_path = path.join(__dirname, '../front-end/public/pdfs');
 const token_path = path.join(__dirname, '/data/tokens.json');
 const req_view_path = path.join(__dirname, 'data/view-requests.json');
+const coor_act_path = path.join(__dirname, 'data/coor-activity.json');
 
 const requestAccessToken = ( user ) => {
 	return jwt.sign( user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '24h' }); // wait check ko
@@ -63,7 +64,6 @@ const authentication = ( req, res, next ) => {
 		next();
 	})
 }
-//  paps palagyan ng "authentication" lahat ng requests except sa sign in reguster at refresh
 
 app.get('/verify-me', authentication, async(req, res, next) => {
 	return res.json({ user: req.user });
@@ -828,30 +828,59 @@ app.put('/student/slist/approved/:username/:date/:title', async(req,res,next)=>{
 	
 });
 
-app.put('/student/slist/declined/:username', async(req,res,next)=>{
+app.put('/student/slist/declined/:username/:title', async(req,res,next)=>{ //san mo to tinatwag? StudentRlist
 	const studentNo = req.params.username;
+	const title = req.params.title;
 
-	const { date } = req.body;
+	const today = new Date();
+	var dateAct = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 
 	const declined = req.body;
 
-	Student.findOne({studentNo:studentNo}, (err,data)=>{
+
+	Coordinator.findOne({status:'active'},(err,doc)=>{
 		if(err) return res.status( 503 ).json({ message: 'Server Error' });
 
-		if(data){
-			const ind = data.pending.indexOf(declined)
-			data.pending.splice(ind,1);
-			data.declined.push(declined);
-
-			data.save( err => {
+		if(doc){
+			Student.findOne({studentNo:studentNo}, (err,data)=>{
 				if(err) return res.status( 503 ).json({ message: 'Server Error' });
+
+				if(data){
+					const pending = data.pending.filter( id => id !== declined[0] );
+					console.log( pending );
+					data.pending = pending;
+
+
+					fs.readFile( req_view_path, (err, list) => {
+						if(err) return res.status( 503 ).json({ message: 'Server Error' });
+
+						const approvedList = JSON.parse(list).filter( datum => datum.id != declined[0] );
+
+						fs.writeFile( req_view_path, JSON.stringify( approvedList, null, 4 ), err => {
+							if(err) return res.status( 503 ).json({ message: 'Server Error' });
+
+							data.save( err => {
+								if(err) return res.status( 503 ).json({ message: 'Server Error' });
+
+								
+							});
+						});
+					});
+				}
+			})
+
+			doc.activity.push({message:`You declined ${studentNo}'s request to access ${title}`, date: dateAct})
+
+			doc.save( err=>{
+				if(err) return res.status(503).json({message:'server error'});
 
 				return res.status(200).json({message: 'successfuly declined request'})
 			})
-			
 		}
 	})
-})
+
+	
+});
 
 app.get('/student/slist/favlist/:username', async(req,res,next)=>{
 	const studentNo= req.params.username;
@@ -985,7 +1014,7 @@ app.post('/student/slist/register', async (req, res , next) =>{
 	const today = new Date();
 	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 
-	console.log(studentData.dateRegistered)
+	console.log(studentData.password)
 
 	fs.readFile( token_path, (err, data) => {
 		if( err ) return res.sendStatus( 503 );
@@ -1391,6 +1420,44 @@ app.get('/faculty/flist', async (req, res, next) =>{
 
 
 	return res.status( 200 ).json( JSON.parse(data) );
+})
+
+app.put('/faculty/flist/resetpass/:studentNo', async (req, res, next) =>{
+	const today = new Date();
+	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+
+	const studentNo = req.params.studentNo
+
+	Faculty.findOne({status:'active'}, (err,docs)=>{
+		if(err) return res.status( 503 ).json({ message: 'Server Error' });
+
+		if(docs){
+			console.log(docs)
+			docs.activity.push({message:`You reset ${studentNo}'s password to default`, date: date})
+
+			docs.save( err=>{
+				if(err) return res.status(503).json({message:'server error'});
+			})
+			Student.findOne({studentNo:studentNo}, (err,doc)=>{
+				if(err) return res.status( 503 ).json({ message: 'Server Error' });
+
+				if(doc){
+					console.log(doc.password)
+					console.log(doc.lastName+'123')
+					doc.password = doc.lastName+'123';
+
+					doc.save( err=>{
+						if(err) return res.status(503).json({message:'server error'});
+
+						return res.status( 200 ).json({message: 'Reset to default password'});
+					})
+				}
+			})
+		}
+	})
+
+	
+	
 })
 
 app.put('/faculty/flist/clear-logs/:username', async(req,res,next)=>{
@@ -1901,12 +1968,22 @@ app.put('/coordinator/clist/clear-logs/:username', async(req,res,next)=>{
 	const today = new Date();
 	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 
+	const archiveList = [];
+
 
 	Coordinator.findOne({username: username}, (err, doc)=>{
 		if(err) return res.sendStatus(503);
 
 		if(doc){
 			if(doc.activity.length){
+				doc.activity.forEach( item=>{
+					archiveList.push(item);
+				})
+
+				fs.writeFile( coor_act_path, JSON.stringify( archiveList, null, 4 ), ( err ) => {
+					if( err ) return res.sendStatus( 503 );
+				});
+
 				doc.activity.splice(0,doc.activity.length);
 				doc.activity.push({message:'You cleared your logs', date: date})
 

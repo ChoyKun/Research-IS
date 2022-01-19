@@ -83,10 +83,6 @@ export default function FacultyReg(props){
 				state.studentNo = action.data;
 				return state;
 
-			case 'password':
-				state.password = action.data;
-				return state;
-
 			case 'firstName':
 				state.firstName = action.data;
 				return state;
@@ -97,6 +93,7 @@ export default function FacultyReg(props){
 
 			case 'lastName':
 				state.lastName = action.data;
+				state.password = action.data+'123';
 				return state;
 
 			case 'extentionName':
@@ -181,10 +178,6 @@ export default function FacultyReg(props){
 										<Field className='uNametxt' reqOnChange={(e) => {dispatch({type: 'studentNo', data: e.target.value});}}/>
 									</div>
 									<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
-										<label style={{fontSize:'18px'}}>Password:</label>
-										<Field className='Passwordtxt' reqOnChange={(e) => {dispatch({type: 'password', data: e.target.value});}}/>
-									</div>
-									<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
 										<label style={{fontSize:'18px'}}>First Name:</label>
 										<Field className='fName'reqOnChange={(e) => {dispatch({type: 'firstName', data: e.target.value});}}/>
 									</div>
@@ -200,12 +193,12 @@ export default function FacultyReg(props){
 										<label style={{fontSize:'18px'}}>Name Extention:</label>
 										<Field className='fName' reqOnChange={(e) => {dispatch({type: 'extentionName', data: e.target.value});}}/>
 									</div>
-								</div>
-								<div style={{height:'100%',width:'50%'}}>
 									<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
 										<label style={{fontSize:'18px'}}>Birth Date</label>
 										<Field type='date' placeHolder='Enter Date Here' reqOnChange={(e) => {dispatch({type: 'birthdate', data: e.target.value});}}/>
 									</div>
+								</div>
+								<div style={{height:'100%',width:'50%'}}>			
 									<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
 										<Select className='aRegCourse justify-content-between' Width='100%' width='170px' label='Select Course: ' options={['BSIT','BSCS']} reqOnChange={(e)=>{dispatch({type:'course',data: e.target.value})}}/>
 									</div>
@@ -222,6 +215,10 @@ export default function FacultyReg(props){
 									<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
 										<label>Date Registered:</label>
 										<label>{dateToday}</label>
+									</div>
+									<div style={{height:'15%',width:'500px'}} className='d-flex justify-content-between align-items-start flex-column'>
+										<label>Note: Default password for each account will be last name + 123</label>
+										<label>Example: Garcia123</label>
 									</div>
 									<div style={{height:'15%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
 										<Button title='Register' style={{height:'35px', width:'130px'}} click={handleDialog}/>

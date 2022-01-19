@@ -53,7 +53,7 @@ export default function AdminRequest( props ){
 				console.log(err);
 				clearInterval( getRequests );
 			})
-		}, 10000);
+		}, 3000);
 
 		return () => clearInterval( getRequests );
 	}, []);
@@ -107,7 +107,7 @@ const Header = ( props ) => {
 		>
 			<div className="col-1 text-center"><p className="p-0 m-0"> Student No. </p></div>
 			<div className="col-2 text-center"><p className="p-0 m-0"> Student Name </p></div>
-			<div className="col-3 text-center"><p className="p-0 m-0"> Title </p></div>
+			<div className="col-5 text-center"><p className="p-0 m-0"> Title </p></div>
 			<div className="col-2 text-center"><p className="p-0 m-0"> Date Requested </p></div>
 			<div className="col-1 text-center">Approve</div>
 			<div className="col-1 text-center">Decline</div>
@@ -115,7 +115,7 @@ const Header = ( props ) => {
 	);
 }
  
-// stud num, name, title, by unique id
+
 const Request = ( props ) => {
 
 	const {username} = useParams();
@@ -123,9 +123,11 @@ const Request = ( props ) => {
 	const [approved, setApproved] = useState([])
 	const [approvedTitle, setApprovedTitle] = useState([])
 	const [declined, setDeclined] = useState([])
+	const [declinedTitle, setDeclinedTitle] = useState([])
 	const [sendApproved, setSendApproved] = useState(false);
 	const [sendDeclined, setSendDeclined] = useState(false);
 	const [dialogOpen, setDialogOpen] = useState(false);
+	const [declineDialogOpen, setDeclineDialogOpen] = useState(false);
 	const [alertMes, setAlertMes] = useState(null);
 	const [alertStatus, setAlertStatus] = useState(null);
 	const [snackOpen, setSnackOpen] =useState(false);
@@ -148,8 +150,16 @@ const Request = ( props ) => {
 		setDialogOpen(true)
 	}
 
+	const handleDeclineDialog = () =>{
+		setDeclineDialogOpen(true)
+	}
+
 	const handleDialogClose = () =>{
 		setDialogOpen(false)
+	}
+
+	const handleDeclineDialogClose = () =>{
+		setDeclineDialogOpen(false)
 	}
 
 	const today = new Date();
@@ -176,22 +186,24 @@ const Request = ( props ) => {
 		}
 	}, [approved])
 
-	// useEffect(()=>{
-	// 	if( sendDeclined ){
-	// 		setDeclined((declined) => [...declined, props.id]);
-	// 	}
-	// }, [sendDeclined]);
+	useEffect(()=>{
+		if( sendDeclined ){
+			setDeclined((declined) => [...declined, props.id]);
+			setDeclinedTitle((declinedTitle) => [...declinedTitle, props.title]);
+		}
+	}, [sendDeclined]);
 
-	// useEffect(() => {
-	// 	if( declined ){
-	// 		axios.put(`http://localhost:7000/student/slist/declined/${props.studentID}`, declined) 
-	// 		.then( res => {
-	// 			console.log( res.data.message );
-	// 			setSendDeclined( false );
-	// 		})
-	// 		.catch((err)=>{console.log(err)});
-	// 	}
-	// }, [declined])
+	useEffect(() => {
+		if( declined ){
+			axios.put(`http://localhost:7000/student/slist/declined/${props.studentID}/${[...declinedTitle]}`, declined) 
+			.then( res => {
+				setAlertMes( res.data.message );
+				setAlertStatus('good')
+				setSendApproved( false );
+			})
+			.catch((err)=>{console.log(err)});
+		}
+	}, [declined])
 
 
 	const approve = async () => {
@@ -207,14 +219,18 @@ const Request = ( props ) => {
 		setAlertStatus(403)
 	}
 
-	// const decline = async () => {
-	// 	axios.put(`http://localhost:7000/declined/change-file-state/${ props.id }`)
-	// 	.catch( err => {
-	// 		console.log( err );
-	// 	});
+	const cancelDecline =() =>{
+		setDeclineDialogOpen(false);
+		setSnackOpen(true);
+		setAlertMes("Operation canceled")
+		setAlertStatus(403)
+	}
 
-	// 	setSendDeclined( true );
-	// }
+	const decline = async () => {
+		setDeclineDialogOpen(false);
+		setSnackOpen(true);
+		setSendDeclined( true );
+	}
 
 	return(
 		<div 
@@ -235,7 +251,7 @@ const Request = ( props ) => {
 			</Snackbar>
 			<div className="col-1 text-center"><p className="p-0 m-0"> { props.studentID } </p></div>
 			<div className="col-2 text-center"><p className="p-0 m-0"> { props.studentName } </p></div>
-			<div className="col-3 text-center"><p className="p-0 m-0"> { props.title } </p></div>
+			<div className="col-5 text-center"><p className="p-0 m-0"> { props.title } </p></div>
 			<div className="col-2 text-center"><p className="p-0 m-0"> { props.dateRequested } </p></div>
 			<div className="col-1 text-center">
 				<IconButton
@@ -273,8 +289,25 @@ const Request = ( props ) => {
 				aria-label="menu"
 				sx={{ mr: 2,color:green[500] }}
 				>
-           	 		<ThumbDownIcon style={{height: '25px',width:'25px'}}/>
+           	 		<ThumbDownIcon style={{height: '25px',width:'25px'}} onClick={handleDeclineDialog}/>
            	 	</IconButton>
+           	 	<Dialog
+					open={declineDialogOpen}
+			        onClose={handleDeclineDialogClose}
+			        aria-labelledby="alert-dialog-title"
+			        aria-describedby="alert-dialog-description"
+				>
+					<DialogTitle>
+						{"Decline Research Request"}
+					</DialogTitle>
+					<DialogContent>
+						Do you want to decline {props.studentName}'s request to view {props.title}?
+					</DialogContent>
+					<DialogActions>
+						<Button title='Cancel' click={cancelDecline}/>
+						<Button title='Yes' click={decline}/>
+					</DialogActions>
+				</Dialog>
 			</div>
 			{/*<div className="col-1 text-center"><Button click={decline} title="Decline"/></div>*/}
 		</div>

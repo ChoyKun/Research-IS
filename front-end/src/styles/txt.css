@@ -70,3 +70,13 @@
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Edge, Opera and Firefox */
 }
+
+.selected{
+	background-color: '#70AD47';
+	color: white;
+}
+
+.notSelected{
+	background-color: #E2F0D9;
+	color: black;
+}
