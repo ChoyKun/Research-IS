@@ -2471,7 +2471,40 @@ app.post('/check-research-state/:username/:id', async (req, res , next )=>{
 })
 
 app.post('/clear-requests', async(req,res,next)=>{
-	fs.writeFile( req_view_path, JSON.stringify( [] ), err => {});
+	const today = new Date();
+	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+
+	Coordinator.findOne({status:'active'},(err,doc)=>{
+		if(err) return res.status(503).json({message:'Server Error'})
+
+		if(doc){
+			console.log(doc.activity)
+			doc.activity.push({message:`${doc.firstName} ${doc.middleInitial} ${doc.lastName} ${doc.extentionName ?? ''} cleared all requests`, date: date})
+			
+			fs.writeFile( req_view_path, JSON.stringify( [] ), err => {
+				if(err) return res.status( 503 ).json({ message: 'Server Error' });
+			});
+
+			doc.save( err=>{
+				if(err) return res.status(503).json({message:'server error'});
+			})
+
+			Student.find({},(err,docs)=>{
+				docs.forEach(item=>{
+					if(item.pending.length){
+						item.pending.splice(0,item.pending.length)
+					}
+
+					item.save( err=>{
+						if(err) return res.status(503).json({message:'server error'});
+					})
+				})
+
+			return res.status(200).json({message:'cleared all requests from the list'});
+
+			})
+		}
+	})	
 });
 
 

@@ -33,6 +33,32 @@ export default function AdminRequest( props ){
 	const {username} = useParams();
 
 	const [requests, setRequests] = useState([]);
+	const [alertMes, setAlertMes] = useState(null);
+	const [alertStatus, setAlertStatus] = useState(null);
+	const [dialogOpen, setDialogOpen] = useState(false);
+	const [snackOpen, setSnackOpen] =useState(false);
+
+	const handleSnack = () =>{
+		setSnackOpen(true);
+	}
+
+	const handleSnackClose = (evernt , reason) =>{
+		if(reason === 'clickaway') {
+			return;
+		}
+
+		setSnackOpen(false);
+		setAlertMes(null);
+	}
+
+	
+	const handleDialog = () =>{
+		setDialogOpen(true)
+	}
+
+	const handleDialogClose = () =>{
+		setDialogOpen(false)
+	}
 
 	useEffect(() => {
 		const getRequests = setInterval(() => {
@@ -59,10 +85,24 @@ export default function AdminRequest( props ){
 	}, []);
 
 	const clear = () =>{
+		setDialogOpen(false);
+		setSnackOpen(true);
+
 		axios.post('http://localhost:7000/clear-requests')
+		.then((res)=>{
+			setAlertMes( res.data.message );
+			setAlertStatus('good')
+		})
 		.catch((err)=>{
 			console.log(err);
 		})
+	}
+
+	const cancelOp =() =>{
+		setDialogOpen(false);
+		setSnackOpen(true);
+		setAlertMes("Operation canceled")
+		setAlertStatus(403)
 	}
 
 	return(
@@ -71,10 +111,37 @@ export default function AdminRequest( props ){
 				
 				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black', overflowY: 'auto'}} className='d-flex flex-column justify-content-center align-items-center'>
 					<div className="d-flex justify-content-around align-items-center flex-column" style={{height:'95%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey",overflowY:'auto',overflowX:'auto'}}>
-						<div className="d-flex flex-row align-items-center justify-content-start" style={{height:'5%',width:'90%'}}>
-							<EmailIcon sx={{color:green[500],height:'40px',width:'40px'}}/>
-							<p style={{fontSize:'30px', textAlign:'center',height:'24px',color:'black'}}>Requests for Full Viewing</p>
-						</div>
+						<div className="d-flex flex-row justify-content-between align-items-center" style={{height:'15%', width:'95%'}}>
+								<Snackbar anchorOrigin={{vertical:"top", horizontal:"center"}} open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+									<Alert variant='filled' severity={alertStatus == 403 ? "error" : "success"} sx={{width:'500px'}}>
+										{alertMes}
+									</Alert>				
+								</Snackbar>
+								<div className="d-flex flex-row align-items-center justify-content-center">
+									<EmailIcon sx={{color:green[500],height:'40px',width:'40px'}}/>
+									<p style={{fontSize:'30px', textAlign:'center',height:'24px',color:'black'}}>Student Requests for Full Content</p>
+								</div>
+								<div className="d-flex flex-row align-items-center justify-content-center">
+									<Button style={{width:'100px',height:'30px'}} click={handleDialog} title="Clear All"/>
+									<Dialog
+										open={dialogOpen}
+								        onClose={handleDialogClose}
+								        aria-labelledby="alert-dialog-title"
+								        aria-describedby="alert-dialog-description"
+									>
+										<DialogTitle>
+											{"Clear all requests"}
+										</DialogTitle>
+										<DialogContent>
+											Do you want to delete all requests?
+										</DialogContent>
+										<DialogActions>
+											<Button title='Cancel' click={cancelOp}/>
+											<Button title='Yes' click={clear}/>
+										</DialogActions>
+									</Dialog>
+								</div>						
+							</div>
 						<Divider style={{height:'2px', width:'100%', color:'black'}}/>
 						<div style={{height:'80%', width:'95%', backgroundColor:'#70AD47', border:'1px solid black', overflowY: 'auto'}} className='d-flex flex-column justify-content-start align-items-center'>
 							<Header/>
