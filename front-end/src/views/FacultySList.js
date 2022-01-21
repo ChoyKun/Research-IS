@@ -623,17 +623,15 @@ function Item(props){
 				</Alert>				
 			</Snackbar>
 			<div className="col-1 text-center"><Checkbox reqOnChange={handleOnChange}/></div>
-			<div className="col-1 text-center">{props.object.password}</div>
-			<div className="col-2 text-center">{`${props.object.lastName}, ${props.object.firstName}, ${props.object.middleInitial} ${props.object.extentionName ?? ''}`}</div>
+			<div className="col-1 text-center">{props.object.studentNo}</div>
+			<div className="col-3 text-center">{`${props.object.lastName}, ${props.object.firstName} ${props.object.middleInitial} ${props.extentionName ?? ''}`}</div>
 			<div className="col-1 text-center">{props.object.sex}</div>
 			<div className="col-1 text-center">{(() => {
 											const date = new Date(props.object.birthdate);
 											return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
 									})()}
 			</div>
-			<div className="col-1 text-center ">{props.object.course}</div>
-			<div className="col-1 text-center">{props.object.yearLevel}</div>
-			<div className="col-1 text-center">{props.object.section}</div>
+			<div className="col-2 text-center ">{`${props.object.course}	${props.object.yearLevel}-${props.object.section}`}</div>
 			<div className="col-1 text-center">{(() => {
 											const date = new Date(props.object.dateRegistered);
 											return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
@@ -678,7 +676,7 @@ function RListHeader(props){
 			<div className='col-1 text-center'>
 				StudentNo
 			</div>
-			<div className='col-2 text-center'>
+			<div className='col-3 text-center'>
 				Student Name
 			</div>
 			<div className='col-1 text-center'>
@@ -687,14 +685,8 @@ function RListHeader(props){
 			<div className='col-1 text-center'>
 				Birth Date
 			</div>
-			<div className='col-1 text-center'>
-				Course
-			</div>
-			<div className='col-1 text-center'>
-				Year level
-			</div>
-			<div className='col-1 text-center'>
-				Section
+			<div className='col-2 text-center'>
+				Course,Year and Section
 			</div>
 			<div className='col-1 text-center'>
 				Reg. Date

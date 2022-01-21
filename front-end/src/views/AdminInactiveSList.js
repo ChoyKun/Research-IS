@@ -378,19 +378,14 @@ function Item(props){
 	return(
 		<div onClick={handleClick} ref={item} style={{height:'30px',width:'100%',border:'1px solid black',borderRadius:'10px'}} className="d-flex bg-light flex-row justify-content-around">
 			<div className="col-1 text-center">{props.object.studentNo}</div>
-			<div className="col-1 text-center">{props.object.password}</div>
-			<div className="col-1 text-center">{props.object.lastName}</div>
-			<div className="col-1 text-center">{props.object.firstName}</div>
-			<div className="col-1 text-center">{props.object.middleInitial}</div>
+			<div className="col-3 text-center">{`${props.object.lastName}, ${props.object.firstName} ${props.object.middleInitial} ${props.extentionName ?? ''}`}</div>
 			<div className="col-1 text-center">{props.object.sex}</div>
 			<div className="col-1 text-center">{(() => {
 											const date = new Date(props.object.birthdate);
 											return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
 									})()}
 			</div>
-			<div className="col-1 text-center ">{props.object.course}</div>
-			<div className="col-1 text-center">{props.object.yearLevel}</div>
-			<div className="col-1 text-center">{props.object.section}</div>
+			<div className="col-2 text-center ">{`${props.object.course}	${props.object.yearLevel}-${props.object.section}`}</div>
 			<div className="col-1 text-center">{(() => {
 											const date = new Date(props.object.dateRegistered);
 											return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
@@ -407,17 +402,8 @@ function RListHeader(props){
 			<div className='col-1 text-center'>
 				StudentNo
 			</div>
-			<div className='col-1 text-center'>
-				Password
-			</div>
-			<div className='col-1 text-center'>
-				Last Name
-			</div>
-			<div className='col-1 text-center'>
-				First Name.
-			</div>
-			<div className='col-1 text-center'>
-				Middle In.
+			<div className='col-3 text-center'>
+				Student Name
 			</div>
 			<div className='col-1 text-center'>
 				Sex
@@ -425,14 +411,8 @@ function RListHeader(props){
 			<div className='col-1 text-center'>
 				Birth Date
 			</div>
-			<div className='col-1 text-center'>
-				Course
-			</div>
-			<div className='col-1 text-center'>
-				Year level
-			</div>
-			<div className='col-1 text-center'>
-				Section
+			<div className='col-2 text-center'>
+				Course,Year and Section
 			</div>
 			<div className='col-1 text-center'>
 				Reg. Date

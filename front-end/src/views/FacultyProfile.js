@@ -568,7 +568,7 @@ export default function StudentProfile(props){
 						))}
 					</div>
 				</div>
-				<div className='d-flex flex-row-reverse align-items-center ' style={{width:'90%', height:'10%'}}>
+				<div className='d-flex flex-row-reverse align-items-center ' style={{width:'100%', height:'10%'}}>
 					<Button click={handleLogsDialog} style={{width:'100px', height:'40px', fontSize:'18px'}} title='Clear logs'/>
 					<Dialog
 						open={logsDialogOpen}

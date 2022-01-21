@@ -8,6 +8,7 @@ import FormCard from './components/cards/form-card';
 import AdminAccess from './views/AdminAccess.js';
 import AdminChangepass from './views/AdminChangepass.js';
 import AdminArchive from './views/AdminArchive.js';
+import AdminActLogs from './views/AdminActLogs.js';
 import AdminLogin from './views/AdminLogin.js';
 import AdminReg from './views/AdminReg.js';
 import AdminUnauthorized from './views/AdminUnauthorized.js';
@@ -74,6 +75,7 @@ const views = [
   '/admin-request',
   '/admin-profile',
   '/admin-edit-profile',
+  '/admin-act-logs',
   '/admin-reg',
   '/admin-dashboard',
   '/emergency-admin',
@@ -196,6 +198,12 @@ function App() {
             <Route path="/admin-profile/:username">
               <AdminFrame authenticate={authenticate}>
                 <AdminProfile />
+              </AdminFrame>
+            </Route>
+
+             <Route path="/admin-act-logs/:username">
+              <AdminFrame authenticate={authenticate}>
+                <AdminActLogs />
               </AdminFrame>
             </Route>
 

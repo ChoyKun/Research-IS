@@ -568,8 +568,8 @@ export default function StudentProfile(props){
 						))}
 					</div>
 				</div>
-				<div className='d-flex flex-row-reverse align-items-center ' style={{width:'90%', height:'10%'}}>
-					<Button click={handleLogsDialog} style={{width:'100px', height:'40px', fontSize:'18px'}} title='Clear logs'/>
+				<div className='d-flex flex-row-reverse justify-content-between align-items-center ' style={{width:'100%', height:'10%'}}>
+					<Button click={handleLogsDialog} style={{width:'200px', height:'40px', fontSize:'18px'}} title='Clear logs'/>
 					<Dialog
 						open={logsDialogOpen}
 				        onClose={handleLogsDialogClose}
@@ -587,6 +587,7 @@ export default function StudentProfile(props){
 							<Button title='Yes' click={clearLogs}/>
 						</DialogActions>
 					</Dialog>
+					<Link to={`/admin-act-logs/${username}`}><Button click={handleLogsDialog} style={{width:'200px', height:'40px', fontSize:'18px'}} title='Activity Archive'/></Link>
 				</div>
 			</div>
 		</div>

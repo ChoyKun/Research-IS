@@ -815,7 +815,7 @@ app.put('/student/slist/approved/:username/:date/:title', async(req,res,next)=>{
 				}
 			})
 
-			doc.activity.push({message:`You approved ${studentNo}'s request to access ${title}`, date: dateAct})
+			doc.activity.push({message:`${doc.firstName} ${doc.middleInitial} ${doc.lastName} ${doc.extentionName ?? ''} approved ${studentNo}'s request to access ${title}`, date: dateAct})
 
 			doc.save( err=>{
 				if(err) return res.status(503).json({message:'server error'});
@@ -869,7 +869,7 @@ app.put('/student/slist/declined/:username/:title', async(req,res,next)=>{ //san
 				}
 			})
 
-			doc.activity.push({message:`You declined ${studentNo}'s request to access ${title}`, date: dateAct})
+			doc.activity.push({message:`${doc.firstName} ${doc.middleInitial} ${doc.lastName} ${doc.extentionName ?? ''} declined ${studentNo}'s request to access ${title}`, date: dateAct})
 
 			doc.save( err=>{
 				if(err) return res.status(503).json({message:'server error'});
@@ -1367,7 +1367,7 @@ app.post('/research/rlist/upload', async (req, res , next) =>{
 				}
 			})
 
-			doc.activity.push({message:`You uploaded a research titled ${researchData.title}`, date: date})
+			doc.activity.push({message:`${doc.firstName} ${doc.middleInitial} ${doc.lastName} ${doc.extentionName ?? ''} uploaded a research titled ${researchData.title}`, date: date})
 			doc.save( err=>{
 				if(err) return res.status(503).json({message:'server error'});
 
@@ -1399,7 +1399,7 @@ app.put('/research/rlist/update', async(req,res,next)=>{
 					}
 				})
 
-				doc.activity.push({message:`You updated ${elem.title}'s status to ${elem.status}`, date: date})
+				doc.activity.push({message:`${doc.firstName} ${doc.middleInitial} ${doc.lastName} ${doc.extentionName ?? ''} updated ${elem.title}'s status to ${elem.status}`, date: date})
 			})
 			
 			doc.save( err=>{
@@ -1560,7 +1560,7 @@ app.post('/faculty/flist/register', async (req, res , next) =>{
 							});
 						})
 
-						docs.activity.push({message:`You registered ${facultyData.username} as the new MIS officer`, date: date})
+						docs.activity.push({message:`${doc.firstName} ${doc.middleInitial} ${doc.lastName} ${doc.extentionName ?? ''} registered ${facultyData.username} as the new MIS officer`, date: date})
 						docs.save( err => {
 							if(err)	return res.status(503).json({ message: 'Server Error' })
 						});
@@ -1640,7 +1640,7 @@ app.put('/faculty/flist/changeofficer/:username', async (req,res,next)=>{
 				}
 			});
 
-			docs.activity.push({message:`You set ${prevCoor} as the MIS officer`, date: date})
+			docs.activity.push({message:`${doc.firstName} ${doc.middleInitial} ${doc.lastName} ${doc.extentionName ?? ''} set ${prevCoor} as the MIS officer`, date: date})
 			docs.save( err => {
 				if(err)	return res.status(503).json({ message: 'Server Error' })
 			});
@@ -1950,7 +1950,7 @@ app.put('/coordinator/clist/remove-approved/:studentNo/:title', async (req,res,n
 			})
 
 			console.log('doc')
-			doc.activity.push({message:`You removed ${studentNo}'s permission to access ${title}`, date: date})
+			doc.activity.push({message:`${doc.firstName} ${doc.middleInitial} ${doc.lastName} ${doc.extentionName ?? ''} removed ${studentNo}'s permission to access ${title}`, date: date})
 
 			doc.save( err=>{
 				if(err) return res.status(503).json({message:'server error'});
@@ -1980,12 +1980,23 @@ app.put('/coordinator/clist/clear-logs/:username', async(req,res,next)=>{
 					archiveList.push(item);
 				})
 
-				fs.writeFile( coor_act_path, JSON.stringify( archiveList, null, 4 ), ( err ) => {
+				fs.readFile( coor_act_path, ( err, reqList ) => {
 					if( err ) return res.sendStatus( 503 );
+
+
+					const list = JSON.parse( reqList );
+
+					archiveList.forEach(item =>{
+						list.push( item );
+					})
+
+					fs.writeFile( coor_act_path, JSON.stringify( list, null, 4 ), ( err ) => {
+						if( err ) return res.sendStatus( 503 );
+					});
 				});
 
 				doc.activity.splice(0,doc.activity.length);
-				doc.activity.push({message:'You cleared your logs', date: date})
+				doc.activity.push({message:`${doc.firstName} ${doc.middleInitial} ${doc.lastName} ${doc.extentionName ?? ''} cleared his/her logs`, date: date})
 
 				doc.save( err=>{
 					if(err) return res.status(503).json({message:'server error'});
@@ -2030,7 +2041,7 @@ app.put('/clist/upload-picture', async (req, res, next) => {
 
 	const updateImage = ( docu ) => {
 		docu.img = `/images/${image_name}`;
-		docu.activity.push({message:'You changed your password', date: date})
+		docu.activity.push({message:`${doc.firstName} ${doc.middleInitial} ${doc.lastName} ${doc.extentionName ?? ''} changed his/her password`, date: date})
 
 		docu.save( err => {
 		    if( err ) return res.sendStatus( 503 );
@@ -2080,6 +2091,10 @@ app.post('/coordinator/clist/register', async (req, res , next) =>{
 
 	const newCoor = new Coordinator(coorData);
 
+	const today = new Date();
+	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+
+
 	fs.readFile( token_path, (err, data) => {
 		if( err ) return res.sendStatus( 503 );
 
@@ -2106,6 +2121,24 @@ app.post('/coordinator/clist/register', async (req, res , next) =>{
 				return res.status(400).json({message:'username already used'})
 			}
 			else{
+
+				fs.readFile( coor_act_path, ( err, reqList ) => {
+					if( err ) return res.sendStatus( 503 );
+
+
+					const list = JSON.parse( reqList );
+
+					const log = {message:`${coorData.firstName} ${coorData.middleInitial} ${coorData.lastName} ${coorData.extentionName ?? ''} is the new Coordinator`, date: date}
+					
+					list.push( log );
+
+
+					fs.writeFile( coor_act_path, JSON.stringify( list, null, 4 ), ( err ) => {
+						if( err ) return res.sendStatus( 503 );
+					});
+				});
+
+
 				newCoor.save((err) => {
 					if ( err ){
 						return res.sendStatus(503);
@@ -2174,10 +2207,29 @@ app.post('/auth-admin', async (req, res, next) => {
 app.put('/coordinator/clist/changecoor/:username', async (req,res,next)=>{
 	const prevCoor = req.params.username;
 
+	const today = new Date();
+	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+
 	const checkMatch = ( doc , username ) => {
 		
 		if( doc.username == username ){
 			doc.status = 'active';
+
+			fs.readFile( coor_act_path, ( err, reqList ) => {
+				if( err ) return res.sendStatus( 503 );
+
+
+				const list = JSON.parse( reqList );
+
+				const log = {message:`${doc.firstName} ${doc.middleInitial} ${doc.lastName} ${doc.extentionName ?? ''} returned as the new Coordinator`, date: date}
+				
+				list.push( log );
+
+
+				fs.writeFile( coor_act_path, JSON.stringify( list, null, 4 ), ( err ) => {
+					if( err ) return res.sendStatus( 503 );
+				});
+			});
 
 			doc.save( err => { // may message ako paps
 				if(err) return res.status(400).json({message:'server error'})
@@ -2185,7 +2237,7 @@ app.put('/coordinator/clist/changecoor/:username', async (req,res,next)=>{
 		}
 	}
 
-	const success = () => res.status(200).json({message:'welcome new coordinator please re log in'});
+	const success = () => res.status(200).json({message:'Welcome new coordinator please re log in'});
 	// try mo
 	Coordinator.find({}, (err, doc) => {
 		if(err)	return res.status(503).json({ message: 'Server Error' })
@@ -2195,6 +2247,8 @@ app.put('/coordinator/clist/changecoor/:username', async (req,res,next)=>{
 			doc.forEach(doc=>{
 				checkMatch( doc, prevCoor );
 			}); // try paps
+
+
 			success();
 		}
 		else{
@@ -2246,7 +2300,7 @@ app.put('/auth-admin/editprofile/:username', async(req,res,next)=>{
 				doc.dateRegistered = _dateRegistered ?? doc.dateRegistered;
 				doc.img = _img ?? doc.img;
 
-				doc.activity.push({message:'You updated your profile', date: date})
+				doc.activity.push({message:`${doc.firstName} ${doc.middleInitial} ${doc.lastName} ${doc.extentionName ?? ''} updated your profile`, date: date})
 				doc.save( err => {
 					if(err)	return res.status(503).json({ message: 'Server Error' })
 					
@@ -2308,7 +2362,7 @@ app.put('/auth-admin/changepassword/:username', async(req,res,next)=>{
 				if(doc.password == _currPassword){
 					doc.password = _newPassword;
 
-					doc.activity.push({message:'You changed your password', date: date})
+					doc.activity.push({message:`${doc.firstName} ${doc.middleInitial} ${doc.lastName} ${doc.extentionName ?? ''} changed your password`, date: date})
 					doc.save( err => {
 						if(err)	return res.status(503).json({ message: 'Server Error' })
 						
@@ -2396,6 +2450,23 @@ app.get('/c-views', async ( req, res, next ) => {
 		if( err ) return res.sendStatus( 503 );
 
 		return res.json({ reqViews: JSON.parse( reqList ) });
+	});
+});
+
+app.get('/actlog-views', async ( req, res, next ) => {
+	const data = req.body.data;
+
+	fs.readFile( coor_act_path, ( err, reqList ) => {
+		if( err ) return res.sendStatus( 503 );
+
+		const newList = []
+		const list = JSON.parse(reqList);
+
+		list.forEach(item=>{
+			newList.unshift(item)
+		})
+
+		return res.json({ reqViews: newList });
 	});
 });
 

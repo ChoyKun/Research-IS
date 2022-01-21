@@ -108,7 +108,7 @@ export default function Login(props){
 				}
 				else if(res.data.role == 'admin'){
 					console.log("admin")
-					setTimeout(()=>{setRedirect( <Redirect to={`/MIS-dashboard/${data._username}`}/> );},2000);
+					setTimeout(()=>{setRedirect( <Redirect to={`/admin-dashboard/${data._username}`}/> );},2000);
 				}
 			}
 

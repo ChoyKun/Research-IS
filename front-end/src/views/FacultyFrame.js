@@ -69,34 +69,13 @@ export default function SFrame(props){
 	
 
     useEffect(()=>{
-    	axios.get('http://localhost:7000/verify-me', {
-			headers: {
-				'authentication': `Bearer ${token}`
-			}
-	    })
-	    .then(req=>{
-	    	const { role, name } = req.data.user;
-	    	console.log(role)
-	    	console.log(name)
-
-	    	switch( role ){
-				case 'mis officer':
-					setAdminPage( `/admin-unauthorized/${username}`);
-					axios.get(`http://localhost:7000/faculty/flist/${username}`)
-					.then(res=>{
-						setName(res.data.data);
-					})
-					.catch(err=>{
-						console.log(err);
-					});
-					break;
-
-				case 'admin':
-					setAdminPage( `/admin-log-in/${username}` );
-					setName('Coordinator');
-					break;
-        	}
-	    })
+    	axios.get(`http://localhost:7000/faculty/flist/${username}`)
+		.then(res=>{
+			setName(res.data.data);
+		})
+		.catch(err=>{
+			console.log(err);
+		});
     },[])
 
     const list = () =>(
@@ -127,18 +106,7 @@ export default function SFrame(props){
 			 					</ListItemButton>
 			 				</Link>
 			 			</ListItem>
-			 			<Divider style={{height:'2px',width:'100%'}}/>
-			 			<ListItem style={{width:'100%',color:'black'}}>
-			 				<Link className="d-flex justify-content-between align-items-center text-center" to={adminPage}>
-			 					<ListItemButton className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
-			 						<ListItemIcon sx={{color:green[500]}}>
-			 							<SupervisorAccountIcon/>
-			 						</ListItemIcon>
-			 						<p style={{fontSize:'18px', textAlign:'center',height:'12px',color:'black'}} className="MontFont">Login as Admin</p>
-			 					</ListItemButton>
-			 				</Link>
-			 			</ListItem>
-			 			<Divider style={{height:'47%',width:'100%',backgroundColor:"#E2F0D9"}}/>
+			 			<Divider style={{height:'60%',width:'100%',backgroundColor:"#E2F0D9"}}/>
 			 			<ListItem style={{width:'100%',color:'black'}}>
 			 				<Link to={`/sign-in`}>				
 			 					<ListItemButton onClick={handleSignOut} className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
