@@ -33,7 +33,7 @@ import { green } from '@mui/material/colors';
 import LogoutIcon from '@mui/icons-material/Logout';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
-
+import Tooltip from '@mui/material/Tooltip';
 
 
 
@@ -132,23 +132,25 @@ export default function SFrame(props){
 			<Box sx={{ flexGrow: 1 }}>
 		      <AppBar position="static" style={{backgroundColor:'#548235'}}>
 		        <Toolbar>
-		          <IconButton
-		            size="large"
-		            edge="start"
-		            color="inherit"
-		            aria-label="menu"
-		            sx={{ mr: 2 }}
-		          >
-		            <MenuIcon onClick={toggleDrawer(true)}/>
-		            <Drawer
-		            	anchor={'left'}
-		            	open={isMenuOpen}
-		            	onClose={toggleDrawer(false)}
-		            >
-	            	{list()}
-	            	</Drawer>
-		            
-		          </IconButton>
+			        <Tooltip title="Menu" arrow>
+			          <IconButton
+			            size="large"
+			            edge="start"
+			            color="inherit"
+			            aria-label="menu"
+			            sx={{ mr: 2 }}
+			          >
+			            <MenuIcon onClick={toggleDrawer(true)} style={{height: '35px',width:'35px'}}/>
+			            <Drawer
+			            	anchor={'left'}
+			            	open={isMenuOpen}
+			            	onClose={toggleDrawer(false)}
+			            >
+		            	{list()}
+		            	</Drawer>
+			            
+			          </IconButton>
+			        </Tooltip>
 		          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
 		           	Welcome Mr./Ms. {name}
 		          </Typography>

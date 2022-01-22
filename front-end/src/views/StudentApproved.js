@@ -18,7 +18,7 @@ import PreviewIcon from '@mui/icons-material/Preview';
 import IconButton from '@mui/material/IconButton';
 import Drawer from '@mui/material/Drawer';
 import Divider from '@mui/material/Divider';
-
+import Tooltip from '@mui/material/Tooltip';
 
 export default function AdminRequest( props ){
 	const {username} = useParams();
@@ -140,15 +140,17 @@ function Item(props){
 			<div className="col-2 text-center">{props.object.yearSubmitted}</div>
 			<div className="col-2 text-center">{props.object.dateApproved}</div>				
 			<div className="col-1 d-flex justify-content-center align-items-center text-center">
-				<IconButton
-				size="large"
-				edge="end"
-				color="inherit"
-				aria-label="menu"
-				sx={{ mr: 2 }}
-				>
-           	 		<PreviewIcon style={{height: '25px',width:'25px'}} onClick={toggleDrawer(true)}/>
-           	 	</IconButton>
+				<Tooltip title='View Document' arrow>
+					<IconButton
+					size="large"
+					edge="end"
+					color="inherit"
+					aria-label="menu"
+					sx={{ color:'#385723',mr: 2 }}
+					>
+	           	 		<PreviewIcon style={{height: '25px',width:'25px'}} onClick={toggleDrawer(true)}/>
+	           	 	</IconButton>
+				</Tooltip>
            	 	<Drawer
 	            	anchor={'right'}
 	            	open={open}

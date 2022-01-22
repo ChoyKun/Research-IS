@@ -14,6 +14,7 @@ const coordinatorSchema= new Schema({
 	emailAdd:String,
 	img: String,
 	activity: Array,
+	inbox: Array,
 	status: String
 })
 

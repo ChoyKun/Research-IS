@@ -41,6 +41,7 @@ import ContactPhoneIcon from '@mui/icons-material/ContactPhone';
 import Avatar from '@mui/material/Avatar';
 import LockIcon from '@mui/icons-material/Lock';
 import EditIcon from '@mui/icons-material/Edit';
+import Tooltip from '@mui/material/Tooltip';
 
 
 
@@ -282,13 +283,15 @@ export default function StudentProfile(props){
 							InputProps={{
 								endAdornment:(
 									<InputAdornment position="end">
-										<IconButton
-											aria-label="toggle password visibility"
-											onClick ={handleClickShowCurrPassword}
-											onMouseDown={handleMouseDownCurrPassword}
-										>
-											{showCurrPassword ? <Visibility/> : <VisibilityOff/>}
-										</IconButton>
+										<Tooltip title='Show Password' arrow>
+											<IconButton
+												aria-label="toggle password visibility"
+												onClick ={handleClickShowCurrPassword}
+												onMouseDown={handleMouseDownCurrPassword}
+											>
+												{showCurrPassword ? <Visibility/> : <VisibilityOff/>}
+											</IconButton>
+										</Tooltip>
 											
 									</InputAdornment>
 								)
@@ -304,13 +307,15 @@ export default function StudentProfile(props){
 							InputProps={{
 								endAdornment:(
 									<InputAdornment position="end">
-										<IconButton
-											aria-label="toggle password visibility"
-											onClick ={handleClickShowNewPassword}
-											onMouseDown={handleMouseDownNewPassword}
-										>
-											{showNewPassword ? <Visibility/> : <VisibilityOff/>}
-										</IconButton>
+										<Tooltip title='Show Password' arrow>
+											<IconButton
+												aria-label="toggle password visibility"
+												onClick ={handleClickShowNewPassword}
+												onMouseDown={handleMouseDownNewPassword}
+											>
+												{showNewPassword ? <Visibility/> : <VisibilityOff/>}
+											</IconButton>
+										</Tooltip>
 											
 									</InputAdornment>
 								)
@@ -327,13 +332,15 @@ export default function StudentProfile(props){
 							InputProps={{
 								endAdornment:(
 									<InputAdornment position="end">
-										<IconButton
-											aria-label="toggle password visibility"
-											onClick ={handleClickShowVerPassword}
-											onMouseDown={handleMouseDownVerPassword}
-										>
-											{showVerPassword ? <Visibility/> : <VisibilityOff/>}
-										</IconButton>
+										<Tooltip title='Show Password' arrow>
+											<IconButton
+												aria-label="toggle password visibility"
+												onClick ={handleClickShowVerPassword}
+												onMouseDown={handleMouseDownVerPassword}
+											>
+												{showVerPassword ? <Visibility/> : <VisibilityOff/>}
+											</IconButton>
+										</Tooltip>
 											
 									</InputAdornment>
 								)
@@ -743,7 +750,7 @@ export default function StudentProfile(props){
 												<div className='d-flex justify-content-start align-items-start' style={{height:'60%', width:'100%',overflowY:'auto',overflowX:'auto'}}>		
 													<div className="d-flex flex-column justify-content-start" style={{width:'100%', height:'100%',overflowY:'auto',overflowX:'auto'}}>
 														{activity?.map?.(object =>(
-															<div className='d-flex justify-content-between flex-row' style={{width:'100%',height:'20%'}}>
+															<div className='d-flex justify-content-between flex-row' style={{width:'100%',height:'25px'}}>
 																<div style={{width:'70%',height:'20%'}}>{object.message}</div>
 																<div style={{width:'20%',height:'20%'}}>{object.date}</div>
 															</div>

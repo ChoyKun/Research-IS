@@ -12,7 +12,7 @@ const studentSchema = new Schema({
 	birthdate:{type: Date},
 	sex: String,
 	course:String,
-	yearLevel:String,
+	yearLevel: Number,
 	section:String,
 	dateRegistered:{type:Date,default:Date.now},
 	img: String,
@@ -20,6 +20,7 @@ const studentSchema = new Schema({
 	approved: Array,
 	pending: Array,
 	activity: Array,
+	inbox: Array,
 	status: String
 
 })

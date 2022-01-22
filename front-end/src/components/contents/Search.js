@@ -24,6 +24,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemButton from '@mui/material/ListItemButton';
 import Popover from '@mui/material/Popover';
+import Tooltip from '@mui/material/Tooltip';
 
 
 
@@ -63,44 +64,50 @@ export default function SearchBar( props ){
 		      <AppBar position="static" style={{height:"40px",backgroundColor:'#70AD47'}}>
 		        <Toolbar style={{minHeight:"40px"}}>
 		          	<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-						<IconButton
+						<Tooltip title="Search" arrow>
+							<IconButton
+							size="large"
+							edge="start"
+							color="inherit"
+							aria-label="menu"
+							sx={{ mr: 2 }}
+							>
+				       	 		<SearchIcon style={{height: '30px',width:'30px'}} onClick={sendRequest}/>
+				       	 	</IconButton>
+						</Tooltip>
+						<Field style={{fontSize:'18px',height:'30px',width:'300px',borderRadius:'10px'}} className={props.className} reqOnChange={linkToButton} placeHolder={props.placeHolder}/>						
+		          	</Typography>
+
+		          	<Tooltip title="Filter" arrow>
+				        <IconButton
 						size="large"
 						edge="start"
 						color="inherit"
 						aria-label="menu"
 						sx={{ mr: 2 }}
 						>
-			       	 		<SearchIcon style={{height: '30px',width:'30px'}} onClick={sendRequest}/>
-			       	 	</IconButton>
-						<Field style={{fontSize:'18px',height:'30px',width:'300px',borderRadius:'10px'}} className={props.className} reqOnChange={linkToButton} placeHolder={props.placeHolder}/>						
-		          	</Typography>
+		           	 		<FilterAltIcon onClick={handleClick} style={{height: '30px',width:'30px'}} />
+		           	 		<Popover
+		           	 		id={id}
+		           	 		open={open}
+		           	 		anchorEl={anchorEl}
+		           	 		onClose={handleClose}
+		           	 		anchorOrigin={{
+		           	 			vertical: 'bottom',
+		           	 			horizontal:'right',
+		           	 		}}
+		           	 		transformOrigin={{
+		           	 			vertical:'top',
+		           	 			horizontal:'right',
+		           	 		}}
+		           	 		>
+				            	{props.list}
+		           	 		</Popover>
+		           	 	</IconButton>
+		          	</Tooltip>
 
-			        <IconButton
-					size="large"
-					edge="start"
-					color="inherit"
-					aria-label="menu"
-					sx={{ mr: 2 }}
-					>
-	           	 		<FilterAltIcon onClick={handleClick} style={{height: '30px',width:'30px'}} />
-	           	 		<Popover
-	           	 		id={id}
-	           	 		open={open}
-	           	 		anchorEl={anchorEl}
-	           	 		onClose={handleClose}
-	           	 		anchorOrigin={{
-	           	 			vertical: 'bottom',
-	           	 			horizontal:'right',
-	           	 		}}
-	           	 		transformOrigin={{
-	           	 			vertical:'top',
-	           	 			horizontal:'right',
-	           	 		}}
-	           	 		>
-			            	{props.list}
-	           	 		</Popover>
-	           	 	</IconButton>
 
+		          	<Tooltip title="Remove Filter" arrow>
 			        <IconButton
 					size="large"
 					edge="start"
@@ -110,6 +117,7 @@ export default function SearchBar( props ){
 					>
 	           	 		<FilterAltOffIcon onClick={removeFilter} style={{height: '30px',width:'30px'}} />
 	           	 	</IconButton>
+		          	</Tooltip>
 		        </Toolbar>
 		      </AppBar>
 		    </Box>

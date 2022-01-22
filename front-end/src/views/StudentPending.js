@@ -16,6 +16,7 @@ import PreviewIcon from '@mui/icons-material/Preview';
 import IconButton from '@mui/material/IconButton';
 import Drawer from '@mui/material/Drawer';
 import Divider from '@mui/material/Divider';
+import Tooltip from '@mui/material/Tooltip';
 
 
 
@@ -140,15 +141,17 @@ function Item(props){
 			<div className="col-3 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
 			<div className="col-2 text-center">{props.object.yearSubmitted}</div>			
 			<div className="d-flex justify-content-center align-items-center text-center">
-				<IconButton
-				size="large"
-				edge="end"
-				color="inherit"
-				aria-label="menu"
-				sx={{ mr: 2 }}
-				>
-           	 		<PreviewIcon style={{height: '25px',width:'25px'}} onClick={toggleDrawer(true)}/>
-           	 	</IconButton>
+				<Tooltip title='View Document' arrow>
+					<IconButton
+					size="large"
+					edge="end"
+					color="inherit"
+					aria-label="menu"
+					sx={{ color:'#385723',mr: 2 }}
+					>
+	           	 		<PreviewIcon style={{height: '25px',width:'25px'}} onClick={toggleDrawer(true)}/>
+	           	 	</IconButton>
+				</Tooltip>
            	 	<Drawer
 	            	anchor={'right'}
 	            	open={open}

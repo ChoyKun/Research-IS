@@ -25,7 +25,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
-
+import Tooltip from '@mui/material/Tooltip';
 
 
 
@@ -321,15 +321,17 @@ const Request = ( props ) => {
 			<div className="col-5 text-center"><p className="p-0 m-0"> { props.title } </p></div>
 			<div className="col-2 text-center"><p className="p-0 m-0"> { props.dateRequested } </p></div>
 			<div className="col-1 text-center">
-				<IconButton
-				size="large"
-				edge="end"
-				color={"inherit"}
-				aria-label="menu"
-				sx={{ mr: 2,color:green[500] }}
-				>
-           	 		<ThumbUpIcon style={{height: '25px',width:'25px'}} onClick={handleDialog}/>
-           	 	</IconButton>
+				<Tooltip title="Approve Request" arrow >
+					<IconButton
+					size="large"
+					edge="end"
+					color={"inherit"}
+					aria-label="menu"
+					sx={{ mr: 2,color:green[500] }}
+					>
+	           	 		<ThumbUpIcon style={{height: '25px',width:'25px'}} onClick={handleDialog}/>
+	           	 	</IconButton>
+				</Tooltip>
            	 	<Dialog
 					open={dialogOpen}
 			        onClose={handleDialogClose}
@@ -349,15 +351,17 @@ const Request = ( props ) => {
 				</Dialog>
 			</div>
 			<div className="col-1 text-center">
-				<IconButton
-				size="large"
-				edge="end"
-				color={"inherit"}
-				aria-label="menu"
-				sx={{ mr: 2,color:green[500] }}
-				>
-           	 		<ThumbDownIcon style={{height: '25px',width:'25px'}} onClick={handleDeclineDialog}/>
-           	 	</IconButton>
+				<Tooltip title='Decline Request' arrow>
+					<IconButton
+					size="large"
+					edge="end"
+					color={"inherit"}
+					aria-label="menu"
+					sx={{ mr: 2,color:green[500] }}
+					>
+	           	 		<ThumbDownIcon style={{height: '25px',width:'25px'}} onClick={handleDeclineDialog}/>
+	           	 	</IconButton>
+				</Tooltip>
            	 	<Dialog
 					open={declineDialogOpen}
 			        onClose={handleDeclineDialogClose}

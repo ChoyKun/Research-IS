@@ -48,6 +48,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
+import Tooltip from '@mui/material/Tooltip';
 
 export default function RListFilter(props){
 	const {username, studentNo} = useParams();
@@ -349,8 +350,9 @@ function Item(props){
 			<div className="col-4 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
 			<div className="col-2 text-center">{props.object.yearSubmitted}</div>
 			<div className="col-2 text-center">{props.object.dateApproved}</div>
-			<div className="col-1 text-center">	
-				<IconButton
+			<div className="col-1 text-center">
+				<Tooltip title="Remove Permission" arrow>
+					<IconButton
 					size="small"
 					edge="end"
 					color="inherit"
@@ -359,6 +361,7 @@ function Item(props){
 					>
 	           	 		<RemoveCircleIcon style={{height: '25px',width:'25px'}} onClick={handleDialog}/>
 	           	 	</IconButton>
+				</Tooltip>	
 				<Dialog
 					open={dialogOpen}
 			        onClose={handleDialogClose}

@@ -38,7 +38,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import IconButton from '@mui/material/IconButton';
 import WcIcon from '@mui/icons-material/Wc'
 import LockIcon from '@mui/icons-material/Lock';
-
+import Tooltip from '@mui/material/Tooltip';
 
 //styles
 import '../styles/button.css';
@@ -186,13 +186,15 @@ export default function StudentProfile(props){
 							InputProps={{
 								endAdornment:(
 									<InputAdornment position="end">
-										<IconButton
-											aria-label="toggle password visibility"
-											onClick ={handleClickShowCurrPassword}
-											onMouseDown={handleMouseDownCurrPassword}
-										>
-											{showCurrPassword ? <Visibility/> : <VisibilityOff/>}
-										</IconButton>
+										<Tooltip title='Show Password' arrow>
+											<IconButton
+												aria-label="toggle password visibility"
+												onClick ={handleClickShowCurrPassword}
+												onMouseDown={handleMouseDownCurrPassword}
+											>
+												{showCurrPassword ? <Visibility/> : <VisibilityOff/>}
+											</IconButton>
+										</Tooltip>
 											
 									</InputAdornment>
 								)
@@ -208,13 +210,15 @@ export default function StudentProfile(props){
 							InputProps={{
 								endAdornment:(
 									<InputAdornment position="end">
-										<IconButton
-											aria-label="toggle password visibility"
-											onClick ={handleClickShowNewPassword}
-											onMouseDown={handleMouseDownNewPassword}
-										>
-											{showNewPassword ? <Visibility/> : <VisibilityOff/>}
-										</IconButton>
+										<Tooltip title='Show Password' arrow>
+											<IconButton
+												aria-label="toggle password visibility"
+												onClick ={handleClickShowNewPassword}
+												onMouseDown={handleMouseDownNewPassword}
+											>
+												{showNewPassword ? <Visibility/> : <VisibilityOff/>}
+											</IconButton>
+										</Tooltip>
 											
 									</InputAdornment>
 								)
@@ -231,14 +235,16 @@ export default function StudentProfile(props){
 							InputProps={{
 								endAdornment:(
 									<InputAdornment position="end">
-										<IconButton
-											aria-label="toggle password visibility"
-											onClick ={handleClickShowVerPassword}
-											onMouseDown={handleMouseDownVerPassword}
-										>
-											{showVerPassword ? <Visibility/> : <VisibilityOff/>}
-										</IconButton>
-											
+										<Tooltip title='Show Password' arrow>
+											<IconButton
+												aria-label="toggle password visibility"
+												onClick ={handleClickShowVerPassword}
+												onMouseDown={handleMouseDownVerPassword}
+											>
+												{showVerPassword ? <Visibility/> : <VisibilityOff/>}
+											</IconButton>
+												
+										</Tooltip>
 									</InputAdornment>
 								)
 							}}

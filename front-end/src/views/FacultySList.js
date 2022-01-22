@@ -49,6 +49,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Popover from '@mui/material/Popover';
 import LockResetIcon from '@mui/icons-material/LockReset';
+import EditIcon from '@mui/icons-material/Edit';
+import Tooltip from '@mui/material/Tooltip';
 
 
 
@@ -65,6 +67,12 @@ export default function StudentRList(props){
 	const [search, setSearch]=useState('');
 	const [sendInactive, setSendInactive] = useState(false);
 	const [inacAccum, setInacAccum]= useState([])
+	const [sendYear, setSendYear] = useState(false);
+	const [yearAccum, setYearAccum]= useState([])
+	const [sendCourse, setSendCourse] = useState(false);
+	const [courseAccum, setCourseAccum]= useState([])
+	const [sendSection, setSendSection] = useState(false);
+	const [sectionAccum, setSectionAccum]= useState([])
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [alertMes, setAlertMes] = useState(null);
 	const [alertStatus, setAlertStatus] = useState(null);
@@ -74,6 +82,29 @@ export default function StudentRList(props){
 	const [drawerOpen, setDrawerOpen] = useState(false);
 	const [editDialog, setEditDialog] = useState(false);
 	const [editSnack, setEditSnack] = useState(false);
+	const [dialogYearOpen, setDialogYearOpen] = useState(false);
+	const [alertYearMes, setAlertYearMes] = useState(null);
+	const [alertYearStatus, setAlertYearStatus] = useState(null);
+	const [snackYearOpen, setSnackYearOpen] =useState(false);
+	const [dialogCourseOpen, setDialogCourseOpen] = useState(false);
+	const [alertCourseMes, setAlertCourseMes] = useState(null);
+	const [alertCourseStatus, setAlertCourseStatus] = useState(null);
+	const [snackCourseOpen, setSnackCourseOpen] =useState(false);
+	const [dialogSectionOpen, setDialogSectionOpen] = useState(false);
+	const [alertSectionMes, setAlertSectionMes] = useState(null);
+	const [alertSectionStatus, setAlertSectionStatus] = useState(null);
+	const [anchorEl, setAnchorEl] = useState(null)
+
+	const handlePop = (event)=>{
+		setAnchorEl(event.currentTarget);
+	}
+
+	const handlePopClose = () =>{
+		setAnchorEl(null)
+	}
+
+	const open = Boolean(anchorEl);
+	const id = open ? 'simple-popover' : undefined;
 
 	const toggleEditDialog = () =>{
 		setEditDialog(true)
@@ -96,13 +127,57 @@ export default function StudentRList(props){
 		setAlertMes(null);
 	}
 
+	const handleYearSnackClose = (evernt , reason) =>{
+		if(reason === 'clickaway') {
+			return;
+		}
+
+		setSnackYearOpen(false);
+		setAlertYearMes(null);
+	}
+
+	const handleCourseSnackClose = (evernt , reason) =>{
+		if(reason === 'clickaway') {
+			return;
+		}
+
+		setSnackCourseOpen(false);
+		setAlertCourseMes(null);
+	}
+
 	
 	const handleDialog = () =>{
 		setDialogOpen(true)
 	}
 
 	const handleDialogClose = () =>{
-		setDialogOpen(false)
+		setDialogYearOpen(false)
+	}
+
+
+
+	const handleYearDialog = () =>{
+		setDialogYearOpen(true)
+	}
+
+	const handleYearDialogClose = () =>{
+		setDialogYearOpen(false)
+	}
+
+	const handleSectionDialog = () =>{
+		setDialogSectionOpen(true)
+	}
+
+	const handleSectionDialogClose = () =>{
+		setDialogSectionOpen(false)
+	}
+
+	const handleCourseDialog = () =>{
+		setDialogCourseOpen(true)
+	}
+
+	const handleCourseDialogClose = () =>{
+		setDialogCourseOpen(false)
 	}
 
 	const handleEditDialogClose = () => {
@@ -181,15 +256,6 @@ export default function StudentRList(props){
 
 	function editReducer(state,action){
 		switch(action.type){
-			case '_password':
-				state._password=action.data;
-				return state;
-			case '_course':
-				state._course=action.data;
-				return state;
-			case '_yearLevel':
-				state._yearLevel=action.data;
-				return state;
 			case '_section':
 				state._section=action.data;
 				return state;
@@ -210,90 +276,82 @@ export default function StudentRList(props){
 
 
 	const studentEdit = ()=>(
-		<div className='d-flex flex-column justify-content-center align-items-center' style={{width:'900px', height:'100%',backgroundColor:"#E2F0D9"}}>
+		<div className='d-flex flex-column justify-content-center align-items-center' style={{width:'300px', height:'300px'}}>
 			<Snackbar anchorOrigin={{vertical:"top", horizontal:"center"}} open={editSnack} autoHideDuration={2000} onClose={handleEditSnackClose}>
 				<Alert variant='filled' severity={editAlertStatus == 403 ? "error" : "success"} sx={{width:'500px'}}>
 					{editAlertMes}
 				</Alert>				
 			</Snackbar>
-			<div className="d-flex justify-content-between align-items-center flex-column" style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey",overflowY:'auto',overflowX:'auto'}}>	
-				<p style={{fontSize:'36px'}}>Edit Profile Details</p>
-				<Divider style={{height:'2px', width:'100%', color:'black'}}/>
-				<div style={{height:'70%',width:'90%',color:'black'}} className='d-flex justify-content-around flex-column'>
-					<div style={{height:'100%',width:'100%'}} className='d-flex justify-content-around align-items-center flex-row'>
-						<div style={{height:'100%',width:'40%'}} className='d-flex justify-content-around flex-column'>
-							<div style={{height:'20%',width:'300px'}} className='d-flex justify-content-between align-items-center'>
-								<label style={{fontSize:'20px'}}>Student Number:</label>
-								<label style={{fontSize:'20px'}}>{selected?.data?.studentNo}</label>
-							</div>
-							<div style={{height:'20%',width:'300px'}} className='d-flex justify-content-between align-items-center'>
-								<label style={{fontSize:'20px'}}>First Name:</label>
-								<label style={{fontSize:'20px'}}>{selected?.data?.firstName}</label>
-							</div>
-							<div style={{height:'20%',width:'300px'}} className='d-flex justify-content-between align-items-center'>
-								<label style={{fontSize:'20px'}}>Middle Initial:</label>
-								<label style={{fontSize:'20px'}}>{selected?.data?.middleInitial}</label>
-							</div>
-							<div style={{height:'20%',width:'300px'}} className='d-flex justify-content-between align-items-center'>
-								<label style={{fontSize:'20px'}}>Last Name:</label>
-								<label style={{fontSize:'20px'}}>{selected?.data?.lastName}</label>
-							</div>
-							<div style={{height:'20%',width:'300px'}} className='d-flex justify-content-between align-items-center'>
-								<label style={{fontSize:'20px'}}>Extention Name:</label>
-								<label style={{fontSize:'20px'}}>{selected?.data?.extentionName}</label>
-							</div>			
+			<div className="d-flex justify-content-between align-items-center flex-column" style={{height:'100%', width:'100%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey",overflowY:'auto',overflowX:'auto'}}>	
+				<div  style={{width:'90%', height:'50px'}}className='d-flex flex-column justify-content-center align-items-start' >
+					<div  style={{height:'50px'}}className='d-flex flex-row justify-content-center align-items-center' >
+						<EditIcon sx={{color:green[500],height:'20px',width:'20px'}}/>
+						<div style={{height:'10px'}} className="d-flex justify-content-center align-items-center text-center">
+							<label style={{fontSize:'20px', textAlign:'center'}}>Edit Student Details</label>
 						</div>
-						<div style={{height:'100%',width:'40%'}} className='d-flex justify-content-around flex-column'>	
-							<div style={{height:'20%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
-								<Select style={{fontSize:'20px'}} fontSize="20px" Width='100%' width="150px"className='aRegCourse justify-content-between' label='Select Course:' options={['BSIT','BSCS']} selected={selected?.data?.course} reqOnChange={(e)=>{editDispatch({type:'_course',data: e.target.value})}}/>
-							</div>
-							<div style={{height:'20%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
-								<Select style={{fontSize:'20px'}} fontSize="20px" Width='100%' width="150px"className='aRegYear justify-content-between' label='Year Level' options={['1','2','3','4']} selected={selected?.data?.yearLevel} reqOnChange={(e)=>{editDispatch({type:'_yearLevel',data: e.target.value})}}/>
-							</div>
-							<div style={{height:'20%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
-								<label style={{fontSize:'20px'}}>Section:</label>
-								<Field style={{fontSize:'20px', width:'150px'}} className='fname' placeHolder={selected?.data?.section} reqOnChange={(e)=>{editDispatch({type:'_section',data: e.target.value})}}/>
-							</div>
-							<div style={{height:'20%',width:'300px'}} className='d-flex justify-content-between align-items-center'>
-								<label style={{fontSize:'20px'}}>Birthday:</label>
-								<label style={{fontSize:'20px'}}>{(() => {
-									const date = new Date(selected?.data?.birthdate);
-									return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
-								})()}</label>
-							</div>
-							<div style={{height:'20%',width:'300px'}} className='d-flex justify-content-between align-items-center'>
-								<label style={{fontSize:'20px'}}>Reg. Date:</label>
-								<label style={{fontSize:'20px'}}>{(() => {
-									const date = new Date(selected?.data?.dateRegistered);
-									return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
-								})()}</label>
-							</div>
-						</div>
-					</div>							
+					</div>					
 				</div>
-				<div style={{height:'10%',width:'100%'}} className='d-flex justify-content-end flex-row align-items-center'>
-					<div style={{height:'100%',width:'30%'}} className='d-flex justify-content-around'>
-						<Field style={{width:'200px',height:'30px'}} placeHolder='password' reqOnChange={(e)=>{editDispatch({type:'_password',data: e.target.value})}}/>
-					</div>
-					<div style={{height:'100%',width:'40%'}} className='d-flex justify-content-around '>
-						<Button style={{height:'30px',width:'150px'}} title='Save Changes' click={toggleEditDialog}/>
+				<Divider style={{height:'2px', width:'100%', color:'black'}}/>
+				<div style={{height:'90%',width:'90%',color:'black'}} className='d-flex justify-content-around align-items-center flex-column'>
+					<Button style={{height:'30px',width:'200px'}} click ={handleYearDialog} title='Advance Year Level'/>
+					<Dialog
+						open={dialogYearOpen}
+				        onClose={handleCourseDialogClose}
+				        aria-labelledby="alert-dialog-title"
+				        aria-describedby="alert-dialog-description"
+					>
+						<DialogTitle>
+							{"Advance Year Level"}
+						</DialogTitle>
+						<DialogContent>
+							Do you want to advance the year level of the selected accounts? Students currently in their 4th year will be deactivated, do you wish to proceed?
+						</DialogContent>
+						<DialogActions>
+							<Button title='Cancel' click={cancelYear}/>
+							<Button title='Yes' click={yearAdvance}/>
+						</DialogActions>
+					</Dialog>
+					<Button style={{height:'30px',width:'200px'}} click ={handleCourseDialog} title='Change Course'/>
+					<Dialog
+						open={dialogCourseOpen}
+				        onClose={handleCourseDialogClose}
+				        aria-labelledby="alert-dialog-title"
+				        aria-describedby="alert-dialog-description"
+					>
+						<DialogTitle>
+							{"Shift Courses"}
+						</DialogTitle>
+						<DialogContent>
+							Do you want to update the courses of the selected students?
+						</DialogContent>
+						<DialogActions>
+							<Button title='Cancel' click={cancelCourse}/>
+							<Button title='Yes' click={shiftCourse}/>
+						</DialogActions>
+					</Dialog>
+					<div style={{height:'40px',width:'50px', color:'black'}} className='d-flex justify-content-around align-items-center flex-column'>
+						<div style={{ height:'40px',width:'50px', color:'black'}} className='d-flex flex-row justify-content-center' >
+							<label>Section: </label>
+							<Field style={{ height:'25px',width:'50px', color:'black'}} reqOnChange={e => editDispatch({type: '_section', data: e.target.value})}/>
+						</div>
+						<Button style={{height:'30px',width:'200px'}} click ={handleSectionDialog} title='Change Section'/>
 						<Dialog
-							open={editDialog}
-					        onClose={handleEditDialogClose}
-					        aria-labelledby="alert-dialog-title"
-					        aria-describedby="alert-dialog-description"
-						>
-							<DialogTitle>
-								{"Edit Student Details"}
-							</DialogTitle>
-							<DialogContent>
-								Do you want to update student details?
-							</DialogContent>
-							<DialogActions>
-								<Button title='Cancel' click={cancelEdit}/>
-								<Button title='Yes' click={editStudentHandler}/>
-							</DialogActions>
-						</Dialog>
+						open={dialogSectionOpen}
+				        onClose={handleSectionDialogClose}
+				        aria-labelledby="alert-dialog-title"
+				        aria-describedby="alert-dialog-description"
+					>
+						<DialogTitle>
+							{"Change Section"}
+						</DialogTitle>
+						<DialogContent>
+							Do you want to change the section of the selected students?
+						</DialogContent>
+						<DialogActions>
+							<Button title='Cancel' click={cancelSection}/>
+							<Button title='Yes' click={changeSection}/>
+						</DialogActions>
+					</Dialog>		
 					</div>
 				</div>
 			</div>
@@ -301,7 +359,7 @@ export default function StudentRList(props){
 	)
 
 	const rFilter = () =>(
-		<div className="d-flex justify-content-center align-items-center" style={{height:'400px',width:'300px',border:'1px solid black',backgroundColor:'white',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}}>
+		<div className="d-flex flex-column justify-content-center align-items-center" style={{height:'400px',width:'300px',border:'1px solid black',backgroundColor:'white',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}}>
 			<h3 style={{width:'95%',color:'black'}}>Filters:</h3>
 			<Divider style={{height:'2px', width:'100%', color:'black'}}/>
 			<div className='d-flex flex-row' style={{width:'100%',height:'70%'}}>
@@ -427,6 +485,42 @@ export default function StudentRList(props){
 
 	}, [sendInactive])
 
+	useEffect(()=>{
+		if( sendYear ){
+			studentData.forEach((elem) => {
+				if(elem.status === 'inactive') {
+					console.log('here')
+					setYearAccum((yearAccum) => [...yearAccum, elem])
+				}
+			});	
+		}
+
+	}, [sendYear])
+
+	useEffect(()=>{
+		if( sendCourse ){
+			studentData.forEach((elem) => {
+				if(elem.status === 'inactive') {
+					console.log('here')
+					setCourseAccum((courseAccum) => [...courseAccum, elem])
+				}
+			});	
+		}
+
+	}, [sendCourse])
+
+	useEffect(()=>{
+		if( sendSection ){
+			studentData.forEach((elem) => {
+				if(elem.status === 'inactive') {
+					console.log('here')
+					setSectionAccum((sectionAccum) => [...sectionAccum, elem])
+				}
+			});	
+		}
+
+	}, [sendSection])
+
 	useEffect(() => {
 		if( inacAccum.length ){
 			axios.put('http://localhost:7000/student/slist/update', inacAccum)
@@ -440,18 +534,98 @@ export default function StudentRList(props){
 		}
 	}, [inacAccum])
 
+	useEffect(() => {
+		if( yearAccum.length ){
+			axios.put('http://localhost:7000/student/slist/update/yearLevel', yearAccum)
+			.then( res => {
+				setEditAlertMes(res.data.message);
+				setEditAlertStatus('good');
+				setSendYear( false );
+			})
+			.catch((err)=>{
+				console.log(err)
+			});
+		}
+	}, [yearAccum])
+
+	useEffect(() => {
+		if( courseAccum.length ){
+			axios.put('http://localhost:7000/student/slist/update/course', courseAccum)
+			.then( res => {
+				setEditAlertMes(res.data.message);
+				setEditAlertStatus('good');
+				setSendYear( false );
+			})
+			.catch((err)=>{
+				console.log(err)
+			});
+		}
+	}, [courseAccum])
+
+	useEffect(() => {
+		if( sectionAccum.length ){
+			axios.put(`http://localhost:7000/student/slist/update/section/${data._section}`, sectionAccum)
+			.then( res => {
+				setEditAlertMes(res.data.message);
+				setEditAlertStatus('good');
+				setSendYear( false );
+			})
+			.catch((err)=>{
+				console.log(err)
+			});
+		}
+	}, [sectionAccum])
+
 	const sender = () =>{
 		setDialogOpen(false);
 		setSnackOpen(true);
 		setSendInactive(true);
 	}
 
+	const yearAdvance = () =>{
+		setDialogYearOpen(false)
+		setEditSnack(true);
+		setSendYear(true);
+	}
+
+	const shiftCourse = () =>{
+		setDialogCourseOpen(false)
+		setEditSnack(true);
+		setSendCourse(true);
+	}
+
+	const changeSection = () =>{
+		setDialogSectionOpen(false)
+		setEditSnack(true);
+		setSendSection(true);
+	}
 
 	const cancelOp =() =>{
 		setDialogOpen(false);
 		setSnackOpen(true);
 		setAlertMes("Operation canceled")
 		setAlertStatus(403)
+	}
+
+	const cancelYear =() =>{
+		setDialogYearOpen(false)
+		setEditSnack(true);
+		setEditAlertMes("Operation canceled")
+		setEditAlertStatus(403)
+	}
+
+	const cancelSection =() =>{
+		setDialogSectionOpen(false)
+		setEditSnack(true);
+		setEditAlertMes("Operation canceled")
+		setEditAlertStatus(403)
+	}
+
+	const cancelCourse =() =>{
+		setDialogCourseOpen(false)
+		setEditSnack(true);
+		setEditAlertMes("Operation canceled")
+		setEditAlertStatus(403)
 	}
 
 	console.log(filter.sFilter)
@@ -508,14 +682,24 @@ export default function StudentRList(props){
 											<Button title='Yes' click={sender}/>
 										</DialogActions>
 									</Dialog>
-									<Button style={{height: '30px',width:'100px'}} click={toggleDrawer(true)}title='Edit'/>
-									<Drawer
-										anchor={'right'}
-										open={drawerOpen}
-										onClose={toggleDrawer(false)}
-									>
-										{studentEdit()}
-									</Drawer>
+									<Button style={{height: '30px',width:'100px'}} click={handlePop}title='Edit'/>
+									<Popover
+				           	 		id={id}
+				           	 		open={open}
+				           	 		anchorEl={anchorEl}
+				           	 		onClose={handlePopClose}
+				           	 		anchorOrigin={{
+				           	 			vertical: 'bottom',
+				           	 			horizontal:'right',
+				           	 		}}
+				           	 		transformOrigin={{
+				           	 			vertical:'top',
+				           	 			horizontal:'right',
+				           	 		}}
+				           	 		>
+				           	 			 <Typography sx={{ p: 2 }}>{studentEdit()}</Typography>
+						            	
+				           	 		</Popover>
 								</div>							
 							</div>
 							<div className="d-flex flex-column" style={{height:'80%', width:'95%',border:'1px solid black'}}>
@@ -638,7 +822,8 @@ function Item(props){
 									})()}
 			</div>
 			<div className="col-1 d-flex justify-content-center align-items-center text-center">
-				<IconButton
+				<Tooltip title='Reset Password' arrow placement='right-start'>
+					<IconButton
 					size="large"
 					edge="end"
 					color="inherit"
@@ -664,6 +849,7 @@ function Item(props){
 							</DialogActions>
 						</Dialog>
 	           	 	</IconButton>
+				</Tooltip>
 			</div>
 		</div>
 	);

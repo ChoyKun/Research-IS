@@ -41,7 +41,7 @@ import PreviewIcon from '@mui/icons-material/Preview';
 import SendIcon from '@mui/icons-material/Send';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
-
+import Tooltip from '@mui/material/Tooltip';
 
 
 
@@ -459,15 +459,17 @@ function Item(props){
 				<div className="col-4 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
 				<div className="col-1 text-center">{props.object.yearSubmitted}</div>			
 				<div className="col-1 d-flex justify-content-center align-items-center text-center">
-					<IconButton
-					size="large"
-					edge="end"
-					color="inherit"
-					aria-label="menu"
-					sx={{ color:'#385723',mr: 2 }}
-					>
-	           	 		<PreviewIcon style={{height: '25px',width:'25px'}} onClick={toggleDrawer(true)}/>
-	           	 	</IconButton>
+					<Tooltip title="View Document" arrow>
+						<IconButton
+						size="large"
+						edge="end"
+						color="inherit"
+						aria-label="menu"
+						sx={{  color:'#385723',mr: 2 }}
+						>
+		           	 		<PreviewIcon style={{height: '25px',width:'25px'}} onClick={toggleDrawer(true)}/>
+		           	 	</IconButton>
+					</Tooltip>
 	           	 	<Drawer
 		            	anchor={'right'}
 		            	open={open}
@@ -477,7 +479,8 @@ function Item(props){
 	            	</Drawer>
 				</div>
 				<div className="col-1 d-flex justify-content-center align-items-center text-center">
-					<IconButton
+					<Tooltip title='Send Request' arrow>
+						<IconButton
 						size="large"
 						disabled={disabled}
 						edge="end"
@@ -487,7 +490,8 @@ function Item(props){
 						>
 		           	 		<SendIcon style={{height: '25px',width:'25px'}} onClick={requestForView}/>
 		           	 	</IconButton>
-					{/*<Button style={{width:'90px'}} click={requestForView} disabled={disabled} className={`col-1 text-center`} title='Request'/>*/}
+						{/*<Button style={{width:'90px'}} click={requestForView} disabled={disabled} className={`col-1 text-center`} title='Request'/>*/}
+					</Tooltip>
 				</div>
 			</div>
 		</div>
