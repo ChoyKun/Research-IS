@@ -1,5 +1,5 @@
 import React,{useState, useEffect, Suspense} from 'react';
-import { Link, useParams} from 'react-router-dom';
+import { Link, useParams, Redirect} from 'react-router-dom';
 import axios from '../modules/config.js';
 
 
@@ -9,6 +9,7 @@ import '../styles/button.css'
 import Button from '../components/buttons/button';
 import Field from '../components/fields/txtfield';
 import SearcBar from '../components/contents/SearchBar';
+import Checkbox from '../components/fields/checkbox';
 
 //mui components
 //mui components
@@ -19,6 +20,13 @@ import IconButton from '@mui/material/IconButton';
 import Drawer from '@mui/material/Drawer';
 import Divider from '@mui/material/Divider';
 import Tooltip from '@mui/material/Tooltip';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 export default function AdminRequest( props ){
 	const {username} = useParams();
@@ -82,14 +90,67 @@ export default function AdminRequest( props ){
 
 function Item(props){
 	const [open, setOpen] = useState(false);
+	const [dialogOpen, setDialogOpen] = useState(false);
+	const [redirect, setRedirect] = useState( null );
+	const [snackOpen, setSnackOpen] =useState(false);
+	const [alertMes, setAlertMes] = useState(null);
+	const [alertStatus, setAlertStatus] = useState(null);
+	var agree;
+
+	const cancelOp =() =>{
+		setDialogOpen(false);
+		setSnackOpen(true);
+		setAlertMes("Operation canceled")
+		setAlertStatus(403)
+	}
+
+	const handleDialog = () =>{
+		setDialogOpen(true)
+	}
+
+	const handleDialogClose = () =>{
+		setDialogOpen(false)
+	}
 
 	const toggleDrawer = (open) => (event) => {
 		setOpen( open );
 	}
 
+	const handleSnackClose = (evernt , reason) =>{
+		if(reason === 'clickaway') {
+			return;
+		}
+
+		setSnackOpen(false);
+		setAlertMes(null);
+	}
+
+	const handleAgree = (e) =>{
+		agree = e.target.checked ? 'yes' : 'no'
+	}
+
+	const Agree = () =>{
+		if(agree == 'yes'){
+			setRedirect( <Redirect to={`/research-full/${props.object._id}`}/> );
+		}
+		else{
+			setDialogOpen(false);
+			setSnackOpen(true);
+			setAlertMes("You must read the strict reminder check the checkbox to proceed")
+			setAlertStatus(403)
+		}
+	}
+
+
+
 	const list = ()=>(
 		<div className="d-flex justify-content-center align-items-center flex-column" style={{height:'100%',width:'500px',backgroundColor:"#E2F0D9"}}>
 			<div className="d-flex justify-content-start align-items-start flex-column" style={{height:'95%',width:'90%',border:'1px solid black',backgroundColor:'white',borderRadius:'10px'}}>
+				<Snackbar anchorOrigin={{vertical:"top", horizontal:"center"}} open={snackOpen} autoHideDuration={2000} onClose={handleSnackClose}>
+					<Alert variant='filled' severity={alertStatus == 403 ? "error" : "success"} sx={{width:'500px'}}>
+						{alertMes}
+					</Alert>				
+				</Snackbar>
 				<div className="d-flex justify-content-start align-items-center flex-column" style={{height:'100%',width:'100%'}}>
 					<div className="d-flex justify-content-start align-items-end" style={{height:'10%',width:'90%'}}>
 						<p style={{fontSize:'30px',textAlign:'center',height:'24px'}}>{props.object.title}</p>
@@ -126,9 +187,28 @@ function Item(props){
 						</div>
 					</div>
 					<div className="d-flex flex-row-reverse justify-content-start" style={{height:'10%',width:'90%'}}>
-						<Link to={`/research-full/${props.object._id}`}><Button title="View Document" style={{height:'40px'}}/></Link>
+						<Button title="View Document" click={handleDialog} style={{height:'40px'}}/>
+						<Dialog
+							open={dialogOpen}
+					        onClose={handleDialogClose}
+					        aria-labelledby="alert-dialog-title"
+					        aria-describedby="alert-dialog-description"
+						>
+							<DialogTitle>
+								{"Strict Reminder"}
+							</DialogTitle>
+							<DialogContent>
+								This document is owned by the instituion and the author of the study. You are only permitted to read/view this document for research purposes. It is illegal and punishable under the law to copy anything from this document. Illegal distribution or copying of the document outside the institution may result to expulsion. Do you understand?
+								<Checkbox cLabel="Yes, I understand" reqOnChange={handleAgree}/> 
+							</DialogContent>
+							<DialogActions>
+								<Button title='Cancel' click={cancelOp}/>
+								<Button title='Yes' click={Agree}/>
+							</DialogActions>
+						</Dialog>
 					</div>
 				</div>
+				{redirect}
 			</div>
 		</div>
 	)

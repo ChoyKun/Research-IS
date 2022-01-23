@@ -151,7 +151,7 @@ export default function StudentRList(props){
 	}
 
 	const handleDialogClose = () =>{
-		setDialogYearOpen(false)
+		setDialogOpen(false)
 	}
 
 

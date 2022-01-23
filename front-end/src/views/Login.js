@@ -25,7 +25,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-
+import Tooltip from '@mui/material/Tooltip';
 
 
 
@@ -150,14 +150,15 @@ export default function Login(props){
 								InputProps={{
 									endAdornment:(
 										<InputAdornment position="end">
-											<IconButton
-												aria-label="toggle password visibility"
-												onClick ={handleClickShowPassword}
-												onMouseDown={handleMouseDownPassword}
-											>
-												{showPassword ? <Visibility/> : <VisibilityOff/>}
-											</IconButton>
-												
+											<Tooltip title='Show Password'>
+												<IconButton
+													aria-label="toggle password visibility"
+													onClick ={handleClickShowPassword}
+													onMouseDown={handleMouseDownPassword}
+												>
+													{showPassword ? <Visibility/> : <VisibilityOff/>}
+												</IconButton>
+											</Tooltip>												
 										</InputAdornment>
 									)
 								}}
