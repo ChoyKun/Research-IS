@@ -407,7 +407,6 @@ export default function StudentRList(props){
 			axios.get('http://localhost:7000/student/slist')
 			.then((res)=>{
 				res.data.forEach( elem => {
-					console.log( elem.status );
 					if( elem.status === 'active' ){
 						setStudentData((studentData) => [...studentData, elem]);
 					}
@@ -586,6 +585,7 @@ export default function StudentRList(props){
 		setDialogYearOpen(false)
 		setEditSnack(true);
 		setSendYear(true);
+		console.log([...yearAccum])
 	}
 
 	const shiftCourse = () =>{
@@ -627,8 +627,6 @@ export default function StudentRList(props){
 		setEditAlertMes("Operation canceled")
 		setEditAlertStatus(403)
 	}
-
-	console.log(filter.sFilter)
 
 	const editStudentHandler=()=>{
 		setEditDialog(false);
@@ -703,7 +701,7 @@ export default function StudentRList(props){
 								</div>							
 							</div>
 							<div className="d-flex flex-column" style={{height:'80%', width:'95%',border:'1px solid black'}}>
-								<RListHeader/>
+								<RListHeader studentData={studentData}/>
 								<div className="d-flex flex-column" style={{height:'100%', width:'100%',backgroundColor:'#70AD47',overflowY:'overlay',overflowX:'overlay'}}>
 									{filteredData}						
 								</div>					
@@ -770,7 +768,7 @@ function Item(props){
 
 	const handleOnChange = (e) => {
 		props.object.status = e.target.checked ? 'inactive' : 'active';
-
+		console.log(e.target.checked)
 	}
 
 	
@@ -800,13 +798,13 @@ function Item(props){
 
 	
 	return(
-		<div onClick={handleClick} ref={item} style={{height:'30px',width:'100%',border:'1px solid black',borderRadius:'10px'}} className="d-flex notSelected flex-row justify-content-around">
+		<div style={{height:'30px',width:'100%',border:'1px solid black',borderRadius:'10px'}} className="d-flex notSelected flex-row justify-content-around">
 			<Snackbar anchorOrigin={{vertical:"top", horizontal:"center"}} open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose}>
 				<Alert variant='filled' severity={alertStatus == 403 ? "error" : "success"} sx={{width:'500px'}}>
 					{alertMes}
 				</Alert>				
 			</Snackbar>
-			<div className="col-1 text-center"><Checkbox reqOnChange={handleOnChange}/></div>
+			<div className="col-1 text-center"><Checkbox reqOnChange={handleOnChange} name='chk' /></div>
 			<div className="col-1 text-center">{props.object.studentNo}</div>
 			<div className="col-3 text-center">{`${props.object.lastName}, ${props.object.firstName} ${props.object.middleInitial} ${props.extentionName ?? ''}`}</div>
 			<div className="col-1 text-center">{props.object.sex}</div>
@@ -856,9 +854,41 @@ function Item(props){
 }
 
 function RListHeader(props){
+
+	const handleSelectAll = (e) =>{
+		var elem = document.getElementsByName('chk')
+		var selectAll = document.getElementById('selectAll')
+
+		for(var i=0;i<elem.length;i++){
+			if(selectAll.checked == true){
+				elem[i].checked = true;
+			}
+			else{
+				elem[i].checked = false;
+			}
+			console.log(elem[i].checked)			
+		}
+
+		props.studentData?.map?.(object =>{
+			for(var i=0;i<elem.length;i++){
+				if(elem[i].checked == true){
+					object.status = 'inactive';
+				}
+				else{
+					object.status = 'active';
+				}
+				console.log(object.status)					
+			}
+			
+		})
+		
+	}
+
 	return(
 		<div style={{height:'30px',width:'100%',border:'1px solid black',color:"white", backgroundColor:'#385723'}} className='d-flex flex-row justify-content-around'>
-			<div className="col-1 text-center"></div>
+			<div className="col-1 text-center">
+				<Checkbox cLabel="Select All" id='selectAll' onClick={handleSelectAll}/>
+			</div>
 			<div className='col-1 text-center'>
 				StudentNo
 			</div>
@@ -884,6 +914,8 @@ function RListHeader(props){
 		</div>
 	);
 }
+
+
 
 const setColorToSelected = (item, reverse = false) => {
 	console.log( item );

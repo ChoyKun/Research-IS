@@ -403,7 +403,7 @@ function Item(props){
 
 	
 	return(
-		<div onClick={handleClick} ref={item} style={{height:'30px',width:'100%',border:'1px solid black',borderRadius:'10px',backgroundColor: '#E2F0D9'}} className="d-flex bg-light flex-row justify-content-around">
+		<div style={{height:'30px',width:'100%',border:'1px solid black',borderRadius:'10px',backgroundColor: '#E2F0D9'}} className="d-flex bg-light flex-row justify-content-around">
 			<div className="col-1 text-center">{props.object.studentNo}</div>
 			<div className="col-3 text-center">{`${props.object.lastName}, ${props.object.firstName} ${props.object.middleInitial} ${props.extentionName ?? ''}`}</div>
 			<div className="col-1 text-center">{props.object.sex}</div>
