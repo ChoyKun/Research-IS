@@ -339,8 +339,8 @@ export default function StudentRList(props){
 								</div>						
 							</div>
 							<div className="d-flex flex-column" style={{height:'80%', width:'95%',border:'1px solid black'}}>
-								<RListHeader/>
-								<div className="d-flex flex-column" style={{height:'100%', width:'100%',backgroundColor:'#70AD47',overflowY:'overlay',overflowX:'overlay'}}>
+								<RListHeader researchData={researchData}/>
+								<div className="d-flex flex-column" style={{height:'100%', width:'100%',backgroundColor:'white',overflowY:'overlay',overflowX:'overlay'}}>
 									{filteredData}						
 								</div>					
 							</div>
@@ -554,7 +554,7 @@ function Item(props){
 					{alertMes}
 				</Alert>				
 			</Snackbar>
-			<div className="col-1 text-center"><Checkbox reqOnChange={handleOnChange}/></div>
+			<div className="col-1 text-center"><Checkbox reqOnChange={handleOnChange} name='chk'/></div>
 			<div className="col-4 text-center">{props.object.title}</div>
 			<div className="col-4 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
 			<div className="col-1 text-center">{props.object.yearSubmitted}</div>			
@@ -584,11 +584,41 @@ function Item(props){
 }
 
 function RListHeader(props){
+
+	const handleSelectAll = (e) =>{
+		var elem = document.getElementsByName('chk')
+		var selectAll = document.getElementById('selectAll')
+
+		for(var i=0;i<elem.length;i++){
+			if(selectAll.checked == true){
+				elem[i].checked = true;
+			}
+			else{
+				elem[i].checked = false;
+			}
+			console.log(elem[i].checked)			
+		}
+
+		props.researchData?.map?.(object =>{
+			for(var i=0;i<elem.length;i++){
+				if(elem[i].checked == true){
+					object.status = 'archive';
+				}
+				else{
+					object.status = 'public';
+				}
+				console.log(object.status)					
+			}
+			
+		})
+		
+	}
+
 	return(
 		<div style={{height:'30px',width:'100%',border:'1px solid black',color:"white", backgroundColor:'#385723'}} className='d-flex flex-row justify-content-start'>
 			<div style={{height:'100%',width:'100%'}} className='d-flex flex-row justify-content-around'>
 				<div className="col-1 text-center">
-					
+					<Checkbox cLabel="Select All" id='selectAll' onClick={handleSelectAll}/>
 				</div>
 				<div className='col-4 text-center'>
 					Title

@@ -4,7 +4,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 import "../styles/button.css";
-
+import '../styles/txt.css';
 
 //icons
 import scslogo from "../images/scs-final.png";
@@ -376,7 +376,7 @@ export default function StudentRList(props){
 							</div>
 							<div className="d-flex flex-column" style={{height:'80%', width:'95%',border:'1px solid black'}}>
 								<RListHeader/>
-								<div className="d-flex flex-column" style={{height:'100%', width:'100%',backgroundColor:'#70AD47',overflowY:'overlay',overflowX:'overlay'}}>
+								<div className="d-flex flex-column" style={{height:'100%', width:'100%',backgroundColor:'white',overflowY:'overlay',overflowX:'overlay'}}>
 									{filteredData}						
 								</div>					
 							</div>
@@ -428,7 +428,7 @@ function Item(props){
 
 	
 	return(
-		<div onClick={handleClick} ref={item} style={{height:'30px',width:'100%',border:'1px solid black',borderRadius:'10px'}} className="d-flex bg-light flex-row justify-content-around">	
+		<div onClick={handleClick} ref={item} style={{height:'30px',width:'100%',border:'1px solid black',borderRadius:'10px'}} className="d-flex notSelected flex-row justify-content-around">	
 			<div className="col-1 text-center">{props.object.username}</div>
 			<div className="col-1 text-center">{props.object.password}</div>
 			<div className="col-1 text-center">{props.object.firstName}</div>
@@ -497,10 +497,10 @@ const setColorToSelected = (item, reverse = false) => {
 
 	if( !reverse ){
 		console.log( item.classList );
-		list.replace('bg-light', 'bg-success');
+		list.replace('notSelected', 'selected');
 	}
 	else{
-		list.replace('bg-success', 'bg-light');
+		list.replace('selected', 'notSelected');
 	}
 	
 

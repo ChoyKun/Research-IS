@@ -145,7 +145,7 @@ export default function AdminRequest( props ){
 						<Divider style={{height:'2px', width:'100%', color:'black'}}/>
 						<div style={{height:'80%', width:'95%', backgroundColor:'#70AD47', border:'1px solid black', overflowY: 'auto'}} className='d-flex flex-column justify-content-start align-items-center'>
 							<Header/>
-							<div className="d-flex flex-column" style={{height:'100%', width:'100%',backgroundColor:'#70AD47',overflowY:'overlay',overflowX:'overlay'}}>									
+							<div className="d-flex flex-column" style={{height:'100%', width:'100%',backgroundColor:'white',overflowY:'overlay',overflowX:'overlay'}}>									
 								{
 									requests?.map?.( req => <Request setRequests={setRequests} key={req.id} {...req}/>)
 								}
@@ -173,9 +173,9 @@ const Header = ( props ) => {
 			className="d-flex flex-row justify-content-around align-items-center"
 		>
 			<div className="col-1 text-center"><p className="p-0 m-0"> Student No. </p></div>
-			<div className="col-2 text-center"><p className="p-0 m-0"> Student Name </p></div>
+			<div className="col-3 text-center"><p className="p-0 m-0"> Student Name </p></div>
 			<div className="col-5 text-center"><p className="p-0 m-0"> Title </p></div>
-			<div className="col-2 text-center"><p className="p-0 m-0"> Date Requested </p></div>
+			<div className="col-1 text-center"><p className="p-0 m-0"> Date </p></div>
 			<div className="col-1 text-center">Approve</div>
 			<div className="col-1 text-center">Decline</div>
 		</div>
@@ -317,9 +317,9 @@ const Request = ( props ) => {
 				</Alert>				
 			</Snackbar>
 			<div className="col-1 text-center"><p className="p-0 m-0"> { props.studentID } </p></div>
-			<div className="col-2 text-center"><p className="p-0 m-0"> { props.studentName } </p></div>
+			<div className="col-3 text-center"><p className="p-0 m-0"> { props.studentName } </p></div>
 			<div className="col-5 text-center"><p className="p-0 m-0"> { props.title } </p></div>
-			<div className="col-2 text-center"><p className="p-0 m-0"> { props.dateRequested } </p></div>
+			<div className="col-1 text-center"><p className="p-0 m-0"> { props.dateRequested } </p></div>
 			<div className="col-1 text-center">
 				<Tooltip title="Approve Request" arrow >
 					<IconButton

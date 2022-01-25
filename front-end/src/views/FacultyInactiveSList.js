@@ -341,8 +341,8 @@ export default function StudentRList(props){
 								</div>							
 							</div>
 							<div className="d-flex flex-column" style={{height:'80%', width:'95%',border:'1px solid black'}}>
-								<RListHeader/>
-								<div className="d-flex flex-column" style={{height:'100%', width:'100%',backgroundColor:'#70AD47',overflowY:'overlay',overflowX:'overlay'}}>
+								<RListHeader studentData={studentData}/>
+								<div className="d-flex flex-column" style={{height:'100%', width:'100%',backgroundColor:'white',overflowY:'overlay',overflowX:'overlay'}}>
 									{filteredData}						
 								</div>					
 							</div>
@@ -393,9 +393,9 @@ function Item(props){
 
 	
 	return(
-		<div onClick={handleClick} ref={item} style={{height:'30px',width:'100%',border:'1px solid black',borderRadius:'10px'}} className="d-flex bg-light flex-row justify-content-around">
+		<div style={{height:'30px',width:'100%',border:'1px solid black',borderRadius:'10px'}} className="d-flex bg-light flex-row justify-content-around">
 			
-			<div className="col-1 text-center"><Checkbox reqOnChange={handleOnChange}/></div>
+			<div className="col-1 text-center"><Checkbox reqOnChange={handleOnChange} name='chk'/></div>
 			<div className="col-1 text-center">{props.object.studentNo}</div>
 			<div className="col-3 text-center">{`${props.object.lastName}, ${props.object.firstName} ${props.object.middleInitial} ${props.extentionName ?? ''}`}</div>
 			<div className="col-1 text-center">{props.object.sex}</div>
@@ -416,9 +416,40 @@ function Item(props){
 }
 
 function RListHeader(props){
+	const handleSelectAll = (e) =>{
+		var elem = document.getElementsByName('chk')
+		var selectAll = document.getElementById('selectAll')
+
+		for(var i=0;i<elem.length;i++){
+			if(selectAll.checked == true){
+				elem[i].checked = true;
+			}
+			else{
+				elem[i].checked = false;
+			}
+			console.log(elem[i].checked)			
+		}
+
+		props.studentData?.map?.(object =>{
+			for(var i=0;i<elem.length;i++){
+				if(elem[i].checked == true){
+					object.status = 'active';
+				}
+				else{
+					object.status = 'inactive';
+				}
+				console.log(object.status)					
+			}
+			
+		})
+		
+	}
+
 	return(
 		<div style={{height:'30px',width:'100%',border:'1px solid black',color:"white", backgroundColor:'#385723'}} className='d-flex flex-row justify-content-around'>
-			<div className="col-1 text-center"></div>
+			<div className="col-1 text-center">
+				<Checkbox cLabel="Select All" id='selectAll' onClick={handleSelectAll}/>
+			</div>
 			<div className='col-1 text-center'>
 				StudentNo
 			</div>

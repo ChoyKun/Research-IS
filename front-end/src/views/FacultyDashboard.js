@@ -184,7 +184,7 @@ export default function StudentDashboard(props){
 									</div>
 									<Divider style={{height:'2px', width:'100%', color:'black'}}/>
 									<div className='d-flex flex-column justify-content-center align-items-center' style={{width:'100%', height:'80%'}}>
-										<div className='d-flex flex-column justify-content-start align-items-center' style={{width:'95%', height:'90%',border:'1px solid black',backgroundColor:'#70AD47', borderRadius:'10px',overflowY:'auto',overflowX:'auto'}}>
+										<div className='d-flex flex-column justify-content-start align-items-center' style={{width:'95%', height:'90%',border:'1px solid black',backgroundColor:'white', borderRadius:'10px',overflowY:'auto',overflowX:'auto'}}>
 											<div className="d-flex flex-row justify-content-around align-items-center" style={{height:'25px',width:'100%',border:'1px solid black', backgroundColor:'#385723',color:'white'}}>
 												<div className='col-2 text-left'>First Name</div>
 												<div className='col-1 text-left'>M.I</div>
