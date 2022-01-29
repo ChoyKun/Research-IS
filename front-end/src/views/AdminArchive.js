@@ -303,9 +303,9 @@ export default function StudentRList(props){
 		<>
 			<Search setSearch={setSearch} list={rFilter()} placeHolder='Enter Research Title' />			
 			<div style={{width: '100%', height: '90%'}} className='d-flex justify-content-center align-items-center'>
-				<div className="d-flex justify-content-center align-items-center" style={{height:'90%', width:'95%', backgroundColor:'white', border:'1px solid black', color:'black',overflowY:'auto',overflowX:'auto'}}>
+				<div className="d-flex justify-content-center align-items-center" style={{height:'90%', width:'95%', backgroundColor:'white', color:'black',overflowY:'auto',overflowX:'auto'}}>
 					<div className="d-flex flex-column justify-content-center align-items-center" style={{height:'98%', width:'97%'}}>
-						<div className="d-flex justify-content-center align-items-center flex-column" style={{height:'100%', width:'100%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}}>
+						<div className="d-flex justify-content-center align-items-center flex-column" style={{height:'100%', width:'100%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"5px 5px 5px 5px grey"}}>
 							<div className="d-flex flex-row justify-content-between align-items-center" style={{height:'15%', width:'95%'}}>
 								<Snackbar anchorOrigin={{vertical:"top", horizontal:"center"}} open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose}>
 									<Alert variant='filled' severity={alertStatus == 403 ? "error" : "success"} sx={{width:'500px'}}>
@@ -617,7 +617,7 @@ function RListHeader(props){
 		<div style={{height:'30px',width:'100%',border:'1px solid black',color:"white", backgroundColor:'#385723'}} className='d-flex flex-row justify-content-start'>
 			<div style={{height:'100%',width:'100%'}} className='d-flex flex-row justify-content-around'>
 				<div className="col-1 text-center">
-					<Checkbox reqOnChange={handleSelectAll} id='selectAll'/>
+					<Checkbox reqOnChange={handleSelectAll} cLabel='Select All' id='selectAll'/>
 				</div>
 				<div className='col-4 text-center'>
 					Title

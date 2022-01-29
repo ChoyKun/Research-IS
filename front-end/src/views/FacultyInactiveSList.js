@@ -311,9 +311,9 @@ export default function StudentRList(props){
 						{alertMes}
 					</Alert>				
 				</Snackbar>
-				<div className="d-flex justify-content-center align-items-center" style={{height:'90%', width:'95%', backgroundColor:'white', border:'1px solid black', color:'black',overflowY:'auto',overflowX:'auto'}}>
+				<div className="d-flex justify-content-center align-items-center" style={{height:'90%', width:'95%', backgroundColor:'white',  color:'black',overflowY:'auto',overflowX:'auto'}}>
 					<div className="d-flex flex-column justify-content-center align-items-center" style={{height:'98%', width:'97%'}}>
-						<div className="d-flex justify-content-center align-items-center flex-column" style={{height:'100%', width:'100%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}}>
+						<div className="d-flex justify-content-center align-items-center flex-column" style={{height:'100%', width:'100%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"5px 5px 5px 5px grey"}}>
 							<div className="d-flex flex-row justify-content-between align-items-center" style={{height:'15%', width:'95%'}}>
 								<div className="d-flex flex-row align-items-center justify-content-center">
 									<SchoolIcon sx={{color:green[300],height:'40px',width:'40px'}}/>
@@ -393,7 +393,7 @@ function Item(props){
 
 	
 	return(
-		<div style={{height:'30px',width:'100%',border:'1px solid black',borderRadius:'10px'}} className="d-flex bg-light flex-row justify-content-around">
+		<div style={{height:'30px',width:'100%',border:'1px solid black',borderRadius:'10px'}} className="d-flex notSelected flex-row justify-content-around">
 			
 			<div className="col-1 text-center"><Checkbox reqOnChange={handleOnChange} name='chk'/></div>
 			<div className="col-1 text-center">{props.object.studentNo}</div>

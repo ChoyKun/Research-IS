@@ -179,7 +179,7 @@ export default function StudentRList(props){
 	const [state, dispatch] = useReducer(reducer, initState);
 
 	const rFilter = () =>(
-		<div className="d-flex justify-content-center align-items-center" style={{height:'400px',width:'300px',border:'1px solid black',backgroundColor:'white',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}} className='d-flex justify-content-center flex-column'>
+		<div className="d-flex justify-content-center align-items-center" style={{height:'400px',width:'300px',border:'1px solid black',backgroundColor:'white',borderRadius:'15px',boxShadow:"5px 5px 5px 5px grey"}} className='d-flex justify-content-center flex-column'>
 					<h3 style={{width:'95%',color:'black'}}>Filters:</h3>
 					<Divider style={{height:'2px', width:'100%', color:'black'}}/>
 					<div className='d-flex flex-row' style={{width:'100%',height:'70%'}}>
@@ -343,9 +343,9 @@ export default function StudentRList(props){
 						{alertMes}
 					</Alert>				
 				</Snackbar>
-				<div className="d-flex justify-content-center align-items-center" style={{height:'90%', width:'95%', backgroundColor:'white', border:'1px solid black', color:'black',overflowY:'auto',overflowX:'auto'}}>
+				<div className="d-flex justify-content-center align-items-center" style={{height:'90%', width:'95%', backgroundColor:'white', color:'black',overflowY:'auto',overflowX:'auto'}}>
 					<div className="d-flex flex-column justify-content-center align-items-center" style={{height:'98%', width:'97%'}}>
-						<div className="d-flex justify-content-center align-items-center flex-column" style={{height:'100%', width:'100%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}}>
+						<div className="d-flex justify-content-center align-items-center flex-column" style={{height:'100%', width:'100%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"5px 5px 5px 5px grey"}}>
 							<div className="d-flex flex-row justify-content-between align-items-center" style={{height:'15%', width:'95%'}}>
 								<div className="d-flex flex-row align-items-center justify-content-center">
 									<SchoolIcon sx={{color:green[500],height:'40px',width:'40px'}}/>

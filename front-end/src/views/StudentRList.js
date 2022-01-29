@@ -506,7 +506,7 @@ function RListHeader(props){
 					Title
 				</div>
 				<div className='col-4 text-center'>
-					ResearchCategories
+					Research Categories
 				</div>
 				<div className='col-1 text-center'>
 					Year

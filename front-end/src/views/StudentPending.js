@@ -58,9 +58,9 @@ export default function AdminRequest( props ){
 	return(
 		<>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
-				<div className="d-flex justify-content-center align-items-center" style={{height:'90%', width:'95%', backgroundColor:'white', border:'1px solid black', color:'black',overflowY:'auto',overflowX:'auto'}}>
+				<div className="d-flex justify-content-center align-items-center" style={{height:'90%', width:'95%', backgroundColor:'white', color:'black',overflowY:'auto',overflowX:'auto'}}>
 					<div className="d-flex flex-column justify-content-center align-items-center" style={{height:'98%', width:'97%'}}>
-						<div className="d-flex justify-content-center align-items-center flex-column" style={{height:'100%', width:'100%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}}>
+						<div className="d-flex justify-content-center align-items-center flex-column" style={{height:'100%', width:'100%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"5px 5px 5px 5px grey"}}>
 							<div className="d-flex flex-row justify-content-between align-items-center" style={{height:'15%', width:'95%'}}>
 								<div className="d-flex flex-row align-items-center justify-content-center">
 									<LocalLibraryIcon sx={{color:green[300],height:'40px',width:'40px'}}/>
@@ -93,15 +93,11 @@ function Item(props){
 		<div className="d-flex justify-content-center align-items-center flex-column" style={{height:'100%',width:'500px',backgroundColor:"#E2F0D9"}}>
 			<div className="d-flex justify-content-start align-items-start flex-column" style={{height:'95%',width:'90%',border:'1px solid black',backgroundColor:'white',borderRadius:'10px'}}>
 				<div className="d-flex justify-content-start align-items-center flex-column" style={{height:'100%',width:'100%'}}>
-					<div className="d-flex justify-content-start align-items-end" style={{height:'10%',width:'90%'}}>
-						<p style={{fontSize:'30px',textAlign:'center',height:'24px'}}>{props.object.title}</p>
+					<div className="d-flex justify-content-center align-items-center" style={{height:'15%',width:'90%'}}>
+						<p style={{fontSize:'25px',textAlign:'top',height:'24px'}}>{props.object.title}</p>
 					</div>
 					<Divider style={{height:'2px', width:'100%', color:'black'}}/>
 					<div className="d-flex flex-column justify-content-start align-items-start" style={{height:'85%',width:'90%'}}>
-						<div className="d-flex flex-row justify-content-around" style={{height:'10%',width:'100%'}}>
-							<p className="col-2" style={{fontSize:'20px'}}>Title:</p>
-							<p className="col-10" style={{fontSize:'20px'}}>{props.object.title}</p>
-						</div>
 						<div className="d-flex flex-row justify-content-around" style={{height:'10%',width:'100%'}}>
 							<p className="col-2" style={{fontSize:'20px'}}>Course:</p>
 							<p className="col-10" style={{fontSize:'20px'}}>{props.object.course}</p>
@@ -140,7 +136,7 @@ function Item(props){
 			<div className="col-3 text-center">{props.object.title}</div>
 			<div className="col-3 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
 			<div className="col-2 text-center">{props.object.yearSubmitted}</div>			
-			<div className="d-flex justify-content-center align-items-center text-center">
+			<div className="col-1 d-flex justify-content-center align-items-center text-center">
 				<Tooltip title='View Document' arrow>
 					<IconButton
 					size="large"
@@ -182,7 +178,7 @@ function RListHeader(props){
 				Title
 			</div>
 			<div className='col-3 text-center'>
-				ResearchCategories
+				Research Categories
 			</div>
 			<div className='col-2 text-center'>
 				Year Submitted

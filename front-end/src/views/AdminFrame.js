@@ -109,7 +109,7 @@ export default function SFrame(props){
 				<div className="d-flex justify-content-center flex-column" style={{height:'100%',width:'100%'}}>
 				 	<List className="d-flex align-items-center flex-column" style={{height:'100%',width:'100%',color:'black'}}>
 				 		<ListItem style={{width:'100%',color:'black'}}>
-				 			<Link className="d-flex justify-content-between align-items-center text-center" to={`/admin-dashboard/${username}`}>
+				 			<Link className="d-flex justify-content-between align-items-center text-center" to={`/admin-dashboard/${username}`} style={{textDecoration:'none'}}>
 				 				<ListItemButton className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
 				 					<ListItemIcon sx={{color:green[500]}}>
 				 						<DashboardIcon/>
@@ -120,7 +120,7 @@ export default function SFrame(props){
 				 		</ListItem>
 				 		<Divider style={{height:'2px',width:'100%'}}/>
 				 		<ListItem style={{width:'100%',color:'black'}}>
-				 			<Link className="d-flex justify-content-between align-items-center text-center" to={`/admin-profile/${username}`}>
+				 			<Link className="d-flex justify-content-between align-items-center text-center" to={`/admin-profile/${username}`} style={{textDecoration:'none'}}>
 				 				<ListItemButton className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
 				 					<ListItemIcon sx={{color:green[500]}}>
 				 						<AccountBoxIcon/>
@@ -131,7 +131,7 @@ export default function SFrame(props){
 				 		</ListItem>
 				 		<Divider style={{height:'60%',width:'100%',backgroundColor:"#E2F0D9"}}/>
 				 		<ListItem style={{width:'100%',color:'black'}}>
-				 			<Link to={`/sign-in`}>				
+				 			<Link to={`/sign-in`} style={{textDecoration:'none'}}>				
 				 				<ListItemButton onClick={handleSignOut} className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
 				 					<ListItemIcon sx={{color:green[500]}}>
 				 						<LogoutIcon/>
@@ -156,20 +156,23 @@ export default function SFrame(props){
 			<div style={{height:'90%', width:'90%'}}>
 				<p style={{fontSize:'36px'}}>Inbox</p>
 				<div className="d-flex justify-content-start align-items-start flex-column" style={{height:'80%', width:'100%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey",overflowY:'auto',overflowX:'auto'}}>
-					<div style={{height:'5%',width:'100%',border:'1px solid black', backgroundColor:'#385723',color:'white'}} className='d-flex flex-row justify-content-around'>
-						<div className='col-7 text-center'>
+					<div style={{height:'7%',width:'100%',border:'1px solid black', backgroundColor:'#385723',color:'white'}} className='d-flex flex-row justify-content-around'>
+						<div className='col-5 text-center' style={{fontSize:'20px'}}>
 							Message
 						</div>
-						<div className='col-1 text-center'>
+						<div className='col-1 text-center' style={{fontSize:'20px'}}>
 							Date
 						</div>
 					</div>
 					<div style={{height:'95%',width:'100%',overflowY:'overlay' }} className='d-flex flex-column align-items-start justify-content-start'>	
 						{inbox?.map?.(object =>(
-							<div className="d-flex flex-row justify-content-around" style={{height:'10%',width:'100%'}}>
-								<div className="col-9 text-center">{object.message}</div>
-								<div className="col-3 text-center">{object.date}</div>
-							</div>
+							<>
+								<div className="d-flex flex-row justify-content-around" style={{height:'10%',width:'100%'}}>
+									<div className="col-8 text-center">{object.message}</div>
+									<div className="col-3 text-center">{object.date}</div>
+								</div>
+								<Divider style={{height:'2px',width:'100%',backgroundColor:"#385723"}}/>
+							</>
 						))}
 					</div>
 				</div>

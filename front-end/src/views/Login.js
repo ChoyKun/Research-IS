@@ -126,26 +126,27 @@ export default function Login(props){
 
 	return(
 		<div className="LoginBG d-flex justify-content-center align-items-center" style={{height:"100%", width:"100%"}}>
-			<div className='Login d-flex justify-content-center align-items-center'>
+			<div className='d-flex justify-content-center align-items-center' style={{height:'90%',width:'70%'}}>
 				<Snackbar anchorOrigin={{vertical:"top", horizontal:"center"}} open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose}>
 					<Alert variant='filled' severity={alertStatus == 403 ? "error" : "success"} sx={{width:'500px'}}>
 						{alertMes}
 					</Alert>				
 				</Snackbar>
-				<div style={{height:"90%",width:"80%",boxShadow:"10px 10px 50px 10px grey"}} className="d-flex flex-row justify-content-center align-items-center">
+				<div style={{height:"90%",width:"80%"}} className="d-flex flex-row justify-content-center align-items-center">
 					<div style={{width:"50%",height:"100%"}}className='login-inputs d-flex flex-column justify-content-center'>
 						<div style={{height:"50%"}}className="login-header d-flex justify-content-center align-items-center flex-column">
 							<img src={scslogo}/>
-							<h5 className="MontFont" style={{width:"270px",textAlign:"center"}}>Sign in to start session</h5>
+							<h5 className="MontFont" style={{width:"270px",textAlign:"center",color:'#676e78'}}>Sign in to start session</h5>
 						</div>
 						<div style={{height:"40%"}}className="login-field d-flex flex-column align-items-center justify-content-around">
-							<TextField required id='outlined-required' className="text-center MontFont" style={{width:"270px"}} label="Student no." onChange={(e)=>{dispatch({type:'username',data: e.target.value})}}/>
+							<TextField required id='outlined-required' variant='filled' className="text-center MontFont" style={{width:"270px"}} label="Student no." onChange={(e)=>{dispatch({type:'username',data: e.target.value})}}/>
 							<TextField 
 								required id='outlined-required' 
 								className="text-center MontFont" 
 								style={{width:"270px"}} 
 								type={showPassword ? "text" : "password"} 
-								label="Password" 
+								label="Password"
+								variant='filled' 
 								onChange={(e)=>{dispatch({type:'password',data: e.target.value})}}
 								InputProps={{
 									endAdornment:(
@@ -163,26 +164,17 @@ export default function Login(props){
 									)
 								}}
 							/>
-							<Button className="MontFont button" style={{height:"40px", width:"80%"}} title="Sign in" click={handler}/>
+							<Button className="MontFont button" style={{height:"40px", width:"63%",color:'#676e78'}} title="Sign in" click={handler}/>
 						</div>
 					</div>
 					<div style={{width:"50%",height:"100%",backgroundColor:"#E2F0D9"}}className='login-logo d-flex flex-column align-items-center justify-content-center' >						
-						<h1 style={{fontFamily: "Garamond, serif",fontWeight: "bold",fontSize:"40px",textAlign:"center",color:"black"}}>SCS Research Information System</h1>
-						<img style={{height:"170px",width:"170px"}} src={researchimg}/>
-						<p style={{fontFamily: "Dancing Script",fontStyle: "italic",fontSize:"25px",textAlign:"center",color:"black"}}> Your quick stop for research papers from SCS department</p>
-						<div style={{width:"60%"}}className="d-flex flex-row justify-content-between align-items-center">
-							<div style={{width:"30px"}} className="d-flex flex-row justify-content-center align-items-center">
-								<img style={{height:"30px"}}src={rlist}/>
-								<h1 style={{fontFamily: "Monserrat",fontSize:"15px",textAlign:"center",color:"black"}}>View Research</h1>
-							</div>
-							<div style={{width:"30px"}} className="d-flex flex-row justify-content-center align-items-center">
-								<img style={{height:"30px"}}src={favorites}/>
-								<h1 style={{fontFamily: "Monserrat",width:"30px",fontSize:"15px",textAlign:"center",color:"black"}}>Search Easier</h1>
-							</div>
-							<div style={{width:"30px"}} className="d-flex flex-row justify-content-center align-items-center">
-								<img style={{height:"30px"}}src={lock}/>
-								<h1 style={{fontFamily: "Monserrat",width:"30px",fontSize:"15px",textAlign:"center",color:"black"}}>Request Permision</h1>
-							</div>
+						<h1 style={{height:'15%',fontFamily: "Garamond, serif",fontWeight: "bold",fontSize:"40px",textAlign:"center",color:"black"}}>SCS Research Information System</h1>
+						<div className='d-flex align-items-center flex-column justify-content-center' style={{height:'30%'}}>
+							<img style={{height:"170px",width:"170px"}} src={researchimg}/>
+						</div>
+						<div className='d-flex align-items-center flex-column justify-content-center' style={{height:'25%'}}>
+							<p style={{fontFamily: "Dancing Script",fontStyle: "italic",fontSize:"25px",textAlign:"center",color:"#676e78"}}> Your quick stop for research papers </p>
+							<p style={{fontFamily: "Dancing Script",fontStyle: "italic",fontSize:"25px",textAlign:"center",color:"#676e78"}}> from SCS department</p>
 						</div>
 					</div>
 				</div>

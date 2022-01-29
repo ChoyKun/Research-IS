@@ -331,9 +331,9 @@ export default function StudentRList(props){
 						{alertMes}
 					</Alert>				
 				</Snackbar>
-				<div className="d-flex justify-content-center align-items-center" style={{height:'90%', width:'95%', backgroundColor:'white', border:'1px solid black', color:'black',overflowY:'auto',overflowX:'auto'}}>
+				<div className="d-flex justify-content-center align-items-center" style={{height:'90%', width:'95%', backgroundColor:'white', color:'black',overflowY:'auto',overflowX:'auto'}}>
 					<div className="d-flex flex-column justify-content-center align-items-center" style={{height:'98%', width:'97%'}}>
-						<div className="d-flex justify-content-center align-items-center flex-column" style={{height:'100%', width:'100%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}}>
+						<div className="d-flex justify-content-center align-items-center flex-column" style={{height:'100%', width:'100%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"5px 5px 5px 5px grey"}}>
 							<div className="d-flex flex-row justify-content-between align-items-center" style={{height:'15%', width:'95%'}}>
 								<div className="d-flex flex-row align-items-center justify-content-center">
 									<AccountCircleIcon sx={{color:green[500],height:'40px',width:'40px'}}/>
@@ -416,10 +416,7 @@ function Item(props){
 		<div onClick={handleClick} ref={item} style={{height:'30px',width:'100%',border:'1px solid black',borderRadius:'10px'}} className="d-flex notSelected flex-row justify-content-around">	
 			<div className="col-1 text-center">{props.object.username}</div>
 			<div className="col-1 text-center">{props.object.password}</div>
-			<div className="col-1 text-center">{props.object.firstName}</div>
-			<div className="col-1 text-center">{props.object.middleInitial}</div>
-			<div className="col-1 text-center">{props.object.lastName}</div>
-			<div className="col-1 text-center">{props.object.extentionName ?? "N/A"}</div>
+			<div className="col-3 text-center">{`${props.object.firstName} ${props.object.middleInitial} ${props.object.lastName} ${props.object.extentionName ?? ""}`}</div>
 			<div className="col-1 text-center">{(() => {
 											const date = new Date(props.object.birthdate);
 											return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
@@ -446,17 +443,8 @@ function RListHeader(props){
 			<div className='col-1 text-center'>
 				Password
 			</div>
-			<div className='col-1 text-center'>
-				First Name
-			</div>
-			<div className='col-1 text-center'>
-				Middile Initial
-			</div>
-			<div className='col-1 text-center'>
-				Last Name
-			</div>
-			<div className='col-1 text-center'>
-				Name Extention
+			<div className='col-3 text-center'>
+				Officer's Name
 			</div>
 			<div className='col-1 text-center'>
 				Birthday

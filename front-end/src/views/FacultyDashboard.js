@@ -103,11 +103,11 @@ export default function StudentDashboard(props){
 	return(
 		<>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
-				<div style={{height:'95%', width:'95%', backgroundColor:'white', border:'1px solid black', color:'black',overflowY:'auto',overflowX:'auto'}}>
-					<div className="d-flex flex-column justify-content-center align-items-center" style={{height:'100%',width:'100%'}}>
+				<div style={{height:'95%', width:'95%', backgroundColor:'white', color:'black',overflowY:'auto',overflowX:'auto'}}>
+					<div className="d-flex flex-column justify-content-around align-items-center" style={{height:'100%',width:'100%'}}>
 						<div className='d-flex flex-row justify-content-center align-items-center'  style={{height:'50%',width:'100%'}}>
 							<div className='d-flex justify-content-center align-items-center'  style={{height:'100%',width:'32%'}}>
-								<div className='d-flex justify-content-around align-items-center flex-column' style={{height:'100%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}}>
+								<div className='d-flex justify-content-around align-items-center flex-column' style={{height:'100%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"5px 5px 5px 5px grey"}}>
 									<div className='d-flex flex-row' style={{width:'90%',height:'10%'}}>
 										<CategoryIcon sx={{color:green[500],height:'35px',width:'35px'}}/>
 										<p style={{fontSize:'25px', textAlign:'center',height:'24px'}}>Students Per Year Level</p>
@@ -119,7 +119,7 @@ export default function StudentDashboard(props){
 								</div>
 							</div>
 							<div className='d-flex justify-content-center align-items-center'  style={{height:'100%',width:'32%'}}>
-								<div className='d-flex justify-content-around align-items-center flex-column' style={{height:'100%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}}>
+								<div className='d-flex justify-content-around align-items-center flex-column' style={{height:'100%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"5px 5px 5px 5px grey"}}>
 									<div className='d-flex flex-row' style={{width:'90%',height:'10%'}}>
 										<WcIcon sx={{color:green[500],height:'35px',width:'35px'}}/>
 										<p style={{fontSize:'25px', textAlign:'center',height:'24px'}}>Student's Gender Ratio</p>
@@ -147,7 +147,7 @@ export default function StudentDashboard(props){
 								</div>
 							</div>
 							<div className='d-flex justify-content-center align-items-center'  style={{height:'100%',width:'32%'}}>
-								<div className='d-flex justify-content-around align-items-center flex-column' style={{height:'100%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}}>
+								<div className='d-flex justify-content-around align-items-center flex-column' style={{height:'100%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"5px 5px 5px 5px grey"}}>
 									<div className='d-flex flex-row' style={{width:'90%',height:'10%'}}>
 										<SchoolIcon sx={{color:green[500],height:'35px',width:'35px'}}/>
 										<p style={{fontSize:'25px', textAlign:'center',height:'24px'}}>Student's Course Ratio</p>
@@ -175,8 +175,8 @@ export default function StudentDashboard(props){
 								</div>
 							</div>
 						</div>
-						<div className='d-flex flex-row justify-content-around align-items-center'  style={{height:'45%',width:'100%'}}>
-							<div className='d-flex justify-content-center align-items-center flex-column' style={{height:'95%', width:'70%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}}>
+						<div className='d-flex flex-row justify-content-around align-items-center'  style={{height:'40%',width:'100%'}}>
+							<div className='d-flex justify-content-center align-items-center flex-column' style={{height:'95%', width:'68%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"5px 5px 5px 5px grey"}}>
 								<div className="d-flex flex-column justify-content-center align-items-center" style={{width:'100%',height:'95%'}}>
 									<div className='d-flex flex-row justify-content-start align-items-center' style={{width:'95%', height:'18%'}}>
 										<SchoolIcon sx={{color:green[500],height:'35px',width:'35px'}}/>
@@ -205,7 +205,7 @@ export default function StudentDashboard(props){
 									</div>
 								</div>
 							</div>
-							<div className='d-flex justify-content-center align-items-center flex-column' style={{height:'95%', width:'20%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}}>
+							<div className='d-flex justify-content-center align-items-center flex-column' style={{height:'95%', width:'20.5%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"5px 5px 5px 5px grey"}}>
 								<div className="d-flex flex-row justify-content-center" style={{height:'25%',width:'100%'}}>
 									<Link to={`/MIS-slist/${username}`}><Button style={{width:'230px',height:'40px'}} title="Activated Account"/></Link>
 								</div>

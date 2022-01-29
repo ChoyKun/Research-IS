@@ -86,7 +86,7 @@ export default function SFrame(props){
 				<div className="d-flex justify-content-center flex-column" style={{height:'100%',width:'100%'}}>
 					<List className="d-flex align-items-center flex-column" style={{height:'100%',width:'100%',color:'black'}}>
 			 			<ListItem style={{width:'100%',color:'black'}}>
-			 				<Link className="d-flex justify-content-between align-items-center text-center" to={`/MIS-dashboard/${username}`}>
+			 				<Link className="d-flex justify-content-between align-items-center text-center" to={`/MIS-dashboard/${username}`} style={{ textDecoration: 'none' }}>
 			 					<ListItemButton className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
 			 						<ListItemIcon sx={{color:green[500]}}>
 			 							<DashboardIcon/>
@@ -97,7 +97,7 @@ export default function SFrame(props){
 			 			</ListItem>
 			 			<Divider style={{height:'2px',width:'100%'}}/>
 			 			<ListItem style={{width:'100%',color:'black'}}>
-			 				<Link className="d-flex justify-content-between align-items-center text-center" to={`/MIS-profile/${username}`}>
+			 				<Link className="d-flex justify-content-between align-items-center text-center" to={`/MIS-profile/${username}`} style={{ textDecoration: 'none' }}>
 			 					<ListItemButton className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
 			 						<ListItemIcon sx={{color:green[500]}}>
 			 							<AccountBoxIcon/>
@@ -108,7 +108,7 @@ export default function SFrame(props){
 			 			</ListItem>
 			 			<Divider style={{height:'60%',width:'100%',backgroundColor:"#E2F0D9"}}/>
 			 			<ListItem style={{width:'100%',color:'black'}}>
-			 				<Link to={`/sign-in`}>				
+			 				<Link to={`/sign-in`} style={{ textDecoration: 'none' }}>				
 			 					<ListItemButton onClick={handleSignOut} className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
 			 						<ListItemIcon sx={{color:green[500]}}>
 			 							<LogoutIcon/>

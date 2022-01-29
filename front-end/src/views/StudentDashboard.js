@@ -95,11 +95,11 @@ export default function StudentDashboard(props){
 	return(
 		<>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
-				<div style={{height:'95%', width:'95%', backgroundColor:'white', border:'1px solid black', color:'black',overflowY:'auto',overflowX:'auto'}}>
+				<div style={{height:'95%', width:'95%', backgroundColor:'white', color:'black',overflowY:'auto',overflowX:'auto'}}>
 					<div className="d-flex flex-row justify-content-center align-items-center" style={{height:'100%',width:'100%'}}>
-						<div className='d-flex flex-column justify-content-center align-items-center'  style={{height:'100%',width:'60%'}}>
-							<div className='d-flex justify-content-center align-items-center'  style={{height:'60%',width:'100%'}}>
-								<div className='d-flex justify-content-center align-items-center flex-column' style={{height:'95%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}}>
+						<div className='d-flex flex-column justify-content-center align-items-center'  style={{height:'100%',width:'50%'}}>
+							<div className='d-flex justify-content-center align-items-center'  style={{height:'57%',width:'100%'}}>
+								<div className='d-flex justify-content-center align-items-center flex-column' style={{height:'95%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"5px 5px 5px 5px grey"}}>
 									<div className='d-flex flex-row' style={{width:'90%',height:'10%'}}>
 										<CategoryIcon sx={{color:green[500],height:'35px',width:'35px'}}/>
 										<p style={{fontSize:'25px', textAlign:'center',height:'24px'}}>Research Categories</p>
@@ -111,7 +111,7 @@ export default function StudentDashboard(props){
 								</div>
 							</div>
 							<div className='d-flex justify-content-center align-items-center'  style={{height:'40%',width:'100%'}}>
-								<div className='d-flex justify-content-center align-items-center flex-column' style={{height:'95%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}}>
+								<div className='d-flex justify-content-center align-items-center flex-column' style={{height:'95%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"5px 5px 5px 5px grey"}}>
 									<div className='d-flex flex-row' style={{width:'90%',height:'18%'}}>
 										<NumbersIcon sx={{color:green[500],height:'35px',width:'35px'}}/>
 										<p style={{fontSize:'25px', textAlign:'center',height:'24px'}}>Total Available Researches</p>
@@ -140,8 +140,8 @@ export default function StudentDashboard(props){
 								</div>
 							</div>
 						</div>
-						<div className='d-flex flex-column justify-content-center align-items-center'  style={{height:'100%',width:'40%'}}>
-							<div className='d-flex justify-content-center align-items-center flex-column' style={{height:'95%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}}>
+						<div className='d-flex flex-column justify-content-center align-items-center'  style={{height:'100%',width:'50%'}}>
+							<div className='d-flex justify-content-center align-items-center flex-column' style={{height:'95%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"5px 5px 5px 5px grey"}}>
 								<div className="d-flex flex-column justify-content-center align-items-center" style={{width:'95%',height:'95%'}}>
 									<div className='d-flex flex-row justify-content-start align-items-center' style={{width:'95%', height:'10%'}}>
 										<LocalLibraryIcon sx={{color:green[500],height:'35px',width:'35px'}}/>
@@ -150,15 +150,15 @@ export default function StudentDashboard(props){
 									<Divider style={{height:'2px', width:'100%', color:'black'}}/>
 									<div className='d-flex flex-column justify-content-center align-items-center' style={{width:'100%', height:'80%'}}>
 										<div className='d-flex flex-column justify-content-start align-items-center' style={{width:'95%', height:'90%',border:'1px solid black', borderRadius:'10px',overflowY:'auto',overflowX:'auto'}}>
-											<div className="d-flex flex-row justify-content-around" style={{height:'25px',width:'100%',border:'1px solid black', backgroundColor:'#385723',color:'white'}}>
-												<div className='col-6 text-left'>Title</div>
-												<div className='col-2 text-left'>Year</div>
+											<div className="d-flex flex-row justify-content-around align-items-center" style={{height:'8%',width:'100%',border:'1px solid black', backgroundColor:'#385723',color:'white'}}>
+												<div className='col-6 text-center' style={{fontSize:'18px'}}>Title</div>
+												<div className='col-2 text-center' style={{fontSize:'18px'}}>Year</div>
 											</div>
 											<div className="d-flex flex-column justify-content-start" style={{height:'95%',width:'100%',overflowY:'overlay',overflowX:'overlay',backgroundColor:'white'}}>
 												{researchData?.map?.(object =>(
 													<div className='d-flex flex-row justify-content-around' style={{fontSize:'18px',border:'1px solid gray',borderRadius:'10px',backgroundColor:'#E2F0D9'}}>
-														<div className='col-6 text-left'>{object.title}</div>
-														<div className='col-2 text-left'>{object.yearSubmitted}</div>
+														<div className='col-6 text-center'>{object.title}</div>
+														<div className='col-2 text-center'>{object.yearSubmitted}</div>
 													</div>
 												))}
 											</div>

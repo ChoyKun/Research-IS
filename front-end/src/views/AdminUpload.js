@@ -158,13 +158,13 @@ export default function FacultyUpload(props){
 	return(
 		<>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
-				<div style={{height:'95%', width:'95%', backgroundColor:'white', border:'1px solid black', color: 'black'}} className='d-flex justify-content-center align-items-center flex-column'>
+				<div style={{height:'95%', width:'95%', backgroundColor:'white', color: 'black'}} className='d-flex justify-content-center align-items-center flex-column'>
 					<Snackbar anchorOrigin={{vertical:"top", horizontal:"center"}} open={snackOpen} autoHideDuration={2000} onClose={handleSnackClose}>
 						<Alert variant='filled' severity={alertStatus == 403 ? "error" : "success"} sx={{width:'500px'}}>
 							{alertMes}
 						</Alert>				
 					</Snackbar>
-					<div style={{height:'95%',width:'95%', color:'black',border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}}>
+					<div style={{height:'95%',width:'95%', color:'black',border:'1px solid black',borderRadius:'15px',boxShadow:"5px 5px 5px 5px grey"}}>
 						<div style={{height:'100%',width:'100%'}} className='d-flex justify-content-center align-items-center flex-column'>
 							<div className="d-flex justify-content-start align-items-center flex-row" style={{width:'90%',height:'20%'}}>
 								<LocalLibraryIcon sx={{color:green[500],height:'40px',width:'40px'}}/>

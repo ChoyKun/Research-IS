@@ -394,7 +394,7 @@ export default function StudentProfile(props){
 					{profileAlertMes}
 				</Alert>				
 			</Snackbar>
-			<div className="d-flex justify-content-between align-items-center flex-column" style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey",overflowY:'auto',overflowX:'auto'}}>	
+			<div className="d-flex justify-content-between align-items-center flex-column" style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"5px 5px 5px 5px grey",overflowY:'auto',overflowX:'auto'}}>	
 				<p style={{fontSize:'36px'}}>Edit Profile Details</p>
 				<Divider style={{height:'2px', width:'100%', color:'black'}}/>
 				<div style={{height:'40%',width:'90%'}} className='d-flex justify-content-start flex-column'>
@@ -520,7 +520,7 @@ export default function StudentProfile(props){
 			</Snackbar>
 			<div style={{height:'90%', width:'90%'}}>
 				<p style={{fontSize:'36px'}}>Activity Logs</p>
-				<div className="d-flex justify-content-start align-items-start flex-column" style={{height:'80%', width:'100%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey",overflowY:'auto',overflowX:'auto'}}>
+				<div className="d-flex justify-content-start align-items-start flex-column" style={{height:'80%', width:'100%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"5px 5px 5px 5px grey",overflowY:'auto',overflowX:'auto'}}>
 					<div style={{height:'30px',width:'100%',border:'1px solid black', backgroundColor:'#385723',color:'white'}} className='d-flex flex-row justify-content-around'>
 						<div className='col-5 text-center'>
 							Activity
@@ -529,12 +529,17 @@ export default function StudentProfile(props){
 							Date
 						</div>
 					</div>
-					{activity?.map?.(object =>(
-						<div className="d-flex flex-row justify-content-around" style={{height:'5%',width:'100%'}}>
-							<div className="col-7 text-center">{object.message}</div>
-							<div className="col-3 text-center">{object.date}</div>
-						</div>
-					))}
+					<div style={{height:'95%',width:'100%',overflowY:'overlay' }} className='d-flex flex-column align-items-start justify-content-start'>	
+						{activity?.map?.(object =>(
+							<div style={{height:'10%',width:'100%'}} className='d-flex justify-content-center align-items-center flex-column'>
+								<div className="d-flex flex-row justify-content-around align-items-center" style={{height:'100%',width:'90%'}}>
+									<div className="col-9 text-left">{object.message}</div>
+									<div className="col-3 text-center">{object.date}</div>
+								</div>
+								<Divider style={{height:'2px',width:'100%',backgroundColor:"#385723"}}/>
+							</div>
+						))}
+					</div>
 				</div>
 			</div>
 		</div>
@@ -612,10 +617,12 @@ export default function StudentProfile(props){
 	return(
 		<>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
-				<div style={{height:'95%', width:'95%', backgroundColor:'white', border:'1px solid black'}} className='d-flex justify-content-center align-items-center'>
+				<div style={{height:'95%', width:'95%', backgroundColor:'white'
+
+			}} className='d-flex justify-content-center align-items-center'>
 					<div style={{height:'95%', width:'95%'}} className='d-flex justify-content-center align-items-center flex-row'>
 						<div className='d-flex justify-content-center align-items-center' style={{width:'50%',height:'100%'}}> 
-							<div className='d-flex justify-content-center align-items-center flex-column' style={{height:'95%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}}>
+							<div className='d-flex justify-content-center align-items-center flex-column' style={{height:'95%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"5px 5px 5px 5px grey"}}>
 								<div className="d-flex justify-content-center align-items-center" style={{height:'100%', width:'100%'}}>
 									<div className='d-flex justify-content-around align-items-center flex-column' style={{height:'100%', width:'90%'}}>
 										<div className='d-flex flex-row justify-content-start align-items-center' style={{width:'100%',height:'10%'}}>
@@ -670,7 +677,7 @@ export default function StudentProfile(props){
 						</div>
 						<div className='d-flex justify-content-center align-items-center flex-column' style={{width:'50%',height:'98%'}}> 
 							<div className='d-flex justify-content-center align-items-center flex-column' style={{width:'100%',height:'80%'}}> 
-								<div style={{height:'95%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey",color:'black'}}>
+								<div style={{height:'95%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"5px 5px 5px 5px grey",color:'black'}}>
 										<div className="d-flex justify-content-center align-items-center flex-column" style={{height:'100%', width:'100%'}}>
 											<div className='d-flex justify-content-around align-items-start flex-column' style={{height:'90%', width:'90%'}}>
 												<p style={{fontSize:'28px',textAlign:'left',height:'5px'}}>Activity Logs</p>
@@ -701,7 +708,7 @@ export default function StudentProfile(props){
 								</div>
 							</div>
 							<div className='d-flex justify-content-center align-items-center flex-column' style={{width:'100%',height:'20%'}}> 
-								<div className='d-flex justify-content-center align-items-center flex-column' style={{height:'95%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey",color:'black'}}>
+								<div className='d-flex justify-content-center align-items-center flex-column' style={{height:'95%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"5px 5px 5px 5px grey",color:'black'}}>
 									<Divider style={{height:'2px', width:'90%', color:'black'}}/>
 									<div className="d-flex flex-row justify-content-around align-items-center" style={{height:'50%', width:'100%'}}>
 										<Link to={`/admin-reg/${username}`}><Button style={{height:'30px',width:'150px'}} click={toggleActDrawer(true)} title='New Officer'/></Link>

@@ -64,9 +64,9 @@ export default function AdminRequest( props ){
 	return(
 		<>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
-				<div className="d-flex justify-content-center align-items-center" style={{height:'90%', width:'95%', backgroundColor:'white', border:'1px solid black', color:'black',overflowY:'auto',overflowX:'auto'}}>
+				<div className="d-flex justify-content-center align-items-center" style={{height:'90%', width:'95%', backgroundColor:'white', color:'black',overflowY:'auto',overflowX:'auto'}}>
 					<div className="d-flex flex-column justify-content-center align-items-center" style={{height:'98%', width:'97%'}}>
-						<div className="d-flex justify-content-center align-items-center flex-column" style={{height:'100%', width:'100%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}}>
+						<div className="d-flex justify-content-center align-items-center flex-column" style={{height:'100%', width:'100%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"5px 5px 5px 5px grey"}}>
 							<div className="d-flex flex-row justify-content-between align-items-center" style={{height:'15%', width:'95%'}}>
 								<div className="d-flex flex-row align-items-center justify-content-center">
 									<LocalLibraryIcon sx={{color:green[500],height:'40px',width:'40px'}}/>
@@ -198,7 +198,7 @@ function Item(props){
 								{"Strict Reminder"}
 							</DialogTitle>
 							<DialogContent>
-								This document is owned by the instituion and the author of the study. You are only permitted to read/view this document for research purposes. It is illegal and punishable under the law to copy anything from this document. Illegal distribution or copying of the document outside the institution may result to expulsion. Do you understand?
+								<p>	This document is owned by the institution and the author of the study. You are only permitted to read/view this document for research purposes. It is illegal and punishable under the law to copy anything from this document. Illegal distribution or copying of the document outside the institution may result to expulsion. Do you understand?</p>
 								<Checkbox cLabel="Yes, I understand" reqOnChange={handleAgree}/> 
 							</DialogContent>
 							<DialogActions>
@@ -260,7 +260,7 @@ function RListHeader(props){
 				Title
 			</div>
 			<div className='col-3 text-center'>
-				ResearchCategories
+				Research Categories
 			</div>
 			<div className='col-2 text-center'>
 				Year Submitted
