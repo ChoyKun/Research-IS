@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "concurrently": "^6.4.0"
+    "concurrently": "^6.4.0",
+    "uniqid": "^5.4.0"
   }
 }

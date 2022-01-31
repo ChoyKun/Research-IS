@@ -99,14 +99,16 @@ export default function Login(props){
 
 			if(res.status == 200 ){
 				if(res.data.role == 'student'){
-					console.log("student")
+					Cookies.set('id', res.data._id);
 					setTimeout(()=>{setRedirect( <Redirect to={`/student-dashboard/${data._username}`}/> );},2000);	
 				}
 				else if(res.data.role == 'mis officer'){
+					Cookies.set('id', res.data._id);
 					console.log("Officer")
 					setTimeout(()=>{setRedirect( <Redirect to={`/MIS-dashboard/${data._username}`}/> );},2000);
 				}
 				else if(res.data.role == 'admin'){
+					Cookies.set('id', res.data._id);
 					console.log("admin")
 					setTimeout(()=>{setRedirect( <Redirect to={`/admin-dashboard/${data._username}`}/> );},2000);
 				}

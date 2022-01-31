@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+const uniqid = require('uniqid');
 const express = require('express');
 const fileUpload = require('express-fileupload');
 const app = express();
@@ -66,7 +67,42 @@ const authentication = ( req, res, next ) => {
 }
 
 app.get('/verify-me', authentication, async(req, res, next) => {
+
 	return res.json({ user: req.user });
+});
+
+app.get('/verify/admin/:username', authentication, async(req, res, next) => {
+		console.log('bitch890')
+	const username = req.params.username;
+	console.log( username );
+	Coordinator.findOne({username:username}, (err,doc)=>{
+		if( err ) return res.status( 503 ).json({ message:'Server Error' });
+
+		if(doc){
+			Student.findOne({studentNo:username}, (err,doc)=>{
+				if( err ) return res.status( 503 ).json({ message:'Server Error' });
+
+				if(doc){
+					return res.sendStatus(403);
+				}
+				else{
+					// Faculty.findOne({username:username}, (err,doc)=>{
+					// 	if( err ) return res.status( 503 ).json({ message:'Server Error' });
+
+					// 	if(doc){
+					// 		return res.sendStatus(403);
+					// 	}
+					// 	else{
+					// 	}
+					// });
+					return res.json({ user: req.user });
+				}
+			});
+		}
+		else{
+			return res.sendStatus(403);
+		}
+	})	
 });
 
 app.get('/filter-query/:course/:category/:yearSubmitted/:order/:year', async( req, res, next ) => {
@@ -312,7 +348,9 @@ app.post('/sign-in', async(req,res,next)=>{
 										accessToken: accessToken,
 										refreshToken: refreshToken,
 										message: 'Welcome mr/ms. coordinator',
-										role: 'admin'});
+										role: 'admin',
+										_id: docs._id.toString()
+									});
 									});
 							}
 							else{
@@ -328,7 +366,9 @@ app.post('/sign-in', async(req,res,next)=>{
 								accessToken: accessToken,
 								refreshToken: refreshToken,
 								message: 'Welcome mr/ms. officer',
-								role: 'mis officer'});
+								role: 'mis officer',
+								_id: doc._id.toString()
+							});
 						});
 					}
 				});
@@ -341,7 +381,9 @@ app.post('/sign-in', async(req,res,next)=>{
 						accessToken: accessToken,
 						refreshToken: refreshToken,
 						message: 'Logged in successfuly',
-						role: 'student'});
+						role: 'student',
+						_id: doc._id.toString()
+					});
 				});
 			}
 		});
@@ -963,7 +1005,11 @@ app.put('/student/slist/approved/:username/:date/:title', async(req,res,next)=>{
 						data.approved.push({ id: approved[0], dateApproved: date });
 					}
 
-					data.inbox.push({message:`Your request to access ${title} has been approved, check your list of approved researches`, date: dateAct})
+					data.inbox.push({
+						msg_id: uniqid(),
+						message:`Your request to access ${title} has been approved, check your list of approved researches`, 
+						date: dateAct
+					});
 
 					fs.readFile( req_view_path, (err, list) => {
 						if(err) return res.status( 503 ).json({ message: 'Server Error' });
@@ -983,7 +1029,11 @@ app.put('/student/slist/approved/:username/:date/:title', async(req,res,next)=>{
 				}
 			})
 
-			doc.activity.push({message:`${doc.firstName} ${doc.middleInitial} ${doc.lastName} ${doc.extentionName ?? ''} approved ${studentNo}'s request to access ${title}`, date: dateAct})
+			doc.activity.push({
+				msg_id: uniqid(),
+				message:`${doc.firstName} ${doc.middleInitial} ${doc.lastName} ${doc.extentionName ?? ''} approved ${studentNo}'s request to access ${title}`, 
+				date: dateAct
+			});
 
 			doc.save( err=>{
 				if(err) return res.status(503).json({message:'server error'});
@@ -1018,7 +1068,11 @@ app.put('/student/slist/declined/:username/:title', async(req,res,next)=>{ //san
 					console.log( pending );
 					data.pending = pending;
 
-					data.inbox.push({message:`Sorry, your request to access ${title} has been declined by the coordinator`, date: dateAct})
+					data.inbox.push({
+						msg_id: uniqid(),
+						message:`Sorry, your request to access ${title} has been declined by the coordinator`, 
+						date: dateAct
+					})
 
 					fs.readFile( req_view_path, (err, list) => {
 						if(err) return res.status( 503 ).json({ message: 'Server Error' });
@@ -1052,35 +1106,97 @@ app.put('/student/slist/declined/:username/:title', async(req,res,next)=>{ //san
 });
 
 app.get('/student/slist/favlist/:username', async(req,res,next)=>{
-	const studentNo= req.params.username;
+	console.log('bitch')
+	// const studentNo= req.params.username;
 
-	Student.findOne({studentNo: studentNo}, (err, data)=>{
-		if(err) return res.status( 503 ).json({ message: 'Server Error' });
+	// Student.findOne({studentNo: studentNo}, (err, data)=>{
+	// 	if(err) return res.status( 503 ).json({ message: 'Server Error' });
 
-		if(data){
-			const favList = [];
+	// 	if(data){
+	// 		const favList = [];
 
-			data.favorites.forEach(async (_id, index) => {
-				await Research.findOne({_id: _id}, (err,doc)=>{
-					if(err) return res.status(503).json({message: 'Server Error' })
+	// 		data.favorites.forEach(async (_id, index) => {
+	// 			await Research.findOne({_id: _id}, (err,doc)=>{
+	// 				if(err) return res.status(503).json({message: 'Server Error' })
 
-					if(doc){
-						favList.push(doc);
+	// 				if(doc){
+	// 					favList.push(doc);
+	// 				}
+
+	// 				if( index === data.favorites.length - 1){
+	// 					return res.status(200).json({data: favList})
+	// 				}
+	// 			})
+	// 		})
+
+
+	// 	}
+	// })
+});
+
+app.get('/messages', async(req,res,next)=>{
+	// const today = new Date();
+	// var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+	const inbox = [];
+	Student.find({}, (err,students)=>{
+		if(err) return res.status(503).json({message: 'Server Error' })
+
+		Faculty.find({}, (err, faculties) => {
+			if(err) return res.status(503).json({message: 'Server Error' })
+
+			Coordinator.find({}, (err, coors) => {
+				if(err) return res.status(503).json({message: 'Server Error' })
+
+					if( coors.length ){
+						coors.forEach( doc => {
+							doc.inbox.forEach( inb => {
+								const message = {
+									...inb,
+									_id: doc._id.toString()
+								}
+
+								inbox.push( message );
+							});
+						});
+
 					}
 
-					if( index === data.favorites.length - 1){
-						return res.status(200).json({data: favList})
+					if( faculties.length ){
+						faculties.forEach( doc => {
+							doc.inbox.forEach( inb => {
+								const message = {
+									...inb,
+									_id: doc._id.toString()
+								}
+
+								inbox.push( message );
+							});
+						});
 					}
-				})
-			})
 
+					if( students.length ){
+						students.forEach( doc => {
+							console.log( doc.inbox );
+							doc.inbox.forEach( inb => {
+								const message = {
+									...inb,
+									_id: doc._id.toString()
+								}
 
-		}
-	})
-})
+								inbox.push( message );
+							});
+						});
+					}
+
+					return res.status( 200 ).json({ data: inbox });
+			});
+		});
+	});
+});
+
 
 app.get('/student/slist/activity/:username', async(req,res,next)=>{
-	studentNo = req.params.username
+	let studentNo = req.params.username
 	const today = new Date();
 	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 
@@ -1103,33 +1219,32 @@ app.get('/student/slist/activity/:username', async(req,res,next)=>{
 			}
 		}
 	})
-})
+});
 
-app.get('/student/slist/inbox/:username', async(req,res,next)=>{
-	studentNo = req.params.username
-	const today = new Date();
-	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+app.get('/student/slist/inbox/:username', async( req,res,next ) => {
+	// studentNo = req.params.username
+	// const today = new Date();
+	// var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 
+	// const inbox = []
 
-	const inbox = []
+	// Student.findOne({studentNo: studentNo}, (err,doc)=>{
+	// 	if(err) return res.status(503).json({message: 'Server Error' })
 
-	Student.findOne({studentNo: studentNo}, (err,doc)=>{
-		if(err) return res.status(503).json({message: 'Server Error' })
+	// 	if(doc){
+	// 		if(doc.inbox.length){
+	// 			doc.inbox.forEach( async (item) =>{
+	// 				inbox.unshift(item);
+	// 			})
 
-		if(doc){
-			if(doc.inbox.length){
-				doc.inbox.forEach( async (item) =>{
-					inbox.unshift(item);
-				})
-
-				return res.status(200).json({data:inbox})
-			}
-			else{
-				return res.sendStatus(404)
-			}
-		}
-	})
-})
+	// 			return res.status(200).json({data:inbox})
+	// 		}
+	// 		else{
+	// 			return res.sendStatus(404)
+	// 		}
+	// 	}
+	// })
+});
 
 app.get('/student/slist/pending-list/:username', async(req,res,next)=>{
 	const studentNo= req.params.username;
@@ -2747,7 +2862,11 @@ app.post('/request-view', async ( req, res, next ) => {
 		if( err ) return res.sendStatus( 503 );
 
 		if(doc){
-			doc.inbox.push({message:`There is a new research request from ${data.studentName}, please check your request list`, date: date})
+			doc.inbox.push({
+				msg_id: uniqid(),
+				message:`There is a new research request from ${data.studentName}, please check your request list`, 
+				date: date
+			})
 
 			doc.save(err=>{
 				if( err ) return res.sendStatus( 503 );
@@ -2832,7 +2951,11 @@ app.post('/clear-requests', async(req,res,next)=>{
 						if(err) return res.status(503).json({message:'server error'});
 					})
 
-					item.inbox.push({message:`The coordinator cleared all research requests, your list of pending requested researches is now empty`, date: date})
+					item.inbox.push({
+						msg_id: uniqid(),
+						message:`The coordinator cleared all research requests, your list of pending requested researches is now empty`, 
+						date: date
+					})
 				})
 
 			return res.status(200).json({message:'cleared all requests from the list'});

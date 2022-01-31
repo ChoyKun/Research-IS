@@ -41,15 +41,16 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import Badge from '@mui/material/Badge';
 
-
-
+import InboxContext from '../contexts/Inbox-context';
 import IconBtn from '../components/buttons/iconbtn';
 import Button from '../components/buttons/button';
 import "../styles/button.css"
 import "../styles/txt.css"
 
 export default function SFrame(props){
+	const inboxMessages = React.useContext( InboxContext );
 
 	const [isMenuOpen, setIsMenuOpen] = useState( false );
 	const [messageDrawer, setMessageDrawer] = useState( false );
@@ -60,6 +61,7 @@ export default function SFrame(props){
 	const [snackOpen, setSnackOpen] = useState(false);
 	const [alertMes, setAlertMes] = useState(null);
 	const [alertStatus, setAlertStatus] = useState(null);
+	const [readMessagesNumber, setReadMessagesNumber] = useState( 0 );
 
 	const handleSnackClose = (evernt , reason) =>{
 		if(reason === 'clickaway') {
@@ -165,15 +167,7 @@ export default function SFrame(props){
 						</div>
 					</div>
 					<div style={{height:'95%',width:'100%',overflowY:'overlay' }} className='d-flex flex-column align-items-start justify-content-start'>	
-						{inbox?.map?.(object =>(
-							<>
-								<div className="d-flex flex-row justify-content-around" style={{height:'10%',width:'100%'}}>
-									<div className="col-8 text-center">{object.message}</div>
-									<div className="col-3 text-center">{object.date}</div>
-								</div>
-								<Divider style={{height:'2px',width:'100%',backgroundColor:"#385723"}}/>
-							</>
-						))}
+						{ inbox }
 					</div>
 				</div>
 				<div className='d-flex flex-row-reverse align-items-center ' style={{width:'100%', height:'10%'}}>
@@ -200,6 +194,79 @@ export default function SFrame(props){
 		</div>
 	)
 
+	useEffect(() => {
+		const id = Cookies.get('id');
+
+		if( id ){
+			console.log( id );
+
+			console.log( inboxMessages );
+			const tempInboxList = [];
+			inboxMessages.forEach( msg => {
+				console.log( msg );
+				// console.log( msg.message, id );
+				// console.log( )
+				if( msg._id === id ){
+					tempInboxList.push(
+						<>
+							<div className="d-flex flex-row justify-content-center" style={{height:'fit-content',width:'100%'}}>
+								<div className="col-8 text-left">{ msg.message }</div>
+								<div className="col-3 text-center">{ msg.date }</div>
+							</div>
+							<Divider style={{height:'2px',width:'100%',backgroundColor:"#385723"}}/>
+						</>
+					);
+				}
+			});
+
+			setInbox([ ...tempInboxList ]);
+		}
+	}, [inboxMessages]);
+
+	useEffect(() => {
+		const id = Cookies.get('id');
+
+		if( messageDrawer ){
+			const readMessages = [];
+			
+			inboxMessages.forEach( msg => {
+				if( msg._id === id ){
+					readMessages.push( msg.msg_id );					
+				}
+			});
+
+			Cookies.set('readMessages', JSON.stringify( readMessages ));
+		}
+		else{
+			let readMessages = Cookies.get('readMessages');
+
+			let readMessagesCurrentNumber = 0;
+
+			if( readMessages ){
+				readMessages = JSON.parse( readMessages );
+				console.log( typeof readMessages );
+
+				inboxMessages.forEach( msg => {
+					if( msg._id === id ){
+						if( !readMessages.includes( msg.msg_id ) ){
+							readMessagesCurrentNumber += 1;
+						}
+					}
+				});
+
+				setReadMessagesNumber( readMessagesCurrentNumber );
+			}
+			else{
+				inboxMessages.forEach( msg => {
+					if( msg._id === id ){
+						readMessagesCurrentNumber += 1;
+					}
+				});
+				setReadMessagesNumber( readMessagesCurrentNumber );
+			}
+		}
+	}, [messageDrawer, inboxMessages]);
+
 	const clearMessage = () =>{
 		setDialogOpen(false);
 		setSnackOpen(true);
@@ -215,16 +282,6 @@ export default function SFrame(props){
 		})
 
 	}
-
-	useEffect(()=>{
-		axios.get(`http://localhost:7000/coordinator/clist/inbox/${username}`)
-		.then(res=>{
-			setInbox(res.data.data)
-		})
-		.catch(err=>{
-			console.log(err);
-		})
-	},[])
 
 
 	useEffect(() => {
@@ -279,19 +336,20 @@ export default function SFrame(props){
 			            edge="start"
 			            color="inherit"
 			            aria-label="menu"
-			            sx={{ height:'40px',width:'40px',mr: 2 }}
+			            sx={{ mr: 2 }}
 			          >
-			            <MailIcon onClick={toggleInbox(true)} style={{height: '35px',width:'35px'}}/>
-			            <Drawer
-			            	anchor={'right'}
-			            	open={messageDrawer}
-			            	onClose={toggleInbox(false)}
-			            >
-		            		{messages()}
-		            	</Drawer>
-			            
+			          	<Badge badgeContent={readMessagesNumber} color="secondary">
+				            <MailIcon onClick={toggleInbox(true)} fontSize="large"/>
+			          	</Badge>
 			          </IconButton>
 			        </Tooltip>
+		            <Drawer
+		            	anchor={'right'}
+		            	open={messageDrawer}
+		            	onClose={toggleInbox(false)}
+		            >
+	            		{messages()}
+	            	</Drawer>
 		        </Toolbar>
 		      </AppBar>
 		    </Box>

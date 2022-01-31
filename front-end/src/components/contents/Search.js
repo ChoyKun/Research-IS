@@ -53,7 +53,7 @@ export default function SearchBar( props ){
 	}
 
 	const removeFilter = async () =>{	
-        window.location.reload();
+        props?.reset?.();
 	}
 
 

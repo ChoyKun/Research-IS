@@ -12,8 +12,10 @@ const facultySchema= new Schema({
 	dateRegistered:{type:Date, default:Date.now},
 	contactNo:String,
 	emailAdd:String,
+	inbox: Array,
 	img: String,
 	activity: Array,
+	inbox: Array,
 	status: String
 })
 
