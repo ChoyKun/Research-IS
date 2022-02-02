@@ -636,6 +636,33 @@ app.post('/student/slist/login', async (req, res, next)=>{
 	})
 })
 
+app.put('/forgetpass', async(req,res,next)=>{
+	const {studentNo, email} = req.body;
+
+	const today = new Date();
+	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+
+	Faculty.findOne({status:'active'}, (err,doc)=>{
+		if(err) return res.status( 503 ).json({ message: 'Server Error' });
+
+		if(doc){
+			doc.inbox.push({
+				msg_id: uniqid(),
+				message:`Student ${studentNo} has requested to reset their password, please send an email at ${email} to notify them`, 
+				date: date
+			})
+
+			doc.save( err=>{
+				if(err) {
+					return res.status(503).json({message:'server error'});
+				}
+
+				return res.status(200).json({message:'your request for password request has been sent, please wait for an email from the MIS office'})
+			})
+		}
+	})
+})
+
 app.put('/student/slist/update', async(req,res,next)=>{
 	const editData = req.body;
 

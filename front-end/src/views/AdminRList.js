@@ -129,6 +129,19 @@ export default function StudentRList(props){
 				state.year = action.data;
 				return state;
 
+			case 'reset':
+				state = {
+					course: 'BSIT',
+					category: [],
+					yearSubmitted: 'null',
+					order: 'A-Z',
+					year: 'Newest'
+				}
+
+				filter.setSFilter( null );
+
+				return state;
+
 			default:
 				throw new Error(`Action type "${action.type}" is not recognized`);
 		}
@@ -302,7 +315,7 @@ export default function StudentRList(props){
 
 	return(
 		<>
-			<Search setSearch={setSearch} list={rFilter()} placeHolder='Enter Research Title' />			
+			<Search setSearch={setSearch} list={rFilter()} reset={() => dispatch({ type: 'reset' })} placeHolder='Enter Research Title' />			
 			<div style={{width: '100%', height: '90%'}} className='d-flex justify-content-center align-items-center'>
 				<div className="d-flex justify-content-center align-items-center" style={{height:'90%', width:'95%', backgroundColor:'white', color:'black',overflowY:'auto',overflowX:'auto'}}>
 					<div className="d-flex flex-column justify-content-center align-items-center" style={{height:'98%', width:'97%'}}>

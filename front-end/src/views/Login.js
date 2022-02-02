@@ -25,6 +25,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import Tooltip from '@mui/material/Tooltip';
 
 
@@ -39,6 +41,21 @@ export default function Login(props){
 	const [dialogMes, setDialogMes] = useState(null);
 	const [dialogOpen, setDialogOpen] = useState(false);
 
+	const cancelOp =() =>{
+		setDialogOpen(false);
+		setSnackOpen(true);
+		setAlertMes("Operation canceled")
+		setAlertStatus(403)
+	}
+
+	const handleDialog = () =>{
+		setDialogOpen(true)
+	}
+
+	const handleDialogClose = () =>{
+		setDialogOpen(false)
+	}
+
 	const token = Cookies.get('token');
 	const rtoken = Cookies.get('rtoken');
 
@@ -46,6 +63,11 @@ export default function Login(props){
 	const state={
 		_username: null,
 		_password:null,
+	}
+
+	const forgetState={
+		studentNo: null,
+		email:null,
 	}
 
 	const handleSnack = () =>{
@@ -83,6 +105,22 @@ export default function Login(props){
 	}
 
 	const [data, dispatch] = useReducer(reducer,state)
+
+	function forgetReducer(state, action){
+		switch(action.type){
+			case "studentNo":
+				state.studentNo=action.data;
+				return state;
+			case "email":
+				state.email=action.data;
+				return state;
+			default:
+				throw new Error(`Unknown action type: ${action.type}`);
+		}
+
+	}
+
+	const [forgetData, forgetDispatch] = useReducer(forgetReducer,forgetState)
 
 	const handler=()=>{
 		setSnackOpen(true)
@@ -123,13 +161,29 @@ export default function Login(props){
 		})
 	}
 
+	const forgetPassword=()=>{
+		setDialogOpen(false)
+		setSnackOpen(true)
+
+		axios.put('http://localhost:7000/forgetpass', forgetData)
+		.then(res=>{
+			setAlertMes(res.data.message);
+			setAlertStatus('good');
+		})
+		.catch(err=>{
+			console.log( err );
+			setAlertMes(JSON.parse(err.request.response).message);
+			setAlertStatus(403)
+		})
+	}
+
 
 
 
 	return(
 		<div className="LoginBG d-flex justify-content-center align-items-center" style={{height:"100%", width:"100%"}}>
 			<div className='d-flex justify-content-center align-items-center' style={{height:'90%',width:'70%'}}>
-				<Snackbar anchorOrigin={{vertical:"top", horizontal:"center"}} open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+				<Snackbar anchorOrigin={{vertical:"top", horizontal:"center"}} open={snackOpen} autoHideDuration={5000} onClose={handleSnackClose}>
 					<Alert variant='filled' severity={alertStatus == 403 ? "error" : "success"} sx={{width:'500px'}}>
 						{alertMes}
 					</Alert>				
@@ -167,6 +221,27 @@ export default function Login(props){
 								}}
 							/>
 							<Button className="MontFont button" style={{height:"40px", width:"63%",color:'#676e78'}} title="Sign in" click={handler}/>
+							<Link onClick={handleDialog}>Forget Password?</Link>
+							<Dialog
+								open={dialogOpen}
+						        onClose={handleDialogClose}
+						        aria-labelledby="alert-dialog-title"
+						        aria-describedby="alert-dialog-description"
+							>
+								<DialogTitle>
+									{"Forget Password"}
+								</DialogTitle>
+								<DialogContent>
+									<p>Enter your student number here:</p>
+									<TextField required id='outlined-required' variant='filled' className="text-center MontFont" style={{width:"300px"}} label="Student no." onChange={(e)=>{forgetDispatch({type:'studentNo',data: e.target.value})}}/>
+									<p>Enter your email address to notify you if your password has been reset:</p>
+									<TextField required id='outlined-required' variant='filled' className="text-center MontFont" style={{width:"300px"}} label="Email Address" onChange={(e)=>{forgetDispatch({type:'email',data: e.target.value})}}/>
+								</DialogContent>
+								<DialogActions>
+									<Button title='Cancel' click={cancelOp}/>
+									<Button title='Yes' click={forgetPassword}/>
+								</DialogActions>
+							</Dialog>
 						</div>
 					</div>
 					<div style={{width:"50%",height:"100%",backgroundColor:"#E2F0D9"}}className='login-logo d-flex flex-column align-items-center justify-content-center' >						
