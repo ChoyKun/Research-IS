@@ -36,6 +36,13 @@ import FacultyInactiveSList from './views/FacultyInactiveSList.js';
 import Login from './views/Login.js';
 import EmergencyAdmin from './views/EmergencyAdmin.js';
 import MobileRList from './views/MobileRList.js';
+import MobileDashboard from './views/MobileDashboard.js';
+import MobileLogin from './views/MobileLogin.js';
+import MobileAbstract from './views/MobileAbstract.js';
+import MobileFull from './views/MobileFull.js';
+import MobilePending from './views/MobilePending.js';
+import MobileApproved from './views/MobileApproved.js';
+import MobileProfile from './views/MobileProfile.js';
 import MobileRListFilter from './views/MobileRListFilter.js';
 import MobileStudentChangePass from './views/MobileStudentChangePass.js';
 import RListFilter from './views/RListFilter.js';
@@ -48,7 +55,6 @@ import StudentPending from './views/StudentPending.js';
 import StudentApproved from './views/StudentApproved.js';
 import AbstractView from './views/AbstractView.js';
 import FullContent from './views/FullContent.js';
-
 import AdminFrame from './views/AdminFrame';
 import FacultyFrame from './views/FacultyFrame';
 import SFrame from './views/SFrame';
@@ -97,6 +103,13 @@ const views = [
   '/MIS-inactive-slist',
   '/MIS-dashboard',
   '/m-rlist',
+  '/m-login',
+  '/m-abstract',
+  '/m-full-content',
+  '/m-profile',
+  '/m-pending',
+  '/m-approved',
+  '/m-dashboard',
   '/m-rlistfilter',
   '/m-changepass',
   '/m-copyright',
@@ -398,9 +411,37 @@ function App() {
                 <Login />
               </Route>
 
-              <Route path="/m-rlist">
+              <Route path="/m-login">
+                <MobileLogin />
+              </Route>
+
+              <Route path="/m-rlist/:username">
                 <MFrame authenticate={authenticate}>
                   <MobileRList />
+                </MFrame>
+              </Route>
+
+              <Route path="/m-dashboard/:username">
+                <MFrame authenticate={authenticate}>
+                  <MobileDashboard />
+                </MFrame>
+              </Route>
+
+              <Route path="/m-profile/:username">
+                <MFrame authenticate={authenticate}>
+                  <MobileProfile />
+                </MFrame>
+              </Route>
+
+              <Route path="/m-pending/:username">
+                <MFrame authenticate={authenticate}>
+                  <MobilePending />
+                </MFrame>
+              </Route>
+
+              <Route path="/m-approved/:username">
+                <MFrame authenticate={authenticate}>
+                  <MobileApproved />
                 </MFrame>
               </Route>
 
@@ -470,7 +511,16 @@ function App() {
 
               <Route path="/research-full/:id">
                   <FullContent />        
-              </Route>        
+              </Route>
+
+              <Route path="/m-abstract/:id">
+                  <MobileAbstract />        
+              </Route>
+
+              <Route path="/m-full-content/:id">
+                  <MobileFull />        
+              </Route>
+
             </Switch>
           </FilterContext.Provider>
 

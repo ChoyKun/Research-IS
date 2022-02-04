@@ -61,8 +61,8 @@ export default function Test() {
 		<>
 		<div style={{height:'100%', width:'100%',backgroundColor:'#385723',fontSize:'100px'}} className="d-flex main justify-content-start align-item-start flex-row	">
 			{researchData?.map?.(object =>(
-		        <div style={{height:'100%', width:'100%',backgroundColor:'gray',fontSize:'100px'}} className="d-flex justify-content-start align-items-start overflow-auto flex-column">
-					<div className="d-flex justify-content-center align-items-start" style={{width:'100%',height:'100%'}}>	
+		        <div style={{height:'100%', width:'100%',backgroundColor:'white',fontSize:'100px'}} className="d-flex justify-content-start align-items-start overflow-auto flex-column">
+					<div className="d-flex justify-content-center align-items-start" style={{width:'100%',height:'80%'}}>	
 						<Document
 							className="noselect d-flex justify-content-start flex-column"
 							file={object.PDFFile}
@@ -71,7 +71,7 @@ export default function Test() {
 						>
 							{Array.apply(null, Array(numPages))
 						    .map((x, i)=>i+1)
-						    .map(page => <Page className="d-flex justify-content-start flex-column" height='700' pageNumber={page}/>)}
+						    .map(page => <Page className="d-flex justify-content-start flex-column" height='400' pageNumber={page}/>)}
 						</Document>
 					</div>
 		        </div>
@@ -82,6 +82,7 @@ export default function Test() {
 }
 
 {/*
+	height='600'
 						<button
 						style={{height:'70px',width:'150px',fontSize:'20px'}}
 						type="button"
