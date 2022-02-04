@@ -56,7 +56,7 @@ export default function StudentRList(props){
 	
 
 	const initState = {
-		course: 'BSIT',
+		course: 'all',
 		category: [],
 		yearSubmitted: 'null',
 		order: 'A-Z',
@@ -98,7 +98,7 @@ export default function StudentRList(props){
 
 			case 'reset':
 				state = {
-					course: 'BSIT',
+					course: 'all',
 					category: [],
 					yearSubmitted: 'null',
 					order: 'A-Z',
@@ -127,7 +127,7 @@ export default function StudentRList(props){
 						<Select 
 							className='sfilterCourse' 
 							label='Course:' 
-							options={['BSIT','BSCS']}
+							options={['all','BSIT','BSCS']}
 							reqOnChange={e => dispatch({type: 'course', data: e.target.value})}
 						/>
 						<div style={{ height:'40px',width:'100px', color:'black'}} className='d-flex flex-row'>

@@ -91,11 +91,11 @@ export default function StudentRList(props){
 	
 
 	const initState = {
-		course: 'BSIT',
+		course: 'all',
 		section:'null',
 		yearLevel: 'all',
 		order: 'A-Z',
-		sex:'Male',
+		sex:'all',
 		year: 'Newest'
 	}
 
@@ -140,11 +140,11 @@ export default function StudentRList(props){
 				
 			case 'reset':
 				state = {
-					course: 'BSIT',
+					course: 'all',
 					section:'null',
 					yearLevel: 'all',
 					order: 'A-Z',
-					sex:'Male',
+					sex:'all',
 					year: 'Newest'
 				}
 
@@ -170,7 +170,7 @@ export default function StudentRList(props){
 								<Select 
 									className='sfilterCourse' 
 									label='Course:' 
-									options={['BSIT','BSCS']}
+									options={['all','BSIT','BSCS']}
 									reqOnChange={e => dispatch({type: 'course', data: e.target.value})}
 								/>
 								<div style={{ height:'40px',width:'500px', color:'black'}} className='d-flex flex-row'>
@@ -180,7 +180,7 @@ export default function StudentRList(props){
 								<Select 
 									className='sfilterCourse' 
 									label='Sex:' 
-									options={['Male','Female']}
+									options={['all','Male','Female']}
 									reqOnChange={e => dispatch({type: 'sex', data: e.target.value})}
 								/>
 								<div style={{ height:'40px',width:'100px', color:'black'}} className='d-flex flex-row'>
@@ -239,16 +239,9 @@ export default function StudentRList(props){
 				console.log(section);
 				axios.get(`http://localhost:7000/inactive-student-filter-query/${course}/${section}/${yearLevel}/${order}/${sex}/${year}`)
 				.then( res => {
-					if(section == 'null'){
-						res.data.result.forEach( item => {
-							result.push(<Item key={item._id} object={item} dispatch={selectedDispatch}/>);
-						});
-					}
-					else{
-						res.data.sectionResult.forEach( item => {
-							result.push(<Item key={item._id} object={item} dispatch={selectedDispatch}/>);
-						});
-					}
+					res.data.result.forEach( item => {
+						result.push(<Item key={item._id} object={item} dispatch={selectedDispatch}/>);
+					});
 					
 
 					setFilteredData([...result]);

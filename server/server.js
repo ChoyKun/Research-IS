@@ -117,7 +117,7 @@ app.get('/filter-query/:course/:category/:yearSubmitted/:order/:year', async( re
 	const result = [];
 
 	Research.find(
-		{ course: course, status: 'public' }, 
+		{ status: 'public' }, 
 		null, 
 		{ sort: { 
 			title: order === 'A-Z' ? 1 : -1,
@@ -128,17 +128,7 @@ app.get('/filter-query/:course/:category/:yearSubmitted/:order/:year', async( re
 
 			if( docs ){
 				if(yearSubmitted == 'null'){
-					docs.forEach( doc => {
-						JSON.parse( doc.researchCategories )
-						.forEach( categ => {
-							if( category.includes( categ ) ){
-								return result.push( doc );
-							}
-						});
-					});
-				}
-				else{
-					if(docs.yearSubmitted == yearSubmitted){
+					if(course == 'all'){
 						docs.forEach( doc => {
 							JSON.parse( doc.researchCategories )
 							.forEach( categ => {
@@ -147,6 +137,45 @@ app.get('/filter-query/:course/:category/:yearSubmitted/:order/:year', async( re
 								}
 							});
 						});
+					}
+					else{
+						docs.forEach( doc => {
+							if(doc.course == course){
+								JSON.parse( doc.researchCategories )
+								.forEach( categ => {
+									if( category.includes( categ ) ){
+										return result.push( doc );
+									}
+								});
+							}
+						});
+					}
+					
+				}
+				else{
+					if(docs.yearSubmitted == yearSubmitted){
+						if(course == 'all'){
+							docs.forEach( doc => {
+								JSON.parse( doc.researchCategories )
+								.forEach( categ => {
+									if( category.includes( categ ) ){
+										return result.push( doc );
+									}
+								});
+							});
+						}
+						else{
+							docs.forEach( doc => {
+								if(doc.course == course){
+									JSON.parse( doc.researchCategories )
+									.forEach( categ => {
+										if( category.includes( categ ) ){
+											return result.push( doc );
+										}
+									});
+								}
+							});
+						}
 					}
 				}
 				
@@ -176,9 +205,11 @@ app.get('/student-filter-query/:course/:section/:yearLevel/:order/:sex/:year', a
 	const sectionResult  = [];
 
 	console.log(yearLevel);
+	console.log(course);
+	console.log(sex)
 
 	Student.find(
-		{ course: course, sex:sex}, 
+		{ status:'active'}, 
 		null, 
 		{ sort: { 
 			lastName: order === 'A-Z' ? 1 : -1,
@@ -189,32 +220,116 @@ app.get('/student-filter-query/:course/:section/:yearLevel/:order/:sex/:year', a
 
 			if( docs ){
 				docs.forEach( doc => {
-					if(doc.status == 'active'){
-						if( yearLevel =='all' ){
-							result.push(doc);
-						}
-						else{
-							if(doc.yearLevel == yearLevel){
-								result.push(doc);
-							}	
-						}
-
-						console.log(doc.yearLevel)
-
-						if(doc.section == section){
-							if(doc.yearLevel == yearLevel){
-								sectionResult.push( doc );
+					if(section == 'null'){
+						if(sex == 'all'){
+							if(course == 'all'){
+								if( yearLevel =='all' ){
+									result.push(doc);
+								}
+								else{
+									if(doc.yearLevel == yearLevel){
+										result.push(doc);
+									}	
+								}		
+							}
+							else{
+								if(doc.course == course){
+									if( yearLevel =='all' ){
+										result.push(doc);
+									}
+									else{
+										if(doc.yearLevel == yearLevel){
+											result.push(doc);
+										}	
+									}		
+								}
 							}
 						}
+						else{
+							if(doc.sex == sex){
+								if(course == 'all'){
+									if( yearLevel =='all' ){
+										result.push(doc);
+									}
+									else{
+										if(doc.yearLevel == yearLevel){
+											result.push(doc);
+										}	
+									}		
+								}
+								else{
+									if(doc.course == course){
+										if( yearLevel == 'all' ){
+											result.push(doc);
+										}
+										else{
+											if(doc.yearLevel == yearLevel){
+												result.push(doc);
+											}	
+										}		
+									}
+								}
+							}			
+						}
 					}
+					else{
+						if(doc.section == section){
+							if(sex == 'all'){
+								if(course == 'all'){
+									if( yearLevel =='all' ){
+										result.push(doc);
+									}
+									else{
+										if(doc.yearLevel == yearLevel){
+											result.push(doc);
+										}	
+									}		
+								}
+								else{
+									if(doc.course == course){
+										if( yearLevel =='all' ){
+											result.push(doc);
+										}
+										else{
+											if(doc.yearLevel == yearLevel){
+												result.push(doc);
+											}	
+										}		
+									}
+								}
+							}
+							else{
+								if(doc.sex == sex){
+									if(course == 'all'){
+										if( yearLevel =='all' ){
+											result.push(doc);
+										}
+										else{
+											if(doc.yearLevel == yearLevel){
+												result.push(doc);
+											}	
+										}		
+									}
+									else{
+										if(doc.course == course){
+											if( yearLevel == 'all' ){
+												result.push(doc);
+											}
+											else{
+												if(doc.yearLevel == yearLevel){
+													result.push(doc);
+												}	
+											}		
+										}
+									}
+								}			
+							}
+						}
+					}		
 				});
 
-				if(section == 'null'){
-					return res.json({ result });
-				}
-				else{
-					return res.json({ sectionResult });
-				}
+				return res.json({ result });
+
 			}
 			else{
 				return res.sendStatus( 403 );
@@ -238,44 +353,127 @@ app.get('/inactive-student-filter-query/:course/:section/:yearLevel/:order/:sex/
 
 
 	Student.find(
-		{ course: course}, 
+		{ status:'inactive'}, 
 		null, 
 		{ sort: { 
-			lastName: order === 'A-Z' ? -1 : 1,
-			yearLevel: yearLevel === '4-1' ? 1 : -1
+			lastName: order === 'A-Z' ? 1 : -1,
+			year: yearLevel === '1-4' ? 1 : -1
 		}},
 		( err, docs ) => {
 			if( err ) return res.status( 503 ).json({ message:'Server Error' });
 
 			if( docs ){
-				console.log(section);
 				docs.forEach( doc => {
-					if(doc.status == 'inactive'){
-						if( yearLevel =='all' ){
-							result.push(doc);
-						}
-						else{
-							if(doc.yearLevel == yearLevel){
-								result.push(doc);
-							}	
-						}
-
-						console.log(doc.yearLevel)
-
-						if(doc.section == section){
-							if(doc.yearLevel == yearLevel){
-								sectionResult.push( doc );
+					if(section == 'null'){
+						if(sex == 'all'){
+							if(course == 'all'){
+								if( yearLevel =='all' ){
+									result.push(doc);
+								}
+								else{
+									if(doc.yearLevel == yearLevel){
+										result.push(doc);
+									}	
+								}		
+							}
+							else{
+								if(doc.course == course){
+									if( yearLevel =='all' ){
+										result.push(doc);
+									}
+									else{
+										if(doc.yearLevel == yearLevel){
+											result.push(doc);
+										}	
+									}		
+								}
 							}
 						}
+						else{
+							if(doc.sex == sex){
+								if(course == 'all'){
+									if( yearLevel =='all' ){
+										result.push(doc);
+									}
+									else{
+										if(doc.yearLevel == yearLevel){
+											result.push(doc);
+										}	
+									}		
+								}
+								else{
+									if(doc.course == course){
+										if( yearLevel == 'all' ){
+											result.push(doc);
+										}
+										else{
+											if(doc.yearLevel == yearLevel){
+												result.push(doc);
+											}	
+										}		
+									}
+								}
+							}			
+						}
 					}
+					else{
+						if(doc.section == section){
+							if(sex == 'all'){
+								if(course == 'all'){
+									if( yearLevel =='all' ){
+										result.push(doc);
+									}
+									else{
+										if(doc.yearLevel == yearLevel){
+											result.push(doc);
+										}	
+									}		
+								}
+								else{
+									if(doc.course == course){
+										if( yearLevel =='all' ){
+											result.push(doc);
+										}
+										else{
+											if(doc.yearLevel == yearLevel){
+												result.push(doc);
+											}	
+										}		
+									}
+								}
+							}
+							else{
+								if(doc.sex == sex){
+									if(course == 'all'){
+										if( yearLevel =='all' ){
+											result.push(doc);
+										}
+										else{
+											if(doc.yearLevel == yearLevel){
+												result.push(doc);
+											}	
+										}		
+									}
+									else{
+										if(doc.course == course){
+											if( yearLevel == 'all' ){
+												result.push(doc);
+											}
+											else{
+												if(doc.yearLevel == yearLevel){
+													result.push(doc);
+												}	
+											}		
+										}
+									}
+								}			
+							}
+						}
+					}		
 				});
 
-				if(section == 'null'){
-					return res.json({ result });
-				}
-				else{
-					return res.json({ sectionResult });
-				}
+				return res.json({ result });
+
 			}
 			else{
 				return res.sendStatus( 403 );
