@@ -134,12 +134,7 @@ export default function StudentRList(props){
 							<label style={{height:'40px',width:'300px'}}>Year: </label>
 							<Field style={{ height:'25px',width:'100px', color:'black'}} type="number" placeHolder='ex. 2001' reqOnChange={e => dispatch({type: 'yearSubmitted', data: e.target.value})}/>
 						</div>
-						<div style={{width:'100%', color:'black'}}>
-							<Select width='55px' className='sfilterAlphabetical' label='Sort from:' options={['A-Z','Z-A']}reqOnChange={e => dispatch({type: 'order', data: e.target.value})}/>
-						</div>
-						<div style={{width:'100%', color:'black'}}>
-							<Select width='80px' className='sfilterYear' label='Sort by year:' options={['Newest','Oldest']} reqOnChange={e => dispatch({type: 'year', data: e.target.value})}/>
-						</div>
+						<Select width='55px' className='sfilterAlphabetical' label='Sort from:' options={['A-Z','Z-A']}reqOnChange={e => dispatch({type: 'order', data: e.target.value})}/>
 					</div>
 				</div>
 				<div className='d-flex flex-column justify-content-start align-items-start' style={{height:'100%',width:'50%'}}>

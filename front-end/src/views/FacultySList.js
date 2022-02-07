@@ -398,12 +398,7 @@ export default function StudentRList(props){
 						<div style={{ height:'40px',width:'100px', color:'black'}} className='d-flex flex-row'>
 							<Select className='aRegYear' label='Year: ' options={['all','1','2','3','4']} reqOnChange={(e)=>{dispatch({type:'yearLevel',data: e.target.value})}}/>
 						</div>
-						<div style={{width:'100%', color:'black'}}>
-							<Select width='55px' className='sfilterAlphabetical' label='Sort from:' options={['A-Z','Z-A']}reqOnChange={e => dispatch({type: 'order', data: e.target.value})}/>
-						</div>
-						<div style={{width:'100%', color:'black'}}>
-							<Select width='80px' className='sfilterYear' label='Sort by year:' options={['Newest','Oldest']} reqOnChange={e => dispatch({type: 'year', data: e.target.value})}/>
-						</div>
+						<Select width='55px' className='sfilterAlphabetical' label='Sort from:' options={['A-Z','Z-A']}reqOnChange={e => dispatch({type: 'order', data: e.target.value})}/>
 					</div>
 				</div>
 			</div>

@@ -182,24 +182,24 @@ export default function Login(props){
 
 	return(
 		<div className="LoginBG d-flex justify-content-center align-items-center" style={{height:"100%", width:"100%"}}>
-			<div className='d-flex justify-content-center align-items-center' style={{height:'90%',width:'70%'}}>
+			<div className='d-flex justify-content-center align-items-center' style={{height:'95%',width:'70%'}}>
 				<Snackbar anchorOrigin={{vertical:"top", horizontal:"center"}} open={snackOpen} autoHideDuration={5000} onClose={handleSnackClose}>
 					<Alert variant='filled' severity={alertStatus == 403 ? "error" : "success"} sx={{width:'500px'}}>
 						{alertMes}
 					</Alert>				
 				</Snackbar>
-				<div style={{height:"90%",width:"80%"}} className="d-flex flex-row justify-content-center align-items-center">
+				<div style={{height:"100%",width:"100%"}} className="d-flex flex-row justify-content-center align-items-center">
 					<div style={{width:"50%",height:"100%"}}className='login-inputs d-flex flex-column justify-content-center'>
 						<div style={{height:"50%"}}className="login-header d-flex justify-content-center align-items-center flex-column">
 							<img src={scslogo}/>
 							<h5 className="MontFont" style={{width:"270px",textAlign:"center",color:'#676e78'}}>Sign in to start session</h5>
 						</div>
 						<div style={{height:"40%"}}className="login-field d-flex flex-column align-items-center justify-content-around">
-							<TextField required id='outlined-required' variant='filled' className="text-center MontFont" style={{width:"270px"}} label="Student no." onChange={(e)=>{dispatch({type:'username',data: e.target.value})}}/>
+							<TextField required id='outlined-required' variant='filled' className="text-center MontFont" style={{width:"63%"}} label="Student no." onChange={(e)=>{dispatch({type:'username',data: e.target.value})}}/>
 							<TextField 
 								required id='outlined-required' 
 								className="text-center MontFont" 
-								style={{width:"270px"}} 
+								style={{width:"63%"}} 
 								type={showPassword ? "text" : "password"} 
 								label="Password"
 								variant='filled' 
@@ -245,9 +245,9 @@ export default function Login(props){
 						</div>
 					</div>
 					<div style={{width:"50%",height:"100%",backgroundColor:"#E2F0D9"}}className='login-logo d-flex flex-column align-items-center justify-content-center' >						
-						<h1 style={{height:'15%',fontFamily: "Garamond, serif",fontWeight: "bold",fontSize:"40px",textAlign:"center",color:"black"}}>SCS Research Information System</h1>
+						<h1 style={{height:'20%',fontFamily: "Garamond, serif",fontWeight: "bold",fontSize:"40px",textAlign:"center",color:"black"}}>SCS Research Information System</h1>
 						<div className='d-flex align-items-center flex-column justify-content-center' style={{height:'30%'}}>
-							<img style={{height:"170px",width:"170px"}} src={researchimg}/>
+							<img style={{height:"100%",width:"100%"}} src={researchimg}/>
 						</div>
 						<div className='d-flex align-items-center flex-column justify-content-center' style={{height:'25%'}}>
 							<p style={{fontFamily: "Dancing Script",fontStyle: "italic",fontSize:"25px",textAlign:"center",color:"#676e78"}}> Your quick stop for research papers </p>
