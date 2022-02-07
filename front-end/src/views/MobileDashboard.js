@@ -138,7 +138,7 @@ export default function StudentDashboard(props){
 									</div>
 									<Divider style={{height:'2px', width:'100%', color:'black'}}/>
 									<div className="d-flex flex-row justify-content-end align-items-center" style={{height:'25%',width:'95%'}}>
-										<Link to={`/m-rlist/${username}`}><Button style={{height:'30px'}}title='See All Researches'/></Link>
+										<Link to={`/student-rlist/${username}`}><Button style={{height:'30px'}}title='See All Researches'/></Link>
 									</div>
 								</div>
 							</div>

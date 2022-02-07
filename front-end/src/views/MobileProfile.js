@@ -519,8 +519,8 @@ export default function StudentProfile(props){
 											</div>
 											<Divider style={{height:'2px', width:'100%', color:'black'}}/>
 											<div className="d-flex flex-row justify-content-between" style={{width:'100%', height:'15%'}}>
-												<Link to={`/m-pending/${username}`}><Button style={{height:'25px',width:'100px',fontSize:'13px'}} title='Pending List'/></Link>
-												<Link to={`/m-approved/${username}`}><Button style={{height:'25px',width:'100px',fontSize:'13px'}} title='Approved List'/></Link>
+												<Link to={`/student-pending/${username}`}><Button style={{height:'25px',width:'100px',fontSize:'13px'}} title='Pending List'/></Link>
+												<Link to={`/student-approved/${username}`}><Button style={{height:'25px',width:'100px',fontSize:'13px'}} title='Approved List'/></Link>
 											</div>
 										</div>
 										

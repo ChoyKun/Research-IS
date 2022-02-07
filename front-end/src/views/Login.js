@@ -156,7 +156,9 @@ export default function Login(props){
 		})	
 		.catch(err=>{
 			console.log( err );
-			setAlertMes(JSON.parse(err.request.response).message);
+			if( err?.request ){
+				setAlertMes(JSON.parse(err.request.response).message);
+			}
 			setAlertStatus(403)
 		})
 	}

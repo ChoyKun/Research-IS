@@ -1987,8 +1987,10 @@ app.put('/faculty/flist/resetpass/:studentNo', async (req, res, next) =>{
 					})
 				}
 			})
-		}
-	})
+	}
+})
+
+
 
 	
 	
@@ -2435,6 +2437,40 @@ app.get('/auth-admin/profile', async(req, res, next)=>{
 		}
 	});
 });
+
+app.put('/coordinator/clist/resetpass', async (req, res, next) =>{
+	const today = new Date();
+	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+
+	const studentNo = req.params.studentNo
+
+	Coordinator.findOne({status:'active'}, (err,docs)=>{
+		if(err) return res.status( 503 ).json({ message: 'Server Error' });
+
+		if(docs){
+			console.log(docs)
+			docs.activity.push({message:`You reset ${studentNo}'s password to default`, date: date})
+
+			docs.save( err=>{
+				if(err) return res.status(503).json({message:'server error'});
+			})
+			Faculty.findOne({status:'active'}, (err,doc)=>{
+				if(err) return res.status( 503 ).json({ message: 'Server Error' });
+
+				if(doc){
+					doc.password = 'mis12345';
+					doc.inbox.push({message:`Coordinator had reset your password`, date: date})
+
+					doc.save( err=>{
+						if(err) return res.status(503).json({message:'server error'});
+
+						return res.status( 200 ).json({message: 'Reset to default password'});
+					})
+				}
+			})
+		}
+	})
+})
 
 app.put('/coordinator/clist/remove-approved/:studentNo/:title', async (req,res,next)=>{
 	const studentNo = req.params.studentNo;

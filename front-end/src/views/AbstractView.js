@@ -41,8 +41,8 @@ export default function Test() {
     <>
     <div style={{height:'100%', width:'100%',backgroundColor:'#385723',fontSize:'100px'}} className="d-flex main justify-content-center align-item-center">
       {researchData?.map?.(object =>(
-        <div style={{height:'100%', width:'100%',backgroundColor:'white',fontSize:'100px'}} className="d-flex justify-content-center align-items-center overflow-auto flex-column">
-          <div className="d-flex flex-column align-items-center justify-content-around" style={{height:'95%',width:'50%',border:'1px solid black',backgroundColor:'#e2f0d9'}}>          
+        <div style={{height:'100%', width:'100%',backgroundColor:'gray',fontSize:'100px'}} className="d-flex justify-content-center align-items-center overflow-auto flex-column">
+          <div className="d-flex flex-column align-items-center justify-content-around" style={{height:'95%',width:'50%'}}>          
               <div className="d-flex justify-content-center align-items-center" style={{width:'400px',height:'80%'}}> 
                 <Document
                   className="noselect"

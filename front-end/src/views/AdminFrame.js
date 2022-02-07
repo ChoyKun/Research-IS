@@ -238,9 +238,6 @@ export default function SFrame(props){
 		const id = Cookies.get('id');
 
 		if( id ){
-			console.log( id );
-
-			console.log( inboxMessages );
 			const tempInboxList = [];
 			inboxMessages.forEach( msg => {
 				console.log( msg );
@@ -332,7 +329,7 @@ export default function SFrame(props){
 		.catch(err=>{
 			console.log(err);
 		});
-	}, [])
+	}, []);
 
 	const toggleDrawer = (open) => (event) => {
 		setIsMenuOpen( open );

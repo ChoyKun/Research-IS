@@ -123,7 +123,7 @@ function Item(props){
 						</div>
 					</div>
 					<div className="d-flex flex-row-reverse justify-content-start align-items-center" style={{height:'20%',width:'90%'}}>
-						<Link to={`/m-abstract/${props.object._id}`}><Button title="View Document" style={{height:'30px'}}/></Link>
+						<Link to={`/research-abstract/${props.object._id}`}><Button title="View Document" style={{height:'30px'}}/></Link>
 					</div>
 				</div>
 			</div>

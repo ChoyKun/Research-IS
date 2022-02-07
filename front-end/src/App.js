@@ -5,16 +5,11 @@ import axios from 'axios';
 import { SnackbarProvider } from 'notistack';
 
 import FormCard from './components/cards/form-card';
-import AdminAccess from './views/AdminAccess.js';
-import AdminChangepass from './views/AdminChangepass.js';
 import AdminArchive from './views/AdminArchive.js';
 import AdminActLogs from './views/AdminActLogs.js';
-import AdminLogin from './views/AdminLogin.js';
 import AdminReg from './views/AdminReg.js';
-import AdminUnauthorized from './views/AdminUnauthorized.js';
 import AdminRequest from './views/AdminRequest.js';
 import AdminProfile from './views/AdminProfile.js';
-import AdminEditProfile from './views/AdminEditProfile.js';
 import AdminRlist from './views/AdminRList';
 import AdminSList from './views/AdminSList.js';
 import AdminSApproved from './views/AdminSApproved.js';
@@ -27,14 +22,10 @@ import AdminDashboard from './views/AdminDashboard.js';
 import AdminNewCoor from './views/AdminNewCoor.js';
 import FacultyReg from './views/FacultyReg.js';
 import FacultyProfile from './views/FacultyProfile.js';
-import FacultyEditProfile from './views/FacultyEditProfile.js';
-import FacultyEditStudent from './views/FacultyEditStudent.js';
-import FacultyChangepass from './views/FacultyChangepass.js';
 import FacultySList from './views/FacultySList.js';
 import FacultyDashboard from './views/FacultyDashboard.js';
 import FacultyInactiveSList from './views/FacultyInactiveSList.js';
 import Login from './views/Login.js';
-import EmergencyAdmin from './views/EmergencyAdmin.js';
 import MobileRList from './views/MobileRList.js';
 import MobileDashboard from './views/MobileDashboard.js';
 import MobileLogin from './views/MobileLogin.js';
@@ -43,11 +34,6 @@ import MobileFull from './views/MobileFull.js';
 import MobilePending from './views/MobilePending.js';
 import MobileApproved from './views/MobileApproved.js';
 import MobileProfile from './views/MobileProfile.js';
-import MobileRListFilter from './views/MobileRListFilter.js';
-import MobileStudentChangePass from './views/MobileStudentChangePass.js';
-import RListFilter from './views/RListFilter.js';
-import SListFilter from './views/SListFilter.js';
-import StudentChangePass from './views/StudentChangePass.js';
 import StudentDashboard from './views/StudentDashboard.js';
 import StudentRList from './views/StudentRList.js';
 import StudentProfile from './views/StudentProfile.js';
@@ -58,7 +44,6 @@ import FullContent from './views/FullContent.js';
 import AdminFrame from './views/AdminFrame';
 import FacultyFrame from './views/FacultyFrame';
 import SFrame from './views/SFrame';
-import EmptyFrame from './views/EmptyFrame';
 import MFrame from './views/MFrame'
 
 import EventEmitter from './modules/custom-event-emitter';
@@ -144,11 +129,14 @@ function App() {
   const [requestedView, setRequetedView] = React.useState( null );
   const [inboxMessages, setInboxMessages] = React.useState( [] );
   const [sFilter, setSFilter] = React.useState( null );
+  const [device, setDevice] = React.useState('pc');
+  const [width, setWidth] = React.useState( window.innerWidth );
 
   const authenticate = () => {
     const token = Cookies.get('token');
     const rtoken = Cookies.get('rtoken');
 
+    console.log( process.env.REACT_APP_HOST );
     if( token ){
       axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/verify-me`, {
         headers: {
@@ -206,10 +194,8 @@ function App() {
   }
 
   const getMessages = async () => {
-    console.log('here');
     axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/messages`)
     .then( res => {
-      console.log( res.data.data );
       setInboxMessages( res.data.data );
     })
     .catch( err => {
@@ -217,12 +203,256 @@ function App() {
     });
   }
 
+  const getMemoizedNMessages = React.useCallback(getMessages, [inboxMessages]);
+
   React.useEffect(() => {
     authenticate();
+    // const getMessage = setInterval(() => {
+    //     getMessages();
+    //   },3000);
+
+    // return () => clearInterval( getMessage );
     getMessages();
+
   }, []);
 
+  // React.useEffect(() => {
+  //   const getMessage = setInterval(() => {
+  //     getMemoizedNMessages();
+  //   }, 6000);
+
+  //   return () => clearInterval( getMessage );
+  // }, []);
+
+  const handleResize = () => {
+    setWidth( window.innerWidth );
+  }
+
+  React.useEffect(() => {
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  React.useEffect(() => {
+    setDevice( isMobileWidth( width ) ? 'mobile' : 'pc' );
+  }, [width]);
+
   const isMobile = () => /iPhone|iPad|iPod|Android/i.test( navigator.userAgent );
+  const isMobileWidth = width => width < 480;
+
+  const DeviceView = () => {
+    return(
+      device === 'mobile'
+        ? <>
+            <Route path="/research-abstract/:id">
+                <MobileAbstract />        
+            </Route>
+
+            <Route path="/research-full/:id">
+                <MobileFull />        
+            </Route>
+
+            <Route path="/sign-in">
+              <MobileLogin />
+            </Route>
+
+            <Route path="/student-rlist/:username">
+              <MFrame authenticate={authenticate}>
+                <MobileRList />
+              </MFrame>
+            </Route>
+
+            <Route path="/student-dashboard/:username">
+              <MFrame authenticate={authenticate}>
+                <MobileDashboard />
+              </MFrame>
+            </Route>
+
+            <Route path="/student-profile/:username">
+              <MFrame authenticate={authenticate}>
+                <MobileProfile />
+              </MFrame>
+            </Route>
+
+            <Route path="/student-pending/:username">
+              <MFrame authenticate={authenticate}>
+                <MobilePending />
+              </MFrame>
+            </Route>
+
+            <Route path="/student-approved/:username">
+              <MFrame authenticate={authenticate}>
+                <MobileApproved />
+              </MFrame>
+            </Route>
+
+          </>
+        : <>
+            <Route path="/student-rlist/:username">
+              <SFrame authenticate={authenticate}>
+                <StudentRList />
+              </SFrame>
+            </Route>
+
+             <Route path='/student-dashboard/:username'>
+              <SFrame authenticate={authenticate}>
+                <StudentDashboard />
+              </SFrame>
+            </Route>
+
+            <Route path="/student-approved/:username">
+              <SFrame authenticate={authenticate}>
+                <StudentApproved />
+              </SFrame>
+            </Route>
+
+            <Route path="/student-pending/:username">
+              <SFrame authenticate={authenticate}>
+                <StudentPending />
+              </SFrame>
+            </Route>
+
+            <Route path="/student-profile/:username">
+              <SFrame authenticate={authenticate}>
+                <StudentProfile />
+              </SFrame>
+            </Route>
+
+            <Route path="/research-abstract/:id">
+                <AbstractView />        
+            </Route>
+
+            <Route path="/research-full/:id">
+                <FullContent />        
+            </Route>
+             <Route path="/admin-profile/:username">
+              <AdminFrame authenticate={authenticate}>
+                <AdminProfile />
+              </AdminFrame>
+            </Route>
+
+             <Route path="/admin-act-logs/:username">
+              <AdminFrame authenticate={authenticate}>
+                <AdminActLogs />
+              </AdminFrame>
+            </Route>
+
+            <Route path="/admin-archive/:username">
+              <AdminFrame authenticate={authenticate}>
+                <AdminArchive />
+              </AdminFrame>
+            </Route>
+
+             <Route path="/admin-dashboard/:username">
+              <AdminFrame authenticate={authenticate}>
+                <AdminDashboard />
+              </AdminFrame>
+            </Route>
+
+            <Route path="/admin-reg/:username">
+              <AdminFrame authenticate={authenticate}>
+                <AdminReg />
+              </AdminFrame>
+            </Route>
+
+            <Route path="/admin-request/:username">
+              <AdminFrame authenticate={authenticate}>
+                <AdminRequest getMessages={() => getMessages()}/>
+              </AdminFrame>
+            </Route>
+
+            <Route path="/admin-new-coor">
+              <AdminFrame authenticate={authenticate}>
+                <AdminNewCoor />
+              </AdminFrame>
+            </Route>
+
+            <Route path="/admin-coor-list/:username">
+              <AdminFrame authenticate={authenticate}>
+                <AdminCList />
+              </AdminFrame>
+            </Route>
+
+            <Route path="/admin-current-officer/:username">
+              <AdminFrame authenticate={authenticate}>
+                <AdminCO />
+              </AdminFrame>
+            </Route>
+
+            <Route exact path="/admin-rlist/:username">
+              <AdminFrame authenticate={authenticate}>
+                <AdminRlist />
+              </AdminFrame>
+            </Route>
+
+            <Route exact path="/admin-slist/:username">
+              <AdminFrame authenticate={authenticate}>
+                <AdminSList />
+              </AdminFrame>
+            </Route>
+
+            <Route exact path="/admin-sapproved/:username/:studentNo">
+              <AdminFrame authenticate={authenticate}>
+                <AdminSApproved />
+              </AdminFrame>
+            </Route>
+
+            <Route exact path="/admin-inactive-slist/:username">
+              <AdminFrame authenticate={authenticate}>
+                <AdminInactiveSList />
+              </AdminFrame>
+            </Route>
+
+            <Route exact path="/admin-flist/:username">
+              <AdminFrame authenticate={authenticate}>
+                <AdminFList />
+              </AdminFrame>
+            </Route>
+
+            <Route path="/admin-upload/:username">
+              <AdminFrame authenticate={authenticate}>
+                <AdminUpload />
+              </AdminFrame>
+            </Route>
+
+            <Route path="/MIS-reg/:username">
+              <FacultyFrame authenticate={authenticate}>
+                <FacultyReg />
+              </FacultyFrame>
+            </Route>
+
+            <Route path="/MIS-profile/:username">
+              <FacultyFrame authenticate={authenticate}>
+                <FacultyProfile />
+              </FacultyFrame>
+            </Route>
+
+            <Route path="/MIS-slist/:username">
+              <FacultyFrame authenticate={authenticate}>
+                <FacultySList />
+              </FacultyFrame>
+            </Route>
+
+            <Route path="/MIS-dashboard/:username">
+              <FacultyFrame authenticate={authenticate}>
+                <FacultyDashboard />
+              </FacultyFrame>
+            </Route>
+
+             <Route path="/MIS-inactive-slist/:username">
+              <FacultyFrame authenticate={authenticate}>
+                <FacultyInactiveSList />
+              </FacultyFrame>
+            </Route>
+
+            <Route path="/sign-in">
+              <Login />
+            </Route>
+
+          </>
+      );
+  }
 
   return (
     <InboxContext.Provider value={inboxMessages}>
@@ -230,305 +460,19 @@ function App() {
          <div className="app">
           <FilterContext.Provider value={{setSFilter: setSFilter, sFilter: sFilter}}>
             <Switch>
-              <Route path="/admin-profile/:username">
-                <AdminFrame authenticate={authenticate}>
-                  <AdminProfile />
-                </AdminFrame>
-              </Route>
-
-               <Route path="/admin-act-logs/:username">
-                <AdminFrame authenticate={authenticate}>
-                  <AdminActLogs />
-                </AdminFrame>
-              </Route>
-
-              <Route path="/admin-access/:username">
-                <FacultyFrame authenticate={authenticate}>
-                  <AdminAccess />
-                </FacultyFrame>
-              </Route>
-
-              <Route path="/admin-archive/:username">
-                <AdminFrame authenticate={authenticate}>
-                  <AdminArchive />
-                </AdminFrame>
-              </Route>
-
-              <Route path="/admin-edit-profile/:username">
-                <AdminFrame authenticate={authenticate}>
-                  <AdminEditProfile />
-                </AdminFrame>
-              </Route>
-
-              <Route path="/admin-changepass/:username">
-                <AdminFrame authenticate={authenticate}>
-                  <AdminChangepass />
-                </AdminFrame>
-              </Route>
-
-               <Route path="/admin-dashboard/:username">
-                <AdminFrame authenticate={authenticate}>
-                  <AdminDashboard />
-                </AdminFrame>
-              </Route>
-
-              <Route path="/admin-log-in/:username">
-                <FacultyFrame authenticate={authenticate}>
-                  <AdminLogin />
-                </FacultyFrame>
-              </Route>
-
-              <Route path="/admin-reg/:username">
-                <AdminFrame authenticate={authenticate}>
-                  <AdminReg />
-                </AdminFrame>
-              </Route>
-
-              <Route path="/admin-unauthorized/:username">
-                <FacultyFrame authenticate={authenticate}>
-                  <AdminUnauthorized />
-                </FacultyFrame>
-              </Route>
-
-              <Route path="/admin-request/:username">
-                <AdminFrame authenticate={authenticate}>
-                  <AdminRequest getMessages={() => getMessages()}/>
-                </AdminFrame>
-              </Route>
-
-              <Route path="/admin-new-coor">
-                <AdminFrame authenticate={authenticate}>
-                  <AdminNewCoor />
-                </AdminFrame>
-              </Route>
-
-              <Route path="/admin-coor-list/:username">
-                <AdminFrame authenticate={authenticate}>
-                  <AdminCList />
-                </AdminFrame>
-              </Route>
-
-              <Route path="/admin-current-officer/:username">
-                <AdminFrame authenticate={authenticate}>
-                  <AdminCO />
-                </AdminFrame>
-              </Route>
-
-              <Route exact path="/admin-rlist/:username">
-                <AdminFrame authenticate={authenticate}>
-                  <AdminRlist />
-                </AdminFrame>
-              </Route>
-
-              <Route exact path="/admin-slist/:username">
-                <AdminFrame authenticate={authenticate}>
-                  <AdminSList />
-                </AdminFrame>
-              </Route>
-
-              <Route exact path="/admin-sapproved/:username/:studentNo">
-                <AdminFrame authenticate={authenticate}>
-                  <AdminSApproved />
-                </AdminFrame>
-              </Route>
-
-              <Route exact path="/admin-inactive-slist/:username">
-                <AdminFrame authenticate={authenticate}>
-                  <AdminInactiveSList />
-                </AdminFrame>
-              </Route>
-
-              <Route exact path="/admin-flist/:username">
-                <AdminFrame authenticate={authenticate}>
-                  <AdminFList />
-                </AdminFrame>
-              </Route>
-
-              <Route path="/admin-upload/:username">
-                <AdminFrame authenticate={authenticate}>
-                  <AdminUpload />
-                </AdminFrame>
-              </Route>
-
-              <Route path="/MIS-reg/:username">
-                <FacultyFrame authenticate={authenticate}>
-                  <FacultyReg />
-                </FacultyFrame>
-              </Route>
-
-              <Route path="/emergency-admin">
-                <FacultyFrame authenticate={authenticate}>
-                  <EmergencyAdmin />
-                </FacultyFrame>
-              </Route>
-
-              <Route path="/MIS-profile/:username">
-                <FacultyFrame authenticate={authenticate}>
-                  <FacultyProfile />
-                </FacultyFrame>
-              </Route>
-
-              <Route path="/MIS-edit-profile/:username">
-                <FacultyFrame authenticate={authenticate}>
-                  <FacultyEditProfile />
-                </FacultyFrame>
-              </Route>
-
-              <Route path="/MIS-edit-student/:username/:studentNo">
-                <FacultyFrame authenticate={authenticate}>
-                  <FacultyEditStudent />
-                </FacultyFrame>
-              </Route>
-
-              <Route path="/MIS-changepass/:username">
-                <FacultyFrame authenticate={authenticate}>
-                  <FacultyChangepass />
-                </FacultyFrame>
-              </Route>
-
-              <Route path="/MIS-slist/:username">
-                <FacultyFrame authenticate={authenticate}>
-                  <FacultySList />
-                </FacultyFrame>
-              </Route>
-
-              <Route path="/MIS-dashboard/:username">
-                <FacultyFrame authenticate={authenticate}>
-                  <FacultyDashboard />
-                </FacultyFrame>
-              </Route>
-
-               <Route path="/MIS-inactive-slist/:username">
-                <FacultyFrame authenticate={authenticate}>
-                  <FacultyInactiveSList />
-                </FacultyFrame>
-              </Route>
-
-              <Route path="/sign-in">
-                <Login />
-              </Route>
-
-              <Route path="/m-login">
-                <MobileLogin />
-              </Route>
-
-              <Route path="/m-rlist/:username">
-                <MFrame authenticate={authenticate}>
-                  <MobileRList />
-                </MFrame>
-              </Route>
-
-              <Route path="/m-dashboard/:username">
-                <MFrame authenticate={authenticate}>
-                  <MobileDashboard />
-                </MFrame>
-              </Route>
-
-              <Route path="/m-profile/:username">
-                <MFrame authenticate={authenticate}>
-                  <MobileProfile />
-                </MFrame>
-              </Route>
-
-              <Route path="/m-pending/:username">
-                <MFrame authenticate={authenticate}>
-                  <MobilePending />
-                </MFrame>
-              </Route>
-
-              <Route path="/m-approved/:username">
-                <MFrame authenticate={authenticate}>
-                  <MobileApproved />
-                </MFrame>
-              </Route>
-
-              <Route path="/m-rlistfilter">
-                <MFrame authenticate={authenticate}>
-                  <MobileRListFilter />
-                </MFrame>
-              </Route>
-
-              <Route path="/m-changepass">
-                <MFrame authenticate={authenticate}>
-                  <MobileStudentChangePass />
-                </MFrame>
-              </Route>
-
-              <Route path="/rlist-filter">
-                <EmptyFrame authenticate={authenticate}>
-                  <RListFilter setSFilter={setSFilter}/>
-                </EmptyFrame>
-              </Route>
-
-              <Route path="/slist-filter">
-                <EmptyFrame authenticate={authenticate}>
-                  <SListFilter />
-                </EmptyFrame>
-              </Route>
-
-              <Route path="/student-changepass/:username">
-                <SFrame authenticate={authenticate}>          
-                  <StudentChangePass />
-                </SFrame>
-              </Route>
-
-              <Route path="/student-rlist/:username">
-                <SFrame authenticate={authenticate}>
-                  <StudentRList />
-                </SFrame>
-              </Route>
-
-               <Route path='/student-dashboard/:username'>
-                <SFrame authenticate={authenticate}>
-                  <StudentDashboard />
-                </SFrame>
-              </Route>
-
-              <Route path="/student-approved/:username">
-                <SFrame authenticate={authenticate}>
-                  <StudentApproved />
-                </SFrame>
-              </Route>
-
-              <Route path="/student-pending/:username">
-                <SFrame authenticate={authenticate}>
-                  <StudentPending />
-                </SFrame>
-              </Route>
-
-              <Route path="/student-profile/:username">
-                <SFrame authenticate={authenticate}>
-                  <StudentProfile />
-                </SFrame>
-              </Route>
-
-              <Route path="/research-abstract/:id">
-                  <AbstractView />        
-              </Route>
-
-              <Route path="/research-full/:id">
-                  <FullContent />        
-              </Route>
-
-              <Route path="/m-abstract/:id">
-                  <MobileAbstract />        
-              </Route>
-
-              <Route path="/m-full-content/:id">
-                  <MobileFull />        
-              </Route>
-
+              <DeviceView/>
             </Switch>
           </FilterContext.Provider>
 
           { pathname === views[ 0 ] ? <Redirect to="/sign-in"/> : requestedView }  
          </div>
-         </SnackbarProvider>
+       </SnackbarProvider>
     </InboxContext.Provider>
-
   );
   
 }
+
+
 
 
 export default App;

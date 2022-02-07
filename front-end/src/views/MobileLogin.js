@@ -138,7 +138,7 @@ export default function Login(props){
 			if(res.status == 200 ){
 				if(res.data.role == 'student'){
 					Cookies.set('id', res.data._id);
-					setTimeout(()=>{setRedirect( <Redirect to={`/m-dashboard/${data._username}`}/> );},2000);	
+					setTimeout(()=>{setRedirect( <Redirect to={`/student-dashboard/${data._username}`}/> );},2000);	
 				}
 				else if(res.data.role == 'mis officer'){
 					setAlertMes('Unauthorized');

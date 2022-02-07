@@ -139,12 +139,12 @@ export default function SFrame(props){
 			<div className="d-flex justify-content-center flex-column" style={{height:'70%',width:'90%',backgroundColor:"#E2F0D9",borderRadius:'10px'}}>
 				<div className="d-flex justify-content-center flex-column" style={{height:'100%',width:'100%'}}>
 				 	<List className="d-flex align-items-center flex-column" style={{height:'100%',width:'100%',color:'black'}}>
-				 		<Link className="d-flex justify-content-between align-items-center text-center" to={`/m-dashboard/${username}`} style={{ textDecoration: 'none',height:'10%',width:'70%' }}>
+				 		<Link className="d-flex justify-content-between align-items-center text-center" to={`/student-dashboard/${username}`} style={{ textDecoration: 'none',height:'10%',width:'70%' }}>
 			 				<DashboardIcon sx={{color:green[500],width:'25px',height:'25px'}}/>
 			 				<p style={{fontSize:'15px', textAlign:'center',height:'12px',color:'black'}} className="MontFont">Dashboard</p>
 						</Link>
 				 		<Divider style={{height:'2px',width:'100%'}}/>
-				 		<Link className="d-flex justify-content-between align-items-center text-center" to={`/m-profile/${username}`} style={{ textDecoration: 'none',height:'10%',width:'70%' }}>
+				 		<Link className="d-flex justify-content-between align-items-center text-center" to={`/student-profile/${username}`} style={{ textDecoration: 'none',height:'10%',width:'70%' }}>
 			 				<AccountBoxIcon sx={{color:green[500],width:'25px',height:'25px'}}/>
 			 				<p style={{fontSize:'15px', textAlign:'start',height:'12px',width:'65%',color:'black'}} className="MontFont">Profile</p>
 			 			</Link>

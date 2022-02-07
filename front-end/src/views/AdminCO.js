@@ -246,107 +246,6 @@ export default function StudentProfile(props){
 		setPasswordAlertStatus(403)
 	}
 
-	const changePass = () =>(
-		<div className='d-flex flex-column justify-content-center align-items-center' style={{width:'100%', height:'50%',backgroundColor:"#E2F0D9"}}>
-			<Snackbar anchorOrigin={{vertical:"top", horizontal:"center"}} open={passwordSnackOpen} autoHideDuration={2000} onClose={handlePasswordSnackClose}>
-				<Alert variant='filled' severity={passwordAlertStatus == 403 ? "error" : "success"} sx={{width:'500px'}}>
-					{passwordAlertMes}
-				</Alert>				
-			</Snackbar>
-			<p style={{fontSize:'25px'}}>Change Password</p>
-			<div  style={{width:'80%', height:'100px'}}className='d-flex flex-row justify-content-between align-items-center' >
-				<TextField 
-					style={{width:'300px',height:'50px'}} 
-					id="filled-password-input" 
-					type={showCurrPassword ? "text" : "password"} 
-					label='Current password' 
-					variant='filled' 
-					onChange={(e)=>{dispatch({type:'_currPassword', data: e.target.value})}}
-					InputProps={{
-						endAdornment:(
-							<InputAdornment position="end">
-								<IconButton
-									aria-label="toggle password visibility"
-									onClick ={handleClickShowCurrPassword}
-									onMouseDown={handleMouseDownCurrPassword}
-								>
-									{showCurrPassword ? <Visibility/> : <VisibilityOff/>}
-								</IconButton>
-									
-							</InputAdornment>
-						)
-					}}
-				/>
-				<TextField 
-					style={{width:'300px',height:'50px'}} 
-					id="filled-password-input" 
-					type={showNewPassword ? "text" : "password"}  
-					label='New password' 
-					variant='filled'
-					onChange={(e)=>{dispatch({type:'_newPassword', data: e.target.value})}}
-					InputProps={{
-						endAdornment:(
-							<InputAdornment position="end">
-								<IconButton
-									aria-label="toggle password visibility"
-									onClick ={handleClickShowNewPassword}
-									onMouseDown={handleMouseDownNewPassword}
-								>
-									{showNewPassword ? <Visibility/> : <VisibilityOff/>}
-								</IconButton>
-									
-							</InputAdornment>
-						)
-					}}
-				/>
-
-				<TextField 
-					style={{width:'300px',height:'50px'}} 
-					id="filled-password-input" 
-					type={showVerPassword ? "text" : "password"}
-					label='Confirm new password' 
-					variant='filled' 
-					onChange={(e)=>{dispatch({type:'_verNewPassword', data: e.target.value})}}
-					InputProps={{
-						endAdornment:(
-							<InputAdornment position="end">
-								<IconButton
-									aria-label="toggle password visibility"
-									onClick ={handleClickShowVerPassword}
-									onMouseDown={handleMouseDownVerPassword}
-								>
-									{showVerPassword ? <Visibility/> : <VisibilityOff/>}
-								</IconButton>
-									
-							</InputAdornment>
-						)
-					}}
-				/>
-			</div>
-			<div  style={{width:'80%', height:'100px'}}className='d-flex flex-row-reverse justify-content-between align-items-center' >
-				<Button title='Save' click={handlePasswordDialog} style={{fontSize:'18px',height:'40px', width:'100px'}}/>
-				<Dialog
-					open={passwordDialogOpen}
-			        onClose={handlePasswordDialogClose}
-			        aria-labelledby="alert-dialog-title"
-			        aria-describedby="alert-dialog-description"
-				>
-					<DialogTitle>
-						{"Change Password"}
-					</DialogTitle>
-					<DialogContent>
-						Do you want to update your password?
-					</DialogContent>
-					<DialogActions>
-						<Button title='Cancel' click={cancelPassword}/>
-						<Button title='Yes' click={passwordHandler}/>
-					</DialogActions>
-				</Dialog>
-			</div>
-			
-		</div>
-	)
-
 	const profileHandler =()=>{
 		setProfileDialogOpen(false);
 		setProfileSnackOpen(true);
@@ -614,12 +513,30 @@ export default function StudentProfile(props){
 	const toggleActDrawer = (open) => (event) => {
 		setActState( open );
 	}
+
+	const resetPassword = () =>{
+		setPasswordDialogOpen(false);
+		setPasswordSnackOpen(true);
+		axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/coordinator/clist/resetpass`)
+		.then(res=>{
+			setPasswordAlertMes(res.data.message);
+			setPasswordAlertStatus('good');
+		})
+		.catch((err)=>{
+			setPasswordAlertMes(JSON.parse(err.request.response).message)
+			setPasswordAlertStatus(403)
+		})	
+	}
+
 	return(
 		<>
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
-				<div style={{height:'95%', width:'95%', backgroundColor:'white'
-
-			}} className='d-flex justify-content-center align-items-center'>
+				<Snackbar anchorOrigin={{vertical:"top", horizontal:"center"}} open={passwordSnackOpen} autoHideDuration={6000} onClose={handlePasswordSnackClose}>
+					<Alert variant='filled' severity={passwordAlertStatus == 403 ? "error" : "success"} sx={{width:'500px'}}>
+						{passwordAlertMes}
+					</Alert>				
+				</Snackbar>
+				<div style={{height:'95%', width:'95%', backgroundColor:'white'}} className='d-flex justify-content-center align-items-center'>
 					<div style={{height:'95%', width:'95%'}} className='d-flex justify-content-center align-items-center flex-row'>
 						<div className='d-flex justify-content-center align-items-center' style={{width:'50%',height:'100%'}}> 
 							<div className='d-flex justify-content-center align-items-center flex-column' style={{height:'95%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"5px 5px 5px 5px grey"}}>
@@ -633,7 +550,7 @@ export default function StudentProfile(props){
 										<Avatar style={{height:'130px',width:'130px'}} src={image}/>
 										<Divider style={{height:'2px', width:'100%', color:'black'}}/>
 										{facultyData?.map?.(object=>(
-											<div className="d-flex align-items-center justify-content-center flex-column" style={{width:'100%',height:'50%',color:'black'}}>
+											<div className="d-flex align-items-center justify-content-center flex-column" style={{width:'100%',height:'45%',color:'black'}}>
 												<div style={{height:'15%',width:'100%'}} className='d-flex flex-row justify-content-start'>
 													<BadgeIcon sx={{color:green[500]}}/>
 													<label style={{fontSize:'20px'}}>Name:</label>
@@ -670,6 +587,27 @@ export default function StudentProfile(props){
 											</div>
 										))}
 										<Divider style={{height:'2px', width:'100%', color:'black'}}/>
+											<div style={{height:'10%',width:'100%'}} className='d-flex flex-row-reverse justify-content-start align-items-center'>
+												<Button style={{height:'30px', width:'150px'}} title='Reset Password' click={handlePasswordDialog}/>
+												<Dialog
+													open={passwordDialogOpen}
+											        onClose={handlePasswordDialogClose}
+											        aria-labelledby="alert-dialog-title"
+											        aria-describedby="alert-dialog-description"
+												>
+													<DialogTitle>
+														{"Reset Officer Password"}
+													</DialogTitle>
+													<DialogContent>
+														Do you want to reset the password of the current MIS officer?
+													</DialogContent>
+													<DialogActions>
+														<Button title='Cancel' click={cancelPassword}/>
+														<Button title='Yes' click={resetPassword}/>
+													</DialogActions>
+												</Dialog>
+												
+											</div>
 										<Divider style={{height:'10px', width:'100%'}}/>
 									</div>
 								</div>			

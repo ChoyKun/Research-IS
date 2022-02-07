@@ -130,7 +130,7 @@ function Item(props){
 
 	const Agree = () =>{
 		if(agree == 'yes'){
-			setRedirect( <Redirect to={`/m-full-content/${props.object._id}`}/> );
+			setRedirect( <Redirect to={`/research-full/${props.object._id}`}/> );
 		}
 		else{
 			setDialogOpen(false);
