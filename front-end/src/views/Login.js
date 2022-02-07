@@ -125,7 +125,7 @@ export default function Login(props){
 	const handler=()=>{
 		setSnackOpen(true)
 
-		axios.post('http://localhost:7000/sign-in', data)
+		axios.post(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/sign-in`, data)
 		.then(res=>{
 
 			setAlertMes(res.data.message);
@@ -165,7 +165,7 @@ export default function Login(props){
 		setDialogOpen(false)
 		setSnackOpen(true)
 
-		axios.put('http://localhost:7000/forgetpass', forgetData)
+		axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/forgetpass`, forgetData)
 		.then(res=>{
 			setAlertMes(res.data.message);
 			setAlertStatus('good');

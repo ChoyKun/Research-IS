@@ -229,7 +229,7 @@ export default function StudentRList(props){
 
 	useEffect(()=>{
 		const getStudentList = async () => {
-			axios.get('http://localhost:7000/auth-admin/data')
+			axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/auth-admin/data`)
 			.then( res => {
 				res.data.forEach( elem => {
 					console.log( elem.status );
@@ -259,7 +259,7 @@ export default function StudentRList(props){
 				} = filter.sFilter;
 
 				console.log(section);
-				axios.get(`http://localhost:7000/student-filter-query/${course}/${section}/${yearLevel}/${order}/${sex}`)
+				axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student-filter-query/${course}/${section}/${yearLevel}/${order}/${sex}`)
 				.then( res => {
 					if(section == 'null'){
 						res.data.result.forEach( item => {
@@ -294,7 +294,7 @@ export default function StudentRList(props){
 	const handleSignOut = async () => {
 		const token = Cookies.get('token');
 
-		axios.delete('http://localhost:7000/sign-out', { token })
+		axios.delete(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/sign-out`, { token })
 		.then(() => {
 			Cookies.remove('token');
 			Cookies.remove('rtoken');
@@ -308,9 +308,9 @@ export default function StudentRList(props){
 		setDialogOpen(false);
 		setSnackOpen(true);
 
-		axios.put(`http://localhost:7000/coordinator/clist/new-admin`) // set current admin to inactive to no?
+		axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/coordinator/clist/new-admin`) // set current admin to inactive to no?
 		.then( async () => {
-			axios.put(`http://localhost:7000/coordinator/clist/changecoor/${selected?.data?.username}`) // set selected admin to active?
+			axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/coordinator/clist/changecoor/${selected?.data?.username}`) // set selected admin to active?
 			.then((res)=>{
 				setAlertMes(res.data.message);
 				setAlertStatus('good');

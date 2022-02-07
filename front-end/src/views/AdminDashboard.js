@@ -65,7 +65,7 @@ export default function StudentDashboard(props){
 
 	useEffect(()=>{
 		const getFacultyData = async () => {
-			axios.get('http://localhost:7000/faculty/flist')
+			axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/faculty/flist`)
 			.then((res)=>{
 				res.data.forEach( elem => {
 					console.log( elem.status );
@@ -83,7 +83,7 @@ export default function StudentDashboard(props){
 
 	useEffect(()=>{
 
-		axios.get('http://localhost:7000/rlist/archive-count')
+		axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/rlist/archive-count`)
 		.then((res)=>{
 			setPublic(res.data.Public);
 			setArchive(res.data.Archive)
@@ -92,7 +92,7 @@ export default function StudentDashboard(props){
 			console.log(err);
 		})
 
-		axios.get('http://localhost:7000/slist/status-count')
+		axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/slist/status-count`)
 		.then((res)=>{
 			setActive(res.data.Active);
 			setInactive(res.data.Inactive)
@@ -101,7 +101,7 @@ export default function StudentDashboard(props){
 			console.log(err);
 		})
 
-		axios.get('http://localhost:7000/research/rlist/Category-count')
+		axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/research/rlist/Category-count`)
 		.then((res)=>{
 			setHardware(res.data.hardware)
 			setSoftware(res.data.software)
@@ -119,7 +119,7 @@ export default function StudentDashboard(props){
 	},[])
 
 	useEffect(() => {
-		axios.get(`http://localhost:7000/faculty/flist/${username}`)
+		axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/faculty/flist/${username}`)
 		.then(res=>{
 			setName(res.data.data);
 		})
@@ -129,7 +129,7 @@ export default function StudentDashboard(props){
 	}, [])
 	
 	useEffect(() =>{
-		axios.get(`http://localhost:7000/faculty/picture`)
+		axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/faculty/picture`)
 		.then( res => {
 			setImage( () => res.data.path );			
 		})

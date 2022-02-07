@@ -134,7 +134,7 @@ export default function FacultyReg(props){
 	const handler = ()=>{
 		setDialogOpen(false);
 		setSnackOpen(true);
-		axios.post('http://localhost:7000/student/slist/register', data)
+		axios.post(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student/slist/register`, data)
 		.then((res)=>{
 			setAlertMes(res.data.message);
 			setAlertStatus(200)

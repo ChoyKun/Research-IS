@@ -228,7 +228,7 @@ export default function StudentRList(props){
 
 	useEffect(()=>{
 		const getStudentList = async () => {
-			axios.get('http://localhost:7000/faculty/flist')
+			axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/faculty/flist`)
 			.then((res)=>{
 				res.data.forEach( elem => {
 					console.log( elem.status );
@@ -258,7 +258,7 @@ export default function StudentRList(props){
 				} = filter.sFilter;
 
 				console.log(section);
-				axios.get(`http://localhost:7000/student-filter-query/${course}/${section}/${yearLevel}/${order}/${sex}`)
+				axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student-filter-query/${course}/${section}/${yearLevel}/${order}/${sex}`)
 				.then( res => {
 					if(section == 'null'){
 						res.data.result.forEach( item => {
@@ -294,9 +294,9 @@ export default function StudentRList(props){
 		setDialogOpen(false);
 		setSnackOpen(true);
 
-		axios.put('http://localhost:7000/faculty/flist/new-officer')
+		axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/faculty/flist/new-officer`)
 		.then((res)=>{
-			axios.put(`http://localhost:7000/faculty/flist/changeofficer/${selected?.data?.username}`)
+			axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/faculty/flist/changeofficer/${selected?.data?.username}`)
 			.then((res)=>{
 				setAlertMes(res.data.message);
 				setAlertStatus('good');

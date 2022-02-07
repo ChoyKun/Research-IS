@@ -68,7 +68,7 @@ export default function RListFilter(props){
 	}
 
 	useEffect(() => {
-		axios.get(`http://localhost:7000/student/slist/${studentNo}`)
+		axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student/slist/${studentNo}`)
 		.then(res=>{
 			setName(res.data.data);
 		})
@@ -78,7 +78,7 @@ export default function RListFilter(props){
 	}, [])
 	
 	useEffect(()=>{
-		axios.get(`http://localhost:7000/student/slist/approved-list/${studentNo}`)
+		axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student/slist/approved-list/${studentNo}`)
 		.then((res)=>{
 			// console.log( res.data );
 			setResearchData( res.data.data );
@@ -103,7 +103,7 @@ export default function RListFilter(props){
 				} = filter.sFilter;
 
 				// ?course=${course}&category=${category}&yearSubmitted=${yearSubmitted}&order=${order}&year=${year}
-				axios.get(`http://localhost:7000/filter-query/${course}/${category}/${yearSubmitted}/${order}/${year}`)
+				axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/filter-query/${course}/${category}/${yearSubmitted}/${order}/${year}`)
 				.then( res => {
 					res.data.result.forEach( item => {
 						result.push(<Item key={item._id} object={item}/>);

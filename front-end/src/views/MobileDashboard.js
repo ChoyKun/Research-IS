@@ -48,7 +48,7 @@ export default function StudentDashboard(props){
 
 	useEffect(()=>{
 		const getResearchList = async () => {
-			axios.get('http://localhost:7000/research/rlist')
+			axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/research/rlist`)
 			.then((res)=>{
 				res.data.forEach( elem => {
 					console.log( elem.status );
@@ -65,7 +65,7 @@ export default function StudentDashboard(props){
 	},[]);
 
 	useEffect(()=>{
-		axios.get('http://localhost:7000/research/rlist/Category-count')
+		axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/research/rlist/Category-count`)
 		.then((res)=>{
 			setHardware(res.data.hardware)
 			setSoftware(res.data.software)
@@ -80,7 +80,7 @@ export default function StudentDashboard(props){
 	},[])
 
 	useEffect(()=>{
-		axios.get('http://localhost:7000/research/rlist/course-count')
+		axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/research/rlist/course-count`)
 		.then((res)=>{
 			setBsit(res.data.BSIT)
 			setBscs(res.data.BSCS)

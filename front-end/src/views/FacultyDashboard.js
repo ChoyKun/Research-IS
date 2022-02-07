@@ -51,7 +51,7 @@ export default function StudentDashboard(props){
 
 	useEffect(()=>{
 		const getStudentList = async () => {
-			axios.get('http://localhost:7000/student/slist')
+			axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student/slist`)
 			.then((res)=>{
 				res.data.forEach( elem => {
 					console.log( elem.status );
@@ -68,7 +68,7 @@ export default function StudentDashboard(props){
 	},[]);
 
 	useEffect(()=>{
-		axios.get('http://localhost:7000/student/course-count')
+		axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student/course-count`)
 		.then((res)=>{
 			setBsit(res.data.BSIT);
 			setBscs(res.data.BSCS)
@@ -77,7 +77,7 @@ export default function StudentDashboard(props){
 			console.log(err);
 		})
 
-		axios.get('http://localhost:7000/student/sex-count')
+		axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student/sex-count`)
 		.then((res)=>{
 			setMale(res.data.Male);
 			setFemale(res.data.Female)
@@ -86,7 +86,7 @@ export default function StudentDashboard(props){
 			console.log(err);
 		})
 
-		axios.get('http://localhost:7000/student/year-count')
+		axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student/year-count`)
 		.then((res)=>{
 			setFirst(res.data.first);
 			setSecond(res.data.second);

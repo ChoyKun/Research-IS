@@ -127,7 +127,7 @@ export default function FacultyReg(props){
 	const handleSignOut = async () => {
 		const token = Cookies.get('token');
 
-		axios.delete('http://localhost:7000/sign-out', { token })
+		axios.delete(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/sign-out`, { token })
 		.then(() => {
 			Cookies.remove('token');
 			Cookies.remove('rtoken');
@@ -145,12 +145,12 @@ export default function FacultyReg(props){
 
 		formData.append('MISimg', imgFile );
 
-		axios.put(`http://localhost:7000/coordinator/clist/new-admin`)			
+		axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/coordinator/clist/new-admin`)			
 			.then( async ()=>{
-				axios.post('http://localhost:7000/coordinator/clist/register', data)
+				axios.post(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/coordinator/clist/register`, data)
 				.then((res)=>{
 					if(image){
-						axios.put(`http://localhost:7000/clist/upload-picture`, formData)
+						axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/clist/upload-picture`, formData)
 						.then((res)=>{
 							setAlertMes(res.data.message);
 							setAlertStatus(200)

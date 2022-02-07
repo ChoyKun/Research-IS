@@ -413,7 +413,7 @@ export default function StudentRList(props){
 
 	useEffect(()=>{
 		const getStudentList = async () => {
-			axios.get('http://localhost:7000/student/slist')
+			axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student/slist`)
 			.then((res)=>{
 				res.data.forEach( elem => {
 					if( elem.status === 'active' ){
@@ -443,7 +443,7 @@ export default function StudentRList(props){
 				} = filter.sFilter;
 
 				console.log(section);
-				axios.get(`http://localhost:7000/student-filter-query/${course}/${section}/${yearLevel}/${order}/${sex}/${year}`)
+				axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student-filter-query/${course}/${section}/${yearLevel}/${order}/${sex}/${year}`)
 				.then( res => {
 					res.data.result.forEach( item => {
 						result.push(<Item key={item._id} object={item} dispatch={selectedDispatch}/>);
@@ -524,7 +524,7 @@ export default function StudentRList(props){
 
 	useEffect(() => {
 		if( inacAccum.length ){
-			axios.put('http://localhost:7000/student/slist/update', inacAccum)
+			axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student/slist/update`, inacAccum)
 			.then( res => {
 				setAlertMes( res.data.message );
 				setSendInactive( false );
@@ -537,7 +537,7 @@ export default function StudentRList(props){
 
 	useEffect(() => {
 		if( yearAccum.length ){
-			axios.put('http://localhost:7000/student/slist/update/yearLevel', yearAccum)
+			axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student/slist/update/yearLevel`, yearAccum)
 			.then( res => {
 				setEditAlertMes(res.data.message);
 				setEditAlertStatus('good');
@@ -551,7 +551,7 @@ export default function StudentRList(props){
 
 	useEffect(() => {
 		if( courseAccum.length ){
-			axios.put('http://localhost:7000/student/slist/update/course', courseAccum)
+			axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student/slist/update/course`, courseAccum)
 			.then( res => {
 				setEditAlertMes(res.data.message);
 				setEditAlertStatus('good');
@@ -565,7 +565,7 @@ export default function StudentRList(props){
 
 	useEffect(() => {
 		if( sectionAccum.length ){
-			axios.put(`http://localhost:7000/student/slist/update/section/${data._section}`, sectionAccum)
+			axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student/slist/update/section/${data._section}`, sectionAccum)
 			.then( res => {
 				setEditAlertMes(res.data.message);
 				setEditAlertStatus('good');
@@ -634,7 +634,7 @@ export default function StudentRList(props){
 		setEditDialog(false);
 		setEditSnack(true);
 		
-		axios.put(`http://localhost:7000/faculty/flist/editstudent/${username}/${selected?.data?.studentNo}`,data)
+		axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/faculty/flist/editstudent/${username}/${selected?.data?.studentNo}`,data)
 		.then((res)=>{
 			setEditAlertMes(res.data.message);
 			setEditAlertStatus('good');
@@ -785,7 +785,7 @@ function Item(props){
 		setDialogOpen(false);
 		setSnackOpen(true);
 		
-		axios.put(`http://localhost:7000/faculty/flist/resetpass/${props.object.studentNo}`)
+		axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/faculty/flist/resetpass/${props.object.studentNo}`)
 		.then((res)=>{
 			setAlertMes(res.data.message);
 			setAlertStatus('good');

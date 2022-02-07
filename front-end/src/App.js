@@ -150,7 +150,7 @@ function App() {
     const rtoken = Cookies.get('rtoken');
 
     if( token ){
-      axios.get('http://localhost:7000/verify-me', {
+      axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/verify-me`, {
         headers: {
           'authentication': `Bearer ${token}`
         }
@@ -169,15 +169,12 @@ function App() {
             break;
             
           case 'admin':
-            axios.get(`http://localhost:7000/verify/admin/${name}`)
-            .then(res=>{
-              console.log('here1')
+            if(pathname.includes(name)){
               setRequetedView( <Redirect to={pathname}/> );
-            })
-            .catch(err=>{
-              console.log('here2')
+            }
+            else{
               setRequetedView( <Redirect to={`/admin-dashboard/${name}`}/> );
-            })
+            }
             break;
         }
 
@@ -185,7 +182,7 @@ function App() {
       })
       .catch( err => {
         if( rtoken && err?.response?.status && err?.response?.status === 401 ){
-          axios.post('http://localhost:7000/refresh-token', { rtoken })
+          axios.post(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/refresh-token`, { rtoken })
           .then( res => {
             Cookies.set('token', res.data.accessToken);
             authenticate();
@@ -210,7 +207,7 @@ function App() {
 
   const getMessages = async () => {
     console.log('here');
-    axios.get('http://localhost:7000/messages')
+    axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/messages`)
     .then( res => {
       console.log( res.data.data );
       setInboxMessages( res.data.data );

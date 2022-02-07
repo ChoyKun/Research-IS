@@ -28,7 +28,7 @@ export default function AdminRequest( props ){
 	const [search, setSearch] = useState('');
 	
 	useEffect(()=>{
-		axios.get(`http://localhost:7000/student/slist/pending-list/${username}`)
+		axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student/slist/pending-list/${username}`)
 		.then((res)=>{
 			// console.log( res.data );
 			setPending( res.data.data );

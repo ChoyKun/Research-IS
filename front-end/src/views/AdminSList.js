@@ -238,7 +238,7 @@ export default function StudentRList(props){
 
 	useEffect(()=>{
 		const getStudentList = async () => {
-			axios.get('http://localhost:7000/student/slist')
+			axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student/slist`)
 			.then((res)=>{
 				res.data.forEach( elem => {
 					console.log( elem.status );
@@ -269,7 +269,7 @@ export default function StudentRList(props){
 				} = filter.sFilter;
 
 				console.log(section);
-				axios.get(`http://localhost:7000/student-filter-query/${course}/${section}/${yearLevel}/${order}/${sex}/${year}`)
+				axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student-filter-query/${course}/${section}/${yearLevel}/${order}/${sex}/${year}`)
 				.then( res => {
 					res.data.result.forEach( item => {
 						result.push(<Item key={item._id} object={item} dispatch={selectedDispatch}/>);
@@ -314,7 +314,7 @@ export default function StudentRList(props){
 
 	useEffect(() => {
 		if( inacAccum.length ){
-			axios.put('http://localhost:7000/student/slist/update', inacAccum)
+			axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student/slist/update`, inacAccum)
 			.then( res => {
 				setAlertMes( res.data.message );
 				setSendInactive( false );

@@ -62,7 +62,7 @@ export default function AdminRequest( props ){
 
 	useEffect(() => {
 		const getRequests = setInterval(() => {
-			axios.get('http://localhost:7000/c-views')
+			axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/c-views`)
 			.then( res => {
 				if( !requests.length ){
 					setRequests([...res.data.reqViews]);
@@ -88,7 +88,7 @@ export default function AdminRequest( props ){
 		setDialogOpen(false);
 		setSnackOpen(true);
 
-		axios.post('http://localhost:7000/clear-requests')
+		axios.post(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/clear-requests`)
 		.then((res)=>{
 			setAlertMes( res.data.message );
 			setAlertStatus('good')
@@ -243,7 +243,7 @@ const Request = ( props ) => {
 
 	useEffect(() => {
 		if( approved ){
-			axios.put(`http://localhost:7000/student/slist/approved/${props.studentID}/${date}/${[...approvedTitle]}`, approved) 
+			axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student/slist/approved/${props.studentID}/${date}/${[...approvedTitle]}`, approved) 
 			.then( res => {
 				setAlertMes( res.data.message );
 				setAlertStatus('good')
@@ -262,7 +262,7 @@ const Request = ( props ) => {
 
 	useEffect(() => {
 		if( declined ){
-			axios.put(`http://localhost:7000/student/slist/declined/${props.studentID}/${[...declinedTitle]}`, declined) 
+			axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student/slist/declined/${props.studentID}/${[...declinedTitle]}`, declined) 
 			.then( res => {
 				setAlertMes( res.data.message );
 				setAlertStatus('good')

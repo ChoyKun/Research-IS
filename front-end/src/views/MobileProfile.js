@@ -142,7 +142,7 @@ export default function StudentProfile(props){
 	const handler = ()=>{
 		setPasswordDialogOpen(false);
 		setPasswordSnackOpen(true);
-		axios.put(`http://localhost:7000/student/slist/changepassword/${username}`,data)
+		axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student/slist/changepassword/${username}`,data)
 		.then((res)=>{
 			setPasswordAlertMes(res.data.message);
 			setPasswordAlertStatus('good');
@@ -283,7 +283,7 @@ export default function StudentProfile(props){
 	const clearLogs = () =>{
 		setLogsDialogOpen(false);
 		setLogsSnackOpen(true);
-		axios.put(`http://localhost:7000/student/slist/clear-logs/${username}`)
+		axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student/slist/clear-logs/${username}`)
 		.then(res=>{
 			setLogsAlertMes(res.data.message);
 			setLogsAlertStatus('good');
@@ -359,7 +359,7 @@ export default function StudentProfile(props){
 	
 
 	useEffect(()=>{
-		axios.get('http://localhost:7000/student/slist')
+		axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student/slist`)
 		.then((res)=>{
 			res.data.forEach( elem => {
 				console.log( elem.status );
@@ -374,7 +374,7 @@ export default function StudentProfile(props){
 	},[])
 
 	useEffect(() => {
-		axios.get(`http://localhost:7000/student/slist/${username}`)
+		axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student/slist/${username}`)
 		.then(res=>{
 			setName(res.data.data);
 		})
@@ -384,7 +384,7 @@ export default function StudentProfile(props){
 	}, [])
 
 	useEffect(()=>{
-		axios.get(`http://localhost:7000/student/slist/r-count/${username}`)
+		axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student/slist/r-count/${username}`)
 		.then(res=>{
 			setACount(res.data.aCount);
 			setPCount(res.data.pCount);
@@ -395,7 +395,7 @@ export default function StudentProfile(props){
 	},[])
 
 	useEffect(()=>{
-		axios.get(`http://localhost:7000/student/slist/activity/${username}`)
+		axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student/slist/activity/${username}`)
 		.then(res=>{
 			setActivity(res.data.data)
 		})

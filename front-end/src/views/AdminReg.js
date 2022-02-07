@@ -133,12 +133,12 @@ export default function FacultyReg(props){
 			console.log(p);
 		}
 
-		axios.put('http://localhost:7000/faculty/flist/new-officer')
+		axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/faculty/flist/new-officer`)
 		.then((res)=>{
-			axios.post('http://localhost:7000/faculty/flist/register',data)
+			axios.post(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/faculty/flist/register`,data)
 			.then((res)=>{
 				if(image){
-					axios.put(`http://localhost:7000/faculty/upload-picture`, formData)
+					axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/faculty/upload-picture`, formData)
 					.catch((err)=>{
 						setAlertMes(JSON.parse(err.request.response).message);
 						setAlertStatus(403)

@@ -87,7 +87,7 @@ export default function SFrame(props){
 	const handleSignOut = async () => {
 		const token = Cookies.get('token');
 
-		axios.delete('http://localhost:7000/sign-out', { token })
+		axios.delete(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/sign-out`, { token })
 		.then(() => {
 			Cookies.remove('token');
 			Cookies.remove('rtoken');
@@ -232,7 +232,7 @@ export default function SFrame(props){
 		setDialogOpen(false);
 		setSnackOpen(true);
 
-		axios.put(`http://localhost:7000/student/slist/clear-message/${username}`)
+		axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student/slist/clear-message/${username}`)
 		.then(res=>{
 			setAlertMes(res.data.message);
 			setAlertStatus('good');
@@ -256,7 +256,7 @@ export default function SFrame(props){
 
 
 	useEffect(() => {
-		axios.get(`http://localhost:7000/student/slist/${username}`)
+		axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student/slist/${username}`)
 		.then(res=>{
 			setName(res.data.data);
 		})
@@ -382,7 +382,7 @@ function OpenedMenu( props ){
 	const handleSignOut = async () => {
 		const token = Cookies.get('token');
 
-		axios.delete('http://localhost:7000/sign-out', { token })
+		axios.delete(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/sign-out`, { token })
 		.then(() => {
 			Cookies.remove('token');
 			Cookies.remove('rtoken');

@@ -131,7 +131,7 @@ export default function FacultyUpload(props){
 		data.members.push(data.mem4);
 		data.members = JSON.stringify( data.members );
 
-		axios.post('http://localhost:7000/research/rlist/upload',data)
+		axios.post(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/research/rlist/upload`,data)
 		.then((res) => {
 			setAlertMes( res.data.message );
 			setAlertStatus(200)

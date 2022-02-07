@@ -233,7 +233,7 @@ export default function StudentProfile(props){
 		setPasswordDialogOpen(false);
 		setPasswordSnackOpen(true);
 
-		axios.put(`http://localhost:7000/faculty/flist/changepassword/${username}`,data)
+		axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/faculty/flist/changepassword/${username}`,data)
 		.then((res)=>{
 			setPasswordAlertMes(res.data.message);
 			setPasswordAlertStatus('good');
@@ -381,10 +381,10 @@ export default function StudentProfile(props){
 
 		formData.append('MISimg', imgFile );
 
-		axios.put(`http://localhost:7000/faculty/flist/editprofile/${username}`, data)
+		axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/faculty/flist/editprofile/${username}`, data)
 		.then((res)=>{
 			if(newImage){
-				axios.put(`http://localhost:7000/faculty/upload-picture`, formData)
+				axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/faculty/upload-picture`, formData)
 				.then((res)=>{
 					setProfileAlertMes(res.data.message);
 					setProfileAlertStatus('good');
@@ -529,7 +529,7 @@ export default function StudentProfile(props){
 	const clearLogs = () =>{
 		setLogsDialogOpen(false);
 		setLogsSnackOpen(true);
-		axios.put(`http://localhost:7000/faculty/flist/clear-logs/${username}`)
+		axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/faculty/flist/clear-logs/${username}`)
 		.then(res=>{
 			setLogsAlertMes(res.data.message);
 			setLogsAlertStatus('good');
@@ -605,7 +605,7 @@ export default function StudentProfile(props){
 	
 
 	useEffect(()=>{
-		axios.get('http://localhost:7000/faculty/flist')
+		axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/faculty/flist`)
 		.then((res)=>{
 			res.data.forEach( elem => {
 				console.log( elem.username );
@@ -620,7 +620,7 @@ export default function StudentProfile(props){
 	},[])
 
 	useEffect(() => {
-		axios.get(`http://localhost:7000/faculty/flist/${username}`)
+		axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/faculty/flist/${username}`)
 		.then(res=>{
 			setName(res.data.data);
 		})
@@ -630,7 +630,7 @@ export default function StudentProfile(props){
 	}, [])
 
 	useEffect(()=>{
-		axios.get(`http://localhost:7000/student/slist/r-count/${username}`)
+		axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student/slist/r-count/${username}`)
 		.then(res=>{
 			setACount(res.data.aCount);
 			setPCount(res.data.pCount);
@@ -641,7 +641,7 @@ export default function StudentProfile(props){
 	},[])
 
 	useEffect(()=>{
-		axios.get(`http://localhost:7000/faculty/flist/activity/${username}`)
+		axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/faculty/flist/activity/${username}`)
 		.then(res=>{
 			setActivity(res.data.data)
 		})
@@ -651,7 +651,7 @@ export default function StudentProfile(props){
 	},[])
 
 	useEffect(() =>{
-		axios.get(`http://localhost:7000/clist/picture`)
+		axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/clist/picture`)
 		.then( res => {
 			setImage( () => res.data.path );			
 		})

@@ -205,7 +205,7 @@ export default function StudentRList(props){
 
 	useEffect(()=>{
 		const getResearchList = async () => {
-			axios.get('http://localhost:7000/research/rlist')
+			axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/research/rlist`)
 			.then((res)=>{
 				res.data.forEach( elem => {
 					console.log( elem.status );
@@ -236,7 +236,7 @@ export default function StudentRList(props){
 				} = filter.sFilter;
 
 				// ?course=${course}&category=${category}&yearSubmitted=${yearSubmitted}&order=${order}&year=${year}
-				axios.get(`http://localhost:7000/filter-query/${course}/${category}/${yearSubmitted}/${order}/${year}`)
+				axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/filter-query/${course}/${category}/${yearSubmitted}/${order}/${year}`)
 				.then( res => {
 					res.data.result.forEach( item => {
 						result.push(<Item key={item._id} object={item}/>);
@@ -285,7 +285,7 @@ export default function StudentRList(props){
 
 	useEffect(() => {
 		if( pubAccum.length ){
-			axios.put('http://localhost:7000/research/rlist/update', pubAccum)
+			axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/research/rlist/update`, pubAccum)
 			.then( res => {
 				setAlertMes( res.data.message );
 				setAlertStatus('good');
@@ -406,7 +406,7 @@ function Item(props){
 	useEffect(() => {
 		const token = Cookies.get('token');
 
-		axios.post(`http://localhost:7000/check-research-state/${username}/${props.object._id}`)
+		axios.post(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/check-research-state/${username}/${props.object._id}`)
 		.then((res)=>{
 			setUrl(`/research-full`)
 		})
@@ -465,7 +465,7 @@ function Item(props){
 		const token = Cookies.get('token');
 
 		const checkFile = async () => {
-			axios.post(`http://localhost:7000/student/slist/disable/${username}/${props.object._id}`)
+			axios.post(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student/slist/disable/${username}/${props.object._id}`)
 			.then((res)=>{
 				setDisabled(true)
 			})
@@ -480,7 +480,7 @@ function Item(props){
 	useEffect(() => {
 		const token = Cookies.get('token'); 
 
-		axios.get(`http://localhost:7000/student/slist/${username}`,{
+		axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student/slist/${username}`,{
 			headers: {
 				authorization: `Bearer ${token}`
 			}
@@ -492,7 +492,7 @@ function Item(props){
 			console.log(err);
 		})
 
-		axios.post(`http://localhost:7000/check-research-state/${username}/${props.object._id}`)
+		axios.post(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/check-research-state/${username}/${props.object._id}`)
 		.then((res)=>{
 			setUrl(`/research-full`)
 		})
@@ -512,7 +512,7 @@ function Item(props){
 		const token = Cookies.get('token')
 
 		if( pending ){
-			axios.put(`http://localhost:7000/student/slist/pending/${username}/${props.object.title}`, pending,{
+			axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student/slist/pending/${username}/${props.object.title}`, pending,{
 			headers: {
 				authorization: `Bearer ${token}`
 			}

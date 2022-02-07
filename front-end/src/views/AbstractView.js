@@ -14,7 +14,7 @@ export default function Test() {
   const [researchData, setResearchData] = useState([]);
 
   useEffect(()=>{
-   axios.get('http://localhost:7000/research/rlist')
+   axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/research/rlist`)
    .then((res)=>{
      res.data.forEach( elem => {
        console.log( elem.status );
