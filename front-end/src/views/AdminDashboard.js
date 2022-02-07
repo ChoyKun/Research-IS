@@ -144,7 +144,7 @@ export default function StudentDashboard(props){
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
 				<div style={{height:'95%', width:'95%', backgroundColor:'white', color:'black',overflowY:'auto',overflowX:'auto'}}>
 					<div className="d-flex flex-row justify-content-center align-items-center" style={{height:'100%',width:'100%'}}>
-						<div className="d-flex flex-column justify-content-around align-items-center" style={{height:'100%',width:'32%'}}>
+						<div className="d-flex flex-column justify-content-around align-items-center" style={{height:'100%',width:'50%'}}>
 							<div className='d-flex justify-content-around align-items-center flex-column' style={{height:'45%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"5px 5px 5px 5px grey"}}>
 								<div className='d-flex flex-row' style={{width:'90%',height:'10%'}}>
 									<Visibility sx={{color:green[500],height:'35px',width:'35px'}}/>
@@ -170,7 +170,7 @@ export default function StudentDashboard(props){
 								</div>
 							</div>
 						</div>
-						<div className="d-flex justify-content-center align-items-center" style={{height:'95%',width:'32%'}}>
+						<div className="d-flex justify-content-center align-items-center" style={{height:'95%',width:'50%'}}>
 							<div className='d-flex justify-content-around align-items-center flex-column' style={{height:'100%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"5px 5px 5px 5px grey"}}>
 								<div className='d-flex justify-content-around align-items-center flex-column' style={{height:'90%', width:'90%'}}>
 										<div className='d-flex flex-row' style={{width:'90%',height:'10%'}}>
@@ -222,30 +222,6 @@ export default function StudentDashboard(props){
 											<Link to={`/admin-current-officer/${username}`}><Button style={{height:'30px',width:'150px'}} title='Officer Profile'/></Link>
 										</div>
 									</div>
-							</div>
-						</div>
-						<div className="d-flex flex-column justify-content-around align-items-center" style={{height:'100%',width:'32%'}}>
-							<div className='d-flex justify-content-around align-items-center flex-column' style={{height:'45%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"5px 5px 5px 5px grey"}}>
-								<div className='d-flex flex-row' style={{width:'90%',height:'10%'}}>
-									<MenuIcon sx={{color:green[500],height:'35px',width:'35px'}}/>
-									<p style={{fontSize:'25px', textAlign:'center',height:'24px'}}>Menu</p>
-								</div>
-								<Divider style={{height:'2px', width:'100%', color:'black'}}/>
-								<div className='d-flex flex-column justify-content-around align-items-center'  style={{width:'90%',height:'80%'}}>
-									<Link to={`/admin-slist/${username}`}><Button style={{height:'30px',width:'200px'}} title="Check Student's List"/></Link>
-									<Link to={`/admin-upload/${username}`}><Button style={{height:'30px',width:'200px'}} title='Upload Research'/></Link>
-									<Link to={`/admin-request/${username}`}><Button style={{height:'30px',width:'200px'}} title='Check Requests'/></Link>
-								</div>
-							</div>
-							<div className='d-flex justify-content-around align-items-center flex-column' style={{height:'45%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"5px 5px 5px 5px grey"}}>
-								<div className='d-flex flex-row' style={{width:'90%',height:'10%'}}>
-									<CategoryIcon sx={{color:green[500],height:'35px',width:'35px'}}/>
-									<p style={{fontSize:'25px', textAlign:'center',height:'24px'}}>Student's Status Ratio</p>
-								</div>
-								<Divider style={{height:'2px', width:'100%', color:'black'}}/>
-								<div style={{width:'90%',height:'70%'}}>
-									<BarChart width='20' height='5' label={['Activated','Deactivated']} data={[active,inactive]} color={['#4CAF50','#548235']} setLabel={"Student's Status"}/>
-								</div>
 							</div>
 						</div>
 					</div>

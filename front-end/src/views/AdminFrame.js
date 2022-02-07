@@ -42,6 +42,9 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Badge from '@mui/material/Badge';
+import SchoolIcon from '@mui/icons-material/School'
+import UploadIcon from '@mui/icons-material/Upload'
+import InboxIcon from '@mui/icons-material/Inbox'
 
 import InboxContext from '../contexts/Inbox-context';
 import IconBtn from '../components/buttons/iconbtn';
@@ -116,7 +119,7 @@ export default function SFrame(props){
 				 					<ListItemIcon sx={{color:green[500]}}>
 				 						<DashboardIcon/>
 				 					</ListItemIcon>
-				 					<p style={{fontSize:'18px', textAlign:'center',height:'12px',color:'black'}} className="MontFont">Dashboard</p>
+				 					<p style={{fontSize:'16px', textAlign:'center',height:'12px',color:'black'}} className="MontFont">Dashboard</p>
 				 				</ListItemButton>
 							</Link>
 				 		</ListItem>
@@ -127,11 +130,44 @@ export default function SFrame(props){
 				 					<ListItemIcon sx={{color:green[500]}}>
 				 						<AccountBoxIcon/>
 				 					</ListItemIcon>
-				 					<p style={{fontSize:'18px', textAlign:'center',height:'12px',color:'black'}} className="MontFont">Profile</p>
+				 					<p style={{fontSize:'16px', textAlign:'center',height:'12px',color:'black'}} className="MontFont">Profile</p>
 				 				</ListItemButton>
 				 			</Link>
 				 		</ListItem>
-				 		<Divider style={{height:'60%',width:'100%',backgroundColor:"#E2F0D9"}}/>
+				 		<Divider style={{height:'2px',width:'100%'}}/>
+				 		<ListItem style={{width:'100%',color:'black'}}>
+				 			<Link className="d-flex justify-content-between align-items-center text-center" to={`/admin-slist/${username}`} style={{textDecoration:'none'}}>
+				 				<ListItemButton className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
+				 					<ListItemIcon sx={{color:green[500]}}>
+				 						<SchoolIcon/>
+				 					</ListItemIcon>
+				 					<p style={{fontSize:'16px', textAlign:'center',height:'12px',color:'black'}} className="MontFont">Student List</p>
+				 				</ListItemButton>
+				 			</Link>
+				 		</ListItem>
+				 		<Divider style={{height:'2px',width:'100%'}}/>
+				 		<ListItem style={{width:'100%',color:'black'}}>
+				 			<Link className="d-flex justify-content-between align-items-center text-center" to={`/admin-upload/${username}`} style={{textDecoration:'none'}}>
+				 				<ListItemButton className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
+				 					<ListItemIcon sx={{color:green[500]}}>
+				 						<UploadIcon/>
+				 					</ListItemIcon>
+				 					<p style={{fontSize:'16px', textAlign:'center',height:'12px',color:'black'}} className="MontFont">Upload Research</p>
+				 				</ListItemButton>
+				 			</Link>
+				 		</ListItem>
+				 		<Divider style={{height:'2px',width:'100%'}}/>
+				 		<ListItem style={{width:'100%',color:'black'}}>
+				 			<Link className="d-flex justify-content-between align-items-center text-center" to={`/admin-request/${username}`} style={{textDecoration:'none'}}>
+				 				<ListItemButton className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
+				 					<ListItemIcon sx={{color:green[500]}}>
+				 						<InboxIcon/>
+				 					</ListItemIcon>
+				 					<p style={{fontSize:'16px', textAlign:'center',height:'12px',color:'black'}} className="MontFont">Student Requests</p>
+				 				</ListItemButton>
+				 			</Link>
+				 		</ListItem>
+				 		<Divider style={{height:'20%',width:'100%',backgroundColor:"#E2F0D9"}}/>
 				 		<ListItem style={{width:'100%',color:'black'}}>
 				 			<Link to={`/sign-in`} style={{textDecoration:'none'}}>				
 				 				<ListItemButton onClick={handleSignOut} className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
@@ -155,9 +191,13 @@ export default function SFrame(props){
 					{alertMes}
 				</Alert>				
 			</Snackbar>
-			<div style={{height:'90%', width:'90%'}}>
-				<p style={{fontSize:'36px'}}>Inbox</p>
-				<div className="d-flex justify-content-start align-items-start flex-column" style={{height:'80%', width:'100%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey",overflowY:'auto',overflowX:'auto'}}>
+			<div className='d-flex flex-column justify-content-around align-items-center' style={{height:'90%', width:'90%',backgroundColor:'white',borderRadius:'5px'}}>
+				<div className='d-flex flex-row justify-content-start align-items-center' style={{width:'90%',height:'5%'}}>
+					<InboxIcon sx={{color:green[500],height:'35px',width:'35px'}}/>
+					<p style={{fontSize:'25px', textAlign:'center',height:'20px'}}>Inbox</p>
+				</div>
+				<Divider style={{height:'2px',width:'100%'}}/>
+				<div className="d-flex justify-content-start align-items-start flex-column" style={{height:'70%', width:'90%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"5px 5px 5px 5px grey",overflowY:'auto',overflowX:'auto'}}>
 					<div style={{height:'7%',width:'100%',border:'1px solid black', backgroundColor:'#385723',color:'white'}} className='d-flex flex-row justify-content-around'>
 						<div className='col-5 text-center' style={{fontSize:'20px'}}>
 							Message
@@ -170,7 +210,7 @@ export default function SFrame(props){
 						{ inbox }
 					</div>
 				</div>
-				<div className='d-flex flex-row-reverse align-items-center ' style={{width:'100%', height:'10%'}}>
+				<div className='d-flex flex-row-reverse align-items-center ' style={{width:'90%', height:'10%'}}>
 					<Button click={handleDialog} style={{width:'200px', height:'40px', fontSize:'18px'}} title='Clear Messages'/>
 					<Dialog
 						open={dialogOpen}
