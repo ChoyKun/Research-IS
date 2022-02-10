@@ -236,7 +236,8 @@ export default function Login(props){
 								<DialogContent>
 									<p>Enter your student number here:</p>
 									<TextField required id='outlined-required' variant='filled' className="text-center MontFont" style={{width:"300px"}} label="Student no." onChange={(e)=>{forgetDispatch({type:'studentNo',data: e.target.value})}}/>
-									<p>Enter your email address to notify you if your password has been reset:</p>
+									<p>Enter your school e-mail address to confirm and notify your request for password reset:</p>
+									<p>note: e-mail addresses other than your school e-mail will be ignored by the MIS officer</p>
 									<TextField required id='outlined-required' variant='filled' className="text-center MontFont" style={{width:"300px"}} label="Email Address" onChange={(e)=>{forgetDispatch({type:'email',data: e.target.value})}}/>
 								</DialogContent>
 								<DialogActions>

@@ -63,6 +63,7 @@ export default function StudentRList(props){
 	const filter = useContext( FilterContext );
 
 	const [studentData, setStudentData] = useState( [] );
+	const [filteredStudent , setFilteredStudent] = useState( [] );
 	const [filteredData, setFilteredData] = useState(null);
 	const [search, setSearch]=useState('');
 	const [sendInactive, setSendInactive] = useState(false);
@@ -447,6 +448,7 @@ export default function StudentRList(props){
 				.then( res => {
 					res.data.result.forEach( item => {
 						result.push(<Item key={item._id} object={item} dispatch={selectedDispatch}/>);
+						setFilteredStudent((filteredStudent) => [...filteredStudent, item]);
 					});
 					
 
@@ -454,11 +456,17 @@ export default function StudentRList(props){
 				})
 			}
 			else if(!filter.sFilter){
+				const filteredItem = []
+
 				studentData.forEach( item =>{
 					if( (item.firstName.toLowerCase().startsWith(search?.[0]?.toLowerCase?.() ?? '') || item.lastName.toLowerCase().startsWith(search?.[0]?.toLowerCase?.() ?? '')) && (item.firstName.toLowerCase().includes(search.toLowerCase()) || item.lastName.toLowerCase().includes(search.toLowerCase()))){
 						result.push( <Item key={item._id} object={item} dispatch={selectedDispatch}/> );
+						filteredItem.push(item);
+						setFilteredStudent([...filteredItem]);
+						
 					}
 				});
+				console.log(filteredStudent)
 
 				setFilteredData([...result]);
 			}
@@ -471,7 +479,7 @@ export default function StudentRList(props){
 	useEffect(()=>{
 		if( sendInactive ){
 			const newActiveElems = []
-			studentData.forEach((elem) => {
+			filteredStudent.forEach((elem) => {
 				if(elem.status === 'inactive') {
 					console.log('here')
 					setInacAccum((inacAccum) => [...inacAccum, elem])
@@ -488,7 +496,7 @@ export default function StudentRList(props){
 
 	useEffect(()=>{
 		if( sendYear ){
-			studentData.forEach((elem) => {
+			filteredStudent.forEach((elem) => {
 				if(elem.status === 'inactive') {
 					console.log('here')
 					setYearAccum((yearAccum) => [...yearAccum, elem])
@@ -500,7 +508,7 @@ export default function StudentRList(props){
 
 	useEffect(()=>{
 		if( sendCourse ){
-			studentData.forEach((elem) => {
+			filteredStudent.forEach((elem) => {
 				if(elem.status === 'inactive') {
 					console.log('here')
 					setCourseAccum((courseAccum) => [...courseAccum, elem])
@@ -512,7 +520,7 @@ export default function StudentRList(props){
 
 	useEffect(()=>{
 		if( sendSection ){
-			studentData.forEach((elem) => {
+			filteredStudent.forEach((elem) => {
 				if(elem.status === 'inactive') {
 					console.log('here')
 					setSectionAccum((sectionAccum) => [...sectionAccum, elem])
@@ -703,7 +711,7 @@ export default function StudentRList(props){
 								</div>							
 							</div>
 							<div className="d-flex flex-column" style={{height:'80%', width:'95%',border:'1px solid black'}}>
-								<RListHeader studentData={studentData}/>
+								<RListHeader studentData={filteredStudent}/>
 								<div className="d-flex flex-column" style={{height:'100%', width:'100%',backgroundColor:'white',overflowY:'overlay',overflowX:'overlay'}}>
 									{filteredData}						
 								</div>					
@@ -867,21 +875,22 @@ function RListHeader(props){
 			}
 			else{
 				elem[i].checked = false;
-			}
-			console.log(elem[i].checked)			
+			}			
 		}
 
-		props.studentData?.map?.(object =>{
-			for(var i=0;i<elem.length;i++){
+		props.studentData?.forEach(object =>{
+			const result = []
+
+			result.push(object)
+			for(var i=0;i<result.length;i++){				
 				if(elem[i].checked == true){
 					object.status = 'inactive';
 				}
 				else{
-					object.status = 'active';
+					object.status = 'active'
 				}
-				console.log(object.status)					
+				console.log(result)		
 			}
-			
 		})
 		
 	}

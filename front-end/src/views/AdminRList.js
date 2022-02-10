@@ -56,6 +56,7 @@ export default function StudentRList(props){
 	const filter = useContext( FilterContext );
 
 	const [researchData, setResearchData] = useState([]);
+	const [filteredResearch, setFilteredResearch] = useState([]);
 	const [filteredData, setFilteredData] = useState([]);
 	const [search, setSearch] = useState( '' );
 	const [sendPublic, setSendPublic] = useState(false);
@@ -240,15 +241,24 @@ export default function StudentRList(props){
 				.then( res => {
 					res.data.result.forEach( item => {
 						result.push(<Item key={item._id} object={item}/>);
+						setFilteredResearch((filteredResearch)=>[...filteredResearch, item])
+
+						
 					});
 
 					setFilteredData([...result]);
 				})
 			}
 			else if(!filter.sFilter){
+				const filteredItem = []
+
 				researchData.forEach( item =>{
 					if( item.title.toLowerCase().startsWith(search?.[0]?.toLowerCase?.() ?? '') && item.title.toLowerCase().includes(search.toLowerCase())){
 						result.push( <Item key={item._id} object={item}/> );
+						filteredItem.push(item)
+
+						setFilteredResearch([...filteredItem])
+
 					}
 				});
 
@@ -264,11 +274,13 @@ export default function StudentRList(props){
 	}, [search, researchData, filter.sFilter]);
 
 	useEffect(()=>{
+		console.log(filteredResearch)
+
 		if( sendPublic ){
 			const newArchiveElems = []
-			researchData.forEach((elem) => {
+			filteredResearch.forEach((elem) => {
 				if(elem.status === 'archive') {
-					console.log('here')
+					
 					setPubAccum((pubAccum) => [...pubAccum, elem])
 				}
 				else{
@@ -276,17 +288,18 @@ export default function StudentRList(props){
 				}
 				
 			});
-			setResearchData(() => [...newArchiveElems])		
-			console.log( pubAccum );	
+			setResearchData(() => [...newArchiveElems])			
 		}
 
 	}, [sendPublic])
 
 
 	useEffect(() => {
+		console.log(pubAccum.length)
 		if( pubAccum.length ){
 			axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/research/rlist/update`, pubAccum)
 			.then( res => {
+				console.log('here')
 				setAlertMes( res.data.message );
 				setAlertStatus('good');
 				setSendPublic( false );
@@ -352,7 +365,7 @@ export default function StudentRList(props){
 								</div>						
 							</div>
 							<div className="d-flex flex-column" style={{height:'80%', width:'95%',border:'1px solid black'}}>
-								<RListHeader researchData={researchData}/>
+								<RListHeader researchData={filteredResearch}/>
 								<div className="d-flex flex-column" style={{height:'100%', width:'100%',backgroundColor:'white',overflowY:'overlay',overflowX:'overlay'}}>
 									{filteredData}						
 								</div>					
@@ -612,15 +625,19 @@ function RListHeader(props){
 			console.log(elem[i].checked)			
 		}
 
-		props.researchData?.map?.(object =>{
-			for(var i=0;i<elem.length;i++){
+		props.researchData?.forEach(object =>{
+			const result = []
+
+			result.push(object)
+
+			for(var i=0;i<result.length;i++){
 				if(elem[i].checked == true){
 					object.status = 'archive';
 				}
 				else{
 					object.status = 'public';
 				}
-				console.log(object.status)					
+				console.log(result)					
 			}
 			
 		})

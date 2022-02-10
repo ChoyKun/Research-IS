@@ -651,7 +651,7 @@ export default function StudentProfile(props){
 	},[])
 
 	useEffect(() =>{
-		axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/clist/picture`)
+		axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/faculty/picture`)
 		.then( res => {
 			setImage( () => res.data.path );			
 		})

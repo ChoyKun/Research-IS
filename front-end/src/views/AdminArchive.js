@@ -55,6 +55,7 @@ export default function StudentRList(props){
 	const filter = useContext( FilterContext );
 
 	const [researchData, setResearchData] = useState([]);
+	const [filteredResearch, setFilteredResearch] = useState([]);
 	const [filteredData, setFilteredData] = useState([]);
 	const [search, setSearch] = useState( '' );
 	const [sendPublic, setSendPublic] = useState(false);
@@ -226,15 +227,21 @@ export default function StudentRList(props){
 				.then( res => {
 					res.data.result.forEach( item => {
 						result.push(<Item key={item._id} object={item}/>);
+						setFilteredResearch((filteredResearch)=>[...filteredResearch, item])
 					});
 
 					setFilteredData([...result]);
 				})
 			}
 			else if(!filter.sFilter){
+				const filteredItem = []
+
 				researchData.forEach( item =>{
 					if( item.title.toLowerCase().startsWith(search?.[0]?.toLowerCase?.() ?? '') && item.title.toLowerCase().includes(search.toLowerCase())){
 						result.push( <Item key={item._id} object={item}/> );
+						filteredItem.push(item)
+
+						setFilteredResearch([...filteredItem])
 					}
 				});
 
@@ -252,7 +259,7 @@ export default function StudentRList(props){
 	useEffect(()=>{
 		if( sendPublic ){
 			const newArchiveElems = []
-			researchData.forEach((elem) => {
+			filteredResearch.forEach((elem) => {
 				if(elem.status === 'public') {
 					console.log('here')
 					setPubAccum((pubAccum) => [...pubAccum, elem])
@@ -338,7 +345,7 @@ export default function StudentRList(props){
 								</div>						
 							</div>
 							<div className="d-flex flex-column" style={{height:'80%', width:'95%',border:'1px solid black'}}>
-								<RListHeader researchData={researchData}/>
+								<RListHeader researchData={filteredResearch}/>
 								<div className="d-flex flex-column" style={{height:'100%', width:'100%',backgroundColor:'white',overflowY:'overlay',overflowX:'overlay'}}>
 									{filteredData}						
 								</div>					
@@ -598,8 +605,12 @@ function RListHeader(props){
 			console.log(elem[i].checked)			
 		}
 
-		props.researchData?.map?.(object =>{
-			for(var i=0;i<elem.length;i++){
+		props.researchData?.forEach(object =>{
+			const result = []
+
+			result.push(object)
+
+			for(var i=0;i<result.length;i++){
 				if(elem[i].checked == true){
 					object.status = 'public';
 				}

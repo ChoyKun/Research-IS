@@ -153,20 +153,22 @@ app.get('/filter-query/:course/:category/:yearSubmitted/:order/:year', async( re
 					
 				}
 				else{
-					if(docs.yearSubmitted == yearSubmitted){
-						if(course == 'all'){
-							docs.forEach( doc => {
+					if(course == 'all'){
+						docs.forEach( doc => {
+							if(doc.yearSubmitted == yearSubmitted){
 								JSON.parse( doc.researchCategories )
 								.forEach( categ => {
 									if( category.includes( categ ) ){
 										return result.push( doc );
 									}
 								});
-							});
-						}
-						else{
-							docs.forEach( doc => {
-								if(doc.course == course){
+							}
+						});
+					}
+					else{
+						docs.forEach( doc => {
+							if(doc.course == course){
+								if(doc.yearSubmitted == yearSubmitted){
 									JSON.parse( doc.researchCategories )
 									.forEach( categ => {
 										if( category.includes( categ ) ){
@@ -174,8 +176,8 @@ app.get('/filter-query/:course/:category/:yearSubmitted/:order/:year', async( re
 										}
 									});
 								}
-							});
-						}
+							}
+						});
 					}
 				}
 				
@@ -1027,6 +1029,7 @@ app.put('/student/slist/update/section/:section', async(req,res,next)=>{
 			})
 		}
 	})
+
 
 	return res.status( 200 ).json({message: 'Updated successfully'});
 })
