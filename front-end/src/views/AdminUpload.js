@@ -85,7 +85,8 @@ export default function FacultyUpload(props){
 				state.course = action.data;
 				return state;
 			case 'researchCategories':
-				if( action.data && !state.researchCategories.includes( action.name ) ){					state.researchCategories.push(action.name);
+				if( action.data && !state.researchCategories.includes( action.name ) ){					
+					state.researchCategories.push(action.name);
 				}
 				else{
 					state.researchCategories.splice(state.researchCategories.indexOf(action.name), 1);
@@ -123,7 +124,6 @@ export default function FacultyUpload(props){
 		setSnackOpen(true);
 
 		data.researchCategories = JSON.stringify( data.researchCategories );
-		console.log(data.members)
 		data.members.push(data.lead);
 		data.members.push(data.mem1);
 		data.members.push(data.mem2);

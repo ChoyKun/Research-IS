@@ -89,7 +89,7 @@ export default function StudentRList(props){
 	
 
 	const initState = {
-		course: 'BSIT',
+		course: 'all',
 		category: [],
 		yearSubmitted: 'null',
 		order: 'A-Z',
@@ -127,6 +127,18 @@ export default function StudentRList(props){
 
 			case 'year':
 				state.year = action.data;
+				return state;
+			case 'reset':
+				state = {
+					course: 'all',
+					category: [],
+					yearSubmitted: 'null',
+					order: 'A-Z',
+					year: 'Newest'
+				}
+
+				filter.setSFilter( null );
+
 				return state;
 
 			default:
@@ -223,7 +235,7 @@ export default function StudentRList(props){
 				} = filter.sFilter;
 
 				// ?course=${course}&category=${category}&yearSubmitted=${yearSubmitted}&order=${order}&year=${year}
-				axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/filter-query/${course}/${category}/${yearSubmitted}/${order}/${year}`)
+				axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/archive-filter-query/${course}/${category}/${yearSubmitted}/${order}/${year}`)
 				.then( res => {
 					res.data.result.forEach( item => {
 						result.push(<Item key={item._id} object={item}/>);
@@ -308,7 +320,7 @@ export default function StudentRList(props){
 
 	return(
 		<>
-			<Search setSearch={setSearch} list={rFilter()} placeHolder='Enter Research Title' />			
+			<Search setSearch={setSearch} list={rFilter()} reset={() => dispatch({ type: 'reset' })} placeHolder='Enter Research Title' />			
 			<div style={{width: '100%', height: '90%'}} className='d-flex justify-content-center align-items-center'>
 				<div className="d-flex justify-content-center align-items-center" style={{height:'90%', width:'95%', backgroundColor:'white', color:'black',overflowY:'auto',overflowX:'auto'}}>
 					<div className="d-flex flex-column justify-content-center align-items-center" style={{height:'98%', width:'97%'}}>

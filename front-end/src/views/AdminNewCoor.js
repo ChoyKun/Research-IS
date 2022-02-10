@@ -152,7 +152,7 @@ export default function FacultyReg(props){
 					if(image){
 						axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/clist/upload-picture`, formData)
 						.then((res)=>{
-							setAlertMes(res.data.message);
+							setAlertMes('Welcome new coordinator please re login');
 							setAlertStatus(200)
 							handleSignOut()
 							setTimeout(()=>{setRedirect( <Redirect to='/sign-in'/> );},2000);	

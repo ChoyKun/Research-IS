@@ -191,6 +191,92 @@ app.get('/filter-query/:course/:category/:yearSubmitted/:order/:year', async( re
 	);
 });
 
+app.get('/archive-filter-query/:course/:category/:yearSubmitted/:order/:year', async( req, res, next ) => {
+	const { 
+		course,
+		category,
+		yearSubmitted,
+		order,
+		year
+	} = req.params;
+
+	const result = [];
+
+	Research.find(
+		{ status: 'archive' }, 
+		null, 
+		{ sort: { 
+			title: order === 'A-Z' ? 1 : -1,
+			yearSubmitted: year === 'Newest' ? 1 : -1
+		}},
+		( err, docs ) => {
+			if( err ) return res.status( 503 ).json({ message:'Server Error' });
+
+			if( docs ){
+				if(yearSubmitted == 'null'){
+					if(course == 'all'){
+						docs.forEach( doc => {
+							JSON.parse( doc.researchCategories )
+							.forEach( categ => {
+								if( category.includes( categ ) ){
+									return result.push( doc );
+								}
+							});
+						});
+					}
+					else{
+						docs.forEach( doc => {
+							if(doc.course == course){
+								JSON.parse( doc.researchCategories )
+								.forEach( categ => {
+									if( category.includes( categ ) ){
+										return result.push( doc );
+									}
+								});
+							}
+						});
+					}
+					
+				}
+				else{
+					if(course == 'all'){
+						docs.forEach( doc => {
+							if(doc.yearSubmitted == yearSubmitted){
+								JSON.parse( doc.researchCategories )
+								.forEach( categ => {
+									if( category.includes( categ ) ){
+										return result.push( doc );
+									}
+								});
+							}
+						});
+					}
+					else{
+						docs.forEach( doc => {
+							if(doc.course == course){
+								if(doc.yearSubmitted == yearSubmitted){
+									JSON.parse( doc.researchCategories )
+									.forEach( categ => {
+										if( category.includes( categ ) ){
+											return result.push( doc );
+										}
+									});
+								}
+							}
+						});
+					}
+				}
+				
+
+				return res.json({ result });
+			}
+			else{
+				return res.sendStatus( 403 );
+			}
+		}
+	);
+});
+
 
 
 app.get('/student-filter-query/:course/:section/:yearLevel/:order/:sex/:year', async( req, res, next ) => {
@@ -2099,7 +2185,7 @@ app.post('/faculty/flist/register', async (req, res , next) =>{
 							});
 						})
 
-						docs.activity.push({message:`${doc.firstName} ${doc.middleInitial} ${doc.lastName} ${doc.extentionName ?? ''} registered ${facultyData.username} as the new MIS officer`, date: date})
+						docs.activity.push({message:`${docs.firstName} ${docs.middleInitial} ${docs.lastName} ${docs.extentionName ?? ''} registered ${facultyData.username} as the new MIS officer`, date: date})
 						docs.save( err => {
 							if(err)	return res.status(503).json({ message: 'Server Error' })
 						});
@@ -2179,7 +2265,7 @@ app.put('/faculty/flist/changeofficer/:username', async (req,res,next)=>{
 				}
 			});
 
-			docs.activity.push({message:`${doc.firstName} ${doc.middleInitial} ${doc.lastName} ${doc.extentionName ?? ''} set ${prevCoor} as the MIS officer`, date: date})
+			docs.activity.push({message:`${docs.firstName} ${docs.middleInitial} ${docs.lastName} ${docs.extentionName ?? ''} set ${prevCoor} as the MIS officer`, date: date})
 			docs.save( err => {
 				if(err)	return res.status(503).json({ message: 'Server Error' })
 			});
@@ -2452,11 +2538,6 @@ app.put('/coordinator/clist/resetpass', async (req, res, next) =>{
 
 		if(docs){
 			console.log(docs)
-			docs.activity.push({message:`You reset ${studentNo}'s password to default`, date: date})
-
-			docs.save( err=>{
-				if(err) return res.status(503).json({message:'server error'});
-			})
 			Faculty.findOne({status:'active'}, (err,doc)=>{
 				if(err) return res.status( 503 ).json({ message: 'Server Error' });
 
@@ -2470,6 +2551,12 @@ app.put('/coordinator/clist/resetpass', async (req, res, next) =>{
 						return res.status( 200 ).json({message: 'Reset to default password'});
 					})
 				}
+
+				docs.activity.push({message:`You reset ${doc.username}'s password to default`, date: date})
+
+				docs.save( err=>{
+					if(err) return res.status(503).json({message:'server error'});
+				})
 			})
 		}
 	})
@@ -2614,7 +2701,7 @@ app.put('/clist/upload-picture', async (req, res, next) => {
 
 	const updateImage = ( docu ) => {
 		docu.img = `/images/${image_name}`;
-		docu.activity.push({message:`${doc.firstName} ${doc.middleInitial} ${doc.lastName} ${doc.extentionName ?? ''} changed his/her password`, date: date})
+		docu.activity.push({message:`${docu.firstName} ${docu.middleInitial} ${docu.lastName} ${docu.extentionName ?? ''} updated their profile picture`, date: date})
 
 		docu.save( err => {
 		    if( err ) return res.sendStatus( 503 );

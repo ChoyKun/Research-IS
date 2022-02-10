@@ -135,6 +135,7 @@ export default function FacultyReg(props){
 
 		axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/faculty/flist/new-officer`)
 		.then((res)=>{
+			console.log('here1');
 			axios.post(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/faculty/flist/register`,data)
 			.then((res)=>{
 				if(image){
