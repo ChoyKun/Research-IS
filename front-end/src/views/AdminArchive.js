@@ -583,7 +583,7 @@ function Item(props){
 					edge="end"
 					color="inherit"
 					aria-label="menu"
-					sx={{ mr: 2 }}
+					sx={{ mr: 2,color:'#385723' }}
 					>
 	           	 		<PreviewIcon style={{height: '25px',width:'25px'}} onClick={toggleDrawer(true)}/>
 	           	 	</IconButton>
