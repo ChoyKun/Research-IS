@@ -308,14 +308,21 @@ export default function StudentRList(props){
 		setDialogOpen(false);
 		setSnackOpen(true);
 
-		axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/coordinator/clist/new-admin`) // set current admin to inactive to no?
-		.then( async () => {
-			axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/coordinator/clist/changecoor/${selected?.data?.username}`) // set selected admin to active?
-			.then((res)=>{
-				setAlertMes(res.data.message);
-				setAlertStatus('good');
-				handleSignOut()
-				setTimeout(()=>{setRedirect( <Redirect to='/sign-in'/> );},2000);	
+		axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/coordinator/clist/clear-logs`)
+		.then( async () =>{
+			axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/coordinator/clist/new-admin`) // set current admin to inactive to no?
+			.then( (res) => {
+				axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/coordinator/clist/changecoor/${selected?.data?.username}`) // set selected admin to active?
+				.then((res)=>{
+					setAlertMes(res.data.message);
+					setAlertStatus('good');
+					handleSignOut()
+					setTimeout(()=>{setRedirect( <Redirect to='/sign-in'/> );},2000);	
+				})
+				.catch((err)=>{
+					setAlertMes(JSON.parse(err.request.response).message)
+					setAlertStatus(403)
+				});
 			})
 			.catch((err)=>{
 				setAlertMes(JSON.parse(err.request.response).message)
@@ -323,8 +330,11 @@ export default function StudentRList(props){
 			});
 		})
 		.catch((err)=>{
-			console.log(err);
-		});
+			setAlertMes(JSON.parse(err.request.response).message)
+			setAlertStatus(403)
+		})
+
+		
 		
 	}
 
