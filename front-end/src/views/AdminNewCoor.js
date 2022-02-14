@@ -145,8 +145,10 @@ export default function FacultyReg(props){
 
 		formData.append('MISimg', imgFile );
 
-		axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/coordinator/clist/new-admin`)			
-			.then( async ()=>{
+		axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/coordinator/clist/clear-logs`)
+		.then( async ()=>{
+			axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/coordinator/clist/new-admin`)			
+			.then((res)=>{
 				axios.post(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/coordinator/clist/register`, data)
 				.then((res)=>{
 					if(image){
@@ -180,6 +182,13 @@ export default function FacultyReg(props){
 				setAlertStatus(403)
 				console.Log(JSON.parse(err.request.response).message)
 			})
+		})
+		.catch((err)=>{
+			setAlertMes(JSON.parse(err.request.response).message);
+			setAlertStatus(403)
+		})
+
+		
 
 		
 	}

@@ -2067,7 +2067,10 @@ app.put('/faculty/flist/resetpass/:studentNo', async (req, res, next) =>{
 
 				if(doc){
 					doc.password = doc.lastName+'123';
-					doc.inbox.push({message:`MIS officer had reset your password`, date: date})
+					doc.inbox.push({
+						msg_id: uniqid(),
+						message:`MIS officer had reset your password`, 
+						date: date})
 
 					doc.save( err=>{
 						if(err) return res.status(503).json({message:'server error'});
@@ -2543,7 +2546,10 @@ app.put('/coordinator/clist/resetpass', async (req, res, next) =>{
 
 				if(doc){
 					doc.password = 'mis12345';
-					doc.inbox.push({message:`Coordinator had reset your password`, date: date})
+					doc.inbox.push({
+						msg_id: uniqid(),
+						message:`Coordinator had reset your password`, 
+						date: date})
 
 					doc.save( err=>{
 						if(err) return res.status(503).json({message:'server error'});
@@ -2622,7 +2628,7 @@ app.put('/coordinator/clist/remove-approved/:studentNo/:title', async (req,res,n
 	})
 })
 
-app.put('/coordinator/clist/clear-logs/:username', async(req,res,next)=>{
+app.put('/coordinator/clist/clear-logs', async(req,res,next)=>{
 	const username = req.params.username;
 
 	const today = new Date();
@@ -2631,13 +2637,13 @@ app.put('/coordinator/clist/clear-logs/:username', async(req,res,next)=>{
 	const archiveList = [];
 
 
-	Coordinator.findOne({username: username}, (err, doc)=>{
+	Coordinator.findOne({status:'active'}, (err, doc)=>{
 		if(err) return res.sendStatus(503);
 
 		if(doc){
 			if(doc.activity.length){
 				doc.activity.forEach( item=>{
-					archiveList.push(item);
+					archiveList.push({id: uniqid(), message:item.message, date:item.date});
 				})
 
 				fs.readFile( coor_act_path, ( err, reqList ) => {
@@ -2880,6 +2886,7 @@ app.put('/coordinator/clist/new-admin', async(req,res,next)=>{
 		if( err ) return res.status(503).json({message:'server error'})
 
 		if( docs ){
+			console.log('here1')
 			docs.status = 'inactive';
 
 			docs.save( err => { // may message ako paps

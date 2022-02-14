@@ -3,13 +3,12 @@ import { Link, useParams} from 'react-router-dom';
 import axios from '../modules/config.js';
 
 
-
 //style
 import '../styles/button.css'
 // components
 import Button from '../components/buttons/button';
 import Field from '../components/fields/txtfield';
-import SearcBar from '../components/contents/SearchBar';
+import ActSearch from '../components/contents/ActSearch';
 
 //mui component
 import { green } from '@mui/material/colors';
@@ -27,12 +26,12 @@ import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 
 
-
-
 export default function AdminRequest( props ){
 	const {username} = useParams();
 
 	const [requests, setRequests] = useState([]);
+	const [filteredData, setFilteredData] = useState([]);
+	const [search, setSearch] = useState( '' );
 	const [alertMes, setAlertMes] = useState(null);
 	const [alertStatus, setAlertStatus] = useState(null);
 	const [dialogOpen, setDialogOpen] = useState(false);
@@ -61,7 +60,7 @@ export default function AdminRequest( props ){
 	}
 
 	useEffect(() => {
-		const getRequests = setInterval(() => {
+		const getRequests = setInterval(()=>{
 			axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/actlog-views`)
 			.then( res => {
 				if( !requests.length ){
@@ -69,9 +68,7 @@ export default function AdminRequest( props ){
 				}
 				else{
 					res.data.reqViews.forEach( req => {						
-						if( !requests.map( r => r.id ).includes( req.id ) ){
-							setRequests( requests => [...requests, res]);
-						}
+						setRequests( requests => [...requests, res]);
 					});
 				}
 			})
@@ -79,10 +76,32 @@ export default function AdminRequest( props ){
 				console.log(err);
 				clearInterval( getRequests );
 			})
-		}, 3000);
+		},3000)
+			
 
 		return () => clearInterval( getRequests );
 	}, []);
+
+	useEffect(() => {
+		let result = [];
+
+		const handleSearch = async () => {
+			requests.forEach( item =>{
+				if( 
+					item.message.toLowerCase().includes(search?.toLowerCase()) || 
+					item.date.toLowerCase().includes(search.toLowerCase())
+				)
+				{
+					result.push( <Request setRequests={setRequests} key={item.id} object={item}/> );
+				}
+			});
+
+			setFilteredData([...result]);
+		}
+
+		handleSearch();		
+
+	}, [search]);
 
 	const clear = () =>{
 		setDialogOpen(false);
@@ -105,10 +124,13 @@ export default function AdminRequest( props ){
 		setAlertStatus(403)
 	}
 
+	
+	console.log(filteredData)
+
 	return(
 		<>
-			<div style={{width: '100%', height: '100%'}} className='d-flex flex-column justify-content-center align-items-center'>
-				
+			<div style={{width: '100%', height: '100%'}} className='d-flex flex-column justify-content-between align-items-center'>
+				<ActSearch setSearch={setSearch} placeHolder='Enter date or activity' />
 				<div style={{height:'90%', width:'90%', backgroundColor:'white', border:'1px solid black', overflowY: 'auto'}} className='d-flex flex-column justify-content-center align-items-center'>
 					<div className="d-flex justify-content-around align-items-center flex-column" style={{height:'95%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey",overflowY:'auto',overflowX:'auto'}}>
 						<div className="d-flex flex-row justify-content-between align-items-center" style={{height:'15%', width:'95%'}}>
@@ -118,11 +140,12 @@ export default function AdminRequest( props ){
 							</div>						
 						</div>
 						<Divider style={{height:'2px', width:'100%', color:'black'}}/>
-						<div style={{height:'80%', width:'95%', backgroundColor:'#70AD47', border:'1px solid black', overflowY: 'auto'}} className='d-flex flex-column justify-content-start align-items-center'>
+						<div style={{height:'80%', width:'95%', border:'1px solid black', overflowY: 'auto'}} className='d-flex flex-column justify-content-start align-items-center'>
 							<Header/>
 							<div className="d-flex flex-column" style={{height:'100%', width:'100%',backgroundColor:'#70AD47',overflowY:'overlay',overflowX:'overlay'}}>									
-								{
-									requests?.map?.( req => <Request setRequests={setRequests} key={req.id} {...req}/>)
+								{ 
+									filteredData
+
 								}
 							</div>	
 						</div>
@@ -274,11 +297,11 @@ const Request = ( props ) => {
 		<div 
 			style={{
 				width: '100%', 
-				height: '30px', 
+				height: '10%', 
 				color: 'black',
 				backgroundColor: '#E2F0D9',
 				border:'1px solid black',
-				borderRadius:'10px'
+				borderRadius:'10px',
 			}} 
 			className="d-flex flex-row justify-content-around align-items-center"
 		>
@@ -287,8 +310,8 @@ const Request = ( props ) => {
 					{alertMes}
 				</Alert>				
 			</Snackbar>
-			<div className="col-6 text-center"><p className="p-0 m-0"> { props.message } </p></div>
-			<div className="col-2 text-center"><p className="p-0 m-0"> { props.date } </p></div>
+			<div className="col-6 text-center"> { props.object.message }</div>
+			<div className="col-2 text-center"> { props.object.date }</div>
 		</div>
 	);
 }

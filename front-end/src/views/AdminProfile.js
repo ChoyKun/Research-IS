@@ -527,7 +527,7 @@ export default function StudentProfile(props){
 	const clearLogs = () =>{
 		setLogsDialogOpen(false);
 		setLogsSnackOpen(true);
-		axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/coordinator/clist/clear-logs/${username}`)
+		axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/coordinator/clist/clear-logs`)
 		.then(res=>{
 			setLogsAlertMes(res.data.message);
 			setLogsAlertStatus('good');
