@@ -3186,6 +3186,8 @@ app.get('/actlog-views', async ( req, res, next ) => {
 			newList.unshift(item)
 		})
 
+		console.log(newList)
+
 		return res.json({ reqViews: newList });
 	});
 });

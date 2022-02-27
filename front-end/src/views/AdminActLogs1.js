@@ -25,6 +25,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 
+
 export default function AdminRequest( props ){
 	const {username} = useParams();
 
@@ -33,28 +34,48 @@ export default function AdminRequest( props ){
 	const [filteredData, setFilteredData] = useState([]);
 	const [search, setSearch] = useState( '' );
 
-	useEffect(()=>{
-		axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/actlog-views`)
-		.then( res => {
-			let result = [];
-			res.data.reqViews.forEach( data =>{
-				if( 
-					data.message.toLowerCase().includes(search?.toLowerCase()) || 
-					data.date.toLowerCase().includes(search.toLowerCase())
-				){
-					result.push(<Request key={data.id} object={data}/>)
-				}	
-			})
+	useEffect(() => {
+		let result = [];
 
-			setRequests([...result])	
-		})
-		.catch( err => {
-			console.log(err);
-		})
-	},[search])
+		const getRequests = async () =>{
+			axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/actlog-views`)
+			.then( res => {
+				res.data.reqViews.forEach( data =>{
+					setRequests(requests =>[...requests, data])
+				})	
+			})
+			.catch( err => {
+				console.log(err);
+				clearInterval( getRequests );
+			})
+		}
+		getRequests();
+
+		
+
+	}, []);
 
 	console.log(requests)
 
+	useEffect(()=>{
+	
+
+		requests.map( item =>{
+			console.log('here')
+			if( 
+				item.message.toLowerCase().includes(search?.toLowerCase()) || 
+				item.date.toLowerCase().includes(search.toLowerCase())
+			)
+			{
+				result.push( <Request setRequests={setRequests} key={item.id} object={item}/> );
+			}
+		});
+
+		setFilteredData([...result]);
+	},[search])
+
+	
+	console.log(filteredData)
 
 	return(
 		<>
@@ -73,7 +94,7 @@ export default function AdminRequest( props ){
 							<Header/>
 							<div className="d-flex flex-column" style={{height:'100%', width:'100%',backgroundColor:'#70AD47',overflowY:'overlay',overflowX:'overlay'}}>									
 								{ 
-									requests
+									filteredData
 								}
 							</div>	
 						</div>
@@ -83,6 +104,7 @@ export default function AdminRequest( props ){
 		</>
 	);
 }
+
 
 const Header = ( props ) => {
 	return(
@@ -102,6 +124,7 @@ const Header = ( props ) => {
 		</div>
 	);
 }
+ 
 
 const Request = ( props ) => {
 	return(
@@ -121,3 +144,4 @@ const Request = ( props ) => {
 		</div>
 	);
 }
+
