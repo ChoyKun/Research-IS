@@ -242,7 +242,7 @@ export default function Login(props){
 								</DialogContent>
 								<DialogActions>
 									<Button title='Cancel' click={cancelOp}/>
-									<Button title='Yes' click={forgetPassword}/>
+									<Button title='Send' click={forgetPassword}/>
 								</DialogActions>
 							</Dialog>
 						</div>
