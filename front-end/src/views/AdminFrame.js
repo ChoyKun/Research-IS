@@ -167,7 +167,9 @@ export default function SFrame(props){
 				 				</ListItemButton>
 				 			</Link>
 				 		</ListItem>
-				 		<Divider style={{height:'20%',width:'100%',backgroundColor:"#E2F0D9"}}/>
+				 		<Typography variant="h6" component="div" sx={{ flexGrow: 0.95 }}>
+				           
+				        </Typography>
 				 		<ListItem style={{width:'100%',color:'black'}}>
 				 			<Link to={`/sign-in`} style={{textDecoration:'none'}}>				
 				 				<ListItemButton onClick={handleSignOut} className="d-flex justify-content-between align-items-center text-center" style={{color:'white'}}>
@@ -320,16 +322,6 @@ export default function SFrame(props){
 
 	}
 
-
-	useEffect(() => {
-		axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student/slist/${username}`)
-		.then(res=>{
-			setName(res.data.data);
-		})
-		.catch(err=>{
-			console.log(err);
-		});
-	}, []);
 
 	const toggleDrawer = (open) => (event) => {
 		setIsMenuOpen( open );

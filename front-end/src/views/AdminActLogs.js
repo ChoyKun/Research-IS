@@ -25,107 +25,36 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 
-
 export default function AdminRequest( props ){
 	const {username} = useParams();
+
 
 	const [requests, setRequests] = useState([]);
 	const [filteredData, setFilteredData] = useState([]);
 	const [search, setSearch] = useState( '' );
-	const [alertMes, setAlertMes] = useState(null);
-	const [alertStatus, setAlertStatus] = useState(null);
-	const [dialogOpen, setDialogOpen] = useState(false);
-	const [snackOpen, setSnackOpen] =useState(false);
 
-	const handleSnack = () =>{
-		setSnackOpen(true);
-	}
-
-	const handleSnackClose = (evernt , reason) =>{
-		if(reason === 'clickaway') {
-			return;
-		}
-
-		setSnackOpen(false);
-		setAlertMes(null);
-	}
-
-	
-	const handleDialog = () =>{
-		setDialogOpen(true)
-	}
-
-	const handleDialogClose = () =>{
-		setDialogOpen(false)
-	}
-
-	useEffect(() => {
-		const getRequests = setInterval(()=>{
-			axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/actlog-views`)
-			.then( res => {
-				if( !requests.length ){
-					setRequests([...res.data.reqViews]);
-				}
-				else{
-					res.data.reqViews.forEach( req => {						
-						setRequests( requests => [...requests, res]);
-					});
-				}
-			})
-			.catch( err => {
-				console.log(err);
-				clearInterval( getRequests );
-			})
-		},3000)
-			
-
-		return () => clearInterval( getRequests );
-	}, []);
-
-	useEffect(() => {
-		let result = [];
-
-		const handleSearch = async () => {
-			requests.forEach( item =>{
+	useEffect(()=>{
+		axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/actlog-views`)
+		.then( res => {
+			let result = [];
+			res.data.reqViews.forEach( data =>{
 				if( 
-					item.message.toLowerCase().includes(search?.toLowerCase()) || 
-					item.date.toLowerCase().includes(search.toLowerCase())
-				)
-				{
-					result.push( <Request setRequests={setRequests} key={item.id} object={item}/> );
-				}
-			});
+					data.message.toLowerCase().includes(search?.toLowerCase()) || 
+					data.date.toLowerCase().includes(search.toLowerCase())
+				){
+					result.push(<Request key={data.id} object={data}/>)
+				}	
+			})
 
-			setFilteredData([...result]);
-		}
-
-		handleSearch();		
-
-	}, [search]);
-
-	const clear = () =>{
-		setDialogOpen(false);
-		setSnackOpen(true);
-
-		axios.post(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/clear-requests`)
-		.then((res)=>{
-			setAlertMes( res.data.message );
-			setAlertStatus('good')
+			setRequests([...result])	
 		})
-		.catch((err)=>{
+		.catch( err => {
 			console.log(err);
 		})
-	}
+	},[search])
 
-	const cancelOp =() =>{
-		setDialogOpen(false);
-		setSnackOpen(true);
-		setAlertMes("Operation canceled")
-		setAlertStatus(403)
-	}
+	console.log(requests)
 
-	
-	console.log(filteredData)
 
 	return(
 		<>
@@ -144,8 +73,7 @@ export default function AdminRequest( props ){
 							<Header/>
 							<div className="d-flex flex-column" style={{height:'100%', width:'100%',backgroundColor:'#70AD47',overflowY:'overlay',overflowX:'overlay'}}>									
 								{ 
-									filteredData
-
+									requests
 								}
 							</div>	
 						</div>
@@ -155,7 +83,6 @@ export default function AdminRequest( props ){
 		</>
 	);
 }
-
 
 const Header = ( props ) => {
 	return(
@@ -175,124 +102,8 @@ const Header = ( props ) => {
 		</div>
 	);
 }
- 
 
 const Request = ( props ) => {
-
-	const {username} = useParams();
-
-	const [approved, setApproved] = useState([])
-	const [approvedTitle, setApprovedTitle] = useState([])
-	const [declined, setDeclined] = useState([])
-	const [declinedTitle, setDeclinedTitle] = useState([])
-	const [sendApproved, setSendApproved] = useState(false);
-	const [sendDeclined, setSendDeclined] = useState(false);
-	const [dialogOpen, setDialogOpen] = useState(false);
-	const [declineDialogOpen, setDeclineDialogOpen] = useState(false);
-	const [alertMes, setAlertMes] = useState(null);
-	const [alertStatus, setAlertStatus] = useState(null);
-	const [snackOpen, setSnackOpen] =useState(false);
-
-	const handleSnack = () =>{
-		setSnackOpen(true);
-	}
-
-	const handleSnackClose = (evernt , reason) =>{
-		if(reason === 'clickaway') {
-			return;
-		}
-
-		setSnackOpen(false);
-		setAlertMes(null);
-	}
-
-	
-	const handleDialog = () =>{
-		setDialogOpen(true)
-	}
-
-	const handleDeclineDialog = () =>{
-		setDeclineDialogOpen(true)
-	}
-
-	const handleDialogClose = () =>{
-		setDialogOpen(false)
-	}
-
-	const handleDeclineDialogClose = () =>{
-		setDeclineDialogOpen(false)
-	}
-
-	const today = new Date();
-
-	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-
-
-	useEffect(()=>{
-		if( sendApproved ){
-			setApproved((approved) => [...approved, props.id]);
-			setApprovedTitle((approvedTitle) => [...approvedTitle, props.title]);
-		}
-	}, [sendApproved]);
-
-	useEffect(() => {
-		if( approved ){
-			axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student/slist/approved/${props.studentID}/${date}/${[...approvedTitle]}`, approved) 
-			.then( res => {
-				setAlertMes( res.data.message );
-				setAlertStatus('good')
-				setSendApproved( false );
-			})
-			.catch((err)=>{console.log(err)});
-		}
-	}, [approved])
-
-	useEffect(()=>{
-		if( sendDeclined ){
-			setDeclined((declined) => [...declined, props.id]);
-			setDeclinedTitle((declinedTitle) => [...declinedTitle, props.title]);
-		}
-	}, [sendDeclined]);
-
-	useEffect(() => {
-		if( declined ){
-			axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student/slist/declined/${props.studentID}/${[...declinedTitle]}`, declined) 
-			.then( res => {
-				setAlertMes( res.data.message );
-				setAlertStatus('good')
-				setSendApproved( false );
-			})
-			.catch((err)=>{console.log(err)});
-		}
-	}, [declined])
-
-
-	const approve = async () => {
-		setDialogOpen(false);
-		setSnackOpen(true);
-		setSendApproved( true );
-	}
-
-	const cancelOp =() =>{
-		setDialogOpen(false);
-		setSnackOpen(true);
-		setAlertMes("Operation canceled")
-		setAlertStatus(403)
-	}
-
-	const cancelDecline =() =>{
-		setDeclineDialogOpen(false);
-		setSnackOpen(true);
-		setAlertMes("Operation canceled")
-		setAlertStatus(403)
-	}
-
-	const decline = async () => {
-		setDeclineDialogOpen(false);
-		setSnackOpen(true);
-		setSendDeclined( true );
-	}
-
 	return(
 		<div 
 			style={{
@@ -305,14 +116,8 @@ const Request = ( props ) => {
 			}} 
 			className="d-flex flex-row justify-content-around align-items-center"
 		>
-			<Snackbar anchorOrigin={{vertical:"top", horizontal:"center"}} open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-				<Alert variant='filled' severity={alertStatus == 403 ? "error" : "success"} sx={{width:'500px'}}>
-					{alertMes}
-				</Alert>				
-			</Snackbar>
 			<div className="col-6 text-center"> { props.object.message }</div>
 			<div className="col-2 text-center"> { props.object.date }</div>
 		</div>
 	);
 }
-
