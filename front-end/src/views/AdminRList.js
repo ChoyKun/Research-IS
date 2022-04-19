@@ -2,6 +2,7 @@ import React,{useState, useEffect, Suspense, useContext, useReducer} from 'react
 import { Link, Redirect,useParams} from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import uniqid from 'uniqid';
 
 import "../styles/button.css";
 
@@ -47,7 +48,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Tooltip from '@mui/material/Tooltip';
-
+import RecentActorsIcon from '@mui/icons-material/RecentActors';
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 
 
 
@@ -204,7 +206,7 @@ export default function StudentRList(props){
 			axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/research/rlist`)
 			.then((res)=>{
 				res.data.forEach( elem => {
-					console.log( elem.status );
+					// console.log( elem.status );
 					if( elem.status === 'public' ){
 						setResearchData((researchData) => [...researchData, elem]);
 					}
@@ -236,9 +238,7 @@ export default function StudentRList(props){
 				.then( res => {
 					res.data.result.forEach( item => {
 						result.push(<Item key={item._id} object={item}/>);
-						setFilteredResearch((filteredResearch)=>[...filteredResearch, item])
-
-						
+						setFilteredResearch((filteredResearch)=>[...filteredResearch, item])	
 					});
 
 					setFilteredData([...result]);
@@ -269,7 +269,6 @@ export default function StudentRList(props){
 	}, [search, researchData, filter.sFilter]);
 
 	useEffect(()=>{
-		console.log(filteredResearch)
 
 		if( sendPublic ){
 			const newArchiveElems = []
@@ -290,7 +289,7 @@ export default function StudentRList(props){
 
 
 	useEffect(() => {
-		console.log(pubAccum.length)
+		// console.log(pubAccum.length)
 		if( pubAccum.length ){
 			axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/research/rlist/update`, pubAccum)
 			.then( res => {
@@ -319,7 +318,6 @@ export default function StudentRList(props){
 	}
 
 
-	console.log(filter.sFilter)
 
 	return(
 		<>
@@ -347,7 +345,7 @@ export default function StudentRList(props){
 								        aria-describedby="alert-dialog-description"
 									>
 										<DialogTitle>
-											{"Deactivate Account/s"}
+											{"Hide Researches"}
 										</DialogTitle>
 										<DialogContent>
 											Do you want to update the list and hide selected researches?
@@ -374,6 +372,7 @@ export default function StudentRList(props){
 }
 
 
+
 function Loading(props){
 	return(
 		<div>
@@ -385,17 +384,36 @@ function Loading(props){
 function Item(props){
 	const { username, id } = useParams();
 
+	const [remAccum, setRemAccum]= useState([])
 	const [pending, setPending] = useState([])
+	const [studentPerm, setStudentPerm] = useState([])
 	const [sendPend, setSendPend] = useState(false);
+	const [sendRem, setSendRem] = useState(false);
 	const [url, setUrl] = useState(null)
 	const [name, setName] = useState(null);
 	const [disabled, setDisabled] = useState(false);
 	const [open, setOpen] = useState(false);
+	const [permOpen, setPermOpen] = useState(false);
 	const [alertMes, setAlertMes] = useState(null);
+	const [alertStatus, setAlertStatus] = useState(null);
 	const [snackOpen, setSnackOpen] =useState(false);
+	const [permDialogOpen, setPermDialogOpen] = useState(false);
+
+	const handleDialog = () =>{
+		setPermDialogOpen(true)
+	}
+
+	const handleDialogClose = () =>{
+		setPermDialogOpen(false)
+	}
+
 
 	const toggleDrawer = (open) => (event) => {
 		setOpen( open );
+	}
+
+	const togglePermission = (open) => (event) => {
+		setPermOpen( open );
 	}
 
 	const handleSnack = () =>{
@@ -410,18 +428,28 @@ function Item(props){
 		setSnackOpen(false);
 		setAlertMes(null);
 	}
-	
-	useEffect(() => {
-		const token = Cookies.get('token');
 
-		axios.post(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/check-research-state/${username}/${props.object._id}`)
+	const cancelPerm =() =>{
+		setPermDialogOpen(false);
+		setSnackOpen(true);
+		setAlertMes("Operation canceled")
+		setAlertStatus(403)
+	}
+	
+
+	useEffect(()=>{
+		axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/permissions/${props.object._id}`)
 		.then((res)=>{
-			setUrl(`/research-full`)
+			res.data.data.forEach( item => {
+				setStudentPerm((studentPerm)=>[...studentPerm, item])	
+			});
 		})
 		.catch((err)=>{
-			setUrl(`/research-abstract`)
+			console.log(err);
 		})
-	}, [])
+	},[])
+
+	// console.log([...studentPerm]);
 
 	const list = ()=>(
 		<div className="d-flex justify-content-center align-items-center flex-column" style={{height:'100%',width:'500px',backgroundColor:"#E2F0D9"}}>
@@ -469,52 +497,66 @@ function Item(props){
 		</div>
 	)
 
+	// const permissions=()=>(
+	// 	<div className="d-flex justify-content-center align-items-center flex-column" style={{height:'100%',width:'1000px',backgroundColor:"#E2F0D9"}}>
+	// 		<div className="d-flex justify-content-start align-items-start flex-column" style={{height:'95%',width:'90%',border:'1px solid black',backgroundColor:'white',borderRadius:'10px'}}>
+	// 			<div className="d-flex justify-content-around align-items-center flex-column" style={{height:'100%',width:'100%'}}>
+	// 				<div className="d-flex justify-content-start align-items-center" style={{height:'10%',width:'90%'}}>
+	// 					<p style={{fontSize:'30px',textAlign:'center',height:'24px'}}>{props.object.title}</p>
+	// 				</div>
+	// 				<Divider style={{height:'2px', width:'100%', color:'black'}}/>
+	// 				<div className="d-flex flex-column justify-content-start align-items-start" style={{height:'75%',width:'90%',border:'1px solid black'}}>
+	// 					<div className="d-flex flex-column" style={{height:'90%', width:'100%',backgroundColor:'white',overflowY:'overlay',overflowX:'overlay'}}>
+	// 						<div style={{height:'30px',width:'100%',border:'1px solid black',color:"white", backgroundColor:'#385723'}} className='d-flex flex-row justify-content-around'>			
+	// 							<div className="col-1 text-center"></div>
+	// 							<div className='col-4 text-center'>
+	// 								Student Name
+	// 							</div>
+	// 							<div className='col-4 text-center'>
+	// 								Date Approved
+	// 							</div>
+	// 						</div>
+	// 						<PermList studentPerm={studentPerm} title={props.object.title} handleOnChange={handlePermissions} rID={props.object._id}/>
+	// 					</div>
+	// 				</div>
+	// 				<div className="d-flex flex-row-reverse justify-content-start" style={{height:'10%',width:'90%'}}>
+	// 					<Button title="Remove Permission" click={ handleDialog } style={{height:'40px'}}/>
+	// 					
+	// 				</div>
+	// 			</div>
+	// 		</div>
+	// 	</div>
+	// )
+
 	useEffect(()=>{
-		const token = Cookies.get('token');
-
-		const checkFile = async () => {
-			axios.post(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student/slist/disable/${username}/${props.object._id}`)
-			.then((res)=>{
-				setDisabled(true)
-			})
-			.catch((err)=>{
-				console.log(err);
+		if( sendRem ){
+			const newArchiveElems = []
+			console.log( studentPerm );
+			studentPerm.forEach((elem) => {
+				if(elem.status === 'archive') {
+					setRemAccum((remAccum) => [...remAccum, elem])
+				}
+				else{
+					newArchiveElems.push( elem );
+				}
 			});
+			setStudentPerm(() => [...newArchiveElems])			
 		}
+	}, [sendRem]);
 
-		checkFile();
-	},[])
-
-	useEffect(() => {
-		const token = Cookies.get('token'); 
-
-		axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/student/slist/${username}`,{
-			headers: {
-				authorization: `Bearer ${token}`
-			}
-		})
-		.then(res=>{
-			setName(res.data.data);
-		})
-		.catch(err=>{
-			console.log(err);
-		})
-
-		axios.post(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/check-research-state/${username}/${props.object._id}`)
-		.then((res)=>{
-			setUrl(`/research-full`)
-		})
-		.catch((err)=>{
-			setUrl(`/research-abstract`)
-		})	
-	},[])
-
+	useEffect(()=>{
+		// console.log(studentPerm?.map?.(elem => elem.studentNo))
+		if( sendRem ){
+			setRemAccum((remAccum) => [...remAccum, ...studentPerm?.filter(elem => elem.status === 'archive').map( elem => elem.studentNo)]);
+		}
+	}, [sendRem]);
 
 	useEffect(()=>{
 		if( sendPend ){
 			setPending((pending) => [...pending, props.object._id]);
 		}
 	}, [sendPend]);
+
 
 	useEffect(() => {
 		const token = Cookies.get('token')
@@ -529,11 +571,31 @@ function Item(props){
 				setSendPend( false );
 			})
 			.catch((err) =>{
-				console.log( err.response );
+				// console.log( err.response );
 				if(err?.response?.data?.message) alert(`${ err?.response?.data?.message}`) 
 			});
 		}
 	}, [pending])
+
+	
+
+	useEffect(() => {
+		// console.log(remAccum)
+		if( remAccum.length ){
+			axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/remove-perm/${props.object._id}`, remAccum)
+			.then( res => {
+				console.log('here')
+				setAlertMes( res.data.message );
+				setAlertStatus('good');
+				setSendRem( false );
+			})
+			.catch((err)=>{
+				console.log(err)
+			});
+		}
+	}, [remAccum])
+
+
 
 	const requestForView = async () => {
 
@@ -541,7 +603,7 @@ function Item(props){
 
 		var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 
-		console.log(date);
+		// console.log(date);
 
 		const data = {
 			id: props.object._id,
@@ -567,6 +629,28 @@ function Item(props){
 	const handleOnChange = (e) => {
 		props.object.status = e.target.checked ? 'archive' : 'public';
 	}
+
+	// const handlePermissions = (e) => {
+	// 	// console.log(studentPerm?.map?.(elem=> elem.status))
+	// 	props.object.status = e.target.checked ? 'archive' : 'public';
+	// }
+
+	const handlePermissions = (id) => {
+		setStudentPerm( studentPerm => [...studentPerm.map( sp => {
+			console.log( id, sp._id );
+			console.log( id === sp._id );
+			if( sp._id === id )
+				sp.status = 'archive';
+
+			return sp;
+		})]);
+
+		setPermDialogOpen(false);
+		setSnackOpen(true);
+		setSendRem(true);
+	}
+
+	React.useEffect(() => console.log( studentPerm ), [studentPerm]);
 	
 	return(
 		<div style={{height:'30px',width:'100%',backgroundColor:'#E2F0D9',border:'1px solid black',borderRadius:'10px'}} className="d-flex flex-row justify-content-around">
@@ -596,7 +680,38 @@ function Item(props){
 	            	open={open}
 	            	onClose={toggleDrawer(false)}
 	            >
-            	{list()}
+            		{list()}
+            	</Drawer>
+			</div>
+			<div className="col-1 d-flex justify-content-center align-items-center text-center">
+				<Tooltip title="View Document" arrow>
+					<IconButton
+					size="large"
+					edge="end"
+					color="inherit"
+					aria-label="menu"
+					sx={{ mr: 2 ,color:'#385723'}}
+					>
+	           	 		<RecentActorsIcon style={{height: '25px',width:'25px'}} onClick={togglePermission(true)}/>
+	           	 	</IconButton>
+				</Tooltip>
+           	 	<Drawer
+	            	anchor={'right'}
+	            	open={permOpen}
+	            	onClose={togglePermission(false)}
+	            >
+	            	<Permissions
+	            		studentPerm={studentPerm} 
+	            		title={props.object.title} 
+	            		handlePermissions={handlePermissions} 
+	            		id={props.object._id}
+	            		handleDialog={handleDialog}
+	            		dialogOpen={permDialogOpen}
+						handleDialogClose={handleDialogClose}
+						cancelOp={cancelPerm}
+						sender={handlePermissions}
+	            	>
+	            	</Permissions>
             	</Drawer>
 				{/*<Button style={{width:'90px'}} click={requestForView} disabled={disabled} className={`col-1 text-center`} title='Request'/>*/}
 			</div>
@@ -604,6 +719,60 @@ function Item(props){
 	);
 }
 
+const Permissions= props => {
+	const [id, setId] = React.useState( null );
+
+	return(
+		<>
+			<div className="d-flex justify-content-center align-items-center flex-column" style={{height:'100%',width:'1000px',backgroundColor:"#E2F0D9"}}>
+				<div className="d-flex justify-content-start align-items-start flex-column" style={{height:'95%',width:'90%',border:'1px solid black',backgroundColor:'white',borderRadius:'10px'}}>
+					<div className="d-flex justify-content-around align-items-center flex-column" style={{height:'100%',width:'100%'}}>
+						<div className="d-flex justify-content-start align-items-center" style={{height:'10%',width:'90%'}}>
+							<p style={{fontSize:'30px',textAlign:'center',height:'24px'}}>{props.title}</p>
+						</div>
+						<Divider style={{height:'2px', width:'100%', color:'black'}}/>
+						<div className="d-flex flex-column justify-content-start align-items-start" style={{height:'75%',width:'90%',border:'1px solid black'}}>
+							<div className="d-flex flex-column" style={{height:'90%', width:'100%',backgroundColor:'white',overflowY:'overlay',overflowX:'overlay'}}>
+								<div style={{height:'30px',width:'100%',border:'1px solid black',color:"white", backgroundColor:'#385723'}} className='d-flex flex-row justify-content-around'>			
+									<div className="col-1 text-center"></div>
+									<div className='col-4 text-center'>
+										Student Name
+									</div>
+									<div className='col-4 text-center'>
+										Date Approved
+									</div>
+								</div>
+								<PermList studentPerm={props.studentPerm} handleDialog={props.handleDialog} title={props.title} handleOnChange={id => setId( id )} rID={props.id}>
+								</PermList>
+							</div>
+						</div>
+						<div className="d-flex flex-row-reverse justify-content-start" style={{height:'10%',width:'90%'}}>
+							<Button title="Remove Permission" click={ props.handleDialog } style={{height:'40px'}}/>
+							{ props?.children }
+						</div>
+					</div>
+				</div>
+			</div>
+			<Dialog
+				open={props.dialogOpen}
+		        onClose={props.handleDialogClose}
+		        aria-labelledby="alert-dialog-title"
+		        aria-describedby="alert-dialog-description"
+			>
+				<DialogTitle>
+					{"Remove Permission/s"}
+				</DialogTitle>
+				<DialogContent>
+					Do you want to remove the permission to view full content from the selected students?
+				</DialogContent>
+				<DialogActions>
+					<Button title='Cancel' click={props?.cancelOp}/>
+					<Button title='Yes' click={() => props.sender( id )}/>
+				</DialogActions>
+			</Dialog>
+		</>
+	)
+}
 function RListHeader(props){
 
 	const handleSelectAll = (e) =>{
@@ -617,7 +786,7 @@ function RListHeader(props){
 			else{
 				elem[i].checked = false;
 			}
-			console.log(elem[i].checked)			
+			// console.log(elem[i].checked)			
 		}
 
 		props.researchData?.forEach(object =>{
@@ -632,7 +801,7 @@ function RListHeader(props){
 				else{
 					object.status = 'public';
 				}
-				console.log(result)					
+				// console.log(result)					
 			}
 			
 		})
@@ -657,7 +826,41 @@ function RListHeader(props){
 				<div className="col-1 text-center">
 					View Details
 				</div>
+				<div className="col-1 text-center">
+					Permissions
+				</div>
 			</div>
 		</div>
 	);
 }
+
+const PermList = (props) =>(
+		<div>
+			{props.studentPerm?.map?.((object)=>(
+				<div key={uniqid()} style={{height:'30px',width:'100%',color:'black',backgroundColor:'#E2F0D9',border:'1px solid black',borderRadius:'10px'}} className="d-flex flex-row justify-content-around">
+					<div className="col-1 text-center">
+						<IconButton
+							size="small"
+							edge="center"
+							color="inherit"
+							aria-label="menu"
+							sx={{ color:green[500],mr: 2 }}
+							onClick={() => {
+								props?.handleDialog();
+								props.handleOnChange( object._id );
+							}}
+						>
+							<RemoveCircleIcon style={{height: '20px',width:'20px'}} />
+							{props.children}
+						</IconButton>
+					</div>
+					<div className='col-4 text-center'>
+						{`${object.firstName} ${object.middleInitial} ${object.lastName}`}
+					</div>
+					<div className='col-4 text-center'>
+						{`${object.approved.filter(elem => elem.id === props?.rID).map( elem => elem.dateApproved)}`}
+					</div>
+				</div>
+			))}				
+		</div>	
+	)

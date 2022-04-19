@@ -51,6 +51,13 @@ const requestAccessToken = ( user ) => {
 	return jwt.sign( user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '24h' }); // wait check ko
 }
 
+function extractValue(arr, prop) {
+  // extract value from property
+  let extractedValue = arr.map(item => item[prop]);
+
+  return extractedValue;
+}
+
 
 const authentication = ( req, res, next ) => {
 	const authHeader = req.headers['authorization'];
@@ -291,11 +298,6 @@ app.get('/student-filter-query/:course/:section/:yearLevel/:order/:sex/:year', a
 
 	const result = [];
 	const sectionResult  = [];
-
-	console.log(yearLevel);
-	console.log(course);
-	console.log(sex)
-
 	Student.find(
 		{ status:'active'}, 
 		null, 
@@ -574,8 +576,6 @@ app.get('/inactive-student-filter-query/:course/:section/:yearLevel/:order/:sex/
 app.post('/sign-in', async(req,res,next)=>{
 	const { _username, _password } = req.body;
 
-	console.log(req.body)
-
 	fs.readFile( token_path, (err, data) => {
 		if( err ) return res.sendStatus( 503 );
 
@@ -601,7 +601,6 @@ app.post('/sign-in', async(req,res,next)=>{
 			token.push( refreshToken );
 
 			if( !doc ){
-				console.log(doc)
 				Faculty.findOne({username:_username, password:_password, status: 'active'},  (err, doc) => {
 					if( err ){
 
@@ -615,7 +614,6 @@ app.post('/sign-in', async(req,res,next)=>{
 					token.push( refreshToken );
 
 					if( !doc ){
-						console.log(doc)
 						Coordinator.findOne({username:_username, password:_password, status: 'active'},  (errs, docs) => {
 							if( errs ){
 								return res.status( 401 ).json({ message: 'Server Error' });
@@ -628,7 +626,6 @@ app.post('/sign-in', async(req,res,next)=>{
 							token.push( refreshToken );
 
 							if( docs ){
-								console.log('admin');
 								saveTokens( token, () => {
 									return res.status( 200 ).json({
 										accessToken: accessToken,
@@ -646,7 +643,6 @@ app.post('/sign-in', async(req,res,next)=>{
 					}
 
 					if( doc ){
-						console.log('faculty');
 						saveTokens( token, () => {
 							return res.status( 200 ).json({
 								accessToken: accessToken,
@@ -661,7 +657,6 @@ app.post('/sign-in', async(req,res,next)=>{
 			}
 
 			if( doc ){
-				console.log('student');
 				saveTokens( token, () => {
 					return res.status( 200 ).json({
 						accessToken: accessToken,
@@ -769,7 +764,6 @@ app.get('/rlist/archive-count', async (req, res, next) =>{
 		if( err ) res.sendStatus( 503 );
 
 		if(doc){
-			console.log(doc.status)
 			doc.forEach((docs)=>{
 				if(docs.status== 'public'){
 					Public=Public+1;
@@ -799,7 +793,6 @@ app.get('/slist/status-count', async (req, res, next) =>{
 		if( err ) res.sendStatus( 503 );
 
 		if(doc){
-			console.log(doc.status)
 			doc.forEach((docs)=>{
 				if(docs.status== 'active'){
 					Active=Active+1;
@@ -1047,7 +1040,6 @@ app.put('/student/slist/update/course', async(req,res,next)=>{
 					}
 
 					if(docs){
-						console.log(docs.course)
 						if(docs.course == 'BSIT'){
 							docs.course = 'BSCS'
 						}
@@ -1242,7 +1234,6 @@ app.put('/student/slist/favorites/:username', async(req,res,next)=>{ //san mo to
 app.put('/student/slist/pending/:username/:title', async(req,res,next)=>{ //san mo to tinatwag? StudentRlist
 	const studentNo = req.params.username;
 	const title = req.params.title;
-	console.log(title)
 
 	const pending = req.body;
 
@@ -1281,7 +1272,6 @@ app.post('/student/slist/disable/:username/:id',async(req,res,next)=>{
 
 		if( data ){
 			const id = data.approved.map( elem => elem.id )
-			console.log(id)
 			if( id.includes(rID) || data.pending.includes( rID ) ){
 				return res.status( 200 ).json({ message: 'button is diabled' });		
 			}
@@ -1311,10 +1301,8 @@ app.put('/student/slist/approved/:username/:date/:title', async(req,res,next)=>{
 
 				if(data){
 					const pending = data.pending.filter( id => id !== approved[0] );
-					console.log( pending );
 					data.pending = pending;
 
-					console.log( approved[0] );
 					if( approved[0] ){
 						data.approved.push({ id: approved[0], dateApproved: date });
 					}
@@ -1379,7 +1367,6 @@ app.put('/student/slist/declined/:username/:title', async(req,res,next)=>{ //san
 
 				if(data){
 					const pending = data.pending.filter( id => id !== declined[0] );
-					console.log( pending );
 					data.pending = pending;
 
 					data.inbox.push({
@@ -1419,8 +1406,41 @@ app.put('/student/slist/declined/:username/:title', async(req,res,next)=>{ //san
 	
 });
 
+app.put('/remove-perm/:id', async(req,res,next)=>{
+	const editData = req.body;
+	const rID = req.params.id
+	const today = new Date();
+	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+
+	console.log(editData)
+
+	Student.find({}, (err,data)=>{
+		if(err) return res.status( 503 ).json({ message: 'Server Error' });
+
+		if(data){
+			data.forEach(object=>{
+				editData.forEach(item=>{
+					if(item.studentNo === object.studentNo){
+						var dataArray = extractValue(object.approved, 'id');
+
+						if(dataArray.includes(rID)){
+							const approved = object.approved.filter(function(el) { return el.id != rID; } );
+							object.approved = approved;
+
+							object.save( err => {
+								if(err) return res.status( 503 ).json({ message: 'Server Error' });
+							})
+						}
+					}
+				})
+			})
+			
+		}
+	})
+})
+
+
 app.get('/student/slist/favlist/:username', async(req,res,next)=>{
-	console.log('bitch')
 	// const studentNo= req.params.username;
 
 	// Student.findOne({studentNo: studentNo}, (err, data)=>{
@@ -1490,7 +1510,6 @@ app.get('/messages', async(req,res,next)=>{
 
 					if( students.length ){
 						students.forEach( doc => {
-							console.log( doc.inbox );
 							doc.inbox.forEach( inb => {
 								const message = {
 									...inb,
@@ -2579,14 +2598,7 @@ app.put('/coordinator/clist/remove-approved/:studentNo/:title', async (req,res,n
 	const removed = req.body;
 
 
-	function extractValue(arr, prop) {
-
-    // extract value from property
-	    let extractedValue = arr.map(item => item[prop]);
-
-	    return extractedValue;
-
-	}
+	
 
 	Coordinator.findOne({status:'active'}, (err,doc)=>{
 		if(err) return res.status( 503 ).json({ message: 'Server Error' });
@@ -3192,6 +3204,26 @@ app.get('/actlog-views', async ( req, res, next ) => {
 	});
 });
 
+app.get('/permissions/:id', async ( req, res, next ) => {
+	const rID = req.params.id;
+	const students=[];
+
+	Student.find({},(err, doc)=>{
+		if( err ) return res.sendStatus( 503 );
+
+		if( doc ){
+			doc.forEach(item=>{
+				if(item.approved.map(elem => elem.id).includes(rID)){
+					students.push(item)
+				}
+			})
+
+			return res.status( 200 ).json({ data: students });
+		}
+	});
+
+});
+
 
 app.post('/request-view', async ( req, res, next ) => {
 	const data = req.body.data;
@@ -3290,7 +3322,6 @@ app.post('/clear-requests', async(req,res,next)=>{
 		if(err) return res.status(503).json({message:'Server Error'})
 
 		if(doc){
-			console.log(doc.activity)
 			doc.activity.push({message:`${doc.firstName} ${doc.middleInitial} ${doc.lastName} ${doc.extentionName ?? ''} cleared all requests`, date: date})
 			
 			fs.writeFile( req_view_path, JSON.stringify( [] ), err => {
