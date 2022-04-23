@@ -3273,15 +3273,28 @@ app.post('/request-view', async ( req, res, next ) => {
 
 		const list = JSON.parse( reqList );
 
-		if( list.length && list.map( item => item.id ).includes( data.id ) ) return res.sendStatus( 200 );
-		else if( !data ) return res.sendStatus( 200 );
-		list.push( data );
+		if( 
+			list.length && 
+			list.map( item => item.id ).includes( data.id ) &&
+			list.map( item => item.studentID ).includes( data.studentID )
+		 ){
+			console.log('here 1');
 
+			return res.sendStatus( 200 );
+		}
+		else if( !data ){
+			console.log('here 2');
+
+			return res.sendStatus( 200 );
+		}
+
+		list.push( data );
+		console.log('here 3');
 
 		fs.writeFile( req_view_path, JSON.stringify( list, null, 4 ), ( err ) => {
 			if( err ) return res.sendStatus( 503 );
 
-
+			console.log('here 4');
 			return res.sendStatus( 200 );
 		});
 	});

@@ -442,6 +442,9 @@ function Item(props){
 		setAlertMes(`You requested "${data.title}" for full content viewing,\nApproval of admin is required for full content.\nThank you for your patience`);
 
 		axios.post(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/request-view`, {data})
+		.then(res =>{
+			console.log( res );
+		})
 		.catch( err => {
 			console.log( err );
 		});
