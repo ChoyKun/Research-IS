@@ -1429,6 +1429,8 @@ app.put('/remove-perm/:id', async(req,res,next)=>{
 
 							object.save( err => {
 								if(err) return res.status( 503 ).json({ message: 'Server Error' });
+
+								return res.status(200).json({message: 'successfuly removed permiss'})
 							})
 						}
 					}
@@ -2050,11 +2052,45 @@ app.put('/research/rlist/update', async(req,res,next)=>{
 			})
 		}
 	})
-
-	
-
 	return res.status( 200 ).json({message: 'Updated successfully'});
 })
+
+app.put('/research/rlist/student/update', async(req,res,next)=>{
+	const editData = req.body; // list of selected research to hide
+
+	Student.find({}, async (err, docs) => {
+		if( err ) return res.status( 503 ).json({ message: 'Server Error' });
+
+		if( docs ){
+			console.log( editData );
+
+			for( const doc of docs ){
+				try{
+					editData.forEach( research => {
+						console.log( doc.pending );
+						doc.pending = doc.pending.filter( pnd => pnd !== research._id );
+						console.log( doc.pending );
+						
+						doc.approved = doc.approved.filter( apprvd => apprvd.id !== research._id );
+					});
+
+					await doc.save();
+				}
+				catch( err ){
+					return res
+						.status( 503 )
+						.json({
+							message: err
+						});
+				}
+			}
+		}
+		else{
+			return res.sendStatus( 200 );
+		}
+	})
+})
+
 
 //Faculty
 app.get('/faculty/flist', async (req, res, next) =>{

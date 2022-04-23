@@ -297,6 +297,14 @@ export default function StudentRList(props){
 				setAlertMes( res.data.message );
 				setAlertStatus('good');
 				setSendPublic( false );
+
+				axios.put(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/research/rlist/student/update`, pubAccum)
+				.then( res =>{
+					console.log(res)
+				})
+				.catch((err)=>{
+					console.log(err)
+				});
 			})
 			.catch((err)=>{
 				console.log(err)
@@ -452,11 +460,11 @@ function Item(props){
 	// console.log([...studentPerm]);
 
 	const list = ()=>(
-		<div className="d-flex justify-content-center align-items-center flex-column" style={{height:'100%',width:'500px',backgroundColor:"#E2F0D9"}}>
+		<div className="d-flex justify-content-center align-items-center flex-column" style={{height:'100%',width:'900px',backgroundColor:"#E2F0D9"}}>
 			<div className="d-flex justify-content-start align-items-start flex-column" style={{height:'95%',width:'90%',border:'1px solid black',backgroundColor:'white',borderRadius:'10px'}}>
 				<div className="d-flex justify-content-start align-items-center flex-column" style={{height:'100%',width:'100%'}}>
 					<div className="d-flex justify-content-start align-items-end" style={{height:'10%',width:'90%'}}>
-						<p style={{fontSize:'30px',textAlign:'center',height:'24px'}}>{props.object.title}</p>
+						<p style={{fontSize:'25px',textAlign:'center',height:'24px'}}>{props.object.title}</p>
 					</div>
 					<Divider style={{height:'2px', width:'100%', color:'black'}}/>
 					<div className="d-flex flex-column justify-content-start align-items-start" style={{height:'85%',width:'90%'}}>
@@ -590,7 +598,8 @@ function Item(props){
 				setSendRem( false );
 			})
 			.catch((err)=>{
-				console.log(err)
+				setAlertMes(JSON.parse(err.request.response).message);
+				setAlertStatus(403);
 			});
 		}
 	}, [remAccum])
@@ -654,8 +663,8 @@ function Item(props){
 	
 	return(
 		<div style={{height:'30px',width:'100%',backgroundColor:'#E2F0D9',border:'1px solid black',borderRadius:'10px'}} className="d-flex flex-row justify-content-around">
-			<Snackbar anchorOrigin={{vertical:"top", horizontal:"center"}} open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-				<Alert variant='filled' severity='info' sx={{width:'500px'}}>
+			<Snackbar anchorOrigin={{vertical:"top", horizontal:"center"}} open={snackOpen} autoHideDuration={2000} onClose={handleSnackClose}>
+				<Alert variant='filled' severity={alertStatus == 403 ? "error" : "success"} sx={{width:'500px'}}>
 					{alertMes}
 				</Alert>				
 			</Snackbar>
@@ -745,10 +754,6 @@ const Permissions= props => {
 								<PermList studentPerm={props.studentPerm} handleDialog={props.handleDialog} title={props.title} handleOnChange={id => setId( id )} rID={props.id}>
 								</PermList>
 							</div>
-						</div>
-						<div className="d-flex flex-row-reverse justify-content-start" style={{height:'10%',width:'90%'}}>
-							<Button title="Remove Permission" click={ props.handleDialog } style={{height:'40px'}}/>
-							{ props?.children }
 						</div>
 					</div>
 				</div>

@@ -310,11 +310,11 @@ function Item(props){
 	}, [])
 
 	const list = ()=>(
-		<div className="d-flex justify-content-center align-items-center flex-column" style={{height:'100%',width:'500px',backgroundColor:"#E2F0D9"}}>
+		<div className="d-flex justify-content-center align-items-center flex-column" style={{height:'100%',width:'900px',backgroundColor:"#E2F0D9"}}>
 			<div className="d-flex justify-content-start align-items-start flex-column" style={{height:'95%',width:'90%',border:'1px solid black',backgroundColor:'white',borderRadius:'10px'}}>
 				<div className="d-flex justify-content-start align-items-center flex-column" style={{height:'100%',width:'100%'}}>
 					<div className="d-flex justify-content-start align-items-end" style={{height:'10%',width:'90%'}}>
-						<p style={{fontSize:'30px',textAlign:'center',height:'24px'}}>{props.object.title}</p>
+						<p style={{fontSize:'25px',textAlign:'center',height:'24px'}}>{props.object.title}</p>
 					</div>
 					<Divider style={{height:'2px', width:'100%', color:'black'}}/>
 					<div className="d-flex flex-column justify-content-start align-items-start" style={{height:'85%',width:'90%'}}>

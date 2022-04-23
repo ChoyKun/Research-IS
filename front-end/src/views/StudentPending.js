@@ -90,7 +90,7 @@ function Item(props){
 	}
 
 	const list = ()=>(
-		<div className="d-flex justify-content-center align-items-center flex-column" style={{height:'100%',width:'500px',backgroundColor:"#E2F0D9"}}>
+		<div className="d-flex justify-content-center align-items-center flex-column" style={{height:'100%',width:'900px',backgroundColor:"#E2F0D9"}}>
 			<div className="d-flex justify-content-start align-items-start flex-column" style={{height:'95%',width:'90%',border:'1px solid black',backgroundColor:'white',borderRadius:'10px'}}>
 				<div className="d-flex justify-content-start align-items-center flex-column" style={{height:'100%',width:'100%'}}>
 					<div className="d-flex justify-content-center align-items-center" style={{height:'15%',width:'90%'}}>
