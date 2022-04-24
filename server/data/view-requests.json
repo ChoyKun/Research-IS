@@ -1,26 +1,3 @@
 [
-    {
-        "id": "61da838b2bf9272b2432531d",
-        "studentID": "1801026",
-        "studentName": "Steven Charles P Palabyab",
-        "title": "Fire Detection Device",
-        "state": "pending",
-        "dateRequested": "2022-4-23"
-    },
-    {
-        "id": "61da84942bf9272b24325322",
-        "studentID": "1801026",
-        "studentName": "Steven Charles P Palabyab",
-        "title": "Complaint Management System",
-        "state": "pending",
-        "dateRequested": "2022-4-23"
-    },
-    {
-        "id": "61da838b2bf9272b2432531d",
-        "studentID": "1801028",
-        "studentName": "Ayhescka Mae P Calanog",
-        "title": "Fire Detection Device",
-        "state": "pending",
-        "dateRequested": "2022-4-23"
-    }
+    
 ]

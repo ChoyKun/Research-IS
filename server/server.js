@@ -3272,15 +3272,24 @@ app.post('/request-view', async ( req, res, next ) => {
 
 
 		const list = JSON.parse( reqList );
+		let dup = 'none';
+		if( list.length ){
+		 	// list.map( item => item.id ).includes( data.id ) &&
+			// list.map( item => item.studentID ).includes( data.studentID )
 
-		if( 
-			list.length && 
-			list.map( item => item.id ).includes( data.id ) &&
-			list.map( item => item.studentID ).includes( data.studentID )
-		 ){
-			console.log('here 1');
+			list.forEach(item=>{
+				if(item.id === data.id && item.studentID === data.studentID){
+					console.log('here 1');
+					dup = 'yes'
+				}
+			})
 
-			return res.sendStatus( 200 );
+			if(dup == 'yes'){
+				return res.sendStatus( 200 );
+			}
+			else{
+				next;
+			}
 		}
 		else if( !data ){
 			console.log('here 2');
@@ -3288,15 +3297,17 @@ app.post('/request-view', async ( req, res, next ) => {
 			return res.sendStatus( 200 );
 		}
 
-		list.push( data );
-		console.log('here 3');
+		if(dup == 'none'){
+			list.push( data );
+			console.log('here 3');
 
-		fs.writeFile( req_view_path, JSON.stringify( list, null, 4 ), ( err ) => {
-			if( err ) return res.sendStatus( 503 );
+			fs.writeFile( req_view_path, JSON.stringify( list, null, 4 ), ( err ) => {
+				if( err ) return res.sendStatus( 503 );
 
-			console.log('here 4');
-			return res.sendStatus( 200 );
-		});
+				console.log('here 4');
+				return res.sendStatus( 200 );
+			});	
+		}
 	});
 
 	Coordinator.findOne({status:'active'},(err,doc)=>{

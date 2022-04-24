@@ -272,6 +272,7 @@ function Item(props){
 	const [disabled, setDisabled] = useState(false);
 	const [open, setOpen] = useState(false);
 	const [alertMes, setAlertMes] = useState(null);
+	const [alertStatus, setAlertStatus] = useState(null);
 	const [snackOpen, setSnackOpen] =useState(false);
 	const [redirect, setRedirect] = useState(null);
 
@@ -413,11 +414,15 @@ function Item(props){
 			}
 		}) 
 			.then( res => {
+				
 				setSendPend( false );
 			})
 			.catch((err) =>{
 				console.log( err.response );
-				if(err?.response?.data?.message) alert(`${ err?.response?.data?.message}`) 
+				if(err?.response?.data?.message){
+					setAlertMes(`${ err?.response?.data?.message}`)
+					setAlertStatus(403) 
+				} 
 			});
 		}
 	}, [pending])
@@ -439,6 +444,7 @@ function Item(props){
 			dateRequested: date
 		};
 
+		setAlertStatus('good')
 		setAlertMes(`You requested "${data.title}" for full content viewing,\nApproval of admin is required for full content.\nThank you for your patience`);
 
 		axios.post(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/request-view`, {data})
@@ -462,8 +468,8 @@ function Item(props){
 	return(
 		<div style={{height:'30px',width:'100%',backgroundColor:'#E2F0D9',border:'1px solid black',borderRadius:'10px'}} className="d-flex flex-row justify-content-start">
 			<div style={{height:'100%',width:'98%'}} className="d-flex flex-row justify-content-around">
-				<Snackbar anchorOrigin={{vertical:"top", horizontal:"center"}} open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-					<Alert variant='filled' severity='info' sx={{width:'500px'}}>
+				<Snackbar anchorOrigin={{vertical:"top", horizontal:"center"}} open={snackOpen} autoHideDuration={2000} onClose={handleSnackClose}>
+					<Alert variant='filled' severity={alertStatus == 403 ? "error" : "info"} sx={{width:'500px'}}>
 						{alertMes}
 					</Alert>				
 				</Snackbar>
