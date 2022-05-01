@@ -574,6 +574,10 @@ app.get('/inactive-student-filter-query/:course/:section/:yearLevel/:order/:sex/
 
 //Login
 app.post('/sign-in', async(req,res,next)=>{
+
+	const today = new Date();
+	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+
 	const { _username, _password } = req.body;
 
 	fs.readFile( token_path, (err, data) => {
@@ -626,6 +630,12 @@ app.post('/sign-in', async(req,res,next)=>{
 							token.push( refreshToken );
 
 							if( docs ){
+								docs.activity.push({message:`You loged in today`, date: date})
+
+								docs.save( err=>{
+									if(err) return res.status(503).json({message:'server error'});
+								})
+
 								saveTokens( token, () => {
 									return res.status( 200 ).json({
 										accessToken: accessToken,
@@ -643,6 +653,12 @@ app.post('/sign-in', async(req,res,next)=>{
 					}
 
 					if( doc ){
+						doc.activity.push({message:`You loged in today`, date: date})
+
+						doc.save( err=>{
+							if(err) return res.status(503).json({message:'server error'});
+						})
+
 						saveTokens( token, () => {
 							return res.status( 200 ).json({
 								accessToken: accessToken,
@@ -657,6 +673,13 @@ app.post('/sign-in', async(req,res,next)=>{
 			}
 
 			if( doc ){
+
+				doc.activity.push({message:`You loged in today`, date: date})
+
+				doc.save( err=>{
+					if(err) return res.status(503).json({message:'server error'});
+				})
+
 				saveTokens( token, () => {
 					return res.status( 200 ).json({
 						accessToken: accessToken,

@@ -89,28 +89,32 @@ function Item(props){
 	}
 
 	const list = ()=>(
-		<div className="d-flex justify-content-center align-items-center flex-column" style={{height:'100%',width:'250px',backgroundColor:"#E2F0D9"}}>
+		<div className="d-flex justify-content-center align-items-center flex-column" style={{height:'100%',width:'300px',backgroundColor:"#E2F0D9"}}>
 			<div className="d-flex justify-content-start align-items-start flex-column" style={{height:'95%',width:'90%',border:'1px solid black',backgroundColor:'white',borderRadius:'10px'}}>
 				<div className="d-flex justify-content-start align-items-center flex-column" style={{height:'100%',width:'100%'}}>
+					<div className="d-flex justify-content-start align-items-end" style={{height:'10%',width:'90%'}}>
+						<p style={{fontSize:'15px',textAlign:'center',height:'24px'}}>{props.object.title}</p>
+					</div>
+					<Divider style={{height:'2px', width:'100%', color:'black'}}/>
 					<div className="d-flex flex-column justify-content-start align-items-start" style={{height:'85%',width:'90%'}}>
-						<div className="d-flex flex-row justify-content-around" style={{height:'16%',width:'100%'}}>
+						<div className="d-flex flex-row justify-content-between" style={{height:'10%',width:'100%'}}>
 							<p className="col-2" style={{fontSize:'15px'}}>Title:</p>
-							<p className="col-10" style={{fontSize:'15px'}}>{props.object.title}</p>
+							<p className="col-8" style={{fontSize:'15px'}}>{props.object.title}</p>
 						</div>
-						<div className="d-flex flex-row justify-content-around" style={{height:'10%',width:'100%'}}>
-							<p className="col-3" style={{fontSize:'15px'}}>Course:</p>
-							<p className="col-9" style={{fontSize:'15px'}}>{props.object.course}</p>
+						<div className="d-flex flex-row justify-content-between" style={{height:'10%',width:'100%'}}>
+							<p className="col-2" style={{fontSize:'15px'}}>Course:</p>
+							<p className="col-8" style={{fontSize:'15px'}}>{props.object.course}</p>
 						</div>
-						<div className="d-flex flex-row justify-content-around" style={{height:'15%',width:'100%'}}>
-							<p className="col-5" style={{fontSize:'15px'}}>Categories:   </p>
-							<p className="col-7" style={{fontSize:'15px'}}>{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</p>
+						<div className="d-flex flex-row justify-content-between" style={{height:'15%',width:'100%'}}>
+							<p className="col-2" style={{fontSize:'15px'}}>Categories:   </p>
+							<p className="col-8" style={{fontSize:'15px'}}>{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</p>
 						</div>
-						<div className="d-flex flex-row justify-content-around" style={{height:'10%',width:'100%'}}>
-							<p className="col-7" style={{fontSize:'15px'}}>Year Submitted:</p>
-							<p className="col-5" style={{fontSize:'15px'}}>{props.object.yearSubmitted}</p>
+						<div className="d-flex flex-row justify-content-between" style={{height:'10%',width:'100%'}}>
+							<p className="col-5" style={{fontSize:'15px'}}>Year Submitted:</p>
+							<p className="col-7" style={{fontSize:'15px'}}>{props.object.yearSubmitted}</p>
 						</div>
 						<div className="d-flex flex-column justify-contentasd-start" style={{height:'40%',width:'100%'}}>
-							<p style={{fontSize:'18px'}}>Authors:</p>
+							<p style={{fontSize:'15px'}}>Authors:</p>
 							<div className="d-flex flex-column justify-content-center align-items-center" style={{height:'100%',width:'100%'}}>
 								<div className="d-flex flex-column justify-content-center align-items-start" style={{height:'100%',width:'80%'}}>
 									<p style={{fontSize:'15px'}}>{props.object.lead ?? '---'}</p>
@@ -122,8 +126,8 @@ function Item(props){
 							</div>
 						</div>
 					</div>
-					<div className="d-flex flex-row-reverse justify-content-start align-items-center" style={{height:'20%',width:'90%'}}>
-						<Link to={`/research-abstract/${props.object._id}`}><Button title="View Document" style={{height:'30px'}}/></Link>
+					<div className="d-flex flex-row-reverse justify-content-start" style={{height:'10%',width:'90%'}}>
+						<Link to={`/research-abstract/${props.object._id}`}><Button title="View Document" style={{height:'40px'}}/></Link>
 					</div>
 				</div>
 			</div>
