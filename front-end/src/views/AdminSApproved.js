@@ -221,9 +221,7 @@ export default function RListFilter(props){
 
 	return(
 		<>
-			<Search setSearch={setSearch} list={rFilter()} placeHolder='Enter first name or last name' />
 			<div style={{width: '100%', height: '100%'}} className='d-flex justify-content-center align-items-center'>
-				
 				<div className="d-flex justify-content-center align-items-center" style={{height:'90%', width:'95%', backgroundColor:'white',  color:'black',overflowY:'auto',overflowX:'auto'}}>
 					<div className="d-flex flex-column justify-content-center align-items-center" style={{height:'98%', width:'97%'}}>
 						<div className="d-flex justify-content-center align-items-center flex-column" style={{height:'100%', width:'100%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"5px 5px 5px 5px grey"}}>
@@ -345,10 +343,10 @@ function Item(props){
 					{alertMes}
 				</Alert>				
 			</Snackbar>
-			<div className="col-2 text-center">{props.object.title}</div>
+			<div className="col-4 text-center">{props.object.title}</div>
 			<div className="col-1 text-center">{props.object.course??'N/A'}</div>
-			<div className="col-4 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
-			<div className="col-2 text-center">{props.object.yearSubmitted}</div>
+			<div className="col-3 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
+			<div className="col-1 text-center">{props.object.yearSubmitted}</div>
 			<div className="col-2 text-center">{props.object.dateApproved}</div>
 			<div className="col-1 text-center">
 				<Tooltip title="Remove Permission" arrow>
@@ -388,16 +386,16 @@ function Item(props){
 function RListHeader(props){
 	return(
 		<div style={{height:'30px',width:'100%',border:'1px solid black', backgroundColor:'#385723',color:'white'}} className='d-flex flex-row justify-content-around'>
-			<div className='col-2 text-center'>
+			<div className='col-4 text-center'>
 				Title
 			</div>
 			<div className='col-1 text-center'>
 				Course
 			</div>
-			<div className='col-4 text-center'>
+			<div className='col-3 text-center'>
 				ResearchCategories
 			</div>
-			<div className='col-2 text-center'>
+			<div className='col-1 text-center'>
 				Year Submitted
 			</div>
 			<div className='col-2 text-center'>

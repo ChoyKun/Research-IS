@@ -630,7 +630,7 @@ app.post('/sign-in', async(req,res,next)=>{
 							token.push( refreshToken );
 
 							if( docs ){
-								docs.activity.push({message:`You loged in today`, date: date})
+								docs.activity.push({message:`${docs.firstName} ${docs.middleInitial} ${docs.lastName} loged in today`, date: date})
 
 								docs.save( err=>{
 									if(err) return res.status(503).json({message:'server error'});

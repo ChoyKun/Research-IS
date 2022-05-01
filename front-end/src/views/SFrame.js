@@ -117,7 +117,7 @@ export default function SFrame(props){
 				// console.log( msg.message, id );
 				// console.log( )
 				if( msg._id === id ){
-					tempInboxList.push(
+					tempInboxList.unshift(
 						<>
 							<div className="d-flex flex-row justify-content-center" style={{height:'fit-content',width:'100%'}}>
 								<div className="col-8 text-left">{ msg.message }</div>

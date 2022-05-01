@@ -71,7 +71,7 @@ export default function AdminRequest( props ){
 						<Divider style={{height:'2px', width:'100%', color:'black'}}/>
 						<div style={{height:'80%', width:'95%', border:'1px solid black', overflowY: 'auto'}} className='d-flex flex-column justify-content-start align-items-center'>
 							<Header/>
-							<div className="d-flex flex-column" style={{height:'100%', width:'100%',backgroundColor:'#70AD47',overflowY:'overlay',overflowX:'overlay'}}>									
+							<div className="d-flex flex-column" style={{height:'100%', width:'100%',backgroundColor:'white',overflowY:'overlay',overflowX:'overlay'}}>									
 								{ 
 									requests
 								}
