@@ -18,6 +18,7 @@ import Field from '../components/fields/txtfield';
 import FileUpload from '../components/fields/file-render';
 import SearcBar from '../components/contents/SearchBar';
 import Select from '../components/fields/select';
+import Selection from '../components/fields/Selection';
 import Checkbox from '../components/fields/checkbox';
 
 
@@ -35,11 +36,14 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
 
+// const categ = ['Hardware',"Software","Desktop App"]
+
 
 
 export default function FacultyUpload(props){
 	const {username} = useParams();
 
+	const [categ, setCateg] = useState( [] );
 	const [snackOpen, setSnackOpen] = useState(false)
 	const [alertMes, setAlertMes] = useState(null)
 	const [alertStatus, setAlertStatus] = useState(null)
@@ -62,7 +66,7 @@ export default function FacultyUpload(props){
 	const state = {
 		title: null,
 		course: 'BSIT',
-		researchCategories: [],
+		researchCategories: null,
 		yearSubmitted: null,
 		members: [],
 		lead: null,
@@ -76,7 +80,6 @@ export default function FacultyUpload(props){
 	}
 
 	function reducer(state, action){
-		console.log(state);
 		switch(action.type){
 			case 'title':
 				state.title = action.data;
@@ -85,14 +88,18 @@ export default function FacultyUpload(props){
 				state.course = action.data;
 				return state;
 			case 'researchCategories':
-				if( action.data && !state.researchCategories.includes( action.name ) ){					
-					state.researchCategories.push(action.name);
-				}
-				else{
-					state.researchCategories.splice(state.researchCategories.indexOf(action.name), 1);
-				}
-				
+				// const isNameNotEmpty = !!action.name;
+				// const doesNameExistInCategories = !state.researchCategories.includes( action.name );
+
+				// if( isNameNotEmpty && doesNameExistInCategories ){					
+				// 	state.researchCategories.push(action.name);
+				// }
+				// else{
+				// 	state.researchCategories.splice(state.researchCategories.indexOf(action.name), 1);
+				// }
+				state.researchCategories = action.name;
 				return state;
+
 			case 'yearSubmitted':
 				state.yearSubmitted = action.data;
 				return state;
@@ -123,7 +130,8 @@ export default function FacultyUpload(props){
 		setDialogOpen(false);
 		setSnackOpen(true);
 
-		data.researchCategories = JSON.stringify( data.researchCategories );
+		// data.researchCategories = JSON.stringify( data.researchCategories );
+		// data.researchCategories = data.researchCategories;
 		data.members.push(data.lead);
 		data.members.push(data.mem1);
 		data.members.push(data.mem2);
@@ -135,13 +143,31 @@ export default function FacultyUpload(props){
 		.then((res) => {
 			setAlertMes( res.data.message );
 			setAlertStatus(200)
-			data.researchCategories = JSON.parse( data.researchCategories )
 		})
 		.catch((err)=>{
 			setAlertMes( err.response.data.message );
 			setAlertStatus(403)
 		})
 
+	}
+
+	const getCategories = async() => {
+		axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/rlist/category`)
+		.then( res => {
+			console.log( res.data );
+			setCateg( res.data );
+		})
+		.catch( err => {
+			throw err;
+		});
+	}
+
+	const handleAddNewCategory = async( newCat ) => {
+		axios.post(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/rlist/add-category`, newCat)
+		.then(() => getCategories())
+		.catch( err => {
+			throw err;
+		});
 	}
 
 	const cancelOp =() =>{
@@ -154,6 +180,8 @@ export default function FacultyUpload(props){
 	const handlePdfUpload = ( path ) => {
 		dispatch({ type: 'PDFFile', data: path });
 	}
+
+	React.useEffect(() => getCategories(), []);
 
 	return(
 		<>
@@ -179,7 +207,7 @@ export default function FacultyUpload(props){
 										<Field style={{width:'300px'}} reqOnChange={(e)=>(dispatch({type:'title', data: e.target.value }))}/>
 									</div>
 									<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
-										<Select style={{width:'300px'}} label='Select Course:' options={['BSIT','BSCS']} reqOnChange={(e)=>(dispatch({type:'course', data: e.target.value }))} />
+										<Select width="200px" style={{width:'300px'}} label='Select Course:' options={['BSIT','BSCS']} reqOnChange={(e)=>(dispatch({type:'course', data: e.target.value }))} />
 									</div>
 									<div style={{height:'10%',width:'300px'}} className='d-flex justify-content-between align-items-center flex-row'>
 										<label style={{width:'300px'}}>Year Submitted:</label>
@@ -207,20 +235,18 @@ export default function FacultyUpload(props){
 										<Field className='fName' reqOnChange={(e) => {dispatch({type: 'mem4', data: e.target.value});}}/>
 									</div>
 								</div>
-								<div style={{height:'95%',width:'40%'}} className="d-flex flex-column justify-content-around align-items-center">
-									<div style={{height: '90%', width: '100%'}} className="py-4 d-flex flex-row justify-content-around align-items-center">
-										<div style={{height:'100%',width:'200px'}} className="d-flex flex-column justify-content-center align-items-center">
-											<label style={{fontSize:'18px'}}>Research Categories</label>
-											<div style={{height:'90%',width:'100%',backgroundColor:'white',border:'1px solid black'}} className='px-3 d-flex flex-column justify-content-around'>
-												<Checkbox cLabel='Hardware' value='Hardware' reqOnChange={(e)=>(dispatch({type:'researchCategories',name:'Hardware', data: e.target.checked }))}/>
-												<Checkbox cLabel='Software' value='Software' reqOnChange={(e)=>(dispatch({type:'researchCategories',name:'Software', data: e.target.checked }))}/>
-												<Checkbox cLabel='Web System' value='Web System' reqOnChange={(e)=>(dispatch({type:'researchCategories',name:'Web System', data: e.target.checked }))}/>
-												<Checkbox cLabel='Game Dev' value='Game Dev' reqOnChange={(e)=>(dispatch({type:'researchCategories',name:'Game Dev', data: e.target.checked }))}/>
-												<Checkbox cLabel='Augmented Reality' value='Augmented Reality' reqOnChange={(e)=>(dispatch({type:'researchCategories',name:'Augmented Reality', data: e.target.checked }))}/>
-												<Checkbox cLabel='Mobile App'value='Mobile App' reqOnChange={(e)=>(dispatch({type:'researchCategories',name:'Mobile App', data: e.target.checked }))} />
-											</div>
+								<div style={{height:'95%',width:'40%'}} className="d-flex flex-column justify-content-around align-items-start">
+									<div style={{height: '100%', width: '100%'}} className="py-4 d-flex flex-column justify-content-around align-items-start">
+										<div style={{height:'20%',width:'200px'}} className="d-flex flex-column justify-content-center align-items-start">
+											<Selection 
+												width="200px" 
+												label="Categories" 
+												options={[...categ]} 
+												onChange={(value) => dispatch({type:'researchCategories', name: value })}
+												placeholder="Select or Add Category"
+											/>
 										</div>
-										<div style={{height:'100%',width:'200px'}} className='d-flex flex-column'>
+										<div style={{height:'80%',width:'200px'}} className='d-flex flex-column'>
 											<FileUpload active={true} title={data.title} fileCatcher={handlePdfUpload}/>
 										</div>
 									</div>

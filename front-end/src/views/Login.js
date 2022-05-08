@@ -197,7 +197,7 @@ export default function Login(props){
 							<h5 className="MontFont" style={{width:"270px",textAlign:"center",color:'#676e78'}}>Sign in to start session</h5>
 						</div>
 						<div style={{height:"40%"}}className="login-field d-flex flex-column align-items-center justify-content-around">
-							<TextField required id='outlined-required' variant='filled' className="text-center MontFont" style={{width:"63%"}} label="Student no." onChange={(e)=>{dispatch({type:'username',data: e.target.value})}}/>
+							<TextField required id='outlined-required' variant='filled' className="text-center MontFont" style={{width:"63%"}} label="Username" onChange={(e)=>{dispatch({type:'username',data: e.target.value})}}/>
 							<TextField 
 								required id='outlined-required' 
 								className="text-center MontFont" 
@@ -223,7 +223,7 @@ export default function Login(props){
 								}}
 							/>
 							<Button className="MontFont button" style={{height:"40px", width:"63%",color:'#676e78'}} title="Sign in" click={handler}/>
-							<Link onClick={handleDialog}>Forget Password?</Link>
+							{/*<Link onClick={handleDialog}>Forget Password?</Link>
 							<Dialog
 								open={dialogOpen}
 						        onClose={handleDialogClose}
@@ -244,7 +244,7 @@ export default function Login(props){
 									<Button title='Cancel' click={cancelOp}/>
 									<Button title='Send' click={forgetPassword}/>
 								</DialogActions>
-							</Dialog>
+							</Dialog>*/}
 						</div>
 					</div>
 					<div style={{width:"50%",height:"100%",backgroundColor:"#E2F0D9"}}className='login-logo d-flex flex-column align-items-center justify-content-center' >						

@@ -145,28 +145,18 @@ export default function StudentDashboard(props){
 				<div style={{height:'95%', width:'95%', backgroundColor:'white', color:'black',overflowY:'auto',overflowX:'auto'}}>
 					<div className="d-flex flex-row justify-content-center align-items-center" style={{height:'100%',width:'100%'}}>
 						<div className="d-flex flex-column justify-content-around align-items-center" style={{height:'100%',width:'50%'}}>
-							<div className='d-flex justify-content-around align-items-center flex-column' style={{height:'45%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"5px 5px 5px 5px grey"}}>
-								<div className='d-flex flex-row' style={{width:'90%',height:'10%'}}>
+							<div className='d-flex justify-content-around align-items-center flex-column' style={{height:'95%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"5px 5px 5px 5px grey"}}>
+								<div className='d-flex flex-row' style={{width:'90%',height:'5%'}}>
 									<Visibility sx={{color:green[500],height:'35px',width:'35px'}}/>
 									<p style={{fontSize:'25px', textAlign:'center',height:'24px'}}>Research Status Ratio</p>
 								</div>
 								<Divider style={{height:'2px', width:'100%', color:'black'}}/>
-								<div style={{width:'90%',height:'60%'}}>
-									<HBarChart width='20' height='5' label={['Public','Hidden']} data={[Public,archive]} color={['#4CAF50','#548235']} setLabel={'Research Status'}/>
+								<div style={{width:'90%',height:'75%'}}>
+									<BarChart width='20' height='5' label={['Public','Hidden']} data={[Public,archive]} color={['#4CAF50','#548235']} setLabel={'Research Status'}/>
 								</div>
-								<div className='d-flex flex-row justify-content-around' style={{width:'90%'}}>
+								<div className='d-flex flex-row justify-content-around align-items-center' style={{width:'90%',height:'10%'}}>
 									<Link to={`/admin-rlist/${username}`}><Button style={{height:'30px',width:'100px'}} title='Published'/></Link>
 									<Link to={`/admin-archive/${username}`}><Button style={{height:'30px',width:'100px'}} title='Archive'/></Link>
-								</div>
-							</div>
-							<div className='d-flex justify-content-around align-items-center flex-column' style={{height:'45%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"5px 5px 5px 5px grey"}}>
-								<div className='d-flex flex-row' style={{width:'90%',height:'10%'}}>
-									<CategoryIcon sx={{color:green[500],height:'35px',width:'35px'}}/>
-									<p style={{fontSize:'25px', textAlign:'center',height:'24px'}}>Research Categories</p>
-								</div>
-								<Divider style={{height:'2px', width:'100%', color:'black'}}/>
-								<div style={{width:'90%',height:'70%'}}>
-									<PieChart width='20' height='5' label={['Hardware','Software','Web System', 'Game Development', 'Augmented Reality', 'Mobile App']} data={[hardware,software,webSys,gameDev,aR,mobileApp]} color={['#98FB98','#00FF7F','#7FFF00','#4CAF50','#548235','#006400']} setLabel={'Student Year Levels'}/>
 								</div>
 							</div>
 						</div>

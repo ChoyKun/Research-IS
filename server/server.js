@@ -46,6 +46,8 @@ const pdfs_path = path.join(__dirname, '../front-end/public/pdfs');
 const token_path = path.join(__dirname, '/data/tokens.json');
 const req_view_path = path.join(__dirname, 'data/view-requests.json');
 const coor_act_path = path.join(__dirname, 'data/coor-activity.json');
+const categ_path = path.join(__dirname, 'data/categories.json');
+
 
 const requestAccessToken = ( user ) => {
 	return jwt.sign( user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '24h' }); // wait check ko
@@ -640,7 +642,7 @@ app.post('/sign-in', async(req,res,next)=>{
 									return res.status( 200 ).json({
 										accessToken: accessToken,
 										refreshToken: refreshToken,
-										message: 'Welcome mr/ms. coordinator',
+										message: 'Welcome coordinator',
 										role: 'admin',
 										_id: docs._id.toString()
 									});
@@ -663,7 +665,7 @@ app.post('/sign-in', async(req,res,next)=>{
 							return res.status( 200 ).json({
 								accessToken: accessToken,
 								refreshToken: refreshToken,
-								message: 'Welcome mr/ms. officer',
+								message: 'Welcome officer',
 								role: 'mis officer',
 								_id: doc._id.toString()
 							});
@@ -1966,57 +1968,29 @@ app.get('/research/rlist/course-count', async (req, res, next) =>{
 	})
 });
 
-app.get('/research/rlist/category-count', async (req, res, next) =>{
-	var hardware = 0;
-	var software = 0; 
-	var webSys = 0;
-	var gameDev = 0;
-	var AR = 0;
-	var mobileApp = 0;
 
-	Research.find({status:'public'}, (err, doc) => {
-		if( err ) res.sendStatus( 503 );
+app.get('/rlist/category', async( req, res ) => {
+	const categories = fs.readFileSync( categ_path );
 
-		if(doc){
-			doc.forEach((docs)=>{
-				JSON.parse(docs.researchCategories).forEach((categ)=>{
-					if(categ === 'Hardware'){
-						hardware = hardware + 1;
-					}
-
-					if(categ === 'Software'){
-						software = software + 1;
-					}
-
-					if(categ === 'Web System'){
-						webSys = webSys + 1;
-					}
-
-					if(categ === 'Game Dev'){
-						gameDev = gameDev + 1;
-					}
-
-					if(categ === 'Augmented Reality'){
-						AR = AR + 1;
-					}
-
-					if(categ === 'Mobile App'){
-						mobileApp = mobileApp + 1;
-					}
-				})
-			})
-
-			return res.json({
-				hardware:hardware,
-				software:software,
-				webSys:webSys,
-				gameDev:gameDev,
-				AR:AR,
-				mobileApp:mobileApp
-			})
-		}
-	})
+	return res.json(JSON.parse( categories ));
 });
+
+
+app.post('/rlist/add-category', async( req, res ) => {
+	const categories = JSON.parse(fs.readFileSync( categ_path ));
+
+	categories.push( req.body.newCat );
+
+	try{
+		fs.writeFileSync( categ_path, JSON.stringify( categories, null, 4 ));
+		return res.sendStatus( 200 );
+	}
+	catch( err ){
+		console.log( err );
+		return res.sendStatus( 503 );
+	}
+});
+
 
 app.post('/research/rlist/upload', async (req, res , next) =>{
 	const researchData = req.body;
@@ -2024,30 +1998,41 @@ app.post('/research/rlist/upload', async (req, res , next) =>{
 	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 	const newResearch = new Research(researchData);
 
-	Coordinator.findOne({status:'active'}, (err,doc)=>{
-		if(err) return res.status( 503 ).json({ message: 'Server Error' });
+	const categories = JSON.parse(fs.readFileSync( categ_path ));
+	const doesCategoryAlreadyExist = !categories.includes( researchData.researchCategories );
 
-		if(doc){
-			newResearch.save((err) => {
-				if ( err ){
-					console.log(err)
-					return res.status( 503 ).json({ message: 'Server Error' });
-				}
-			})
 
-			doc.activity.push({message:`${doc.firstName} ${doc.middleInitial} ${doc.lastName} ${doc.extentionName ?? ''} uploaded a research titled ${researchData.title}`, date: date})
-			doc.save( err=>{
-				if(err) return res.status(503).json({message:'server error'});
-
-				return res.status( 200 ).json({message: 'Uploaded successfully'});
-			})
+	try{
+		if( doesCategoryAlreadyExist ){
+			categories.push( researchData.researchCategories );
+			fs.writeFileSync( categ_path, JSON.stringify( categories, null, 4 ));
 		}
-	})
-	
-	
 
-	
-})
+		Coordinator.findOne({status:'active'}, (err,doc)=>{
+			if(err) return res.status( 503 ).json({ message: 'Server Error' });
+
+			if(doc){
+				newResearch.save((err) => {
+					if ( err ){
+						console.log(err)
+						return res.status( 503 ).json({ message: 'Server Error' });
+					}
+					
+					doc.activity.push({message:`${doc.firstName} ${doc.middleInitial} ${doc.lastName} ${doc.extentionName ?? ''} uploaded a research titled ${researchData.title}`, date: date})
+					doc.save( err=>{
+						if(err) return res.status(503).json({message:'server error'});
+
+						return res.status( 200 ).json({message: 'Uploaded successfully'});
+					})
+				})
+
+			}
+		});
+	}
+	catch( err ){
+		return res.sendStatus( 503 );
+	}
+});
 
 
 app.put('/research/rlist/update', async(req,res,next)=>{

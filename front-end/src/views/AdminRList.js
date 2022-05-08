@@ -478,7 +478,7 @@ function Item(props){
 						</div>
 						<div className="d-flex flex-row justify-content-around" style={{height:'15%',width:'100%'}}>
 							<p className="col-3" style={{fontSize:'20px'}}>Categories:   </p>
-							<p className="col-9" style={{fontSize:'20px'}}>{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</p>
+							<div className="col-4 text-center">{ props.object.researchCategories}</div>
 						</div>
 						<div className="d-flex flex-row justify-content-around" style={{height:'10%',width:'100%'}}>
 							<p className="col-5" style={{fontSize:'20px'}}>Year Submitted:</p>
@@ -670,7 +670,8 @@ function Item(props){
 			</Snackbar>
 			<div className="col-1 text-center"><Checkbox reqOnChange={handleOnChange} name='chk'/></div>
 			<div className="col-4 text-center">{props.object.title}</div>
-			<div className="col-4 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
+			{/*<div className="col-4 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>*/}
+			<div className="col-4 text-center">{ props.object.researchCategories}</div>
 			<div className="col-1 text-center">{props.object.yearSubmitted}</div>			
 			<div className="col-1 d-flex justify-content-center align-items-center text-center">
 				<Tooltip title="View Document" arrow>
