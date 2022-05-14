@@ -161,7 +161,7 @@ function Item(props){
 						</div>
 						<div className="d-flex flex-row justify-content-between" style={{height:'15%',width:'100%'}}>
 							<p className="col-2" style={{fontSize:'15px'}}>Categories:   </p>
-							<p className="col-8" style={{fontSize:'15px'}}>{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</p>
+							<p className="col-8" style={{fontSize:'15px'}}>{props.object.researchCategories}</p>
 						</div>
 						<div className="d-flex flex-row justify-content-between" style={{height:'10%',width:'100%'}}>
 							<p className="col-5" style={{fontSize:'15px'}}>Year Submitted:</p>
