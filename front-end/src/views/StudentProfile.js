@@ -329,26 +329,6 @@ export default function StudentProfile(props){
 						))}
 					</div>
 				</div>
-				<div className='d-flex flex-row-reverse align-items-center ' style={{width:'100%', height:'10%'}}>
-					<Button click={handleLogsDialog} style={{width:'100px', height:'40px', fontSize:'18px'}} title='Clear logs'/>
-					<Dialog
-						open={logsDialogOpen}
-				        onClose={handleLogsDialogClose}
-				        aria-labelledby="alert-dialog-title"
-				        aria-describedby="alert-dialog-description"
-					>
-						<DialogTitle>
-							{"Clear Logs"}
-						</DialogTitle>
-						<DialogContent>
-							Do you want to clear all your activity?
-						</DialogContent>
-						<DialogActions>
-							<Button title='Cancel' click={cancelLogs}/>
-							<Button title='Yes' click={clearLogs}/>
-						</DialogActions>
-					</Dialog>
-				</div>
 			</div>
 		</div>
 	) 

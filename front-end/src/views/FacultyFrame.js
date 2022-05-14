@@ -282,26 +282,6 @@ export default function SFrame(props){
 						{ inbox }
 					</div>
 				</div>
-				<div className='d-flex flex-row-reverse align-items-center ' style={{width:'90%', height:'10%'}}>
-					<Button click={handleDialog} style={{width:'200px', height:'40px', fontSize:'18px'}} title='Clear Messages'/>
-					<Dialog
-						open={dialogOpen}
-				        onClose={handleDialogClose}
-				        aria-labelledby="alert-dialog-title"
-				        aria-describedby="alert-dialog-description"
-					>
-						<DialogTitle>
-							{"Clear Messages"}
-						</DialogTitle>
-						<DialogContent>
-							Do you want to clear your inbox?
-						</DialogContent>
-						<DialogActions>
-							<Button title='Cancel' click={cancelOp}/>
-							<Button title='Yes' click={clearMessage}/>
-						</DialogActions>
-					</Dialog>
-				</div>
 			</div>
 		</div>
 	)

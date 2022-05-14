@@ -139,23 +139,19 @@ app.get('/filter-query/:course/:category/:yearSubmitted/:order/:year', async( re
 				if(yearSubmitted == 'null'){
 					if(course == 'all'){
 						docs.forEach( doc => {
-							JSON.parse( doc.researchCategories )
-							.forEach( categ => {
-								if( category.includes( categ ) ){
-									return result.push( doc );
-								}
-							});
+							console.log('here1')					 
+							if( category == doc.researchCategories  ){
+								return result.push( doc );
+							}
 						});
 					}
 					else{
 						docs.forEach( doc => {
 							if(doc.course == course){
-								JSON.parse( doc.researchCategories )
-								.forEach( categ => {
-									if( category.includes( categ ) ){
-										return result.push( doc );
-									}
-								});
+								console.log('here2')
+								if( category == doc.researchCategories  ){
+									return result.push( doc );
+								}
 							}
 						});
 					}
@@ -164,26 +160,22 @@ app.get('/filter-query/:course/:category/:yearSubmitted/:order/:year', async( re
 				else{
 					if(course == 'all'){
 						docs.forEach( doc => {
+							console.log('here3')
 							if(doc.yearSubmitted == yearSubmitted){
-								JSON.parse( doc.researchCategories )
-								.forEach( categ => {
-									if( category.includes( categ ) ){
-										return result.push( doc );
-									}
-								});
+								if( category == doc.researchCategories  ){
+									return result.push( doc );
+								}
 							}
 						});
 					}
 					else{
 						docs.forEach( doc => {
+							console.log('here4')
 							if(doc.course == course){
 								if(doc.yearSubmitted == yearSubmitted){
-									JSON.parse( doc.researchCategories )
-									.forEach( categ => {
-										if( category.includes( categ ) ){
-											return result.push( doc );
-										}
-									});
+									if( category == doc.researchCategories  ){
+										return result.push( doc );
+									}
 								}
 							}
 						});
@@ -2000,7 +1992,6 @@ app.post('/research/rlist/upload', async (req, res , next) =>{
 
 	const categories = JSON.parse(fs.readFileSync( categ_path ));
 	const doesCategoryAlreadyExist = !categories.includes( researchData.researchCategories );
-
 
 	try{
 		if( doesCategoryAlreadyExist ){

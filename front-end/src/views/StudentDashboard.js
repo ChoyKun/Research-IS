@@ -98,19 +98,7 @@ export default function StudentDashboard(props){
 				<div style={{height:'95%', width:'95%', backgroundColor:'white', color:'black',overflowY:'auto',overflowX:'auto'}}>
 					<div className="d-flex flex-row justify-content-center align-items-center" style={{height:'100%',width:'100%'}}>
 						<div className='d-flex flex-column justify-content-center align-items-center'  style={{height:'100%',width:'50%'}}>
-							<div className='d-flex justify-content-center align-items-center'  style={{height:'57%',width:'100%'}}>
-								<div className='d-flex justify-content-center align-items-center flex-column' style={{height:'95%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"5px 5px 5px 5px grey"}}>
-									<div className='d-flex flex-row' style={{width:'90%',height:'10%'}}>
-										<CategoryIcon sx={{color:green[500],height:'35px',width:'35px'}}/>
-										<p style={{fontSize:'25px', textAlign:'center',height:'24px'}}>Research Categories</p>
-									</div>
-									<Divider style={{height:'2px', width:'100%', color:'black'}}/>
-									<div style={{width:'90%',height:'80%'}}>
-										<BarChart width='20' height='5' label={['Hardware','Software','Web System', 'Game Development', 'Augmented Reality', 'Mobile App']} data={[hardware,software,webSys,gameDev,aR,mobileApp]} color={['#4CAF50','#548235']} setLabel={'System Categories'}/>
-									</div>
-								</div>
-							</div>
-							<div className='d-flex justify-content-center align-items-center'  style={{height:'40%',width:'100%'}}>
+							<div className='d-flex justify-content-center align-items-center'  style={{height:'100%',width:'100%'}}>
 								<div className='d-flex justify-content-center align-items-center flex-column' style={{height:'95%', width:'95%', backgroundColor:'white', border:'1px solid black',borderRadius:'15px',boxShadow:"5px 5px 5px 5px grey"}}>
 									<div className='d-flex flex-row' style={{width:'90%',height:'18%'}}>
 										<NumbersIcon sx={{color:green[500],height:'35px',width:'35px'}}/>
@@ -119,7 +107,7 @@ export default function StudentDashboard(props){
 									<Divider style={{height:'2px', width:'100%', color:'black'}}/>
 									<div className='d-flex flex-row justify-content-center align-items-center'style={{width:'95%',height:'80%'}}>	
 										<div className='d-flex flex-row'style={{width:'80%',height:'100%'}}>
-											<HBarChart width='20' height='5' label={['BSIT','BSCS']} data={[bsit,bscs]} color={['#4CAF50','#548235']} setLabel={'System Categories'}/>
+											<BarChart width='20' height='5' label={['BSIT','BSCS']} data={[bsit,bscs]} color={['#4CAF50','#548235']} setLabel={'System Categories'}/>
 										</div>
 										<div className='d-flex flex-column justify-content-around'style={{width:'20%',height:'60%'}}>
 											<div className='d-flex flex-row justify-content-around align-items-center'style={{width:'100%',height:'20%'}}>

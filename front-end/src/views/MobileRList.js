@@ -11,6 +11,7 @@ import scslogo from "../images/scs-final.png";
 import favorites from "../images/heart.png";
 import profile from "../images/profile.png";
 import FilterContext from '../contexts/filter-context';
+import Selection from '../components/fields/Selection';
 
 // components
 import Button from '../components/buttons/button';
@@ -52,16 +53,28 @@ export default function StudentRList(props){
 	const [researchData, setResearchData] = useState([]);
 	const [filteredData, setFilteredData] = useState([]);
 	const [search, setSearch] = useState( '' );
+	const [categ, setCateg] = useState( [] );
 
 	
 
 	const initState = {
 		course: 'all',
-		category: [],
+		category: '',
 		yearSubmitted: 'null',
 		order: 'A-Z',
 		year: 'Newest'
 	}
+
+	useEffect(()=>{
+		axios.get(`http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/rlist/category`)
+		.then( res => {
+			console.log( res.data );
+			setCateg( res.data );
+		})
+		.catch( err => {
+			throw err;
+		});
+	},[]);
 
 	const reducer = (state, action) => {
 		switch( action.type ){
@@ -70,18 +83,7 @@ export default function StudentRList(props){
 				return state;
 
 			case 'category':
-				if( state.category.length ){
-					if( state.category.includes( action.data ) ){
-						state.category = state.category.filter( elem => elem !== action.data );
-					}
-					else{
-						state.category.push( action.data );						
-					}
-				}
-				else{
-					state.category.push( action.data );						
-				}
-
+				state.category = action.data;
 				return state;
 
 			case 'yearSubmitted':
@@ -99,7 +101,7 @@ export default function StudentRList(props){
 			case 'reset':
 				state = {
 					course: 'all',
-					category: [],
+					category: '',
 					yearSubmitted: 'null',
 					order: 'A-Z',
 					year: 'Newest'
@@ -118,11 +120,11 @@ export default function StudentRList(props){
 
 
 	const rFilter = () =>(
-		<div style={{height:'300px',width:'312px',border:'1px solid black',backgroundColor:'white',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}} className='d-flex justify-content-center flex-column'>
+		<div style={{height:'400px',width:'350px',border:'1px solid black',backgroundColor:'white',borderRadius:'15px',boxShadow:"10px 10px 20px 10px grey"}} className='d-flex justify-content-center flex-column'>
 			<h3 style={{width:'95%',color:'black'}}>Filters:</h3>
 			<Divider style={{height:'2px', width:'100%', color:'black'}}/>
 			<div className='d-flex flex-row' style={{width:'100%',height:'70%'}}>
-				<div className='d-flex flex-column justify-content-center align-items-center' style={{height:'100%',width:'40%'}}>
+				<div className='d-flex flex-column justify-content-center align-items-center' style={{height:'100%',width:'50%'}}>
 					<div className='d-flex flex-column justify-content-around align-items-start' style={{height:'100%',width:'80%'}}>
 						<Select 
 							className='sfilterCourse' 
@@ -132,32 +134,21 @@ export default function StudentRList(props){
 						/>
 						<div style={{ height:'40px',width:'100px', color:'black'}} className='d-flex flex-row'>
 							<label style={{height:'40px',width:'300px'}}>Year: </label>
-							<Field style={{ height:'25px',width:'70px', color:'black'}} type="number" placeHolder='ex. 2001' reqOnChange={e => dispatch({type: 'yearSubmitted', data: e.target.value})}/>
+							<Field style={{ height:'25px',width:'100px', color:'black'}} type="number" placeHolder='ex. 2001' reqOnChange={e => dispatch({type: 'yearSubmitted', data: e.target.value})}/>
 						</div>
-						<div style={{width:'100%', color:'black'}}>
-							<Select width='75px' className='sfilterAlphabetical' label='Sort from:' options={['A-Z','Z-A']}reqOnChange={e => dispatch({type: 'order', data: e.target.value})}/>
-						</div>
-						<div style={{width:'100%', color:'black'}}>
-							<Select width='80px' className='sfilterYear' label='Sort by year:' options={['New','Old']} reqOnChange={e => dispatch({type: 'year', data: e.target.value})}/>
-						</div>
-					</div>
-				</div>
-				<div className='d-flex flex-column justify-content-start align-items-start' style={{height:'100%',width:'50%'}}>
-					<p>Research Categories</p>
-					<div style={{height:'90%',width:'100%',border:'1px solid black',backgroundColor:'white',borderRadius:'15px'}} className='d-flex justify-content-around align-items-center flex-column'>
-						<div style={{height:'100%',width:'95%'}} className='d-flex justify-content-around align-items-start flex-column'>
-							<Checkbox cLabel='Hardware' value="Hardware" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
-							<Checkbox cLabel='Software' value="Software" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
-							<Checkbox cLabel='Web System' value="Web System" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
-							<Checkbox cLabel='Game Dev' value="Game Dev" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
-							<Checkbox cLabel='Augmented Reality'value="Augmented Reality" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
-							<Checkbox cLabel='Mobile App' value="Mobile App" reqOnChange={e => dispatch({type: 'category', data: e.target.value})}/>
-						</div>
+						<Selection 
+							width="200px" 
+							label="Categories" 
+							options={[...categ]} 
+							onChange={(value) => dispatch({type:'category', data: value })}
+							placeholder="Select or Add Category"
+						/>
+						<Select width='55px' className='sfilterAlphabetical' label='Sort from:' options={['A-Z','Z-A']}reqOnChange={e => dispatch({type: 'order', data: e.target.value})}/>
 					</div>
 				</div>
 			</div>
-			<div className='d-flex flex-row-reverse  align-items-center' style={{height:'13%',width:'85%'}}>					
-				<Button style={{width:'90px',height:'30px'}} title='Filter' click={() => {
+			<div className='d-flex flex-row-reverse  align-items-start' style={{height:'5%',width:'95%'}}>					
+				<Button style={{width:'100px',height:'30px'}} title='Filter' click={() => {
 					filter.setSFilter( state );
 				}}/>
 			</div>

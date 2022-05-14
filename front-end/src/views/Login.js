@@ -156,10 +156,10 @@ export default function Login(props){
 		})	
 		.catch(err=>{
 			console.log( err );
-			if( err?.request ){
-				setAlertMes(JSON.parse(err.request.response).message);
-			}
-			setAlertStatus(403)
+			if(err?.response?.data?.message){
+				setAlertMes(`${ err?.response?.data?.message}`)
+				setAlertStatus(403) 
+			} 
 		})
 	}
 

@@ -141,7 +141,7 @@ export default function StudentDashboard(props){
 											</div>
 										</div>
 										<div className='d-flex flex-row'style={{width:'100%',height:'80%'}}>
-											<PieChart width='23' height='20' label={['Male','Female']} data={[Male,Female]} color={['#4CAF50','#548235']} setLabel={'System Categories'}/>
+											<BarChart width='23' height='20' label={['Male','Female']} data={[Male,Female]} color={['#4CAF50','#548235']} setLabel={'System Categories'}/>
 										</div>
 									</div>
 								</div>
@@ -169,7 +169,7 @@ export default function StudentDashboard(props){
 											</div>
 										</div>
 										<div className='d-flex flex-row'style={{width:'100%',height:'80%'}}>
-											<PieChart width='23' height='20' label={['BSIT','BSCS']} data={[bsit,bscs]} color={['#4CAF50','#548235']} setLabel={'System Categories'}/>
+											<BarChart width='23' height='20' label={['BSIT','BSCS']} data={[bsit,bscs]} color={['#4CAF50','#548235']} setLabel={'System Categories'}/>
 										</div>
 									</div>
 								</div>
