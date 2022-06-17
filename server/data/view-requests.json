@@ -1,1 +1,18 @@
-[]
+[
+    {
+        "id": "627789314f639c31f0dd3656",
+        "studentID": "1801189",
+        "studentName": "Kent Bryan M. Lin",
+        "title": "Research 5",
+        "state": "pending",
+        "dateRequested": "2022-6-17"
+    },
+    {
+        "id": "627789064f639c31f0dd3648",
+        "studentID": "1801189",
+        "studentName": "Kent Bryan M. Lin",
+        "title": "Research 3",
+        "state": "pending",
+        "dateRequested": "2022-6-17"
+    }
+]

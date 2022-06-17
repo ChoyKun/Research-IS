@@ -134,7 +134,7 @@ function Item(props){
 	return(
 		<div className="d-flex flex-row justify-content-around" style={{height:'30px',width:'100%',backgroundColor:'#E2F0D9',border:'1px solid black',borderRadius:'10px'}}>
 			<div className="col-3 text-center">{props.object.title}</div>
-			<div className="col-3 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
+			<div className="col-3 text-center">{props.object.researchCategories }</div>
 			<div className="col-2 text-center">{props.object.yearSubmitted}</div>			
 			<div className="col-1 d-flex justify-content-center align-items-center text-center">
 				<Tooltip title='View Document' arrow>
