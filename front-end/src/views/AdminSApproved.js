@@ -345,7 +345,7 @@ function Item(props){
 			</Snackbar>
 			<div className="col-4 text-center">{props.object.title}</div>
 			<div className="col-1 text-center">{props.object.course??'N/A'}</div>
-			<div className="col-3 text-center">{props.object.researchCategories === '[]' ? 'N/A' : (()=> JSON.parse(props.object.researchCategories).join(', '))()}</div>
+			<div className="col-3 text-center">{props.object.researchCategories}</div>
 			<div className="col-1 text-center">{props.object.yearSubmitted}</div>
 			<div className="col-2 text-center">{props.object.dateApproved}</div>
 			<div className="col-1 text-center">
